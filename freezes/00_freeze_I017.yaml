@@ -1,0 +1,24 @@
+iteration_id: "KGi-DISS-I017"
+mode: "insight-first messaging pass + public-repo centralisation; no new runs"
+freeze_time: "2026-11-04T22:20Z (text edits applied immediately after)"
+user_directive: "we do not care about what fails or how we got to the results, we care
+  about the insights; connect to the public repo (CSL3) and push all developed code
+  centrally"
+text_pass: "main text: overview 'failed conjectures' sentence -> audit-trail pointer;
+  'What failed, and what can be measured' -> 'What can be measured' with the
+  refutation inventory compressed to a boundaries-are-results sentence + SI/repo
+  pointer; 'survive our own adversarial checking (two earlier candidates did not)' ->
+  discriminating-signatures phrasing; chi_c passage reframed insight-first (bold
+  slow-aspiration claim leads; static-version failure demoted to a clause); theory
+  section fail-forward aside -> equilibrium-reference Corollary pointer. INVARIANT:
+  every refutation remains in SI S12/S4 and the repository; nothing deleted from the
+  record; honesty discipline (designed-validation framing, horizon qualifiers,
+  class-conditioning) untouched"
+repo_centralisation:
+  repo: "github.com/TrompetteMarine/CSL3 (public; was empty; user-created)"
+  pushed: "initial commit 9c7c204 on main: README (insight-led), REPRODUCIBILITY.md,
+    engine/ (Rust), figures/ (Julia pipeline), generators/ (predict_taskv3, dualalpha,
+    sigmar_sweep), analysis/ (I003 identification code), experiment/ (oTree task +
+    bots + pipeline + DESIGN.md), records/ (all frozen CSV/JSON), freezes/ (all
+    00_freeze_*.yaml + citation log), paper/ (tex + bib); 3.1 MB; internal simulated
+    referee documents intentionally excluded from the public repo"
