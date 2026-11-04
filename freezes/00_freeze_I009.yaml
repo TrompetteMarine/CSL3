@@ -1,0 +1,37 @@
+iteration_id: "KGi-DISS-I009"
+mode: "aesthetics + readability pass (main & SI) + uncertainty display; no new claims"
+freeze_time: "2026-11-04T13:52Z"
+frozen_rerun_addendum: "pt2 and pt3 sweeps re-emitted with the SAME frozen designs and
+  seed bases (00_freeze_figruns.yaml), adding dispersion columns only (pt2: var_dwell;
+  pt3: var_m2, var_gate); point estimates must be bit-identical to the frozen CSVs
+  (same RNG stream) - checked before use"
+deliverables_and_gates:
+  D1_fig1: "visibility-chi arrow rerouted over the top (S.north -> high arc -> descend
+    right of the reward->aspiration drop), no crossing of any box, arrow or label;
+    full label audit of panel a under the house rules; gate: render-inspect"
+  D2_error_display: "uncertainty shown wherever a frozen record supports it: pt1 cuts
+    +-2 s.e.m. bands (60 runs/point); pt2 dwell +-2 s.e.m. (40 runs); pt3 sweeps +-2
+    s.e.m. (60 runs); abm panel c already carries the frozen bootstrap/Wilson intervals;
+    fig_pred keeps IQR bands (population spread of predictions); fig_ident: NO interval
+    shown - the frozen screen records store point correlations only, and inventing CIs
+    is excluded; captions name each band"
+  D3_SI_aesthetics: "SI TikZ pass: schedule + drift-region diagrams brought to Fig-1
+    standards (fonts, arrows, spacing, collisions); SI page skim for readability"
+  D4_docs: "both docs compile clean; changed pages inspected; v5.2 bundle"
+out_of_scope: "new cells, oTree, text claims"
+closing_record:
+  closed: "2026-11-04"
+  D1_fig1: "DONE - visibility-chi rerouted S.north -> high arc -> descent right of the
+    reward->aspiration drop (moved to +8mm), label in inter-panel free space; panel-a
+    audit clean at 150 dpi"
+  D2_error_display: "DONE - pt2/pt3 re-emitted with dispersion columns under the same
+    seeds; point estimates verified BIT-IDENTICAL to the frozen CSVs (676 and 104 rows)
+    before use; bands added: pt1 cuts +-2 sem (60 runs), pt2 dwell +-2 sem (40 runs),
+    pt3 sweeps +-2 sem (60 runs, incl. generic-nuR dashed); abm c keeps the frozen
+    bootstrap/Wilson intervals; fig_pred keeps IQR; fig_ident: no interval (frozen
+    record stores point correlations only - inventing CIs excluded); captions name
+    every band"
+  D3_SI: "DONE - drift-region TikZ rebuilt (proper width, staggered tick labels, no
+    collisions, dynamics arrows with explanations); schedule TikZ inspected, clean;
+    vermillion -> vermilion standardized in both documents (refs.bib untouched)"
+  D4_docs: "DONE - julia 0 / main 0 / supp 0; changed figures + SI page 6 inspected"

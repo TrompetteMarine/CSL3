@@ -1,0 +1,59 @@
+iteration_id: "KGi-DISS-I016"
+mode: "messaging restructure + Manohar citations; no new runs, no claim changes"
+freeze_time: "2026-11-04T22:00Z"
+user_directives:
+  - "simulation protocol and machine-check statements are for the repo"
+  - "clearest messaging; the hypothesis to test experimentally stated clearly"
+  - "everything not directly relevant for an academic paper: cleared, in repo, or in
+    supplement"
+  - "Sanjay Manohar's vmPFC prosocial papers: find on his site/Scholar, cite"
+manohar_citations_verified:
+  - "Lockwood, Cutler, Drew, Abdurahman, Jeyaretna, Apps, Husain & Manohar (2024),
+    Human ventromedial prefrontal cortex is necessary for prosocial motivation,
+    Nature Human Behaviour 8(7):1403-1416, doi 10.1038/s41562-024-01899-4"
+  - "Gueguen, Cutler, Drew, Apps, Jeyaretna, Husain, Manohar & Lockwood (2025),
+    Ventromedial prefrontal cortex lesions disrupt learning to reward others,
+    Brain 148(10):3537-3550, doi 10.1093/brain/awaf056"
+restructure_plan:
+  repo_doc: "REPRODUCIBILITY.md staged in the paper directory for the public repo and
+    bundle: full frozen-design protocol, scalar-audit statement with numbers and
+    status, the five distributional gates with tolerances and outcomes, engine roles
+    and seed policy, machine-check statements (7 theorems, axiom closure, toolchain
+    pin, branch/hashes), figure-pipeline notes"
+  main_cuts:
+    - "Machine-checked statements subsection -> 2 sentences + pointer (S7 + repo);
+      long Lean footnote at eq. (2) -> short pointer footnote"
+    - "Simulation protocol -> frozen-design sentence, outcome definition, statistics
+      conventions; audit numbers -> SI S10 + repo, one-sentence pointer remains"
+    - "High-throughput mapping runs subsection -> folded into Simulation protocol as
+      one sentence (five pre-stated gates, all passed; details SI S10 + repo)"
+    - "Robustness subsection -> 3-4 sentence enumeration; numbers stay in S12 only,
+      except the sigma_r load-bearing clause kept short"
+    - "Prediction generation trimmed ~30% (honesty content kept: frozen/not fitted,
+      verbatim rival port, seed rule)"
+  main_additions:
+    - "Confirmatory-hypothesis statement opens the predictions section: H1 named,
+      formal one-liner, test/alpha/N/d-floor; all else labelled
+      discriminating/secondary"
+    - "Discussion neuro sentence gains the two Manohar-coauthored lesion papers
+      (causal substrate evidence for socially contextualized valuation/learning)"
+  supplement_additions:
+    - "S10 engines paragraph receives the corrected audit statement (s.e. labelling,
+      1.1 s.e. gap, pre-stated gates) and the trap-cell gate values + tolerances
+      moved out of main"
+  invariants: "no frozen number changes; every number removed from main remains
+    quotable in SI or the staged repo doc; referee-fix content (audit labelling, CI
+    conventions) preserved verbatim at its new location"
+closing_record:
+  closed: "2026-11-04"
+  build: "v8: main 24pp, SI 24pp, 0 undefined refs, 0 rendered '??'; Methods plumbing
+    cut ~600 words (machine-check subsection -> 2 sentences; mapping-runs subsection
+    folded into protocol; robustness -> enumeration; prediction-generation trimmed;
+    long Lean footnote -> pointer); every removed number preserved in SI S9/S10 or
+    REPRODUCIBILITY.md (staged repo doc, also cited in Code availability)"
+  messaging: "predictions section opens with the single confirmatory hypothesis in
+    bold (H1 reference-dependent delegitimation: one-sided Welch on P1->P2 drop,
+    alpha=.005, N=320/cell, d=.25 floor; all else labelled discriminating/secondary)"
+  manohar: "both lesion papers verified and engaged in the Discussion neuro passage
+    (Lockwood et al. 2024 NHB 8:1403; Gueguen et al. 2025 Brain 148:3537): causal
+    dissociability of socially contextualized valuation/learning"

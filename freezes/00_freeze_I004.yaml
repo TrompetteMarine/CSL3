@@ -1,0 +1,76 @@
+iteration_id: "KGi-DISS-I004"
+mode: "manuscript engineering + formal-artifact publication; no new scientific claims"
+freeze_time: "2026-11-04T00:50Z (before any edit, render, or push of this iteration)"
+baseline: "kgi-diss-paper v3 (main 13pp + SI 10pp, Makie pipeline, frozen sweeps pt1-pt4)"
+deliverables_and_gates:
+  D1_phase_portrait_main: "replace Fig 2 b,c with true VECTOR-FIELD phase portraits of the
+    (A,L) mean-field flow (streamplot + nullcline/A* lines + basin-coloured trajectories),
+    rendered in CairoMakie from the same closed-form drift; gate: field arrows, separatrix
+    at A*, and absorbing sets visually verifiable against Props S4.x"
+  D2_regime_map_promoted: "four-regime (A0,Gamma) map moves from SI to MAIN text (new
+    figure); bimodality stays SI; ED Fig 1 unchanged; gate: all cross-references resolve,
+    figure numbers consistent"
+  D3_information_aggregation: "new Results/Discussion treatment of the information-
+    aggregation dimension (wisdom-of-crowds/DeGroot-Golub-Jackson, cascades, network
+    epistemology) with explicit statement of what the gate does to aggregation; gate:
+    every cited claim about those literatures checked against the sources already
+    verified or standard-text level"
+  D4_contribution_positioning: "explicit contributions paragraph (end of Introduction)
+    + positioning paragraphs; SI gains a positioning table in the style of the uploaded
+    working papers' comparison tables; gate: no self-citations reintroduced"
+  D5_tikz_sourcing: "align/attribute the TikZ diagrams to the uploaded WP TikZ sources
+    (zip1 .../figures/*.tex): read fig1_mechanism.tex (WP1+WP2) and fig_regimemap.tex
+    (WP2), adapt conventions, record provenance in comments + README; gate: provenance
+    lines present in the .tex"
+  D6_lean_to_repos: "push DissCore.lean, DissBridge.lean, verification records and a
+    README to TrompetteMarine/csl and TrompetteMarine/csl2 on a NEW BRANCH
+    (lean-diss-core) in each, never direct to main; commits carry the required
+    attribution lines; gate: recorded commit SHAs + remote branch existence; local
+    compile re-run before push"
+  D7_supplement_efficiency_proofs: "rewrite SI proofs to cite standard results instead of
+    first-principles arguments (stochastic approximation: Borkar 2008 / Kushner-Yin 2003 /
+    Benaim 1999; martingale/ergodic facts: Durrett; QRE: McKelvey-Palfrey; contraction:
+    Banach), each citation verified against an authoritative statement (web check where
+    needed) and logged in 00_citation_verification_I004.md; gate: verification log entry
+    per load-bearing citation"
+  D8_repo_readiness_note: "rust+julia pipeline is packaged repo-ready for the planned new
+    repo; C engine for very large N recorded as an option with an interface note, not
+    built (user: 'if needed')"
+out_of_scope: "no new simulations beyond already-frozen sweeps; no oTree; no new claims"
+closing_record:
+  closed: "2026-11-04"
+  D1_phase_portrait_main: "DONE — fig_theory b,c are streamplot vector fields of the (A,L)
+    mean-field flow with A* separatrix, A_inf line, basin-coloured trajectories, attractors;
+    visually verified against Props S4.x"
+  D2_regime_map_promoted: "DONE — fig_regimes_map.pdf is now main-text Fig 6 (after fig:pt2);
+    removed from SI; main refs updated (regmap -> Fig ref; bimodal -> Supplementary Fig 3);
+    Methods Rust-figure list updated; both docs compile with zero undefined refs"
+  D3_information_aggregation: "DONE — Results paragraph (end of 'One mechanism, four
+    regimes'): credulous error = supply-side correlated-signal failure (cascades);
+    defensive wrong = uptake-side failure invisible to classical analysis (gate-off CRN
+    contrast is the witness); correct-but-illegitimate = layer-split aggregation.
+    Discussion paragraph: state-dependent listening weights break the structure->wisdom
+    link (DeGroot/Golub-Jackson); third failure mode; intervention asymmetry. All claims
+    standard-text level"
+  D4_contribution_positioning: "DONE — four-contribution paragraph at end of Introduction;
+    positioning sentence vs aggregation literature in intro para 4; SI 'Positioning
+    relative to adjacent literatures' section with 7-row Supplementary Table 3; no
+    self-citations reintroduced"
+  D5_tikz_sourcing: "DONE — Fig 1 rebuilt in WP conventions (lane mechanism layout after
+    WP2--draft1/figures/fig1_mechanism.tex; regime-map cells after fig_regimemap.tex);
+    provenance comment block in main.tex; render visually verified clean at 200 dpi"
+  D6_lean_to_repos: "DONE — gate passed (both files recompiled locally, axiom closure
+    exactly [propext, Classical.choice, Quot.sound]); formal_diss/ (sources, sha256,
+    verification records, expected outputs, lean-toolchain pin, README) pushed on branch
+    lean-diss-core in both repos, never main.
+    CSL:  4049e6af8ef7fa2228034f5cd111d23bbad7f85c
+    CSL2: 77e5c40445781b602ddda9a1714de71608306c01"
+  D7_supplement_efficiency_proofs: "DONE — resignation proposition now has a complete
+    efficient proof (Hoeffding/EWMA band via BLM2013; drift-to-hitting-time via Hajek1982);
+    race proposition gains a stochastic-validity paragraph (KushnerYin2003, Borkar2008 Ch9,
+    BenaimWeibull2003) with kink/reflection caveats; mean-field slow-fast cites Borkar Ch6;
+    SA section rewritten around the cited apparatus (incl. Benaim1999 APT) with open
+    problems retained. Verification log: 00_citation_verification_I004.md (6 entries;
+    internal theorem numbers not asserted where unverified)"
+  D8_repo_readiness_note: "DONE — 00_repo_readiness_note.md; C engine recorded as option
+    with interface contract, not built"

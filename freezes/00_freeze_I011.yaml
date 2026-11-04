@@ -1,0 +1,46 @@
+iteration_id: "KGi-DISS-I011"
+mode: "readability restructure + simulated referee review; no new claims, no new runs"
+freeze_time: "2026-11-04T15:40Z"
+deliverables_and_gates:
+  D1_network_to_main: "network-configurations TikZ moves from SI to the main text at its
+    first use (the confirmatory-experiment section); SI subsection removed; SI figures
+    renumber (bimodal pointer 4->3); Methods pointer updated"
+  D2_readable_grids: "fig_flow and fig_trans rebuilt as 2x2 grids (per-panel area ~2x);
+    fig_pred gets the same treatment (same defect); gate: render-inspect at page scale"
+  D3_text_outside_data: "in-plot text boxes overlapping plot elements removed or moved
+    out: abm raster community boxes -> axis subtitle; theory 'initial states' note ->
+    caption (already there); race post-correction note -> caption (already there);
+    remaining in-plot labels only in data-free zones; region labels on heatmaps stay
+    (they are the identification mechanism and overlap no marks)"
+  D4_referee_review: "three independent NHB-style referee reports on the NEW build
+    (distinct personas: computational cognition/RL; social learning & networks
+    economics; complex systems/statistical physics), each instructed to be critical
+    and to apply NHB scope+novelty standards; plus an editor-style synthesis with an
+    honest desk-rejection likelihood and venue suggestions; labelled SIMULATED review
+    throughout - no claim to predict the real process"
+  D5_records: "compile clean, inspect, v5.4 bundle, project doc with the reports"
+out_of_scope: "new analyses; prose rewrites beyond caption/pointer adjustments"
+closing_record:
+  closed: "2026-11-04"
+  D1_network_to_main: "DONE - fig:nets is now main Fig 4 (cited at the confirmatory
+    section's first mention); SI subsection removed; bimodal pointer renumbered 4->3;
+    Methods pointer updated; caption's SI equation ref rewritten (first attempt failed
+    silently across a line break and shipped as (??) in v5.4 - caught by two referees,
+    fixed and recompiled)"
+  D2_readable_grids: "DONE - fig_flow, fig_trans, fig_pred rebuilt as 2x2 grids
+    (~2x panel area); render-inspected at page scale"
+  D3_text_outside_data: "DONE - abm raster boxes -> subtitle; race post-correction note
+    and theory 'initial states' note -> captions (already present there); remaining
+    in-plot labels verified in data-free zones; heatmap region labels retained as the
+    identification mechanism"
+  D4_referee_review: "DONE - three independent agent-referees read the v5.4 PDFs in
+    full; all three returned MAJOR REVISION with distinct, substantive findings;
+    convergent priorities: group-contingent-rig rival threat to the sign-reversal
+    discriminator (R2, potentially fatal to the headline claim); lexicographic-
+    convention over-claim; phase-vs-bistability (finite-size/horizon scaling missing);
+    scope language; positioning gaps (Akerlof-Dickens, Rabin, Benabou groupthink,
+    Hegselmann-Krause, Bohren); no-human-data NHB risk. Editorial synthesis with
+    desk-rejection likelihood (simulation-only: ~55-75%; with the preregistered
+    experiment run: ~20-35%) and 7-venue ladder. All labelled SIMULATED"
+  D5_records: "DONE - 90_referee_reports_I011.md in bundle + project docs; v5.4.1
+    bundle with the caption fix"

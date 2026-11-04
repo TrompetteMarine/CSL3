@@ -1,0 +1,45 @@
+# Frozen design addendum — NHB-figure mapping runs (2026-11-03, before any Rust run)
+# Purpose: dense phase-transition maps and ABM-style trajectory plots for the NHB-style
+# manuscript. These are MAPPING runs over effects already established by the frozen
+# I001-I002 experiments; no new confirmatory claims are derived from them. Any boundary
+# they show is reported descriptively against the already-confirmed cells.
+engine: "new zero-dependency Rust port of the audited simulator (xoshiro256++ RNG,
+  SplitMix64 seeding). RNG stream differs from numpy PCG64, so validation is
+  distributional, matching the I002 audit methodology."
+cross_validation_gates (must pass before any figure sweep is used):
+  CV1_trap_on:  "confirmatory cell (A0=.8, lam=.7, G=.1, chi=.4, rho=.002, global,
+                 nuR=.0125), R=300: |m2 - 0.166| <= 0.06; P_dw in [0.78, 0.90];
+                 L2 <= 0.10"
+  CV2_trap_off: "same cell gate off: m2 >= 0.99"
+  CV3_decouple: "Gamma=.3 same params gate on: m2 >= 0.99; L2 in [0.04, 0.09]
+                 (knife-edge defaults nuR=.01 used for this cell to match I001 X2)"
+  CV4_credulous:"E2b-v3 Gamma=0 cell (local, chi=1, arms .7/.3, A0=.5, lam=.7,
+                 nuR=.0125): m2 <= 0.05; L2 in [0.60, 0.85]"
+  CV5_resign:   "single-agent chi=0 defaults: tail L >= 0.8 (resignation)"
+sweeps (seeds: base 31000 + cell index; R per cell as stated; T=600, N=200 unless noted):
+  PT1_entitlement_transmission: "A0 in linspace(.45,.90,26) x lam in linspace(.40,.85,26),
+    R=40, Gamma=.1, chi=.4, rho=.002, global, nuR=.0125 -> P_dw, mean m2, var m2"
+  CUTS_order_parameter: "m2, Var(m2), P_dw vs A0 (41 pts in [.45,.9]) at lam in
+    {.55,.65,.75}, R=60 — finite-size transition sharpening (susceptibility analogue)"
+  PT2_rigidity_anchoring: "rho log-grid 26 pts in [1e-3, 5e-2] x chi in linspace(0,.9,26),
+    R=40 at trap cell -> P_persist(L2<.3 at T), mean dwell"
+  PT3_transparency: "Gamma in linspace(0,.5,26) x agent in {diss, bayes}, R=60 at trap
+    cell -> m2, gate variable; (knife-edge nuR=.01 variant additionally run to match the
+    frozen I001 X2 numbers, shown as the main panel for continuity with audited results;
+    generic nuR=.0125 variant shown or reported alongside)"
+  TRAJ: "trap cell: (i) one run agent x time L raster (200 x 600, stride 2 in t);
+    (ii) m2(t) for 60 reps gate on + 60 CRN-ish gate off (separate seeds; spaghetti/
+    bimodality); (iii) community mean L(t) bands"
+figure_outputs: "CSV under kgi-diss-paper/rustsim/out/; Julia scripts regenerate all
+  manuscript figures from these CSVs + the frozen I001-I003 JSONs"
+prohibitions: "no threshold tuning on sweep output; confirmatory numbers quoted in the
+  text continue to come from the frozen I002 run, never from the maps"
+
+# ---- ADDENDUM 2 (2026-11-04, before execution): four-regime phase map ----
+PT4_regime_map: "A0 in linspace(.45,.90,26) x Gamma in linspace(0,.5,26), lam=.7,
+  chi=.4, rho=.002, global comparison, generic nuR=.0125, R=40, seeds 37000+cell*1000.
+  Per-run classification: defensive-wrong (m2<.3 & L2<.3); credulous (m2<.3 & L2>.5);
+  correct-but-illegitimate (m2>.7 & L2<.3); legitimate (m2>.7 & L2>.5); else mixed.
+  Output: per-cell regime frequencies + modal regime. DESCRIPTIVE mapping run; the
+  classification thresholds reuse the frozen I002 bounds (.3) plus a symmetric .5/.7
+  band stated here before execution."

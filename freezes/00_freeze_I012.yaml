@@ -1,0 +1,117 @@
+iteration_id: "KGi-DISS-I012"
+mode: "referee-implementation rewrite: new frozen simulations + narrative/figure/scope
+  program; public-facing de-plumbing (engines live in the repo, not the narrative)"
+freeze_time: "2026-11-04T16:28Z (before any engine edit or run)"
+frozen_run_designs:
+  pt3b_group_contingent_rival: "network permeability sweep adds Gate::RigUs — Bayesian
+    whose rigged hypothesis is GROUP-CONTINGENT ('rigged against us'): own outcomes have
+    likelihood Bern(mu_rig) under H_rig; OTHERS' observed outcomes are uninformative
+    about H_rig (LR contribution exactly 0, since the hypothesis asserts nothing about
+    their payoffs). Same grid/seeds structure as pt3 (26 Gamma values x 60 runs, seeds
+    34000-base +154 offset for the new gate); outputs appended to pt3 schema with
+    agent='rigus'. PREDICTION RISK STATED NOW (R2): others' success no longer defeats
+    the hypothesis; expected outcome is trust collapse AND learning freeze at all Gamma.
+    Whatever comes out is reported"
+  pred_rival_us: "prediction generator adds agent 'rival_us' with the same group-
+    contingent likelihood (peer LR = 0); conditions {HIGH,LOW} x FULL + HIGH x MODERATE,
+    n=300, seeds 71000+; panel c of the predictions figure becomes the two-rival panel;
+    the discriminator claim is RESCOPED to what the data show (expected: sign reversal
+    holds only for the global-rig class; restoration dynamics + increment asymmetry
+    carry the discrimination against the group-contingent class)"
+  nonlex_variant: "Gate::DissNL — the non-lexicographic L-update adds a surprise-erosion
+    term -nuS*delta^2/2 with nuS = nuF = .05 (unit-w_f convention, stated); run the
+    confirmatory cell contrast (300 fresh-seed runs, seeds 45000) + the A0=.5 baseline;
+    gate: report P_dw and restore under the variant; claim limited to 'threshold
+    structure survives with shifted constants' as SI Remark already states"
+  finite_size_scaling: "mode fss: lambda=.75 cut, 15 A0 points in [.58,.72], 60 runs per
+    cell, N in {50,100,200,400,800,1600} (T=600, seeds 46000 + iN*10000 + cell*100);
+    outputs m2 mean/var per cell; derived: front width (A0 range where P_dw in
+    [.1,.9]) and variance-peak height vs N"
+  horizon_sweep: "mode tsweep: chi=.432 column of pt2 (26 rho values, 40 runs), T in
+    {600, 2400, 9600} (seeds 47000 + iT*10000 + cell*1000); derived: empirical rho
+    boundary (P_persist=.5 crossing) vs T and its gap to rho_c=0.00641"
+  threshold_sensitivity: "mode sens: pt1 grid re-classified under thresholds
+    (.25,.25), (.30,.30), (.35,.35) on the SAME seeds; derived: shift of the lambda=.75
+    front location"
+  mf_vs_abm: "deterministic mean-field map (Lemmas S5.1-S5.3) integrated at the
+    confirmatory cell and the rescued cell; overlaid on ABM community means (race.csv
+    runs + 20-run bands, seeds 38100+); quantifies Lemma S5.1's residual"
+  design_power: "from pred_series subject-level draws: simulated effect sizes and power
+    at the preregistered N=320/group, alpha=.005 for H1 (Welch d), H2 (lag), H3 (slope
+    interaction), H4 (shortfall coefficient); model-based power, labelled as such"
+language_and_positioning_program:
+  - "verify then add refs: Akerlof-Dickens 1982 AER; Rabin 1994 JEBO; Benabou 2013
+    REStud groupthink; Hegselmann-Krause 2002 JASSS; Bohren 2016 JET; engage in intro,
+    Discussion, SI positioning table (two new rows); drop the 'we verified against the
+    primary texts' locution; rescope 'third failure mode' to the actual novelty
+    (outcome-entitlement gating of EVIDENCE weights vs opinion-distance gating of
+    OPINION weights in bounded confidence)"
+  - "phase language: decided BY the fss/tsweep results — if the front sharpens as a
+    deterministic basin boundary with bounded variance peak, rename to bistability with
+    stochastic regime selection; retitle pt1 panels; drop 'susceptibility analogue';
+    'coexistence region' replaces 'bimodal critical region'"
+  - "scope pass: abstract P-notation + machine-checked scope + designed-validation
+    framing; reldep iff scoped to fixed reference at first use; aggregation claims
+    restricted to the studied class; policy paragraph -> comparative statics;
+    theorem->proposition in main; rho_c harmonized to 0.00641; Selten ref fixed;
+    race-figure caption gains the 84.3% conditioning fraction and the panel-b
+    first-seed statement; sigma_r=0.1 labelled an assumption"
+  - "de-plumb: engine/figure-stack names out of the narrative (Methods keeps frozen-
+    design + independent-validation statements; implementation detail -> repository);
+    'Rust'/'Julia'/'CairoMakie' do not appear in main text"
+  - "fig_ident gains Fisher-z 95% CIs (computable from r and n=60 alone - no invention)"
+scoped_out_with_reason:
+  - "heterogeneous topologies (R1-M6/R2-M4): claims RESTRICTED in text this iteration;
+    unequal-block engine generalization is next-iteration work, recorded"
+  - "regime-map mixedness sub-panel (R3-m3): caption clarified only"
+  - "human data (R1-M1): deferred by design - experiment follows once simulation paper
+    is settled (user directive)"
+gates: "every new number from these frozen runs only; predictions and claims rescoped to
+  what the runs show; both docs compile; referee-response memo mapping every major
+  comment to its disposition"
+closing_record:
+  closed: "2026-11-04"
+  runs: "all frozen designs executed: pt3b (group-contingent rival network sweep),
+    pred rival_us (task protocol), nlvar (P_dw=1.000/restore+0.993 at validation cell;
+    P=0.257 at neutral - the variant's distinctive testable divergence), fss (front
+    narrows ~N^-1/2 AND shifts left; variance peak bounded ~0.24), tsweep (boundary
+    ~1/T: 0.00488@600 -> <=0.001@2400; absorption vs escape clocks separated), sens
+    (front A0*=0.662 under all three threshold pairs - bimodality makes classification
+    robust), mfband + deterministic map comparison, design power (d=1.8/2.3/3.3/6.6,
+    power>.999 at N=320)"
+  headline_science: "R2's group-contingent challenge CONFRONTED and the dissociation
+    SURVIVES STRENGTHENED: both rational classes recover trust at evidence speed (global
+    via others' outcomes; group-contingent via own outcomes after behaviour corrects
+    through the still-open prior, m2=.5 at Gamma~0.137); only the gate recovers on the
+    aspiration clock. Task protocol: fixed-rate group-contingent class predicts ~no P2
+    drop (banked P1 evidence) - a third signature; sign reversal scoped to the global
+    class. Phase language replaced by stochastic attractor selection; persistence
+    horizon-indexed (dwell ~1/rho)"
+  text: "abstract rewritten (designed validation framing, scope qualifiers); positioning
+    engaged (5 verified refs added: AkerlofDickens1982, Rabin1994, Benabou2013,
+    HegselmannKrause2002, Bohren2016; 2 new SI table rows); derivation rhetoric
+    tempered; reldep scoped at first use; policy -> comparative static; aggregation
+    claims restricted to studied class; theorem -> result/proposition; de-plumbed
+    (no engine/toolchain names in narrative); sigma_r assumption stated; Fisher-z CIs
+    on ident plot; variance CI bands on cuts; transparency 3-way rewrite; predictions
+    2-rival rewrite + power sentence; Methods: rival classes, variant, Robustness
+    subsection. SI: new S12 robustness section + 2 figures (scaling, mfcheck), S8
+    group-contingent spec, power subsection"
+  deliverable: "main 21pp, SI 18pp, zero undefined refs; referee-response memo
+    91_referee_response_I012.md maps every major comment to its disposition incl.
+    explicit not-done list (human data deferred by design; heterogeneous topologies;
+    kink crossing audit; hierarchical reference-dependent-prior Bayesian)"
+addendum_fig_flow_rebuild: "post-review user directive: complete rebuild of the
+  dynamical-anatomy figure. Streamplot replaced by integral curves of the same
+  closed-form map, FATE-coloured (repair-bound blue / absorption-bound vermilion),
+  arrowheads on paths, slow-manifold guides along L=1 / L=0, nullclines kept; panel d
+  phase-coloured along the trajectory (amber while in the metastable channel, blue
+  after exit) with the eventual attractor marked. No change to the underlying
+  dynamics, cells, or claims; caption updated to match"
+addendum_fig_flow_key: "second user pass: regime tab strips atop the panels read as
+  unexplained colour bars -> removed; slow-manifold guides unified to neutral grey so
+  the key swatch matches the panels exactly; key restructured into three titled groups
+  (trajectories - colour gives the destination / landmarks / background shading) with
+  PolyElement swatches naming the pale A*-split vspans; panel-d channel label moved
+  above the incoming transit curves (no text over flows). Caption rewritten to state
+  the same colour rule. Cosmetic only: no change to dynamics, cells, or claims"

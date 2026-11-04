@@ -1,0 +1,73 @@
+iteration_id: "KGi-DISS-I005"
+mode: "figure redesign only; no new scientific claims, no new simulation runs"
+freeze_time: "2026-11-04T02:10Z (before any figure-code edit of this iteration)"
+baseline: "kgi-diss-paper v4 (main 15pp/8 figs + SI 12pp, CairoMakie pipeline)"
+inputs: "frozen CSVs in rustsim/out/ and frozen I001-I003 JSONs ONLY; any number drawn on a
+  figure must already exist in those records"
+global_design_contract:
+  - "one theme: sans font, panel labels bold a/b/c, top/right spines off, recessive grids,
+    outside ticks, consistent type hierarchy across all figures"
+  - "color follows entity across ALL figures: vermillion=dissonance/gate-on/trapped,
+    blue=Bayesian/gate-off-corrected/legitimate, gray=neutral/off; regime colors shared
+    between Fig 1b (TikZ) and Fig 6 (map); sequential = single-hue ramps"
+  - "categorical palette validated with dataviz validator (CVD deltaE and normal-vision
+    floors) before use; failures fixed by re-stepping, not eyeballed"
+  - "legend only where direct labels cannot work; text in ink colors, not series colors;
+    colorbars labeled; phase/region names written on the maps"
+deliverables_and_gates:
+  F1_theory: "a: sign-shaded drift panel (repair/erosion bands), direct mu labels, A*
+    marked at the zero crossings; b,c: basin-tinted phase portraits, stronger field,
+    labelled separatrix/attractors. gate: render-inspect"
+  F2_abm: "a: community annotation readable (outside or halo), separator at agent=100;
+    b: gate-on drawn on top, end-state direct labels; c: gate-on=verm/gate-off=gray with
+    bootstrap CI whiskers from frozen record, restore arrow. gate: colors consistent with
+    panel b; numbers only from frozen JSON"
+  F3_pt1: "labeled colorbar, phase annotations (trapped/corrects), direct lambda labels,
+    transition-peak alignment marker b<->c. gate: render-inspect"
+  F4_pt2: "labeled colorbar, phase annotations, rho_c labelled in both panels, log-axis
+    ticks as powers, direct chi labels. gate: render-inspect"
+  F5_regimes_map: "crisp cells (no interpolation blur), regime names ON the map with
+    halo, saturation explained in a compact inset/legend, sensible aspect, frozen-cell
+    markers only if their coordinates exist in frozen records. gate: validator pass on
+    the 4-regime palette; render-inspect"
+  F6_transparency: "direct labels replacing legends where clean; c: divergence annotation
+    at the resignation boundary; d: Bayesian invariance stays TEXT (no fabricated line).
+    gate: no invented data"
+  F7_ident: "4-bar families re-stepped on one validated ramp, gate line clear of bars,
+    rho group highlighted, nu_R exclusion marked. gate: validator pass on the ramp"
+  F8_bimodal: "count annotations (49/11 vs 60), consistent gate colors, tightened
+    geometry. gate: counts match frozen record"
+  F9_docs: "main+SI recompile clean; every changed figure page visually inspected"
+out_of_scope: "TikZ Fig 1 (rebuilt and approved in I004); new sweeps; caption claims"
+closing_record:
+  closed: "2026-11-04"
+  palette: "4-regime categorical set (#0072B2,#D55E00,#E69F00,#56B4E9) passes ALL validator
+    checks under --pairs all (worst pair amber-verm: deutan dE 13.1, normal 15.6); 'mixed'
+    removed from the categorical palette (neutral gray cannot pass chroma/normal-vision
+    floors) and carried by the saturation channel + on-map annotation; contrast WARNs on
+    amber/sky relieved by on-map direct labels; 4-step blue bar ramp (old ED fig) FAILED
+    all floors -> ED figure re-formed as a shape+fill dot plot, one hue"
+  F1_theory: "DONE - sign-banded drift (repair/erosion), A* zero-crossing markers,
+    banded phase portraits with attractor labels (resigned repair / grievance trap),
+    panel subtitles; 3 label-collision rounds render-inspected"
+  F2_abm: "DONE - readable community label boxes, direct labels replace legend in b,
+    gate-on=vermillion / gate-off=gray in c (now consistent with b), CRN paired-restore
+    bracket drawn from the frozen bootstrap record (no invented whiskers), P(def wrong)
+    CI as subtitle"
+  F3_pt1: "DONE - labeled colorbar, phase annotations, confirmatory star kept, direct
+    lambda labels, shared critical-region band linking b and c"
+  F4_pt2: "DONE - decimal log ticks, labeled colorbar, phase annotations, rho_c labeled
+    in both panels, stacked direct chi labels"
+  F5_regimes_map: "DONE - interpolate=false crisp cells (the v3/v4 blur was image
+    interpolation), hairline cell grid, four on-map region labels with taglines,
+    white credulous label + leader, mixed-strip annotation, saturation mini-ramp legend"
+  F6_transparency: "DONE - direct labels throughout (no legends), knife-edge vs generic
+    nu_R labeled on the curves, divergence annotation at the resignation boundary,
+    point value labels in d; Bayesian invariance remains TEXT (no fabricated line)"
+  F7_ident: "DONE - dot plot: circles=MLE, diamonds=MAP, open=L, filled=L+A, single hue;
+    rho row highlighted, r=0.92/0.91 annotated, gate line labeled; caption updated"
+  F8_bimodal: "DONE - count annotations computed from the same frozen CSV (49/60 freeze,
+    11/60 escape, 60/60 correct), bimodality note, consistent gate colors"
+  F9_docs: "DONE - main (15pp) + SI (12pp) recompile clean, zero undefined refs; captions
+    for Figs 2,3,4 and ED Fig 1 updated to match the redesigns; figure pages 7-8 and
+    standalone renders of all 8 figures visually inspected"

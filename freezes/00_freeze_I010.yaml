@@ -1,0 +1,44 @@
+iteration_id: "KGi-DISS-I010"
+mode: "figure/diagram additions; theory-derived only (closed-form drift), no new sims"
+freeze_time: "2026-11-04T14:00Z"
+deliverables_and_gates:
+  D1_regmap_legend: "replace the single-hue saturation ramp with a proper 2D legend for
+    the hue x saturation encoding: 5 columns (4 regimes + mixed) x frequency 0->1 tint,
+    labelled; gate: render-inspect; palette unchanged (validated in I005)"
+  D2_fig_flow: "companion 4-panel attractor flow figure (main, after the regime map):
+    (A,L) mean-field direction field per regime at theory-pinned cells -- legitimate
+    (mu=.6, Ainf=.6), credulous (mu=.4, Ainf=.4), defensive wrong (mu=.4, Ainf=.52 via
+    chi=.6 anchored to visible winners), correct-but-illegitimate (mu=.6 entered from
+    the trap at high A); stability stated honestly: filled markers = stable attractors;
+    CI is NOT a fixed point of this flow -- shown as a metastable low-L channel exiting
+    on the 1/rho clock (open marker + annotation); regime colours = the validated set;
+    all content computed from the closed-form drift, no simulation; gate: every
+    stability claim matches SI Propositions (resignation, reldep, race) and the
+    transparency results"
+  D3_network_tikz: "SI TikZ 'network configurations tested': (a) two-community block
+    with permeability Gamma (confirmatory cell + pt1-pt3 sweeps, global reference),
+    (b) isolation Gamma=0 with local reference (credulous cell), (c) reference channels
+    local vs global, (d) single agent with peer display (theory checks, recovery
+    threshold, task-v3 predictions); usage claims cross-checked against the frozen
+    engine configs before captioning; becomes Supplementary Fig 2 (renumber refs:
+    main-text bimodal pointer 3->4)"
+  D4_docs: "main sentence anchoring the flow figure; Methods pointer to the network
+    figure; compile clean; inspect; v5.3"
+out_of_scope: "new runs, text claims beyond existing propositions"
+closing_record:
+  closed: "2026-11-04"
+  D1_regmap_legend: "DONE - 2D hue x frequency legend (5 crisp columns incl. mixed,
+    white separators, rotated labels, frequency axis); replaces the single-hue ramp"
+  D2_fig_flow: "DONE - main Fig 8 'Dynamical anatomy of the four regimes': per-regime
+    direction fields with regime tab strips, nullclines labelled, stable attractors
+    (filled, regime colours) for legitimate/credulous/defensive-wrong; CI shown
+    honestly as a metastable low-L channel with entry trajectory and 1/rho exit
+    (NOT a fixed point) with eventual legitimate attractor marked; two label-collision
+    rounds render-inspected; all content closed-form, no simulation"
+  D3_network_tikz: "DONE - Supplementary Fig 2 (4 panels: block B(Gamma), isolation,
+    reference channels global/local, single agent + yoked peer); usage claims
+    cross-checked against engine configs (confirmatory/pt1/pt2 at Gamma=.1 global;
+    pt3/pt4 vary Gamma; credulous cell = local ref + chi=1 + Gamma=0; single-agent
+    checks/predictions); width fixed via resizebox after a clipped first render;
+    main bimodal pointer renumbered 3->4; Methods pointer added"
+  D4_docs: "DONE - main 19pp/11 figs + SI 17pp compile clean; zero undefined refs"

@@ -1,0 +1,85 @@
+iteration_id: "KGi-DISS-I008"
+mode: "testable-predictions figures + TikZ/narrative upgrades; no new scientific claims
+  about the model's phase structure; new trajectory/prediction OUTPUT runs are frozen
+  here before execution and are descriptive/illustrative only"
+freeze_time: "2026-11-04T13:05Z (before any engine edit or run)"
+frozen_run_designs:
+  race_anatomy: "rustsim new mode 'race' (validated engine, unchanged dynamics; adds
+    community-2 aspiration mean to the trajectory record): confirmatory cell A0=.8,
+    lam=.7, gate on, global reference, chi=.4; two cells rho=.002 (trapped) and rho=.02
+    (rescued); ONE run each, seeds 38001/38002, record every 2nd trial: t, m2, L2bar,
+    A2bar; output out/race.csv; purpose: time-series anatomy of Proposition race"
+  task_v3_predictions: "generator predict_taskv3.py; single-agent frozen spec (nuF=.05,
+    nuR=.0125, tauF=.3, phi=(1,.25), alpha=.2, beta=12; fairness slider == 100*L,
+    entitlement slider == 100*A per the prereg mapping); per-subject rho in {.002,.02}
+    50/50 (the preregistered rigidity moderator), chi=.6; protocol = task v3 (450
+    trials; P1 (.65,.35), P2 (.30,.15), P3 FULL (.65,.35) or MODERATE (.45,.35));
+    HIGH ref = displayed peer rate .65, LOW ref = own trailing-15 rate; windfall bonus
+    excluded from the learned reward stream (design probe only); rival R1 = coarse
+    fixed-rate rigged hypothesis mu_rig=.3 updated on own outcome + displayed peer
+    outcome, trust = pi_fair; n=300 simulated subjects per condition, seeds 70000+;
+    conditions: DISS x {HIGH,LOW} x FULL, DISS x HIGH x MODERATE, R1 x {HIGH,LOW} x
+    FULL, R1 x HIGH x MODERATE; outputs out/pred_*.csv"
+deliverables_and_gates:
+  D1_fig_race: "2-panel time series (trapped vs rescued): m2, L2bar, A2bar with A* line;
+    gate: render-inspect; numbers only from out/race.csv"
+  D2_fig_pred: "4-panel 'model-generated predictions for the preregistered experiment'
+    figure + TikZ protocol strip in the same float: a DISS fairness series HIGH vs LOW
+    (H1+H2), b rival pi_fair series HIGH vs LOW (sign-reversal discriminator), c P3
+    recovery FULL vs MODERATE under HIGH (H3) with rival contrast, d increment asymmetry
+    Delta-rating vs elicited shortfall, DISS vs rival (H4); every panel labelled as model
+    output, not data; gate: panels match the preregistered hypothesis statements, no
+    claim beyond them"
+  D3_text: "new Results subsection walking a-d as experimentally testable predictions
+    (what DISS predicts, what the rival predicts, what decides); Methods subsection
+    'Prediction generation' documenting the frozen generator"
+  D4_tikz: "Fig 1a gains labelled margin lanes (evidence / frame backgrounds); new
+    protocol TikZ strip (phases, regimes, slider cadence, windfalls, peer panel);
+    quality pass on arrows/spacing; gate: render-inspect"
+  D5_footnotes: "main-text footnotes for Lean/technical asides (machine-checking scope +
+    repo branch; A* Lean chain; rho_c validity; KL identity; identification geometry)
+    pointing into the SI"
+  D6_records: "compile clean, page inspection, v5.1 bundle, project docs, memory"
+out_of_scope: "oTree, prereg edits, repo creation, SI proof changes"
+pre_run_addendum_1: "task_v3_predictions missing pins, fixed BEFORE first generator run:
+  A0=0.5 (neutral start; P1 adapts it upward), L0=1, pi0=.9; peer display anchor = peer
+  running rate; slider cadence every 5 trials (prereg); rival auxiliary slider links for
+  the H4 panel: trust slider = 100*pi_fair, entitlement slider = adaptive own-earnings
+  expectation with rate .02 (the identification-screen convention); DISS sliders =
+  100*L, 100*A"
+pre_run_addendum_2: "race_anatomy correction, declared BEFORE re-running: seed 38001
+  produced an escape run (the ~16% minority at the confirmatory cell), unsuitable for a
+  figure captioned as the modal trapped trajectory. Rule fixed now: for the rho=.002
+  panel, advance through the pre-declared sequence 38001, 38011, 38021, ... and take the
+  FIRST seed whose run satisfies the frozen defensive-wrong criterion (m2<.3, L2bar<.3);
+  record the chosen seed and the number of candidates skipped in race.csv header comment.
+  rho=.02 stays at seed 38002 (modal: rescued). Mechanism note from the first render,
+  recorded for caption honesty: in the rescued run aspiration does NOT cross A*(mu2);
+  fast adaptation shrinks the discomfort margin, the gate never absorbs, correction
+  arrives through a partly open gate, and repair proceeds because post-correction
+  outcomes are the superior arm's with A below A*(mu1)=.675. Captions and text must
+  state THIS mechanism, not the mean-field idealization."
+closing_record:
+  closed: "2026-11-04"
+  D1_fig_race: "DONE - main Fig 6; modal-seed rule applied per addendum 2 (chosen seed
+    38021, 2 escape draws skipped and retained); both A* lines; mechanism-honest
+    annotations and caption (rescued run: gate never absorbs, correction through
+    partly open gate, repair under A*(mu1) - the first render's idealized caption was
+    corrected per addendum 2)"
+  D2_fig_pred: "DONE - main Fig 9 (b-e) + TikZ protocol strip (a); generator outputs
+    match every preregistered claim: H1 ordering (P2 trust 53 HIGH vs 74 LOW), sign
+    reversal (rival 100 under HIGH vs collapse-and-freeze under LOW = lab shadow of the
+    I001 isolation trap), H2 decoupling (P3 acc .95 vs trust 43), H3 flatline (14 under
+    MODERATE), H4 kink (+4 capped repair vs graded to -2.4); all panels labelled model
+    output, not data"
+  D3_text: "DONE - Results subsection 'The model commits to testable predictions'
+    (direction-not-magnitude discriminator stated); Methods 'Prediction generation'
+    (freeze, seeds, slider links, no evidential weight)"
+  D4_tikz: "DONE - Fig 1a EVIDENCE/FRAME margin lane backgrounds with labels; new
+    protocol strip (phases, regimes, slider cadence, windfalls, trial axis);
+    render-inspected"
+  D5_footnotes: "DONE - 5 footnotes: Lean scope+repo branch; A* chain T4->T2->T2b;
+    rho_c small-gain validity; KL self-confirmation identity; identification ridges"
+  D6_records: "main now 18pp/10 figs incl. [p] predictions page, compile clean, zero
+    undefined refs; race.csv + pred_*.csv frozen in rustsim/out/; predict_taskv3.py in
+    bundle"

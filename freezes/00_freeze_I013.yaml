@@ -1,0 +1,70 @@
+iteration_id: "KGi-DISS-I013"
+mode: "simulated peer review, round 2: three NEW referee personas (disjoint from I011's
+  R1-R3) read the v6.2 build in full; no manuscript changes in this iteration"
+freeze_time: "2026-11-04T18:10Z (before any referee agent is launched)"
+user_directive: "three new referees for this kind of paper (target NHB, JASSS,
+  Physica A, or JEDC); each independently recommends 5 journals with likelihood of
+  non-desk-rejection, no-nonsense, in case NHB is the wrong target; check the paper
+  AND the supplement"
+inputs:
+  main: "main.pdf v6.2, 21 pp, md5 7b3d60694dac1014a3dd9e20d584c1f3 (0 undefined
+    refs/citations, 0 rendered '??')"
+  supplement: "supplement.pdf (I012 content, rebuilt 2026-11-04T18:09 against
+    re-rendered identical figures), 18 pp, md5 35c9d967cd145c46e91ea2cf0da6e363
+    (0 undefined refs/citations, 0 rendered '??')"
+personas:  # frozen before launch; chosen to cover the four candidate venues
+  R4: "computational social scientist / ABM methodologist (JASSS editorial culture:
+    model documentation, validation and verification, ODD-style transparency,
+    simulation-as-evidence standards; also fluent in NHB computational-modelling
+    expectations)"
+  R5: "computational / behavioural macroeconomist (JEDC culture: heterogeneous-agent
+    and learning models, adaptive expectations, stochastic approximation in economics,
+    numerical rigour, what counts as an economic contribution)"
+  R6: "sociophysicist / statistical-mechanics-of-social-dynamics researcher
+    (Physica A / PRE culture: opinion dynamics, absorbing states, finite-size scaling,
+    mean-field vs simulation agreement, order parameters and transition language)"
+independence_rules:
+  - "each referee is a FRESH agent with no access to this conversation, to I011's
+    reports, to the referee-response memo, or to the other referees' outputs"
+  - "briefs contain persona + file paths + deliverable format only; no editorial
+    steer, no prior desk-rejection estimates, no list of known weaknesses"
+deliverable_per_referee:
+  - "standard report on BOTH documents: summary, major points, minor points,
+    verdict (accept / minor / major / reject-and-resubmit-elsewhere)"
+  - "independent ranked list of exactly 5 journals with P(non-desk-rejection) as a
+    number in [0,1] and a one-line blunt justification each; candidate set is open
+    (NHB, JASSS, Physica A, JEDC are candidates, not constraints)"
+  - "one line on what single change would most move the venue ranking"
+aggregation: "92_referee_reports_I013.md: three verbatim reports + venue consensus
+  matrix (journal x referee probabilities) + editorial synthesis; disagreements
+  reported, not averaged away"
+honesty_rules:
+  - "reports are SIMULATED expert judgments by AI personas and are labelled as such
+    everywhere they appear; probabilities are calibrated guesses, not data"
+  - "verbatim reports preserved unedited in the record, including anything wrong or
+    unflattering"
+out_of_scope: "manuscript edits, new runs, venue decision itself (author's call)"
+closing_record:
+  closed: "2026-11-04"
+  reports: "3/3 delivered per frozen format; verbatim in 92_referee_reports_I013.md"
+  verdicts: "R4 reject-and-resubmit-elsewhere (as NHB submission); R5 major revision;
+    R6 major revision; no mathematical errors found (R5, R6 independently recomputed
+    A*(0.4), A*(0.6), rho_c and confirm)"
+  venue_consensus: "NHB 0.10-0.20 as-is (unanimous: no human data = desk);
+    JASSS 0.90-0.93 (unanimous floor-not-target); Physica A 0.85 (R5 advises against
+    on substance); JEBO 0.60-0.65; JEDC 0.50-0.55; PsychRev 0.35-0.40.
+    Unanimous single change: human data (pilot or ref-7 reanalysis) inverts the
+    ranking and makes NHB a live first choice"
+  convergent_actionables: "abstract horizon qualifier; nlvar P=.257 into main beside
+    the slogan + as-if-representation wording; purge 'phase' title/vocabulary
+    (contradicts S12.1); audit 0.112+-0.047 vs 0.166 tolerance must be answered from
+    the frozen record; 0.55 confusion diagonal + aspiration-in-utility rival into
+    main/pred figure; CI convention + n beside every regime probability; topology
+    sweep upgraded to required; new cheap runs proposed: direct rho_c absorption
+    test, field-form check (unweighted freq, eta=0); verify-then-add SCE/escape
+    literature (Fudenberg-Levine, Evans-Honkapohja, Cho-Williams-Sargent);
+    archived DOI; author contributions"
+  surprises: "round 2 trio is HARSHER on NHB than round 1 (0.10-0.20 vs implied
+    0.25-0.45) while unanimously praising the reporting hygiene; two referees
+    independently caught the same audit-tolerance arithmetic; R6 caught a genuine
+    main-vs-SI vocabulary self-contradiction ('The trap is a phase' vs S12.1)"

@@ -1,0 +1,31 @@
+{{ block title }}Welcome{{ endblock }}
+{{ block content }}
+
+<p>In this study you will make <b>450 choices</b> between two boxes. Each choice can
+earn you <b>1 point</b>. Some boxes pay more often than others, and how often a box
+pays <b>can change during the study without warning</b>.</p>
+
+<p>In addition, every 15th choice you receive an announced <b>bonus of
+{{ C.BONUS_POINTS }} points</b>, regardless of what you chose.</p>
+
+<p>Throughout the task you will see what <b>another participant</b> who previously
+played this same task earned on each of their choices. This is a real record from a
+previous session, not a simulation.</p>
+
+<p>Every 5 choices we will ask you two quick questions: how <b>fair</b> you find the
+payout rule, and what you feel you <b>deserve to earn</b> per choice.</p>
+
+<p><i>The payout rule used in your session is one of several rules used across
+sessions of this study.</i></p>
+
+<p>Your points are converted to money at the rate shown at the end. The study takes
+about 28 minutes. You may stop at any time, but payment requires completion.</p>
+
+<label>
+  <input type="checkbox" name="consent" required>
+  I have read the above and consent to take part.
+</label>
+
+<br><br>
+{{ next_button }}
+{{ endblock }}

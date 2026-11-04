@@ -1,0 +1,111 @@
+{{ block title }}{{ endblock }}
+{{ block content }}
+<style>
+  .db-wrap { max-width: 680px; margin: 0 auto; font-size: 1.05rem; }
+  .db-arms { display: flex; gap: 28px; justify-content: center; margin: 26px 0; }
+  .db-arm { width: 180px; height: 130px; font-size: 1.4rem; border-radius: 12px;
+            border: 2px solid #555; background: #f4f4f2; cursor: pointer; }
+  .db-arm:disabled { opacity: .55; cursor: default; }
+  .db-feedback { text-align: center; min-height: 64px; font-size: 1.25rem; }
+  .db-win { color: #0072B2; font-weight: 700; }
+  .db-zero { color: #777; }
+  .db-bonus { color: #D55E00; font-weight: 700; }
+  .db-peer { border-top: 1px solid #ddd; margin-top: 18px; padding-top: 10px;
+             color: #444; text-align: center; }
+  .db-progress { color: #888; text-align: center; font-size: .9rem; }
+  #ratingModal { display: none; position: fixed; inset: 0;
+                 background: rgba(0,0,0,.45); z-index: 50; }
+  #ratingModal .inner { background: #fff; max-width: 520px; margin: 12vh auto;
+                        padding: 26px 30px; border-radius: 10px; }
+  .db-slider { width: 100%; }
+  .db-sl-row { margin: 18px 0 6px; }
+  .db-sl-labels { display: flex; justify-content: space-between; color: #777;
+                  font-size: .85rem; }
+</style>
+
+<div class="db-wrap">
+  <div class="db-progress">choice <span id="tNow">–</span> of 450 &nbsp;·&nbsp;
+    total points: <span id="pts">0</span></div>
+
+  <div class="db-arms">
+    <button class="db-arm" id="armLeft">Box A</button>
+    <button class="db-arm" id="armRight">Box B</button>
+  </div>
+
+  <div class="db-feedback" id="fb">&nbsp;</div>
+
+  <div class="db-peer">
+    Previous participant: last choice earned <b id="peerR">–</b>,
+    overall rate <b id="peerRate">–</b>
+  </div>
+</div>
+
+<div id="ratingModal">
+  <div class="inner">
+    <div class="db-sl-row">
+      <div>“<b>The payout rule is fair.</b>”</div>
+      <input type="range" class="db-slider" id="slFair" min="0" max="100" value="50">
+      <div class="db-sl-labels"><span>completely disagree</span><span>completely agree</span></div>
+    </div>
+    <div class="db-sl-row">
+      <div>“<b>What I deserve to earn per choice.</b>”</div>
+      <input type="range" class="db-slider" id="slEnt" min="0" max="100" value="50">
+      <div class="db-sl-labels"><span>nothing</span><span>the maximum</span></div>
+    </div>
+    <button class="btn btn-primary" id="ratingGo" style="margin-top:14px">Continue</button>
+  </div>
+</div>
+
+<script>
+  let t0 = performance.now(), ratT0 = 0, blockDone = false;
+  const L = document.getElementById('armLeft'), R = document.getElementById('armRight');
+  const fb = document.getElementById('fb');
+
+  function lock(b) { L.disabled = b; R.disabled = b; }
+  function send(side) {
+    lock(true);
+    liveSend({type: 'choice', side: side, rt_ms: Math.round(performance.now() - t0)});
+  }
+  L.onclick = () => send('left');
+  R.onclick = () => send('right');
+
+  document.getElementById('ratingGo').onclick = function () {
+    document.getElementById('ratingModal').style.display = 'none';
+    liveSend({type: 'rating',
+              fairness: +document.getElementById('slFair').value,
+              entitlement: +document.getElementById('slEnt').value,
+              rt_ms: Math.round(performance.now() - ratT0)});
+  };
+
+  function liveRecv(data) {
+    if (data.type === 'trial') {
+      document.getElementById('tNow').textContent = data.t;
+      lock(false); t0 = performance.now();
+    }
+    if (data.type === 'feedback') {
+      document.getElementById('tNow').textContent = data.t;
+      document.getElementById('pts').textContent = data.points;
+      document.getElementById('peerR').textContent = data.peer_reward + ' point' + (data.peer_reward === 1 ? '' : 's');
+      document.getElementById('peerRate').textContent = (100 * data.peer_rate).toFixed(0) + '%';
+      let h = data.reward ? '<span class="db-win">+1 point</span>'
+                          : '<span class="db-zero">0 points</span>';
+      if (data.bonus) h += ' &nbsp; <span class="db-bonus">bonus +' + data.bonus + '</span>';
+      fb.innerHTML = h;
+      blockDone = data.block_done;
+      if (data.ask_rating) {
+        ratT0 = performance.now();
+        document.getElementById('ratingModal').style.display = 'block';
+      } else if (blockDone) {
+        document.getElementById('form').submit();
+      } else {
+        setTimeout(() => { lock(false); t0 = performance.now(); }, 350);
+      }
+    }
+    if (data.type === 'rating_ok') {
+      if (data.block_done) { document.getElementById('form').submit(); }
+      else { lock(false); t0 = performance.now(); }
+    }
+  }
+  document.addEventListener('DOMContentLoaded', () => { lock(true); liveSend({type: 'start'}); });
+</script>
+{{ endblock }}

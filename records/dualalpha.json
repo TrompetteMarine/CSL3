@@ -1,0 +1,42 @@
+{
+ "diss_HIGH_P1": {
+  "median_log_ratio": -0.174,
+  "frac_positive": 0.387,
+  "n": 300
+ },
+ "diss_HIGH_P2": {
+  "median_log_ratio": 0.302,
+  "frac_positive": 0.603,
+  "n": 300
+ },
+ "diss_LOW_P1": {
+  "median_log_ratio": -0.23,
+  "frac_positive": 0.32,
+  "n": 300
+ },
+ "diss_LOW_P2": {
+  "median_log_ratio": 0.096,
+  "frac_positive": 0.54,
+  "n": 300
+ },
+ "off_HIGH_P1": {
+  "median_log_ratio": -0.245,
+  "frac_positive": 0.37,
+  "n": 300
+ },
+ "off_HIGH_P2": {
+  "median_log_ratio": -0.188,
+  "frac_positive": 0.42,
+  "n": 300
+ },
+ "off_LOW_P1": {
+  "median_log_ratio": -0.208,
+  "frac_positive": 0.38,
+  "n": 300
+ },
+ "off_LOW_P2": {
+  "median_log_ratio": -0.095,
+  "frac_positive": 0.467,
+  "n": 300
+ }
+}

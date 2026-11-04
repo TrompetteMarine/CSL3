@@ -1,0 +1,58 @@
+iteration_id: "KGi-DISS-I007"
+mode: "manuscript + supplement rewrite; no new scientific claims, no new runs"
+freeze_time: "2026-11-04T12:40Z (before any edit)"
+baseline: "v4.1 (main 15pp/8 figs + SI 12pp + I006 instrument)"
+deliverables_and_gates:
+  D1_SI_proof_completeness: "every Proposition/Theorem in the supplement carries either a
+    complete proof, an explicit citation to a verified source for the imported step, or a
+    numerical-evidence tag; the relative-deprivation proposition (currently statement-only)
+    gets a full proof; the drift-region decomposition becomes a derivation with explicit
+    steps; mean-field reduction steps written out (logistic choice map, gated contraction
+    modulus, gap recursion); gate: zero proof-free numbered claims"
+  D2_verification_provenance: "uniform provenance badge on every numbered result:
+    Lean-certified (names the exact theorems, matching the S7 table), proved here,
+    imported (cited + logged in 00_citation_verification_I004.md), or numerical (frozen
+    record named); gate: badge set == S7 table for all Lean claims, no over-claiming"
+  D3_meaningful_calculations: "documented derivations kept/added where they carry content:
+    EWMA variance + concentration arithmetic, A* and rho_c numeric evaluation at frozen
+    defaults, windfall-corner condition, Bayesian E[log-LR] trap calculation,
+    identification ridge geometry; non-standard results explicitly flagged as such"
+  D4_main_rewrite_NHB: "full prose pass in NHB computational-article register: tightened
+    unheaded Introduction, declarative Results subheads, stats inline, compact Discussion,
+    Methods with Statistics & reproducibility, plus Data availability, Code availability,
+    Author contributions, Competing interests; no change to any number or claim"
+  D5_oxford_english: "Oxford spelling throughout BOTH documents (-ize endings; behaviour,
+    colour, modelling, labelled, grey, artefact, neighbour, centre, defence, analyse);
+    refs.bib and quoted titles EXEMPT; gate: scripted sweep + manual diff review +
+    compile clean"
+  D6_records: "recompile + page inspection, v5 bundle, project docs, memory"
+out_of_scope: "figures (I005 final), Lean sources, oTree, new analyses"
+closing_record:
+  closed: "2026-11-04"
+  D1_proof_completeness: "DONE - no proof-free numbered claims remain: new complete proofs
+    for the gradient proposition (3 parts), the four-region drift decomposition (now a
+    Lemma), the A* characterization (human-readable shadow of the Lean chain), relative
+    deprivation (limit aspiration + absorption both directions as hitting/occupation via
+    Hajek + local-vs-global computation), the race (integration shown + rho_c arithmetic
+    0.05*0.6*0.2138=0.00641), three mean-field lemmas (choice map, gated contraction,
+    gap decay), and the Bayesian trap as a two-line KL identity (g = KL - KL)"
+  D2_provenance: "DONE - 12 Verification badges; reading guide defines the four tags
+    (Lean-certified/proved here/imported/numerical); Lean tag set across the SI = exactly
+    {T1,T2,T2b,T3,T4,T5a,T5b} = the S7 table; every tag names algebra only; S7 notes the
+    lean-diss-core publication"
+  D3_calculations: "DONE - EWMA variance fixed-point derivation, A* arithmetic at
+    defaults, windfall-corner exclusion derived (0.25 <= 0.3/0.7), rho_c numeric,
+    KL identity; non-standard results flagged (step-size-as-state in S6; KL
+    self-confirmation remark in S8)"
+  D4_main_NHB: "DONE - abstract tightened (~150 words, engine detail removed),
+    contributions opener re-registered, iff -> if and only if in prose, Results engine
+    detail moved to Methods register, long Discussion paragraph split, Supplementary
+    Section reference style, Data availability + Code availability subsections, Author
+    contributions (placeholder, flagged) + Competing interests (standard declaration,
+    flagged for confirmation) end matter"
+  D5_oxford: "DONE - realised->realized, organis->organiz, toward->towards (prose only);
+    scan shows remaining hits are LaTeX commands (color/center names); refs.bib untouched
+    (published titles keep their own spelling)"
+  D6_records: "main 15pp clean, SI 16pp clean, zero undefined refs; pages visually
+    inspected (SI guide p1, regions lemma p4, reldep proof p7, mean-field lemmas p9,
+    KL lemma p11; main end matter p13)"
