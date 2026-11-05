@@ -1,0 +1,62 @@
+iteration_id: "KGi-DISS-I023"
+mode: "two frozen work packages, no new simulation runs: (A) the top-3 lab-to-field
+  prior-elicitation specification, frozen as the experiment's analysis-bridge
+  document; (B) simulated referee round 3 on manuscript v10"
+freeze_time: "2026-11-05T12:45Z (before any referee agent is launched and before the
+  spec is pushed)"
+user_directives:
+  - "freeze the top 3 for the experiment"
+  - "third round of referees"
+
+package_A_prior_elicitation:
+  deliverable: "experiment/PRIORS.md in the public repo (CSL3) + Project mirror"
+  trio_frozen:  # confirmed by the author (these three were proposed and are now frozen)
+    P-A: "reference-dependence magnitude (from confirmatory H1): HIGH-LOW difference
+      in the P1->P2 legitimacy drop; the only confirmatory quantity; seeds the field
+      prior on how much delegitimation is reference-driven rather than outcome-driven"
+    P-B: "restoration dissociation + recovery threshold (from discriminating H2/H3):
+      behaviour-vs-trust lag after restoration, and the FULL-vs-MODERATE reopening
+      contrast; seeds the field priors on persistence half-life of delegitimated
+      discourse after corrective exposure and on the minimum visible-success dosage"
+    P-C: "aspiration-rigidity distribution (instrumental, from H4 + entitlement
+      slider): individual rho posteriors (slider-identified, synthetic recovery
+      r=.91); seeds the field heterogeneity prior and, through the t* clock, the
+      predicted persistence distribution"
+  honesty_constraints:
+    - "only H1 is confirmatory (alpha=.005, N=320/cell, d=.25 design floor);
+      P-B/P-C are preregistered secondaries/instruments, never promoted post hoc"
+    - "all numeric priors below are MODEL-GENERATED at frozen defaults; the lab
+      posteriors replace them; the chain model->lab->field is stated at every use"
+    - "no individual-level nuR priors (group bias -30%, excluded at I003); dual-alpha
+      asymmetry stays exploratory (OFF-level sanity failed at I015, shift-only claims)"
+    - "window mapping: HIGH/LOW is a within-window displacement of x; the field stage
+      estimates platform x distributions; t*(x) maps lab rho-hat to field persistence"
+
+package_B_referee_round_3:
+  manuscript: "v10 frozen: main.pdf md5 396abccb516e184d7c91c5e31fd12795 (24 pp),
+    supplement.pdf md5 c98788a9738434a35db0e22a74fd84b7 (27 pp)"
+  protocol: "three NEW personas, fully independent (separate agents, no shared
+    context, no access to rounds 1-2 or to each other), both PDFs read in full;
+    verdict + major/minor points + independent math recomputation + the single
+    highest-value change + 5 journal recommendations each with P(non-desk-rejection),
+    no-nonsense; reports reproduced verbatim, kept OUT of the public repo"
+  personas:
+    R7: "social/cognitive neuroscientist and experimentalist (reward learning under
+      social influence; reads Pescetelli/Yeung, Wittmann, Lockwood/Manohar); typical
+      NHB reviewer; judges the experiment bridge, DDM scoping, induced-asymmetry
+      claim, neuro framing"
+    R8: "computational social scientist / network scientist (echo chambers,
+      misinformation, exposure effects; Bail/Cinelli school; multilayer and
+      meta-network methods); judges the M-community battery, the exposure-window
+      claim, broadcast dissociation, and the field-stage plausibility"
+    R9: "microeconomic theorist of misspecified learning (Berk-Nash/SCE tradition:
+      Esponda-Pouzo, Bohren, Frick-Iijima-Ishii, Heidhues-Koszegi); judges the as-if
+      representation, the closed forms (A*, rho_c, t*, the 5/6 permanence bound),
+      the rival class, and the identification wall"
+  pre_stated_use: "convergent actionables become the I024 worklist; venue matrix
+    updates the submission ladder (NHB first with experiment, JASSS floor; JEBO
+    excluded by prior desk rejection)"
+honesty_rules:
+  - "referee findings reported verbatim, including any error they find in the new
+    S13 closed forms; no silent fixes"
+  - "no frozen numbers change in either package"
