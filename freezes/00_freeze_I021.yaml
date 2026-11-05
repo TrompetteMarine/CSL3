@@ -1,0 +1,121 @@
+iteration_id: "KGi-DISS-I021"
+mode: "EXPLORATION (results before writing): M-community generalisation of the
+  collective theory on meta-network and complex-network exposure; manuscript
+  integration deferred to a later iteration once results are in hand"
+freeze_time: "2026-11-05T10:50Z (before any engine edit or run)"
+user_directive: "general theory in the main text with the two-community model as the
+  worked example; progression 2-10-100-1000-10000 communities; meta-network and
+  complex-network approaches; explore before writing into the current literature
+  positioning"
+theory_anchor: "the former NHB paper's exact block-aggregation identity (community
+  aggregates suffice under block-uniform exposure, any M, unequal sizes) licenses the
+  community-level field engine at every M; its two population limits (fixed-M growing
+  n; sparse growing M) organise the ladder's two ends; its common/relative mode
+  analysis (eigenvalues of the exposure matrix) is the candidate spectral statement.
+  Theory generalisation to draft AFTER results: per-community trap condition at the
+  equilibrium exposure-weighted reference, chi*(W mu^eq - mu_c) > A*(mu_c) - mu_c,
+  with the two-community B(Gamma) as worked example and the relative-mode multiplier
+  governed by the exposure matrix's subdominant eigenvalue"
+engine_extension:
+  design: "M community blocks, sizes n_c, row-stochastic exposure matrix W built from
+    a meta-graph: within-weight w_in=0.85, remaining 0.15 split over meta-neighbours.
+    Meta-graphs: ring(deg 4), Watts-Strogatz rewiring p in {0.01,0.1,1} (rewire each
+    ring edge with prob p to a uniform random community), Barabasi-Albert m=2
+    (degree-heterogeneous), broadcast (0.15 to the population-weighted mean of all
+    other communities). Fields and retrospective channel aggregate per community then
+    mix through W (exact under block-uniform exposure). Reference channel:
+    exposure-weighted community mean (local) throughout; one global-reference variant
+    cell. Gate: Diss only"
+  validation_gate: "instantiating M=2, n=(100,100), W=B(0.1) through the NEW code path
+    must reproduce the frozen confirmatory cell distributionally BEFORE any battery
+    output is used: P_dw in [0.78,0.90] and |m2-0.166|<=0.06 at 300 runs (the same
+    pre-stated band as the original engine port); failure blocks the battery"
+battery:  # all seeds pre-declared: seed = 80000 + cell_id*1000 + run
+  common: "T=600; lam=0.7; rho=0.002; chi=0.4; A0=0.8 everywhere; losing communities
+    (fraction 1/2) initialised Q=(0.38,0.62), winners (0.62,0.38); frozen defaults
+    otherwise; classification per community over last 50 trials (trapped m<0.3 &
+    L<0.3; corrected-but-illegitimate m>0.7 & L<0.3)"
+  ladder_ring_clustered: "(M,n): (2,5000) (10,1000) (100,100) (1000,10) at N=10,000;
+    (10000,10) at N=100,000; ring, clustered losing block; 40 runs per cell (20 at
+    N=100,000)"
+  geometry_grid: "at (M,n) in {(10,1000),(100,100),(1000,10)}: geometries {ring,
+    WS p=0.01, WS p=0.1, WS p=1, BA m=2, broadcast} x placements {clustered,
+    scattered}; 40 runs per cell"
+  unequal_sizes: "M=10 at N=10,000: one winner of 5,500 + 9 losers of 500; and one
+    loser of 5,500 + 9 winners of 500; ring, 40 runs each"
+  global_reference_variant: "broadcast geometry at (100,100), clustered, global-mean
+    reference instead of exposure-weighted; 40 runs"
+  outputs: "cell-level CSV (fractions trapped/CBI/corrected per losing set, means) +
+    community-level CSV for the geometry grid (per losing community: realized
+    cross-exposure to initially-winning communities, terminal class) for the
+    exposure-predictor regression"
+frozen_predictions:  # falsifiable; failures reported as findings
+  - "P1 ladder: trap survives at every M on the ring with clustered losers; the
+    trapped fraction falls as community size n falls (fluctuation escapes), echoing
+    the N^(-1/2) law at community scale"
+  - "P2 rewiring: trapped fraction falls with p, and within cells a losing
+    community's trap probability is decreasing in its realized cross-exposure to
+    corrected communities (the I014 exposure-boundary claim at scale)"
+  - "P3 scattered losers: behaviour corrects under every local geometry (the WP1
+    analogue) while losing-community legitimacy heals only on the rho clock -> the
+    correct-but-illegitimate transit generalises; defensive wrong consensus requires
+    CLUSTERED reference structure"
+  - "P4 BA meta-graph: high-degree (hub) losing communities escape, low-degree
+    peripheral ones trap -> degree-quantile ordering of trap probability"
+  - "P5 broadcast: with the common field and local references, legitimacy collapse is
+    at least as persistent as on the ring (reference-rich, correction-poor);
+    behavioural outcome stated as exploratory, no prediction"
+  - "P6 unequal sizes: monotonicity in the losing community's own size carries over
+    (big loser among small winners traps harder than the reverse)"
+honesty_rules:
+  - "exploration only: no manuscript claims until results are frozen and reviewed
+    with the author; surprises and failed predictions reported verbatim"
+  - "frozen two-community confirmatory numbers unchanged and never regenerated by
+    the new path (validation gate is a distributional check, not a replacement)"
+addendum_1_pre_run: "two follow-up cells frozen after the main battery, before the
+  report: (A) horizon cell M=100, n=100, ring, clustered, T=2400, 20 runs, seeds
+  85000+r — prediction: interior losing communities flip trap -> credulous (L
+  recovers) as A adapts below A* on the rho clock, exposing the window's lower edge
+  invisible at T=600; (B) ladder anchor M=2, n=5000, w_in=0.90 (the paper's
+  Gamma=0.1), clustered, 20 runs, seeds 86000+r — prediction: trap ~1 (deterministic
+  limit of the confirmatory cell)"
+closing_record:
+  closed: "2026-11-05"
+  validation: "new M-block path passed the pre-stated gate (m2=0.208, P_dw=0.803);
+    untouched legacy path still bit-identical on the five frozen gates"
+  battery: "44 cells + 2 addendum cells, 1,740 runs, 266,400 community-level records
+    (mnet_cells.csv, mnet_comm.csv, mnetT.csv)"
+  central_finding: "ONE community-level sufficient statistic governs fate at every
+    M in {2..10,000}: cross-exposure to corrected communities x_c. P(trap|x) at
+    T=600 falls 0.991/0.921/0.276/0.154/0.001/0.000 across bins pooled over ALL
+    geometries; behavioural threshold x_B ~ 0.11 (P(escape|x>=0.1125)=0.999). The
+    lower (grievance) edge is horizon-indexed: at T=2400 every T=600 trap resolves
+    (45% credulous resignation with L=0.98, rest corrected) — the two-community
+    regime map generalises as a WINDOW in x plus the rho horizon clock"
+  prediction_scorecard:
+    P1: "PARTIAL — trap (at horizon) survives at every M>=10 with clustered losers
+      (1.00, stronger than two-community 0.843: interiors have x~0); the M=2 ladder
+      cell at the 0.85 budget corrected (Gamma=0.15 above the window top; the
+      Gamma=0.10 anchor traps 20/20 at n=5000); trapped fraction did NOT fall with
+      n on the clustered ring (clustering shields interiors)"
+    P2: "PASS — rewiring lowers trapping (ws1: 0.71/0.75/0.36) and x_c is the
+      predictor (window regression)"
+    P3: "FAIL at M=10/100 (scattered deg-4 puts every loser at x~0.075, INSIDE the
+      window -> trapped at horizon), PASS at M=1000 via fluctuation-seeded cascades
+      (n=10: trap 0.10, cbi 0.37) — window account absorbs both"
+    P4: "FAIL — BA meta-degree flat (P(trap) 0.62-0.71 across degrees): composition
+      of exposure, not degree, is what moves x"
+    P5: "FAIL at M=1000 (broadcast fully corrects via common-field cascades: trap 0,
+      cbi 0.45, L=0.31 — mass correct-but-illegitimate), PASS at M<=100 (trap 1.00)"
+    P6: "FAIL as stated — exposure composition dominates size: the big loser among 9
+      small winners has x=0.15 and corrects; nine losers around one big winner have
+      low x and trap; the I014 size effect was a fluctuation effect, this one is
+      compositional"
+  surprises_beyond_predictions:
+    - "clustered ring at M>=10 traps HARDER than the two-community cell (interior
+      x~0 communities are reference-shielded at the horizon)"
+    - "broadcast at n=10, M=1000: full behavioural correction with ~45% of losing
+      communities corrected-but-illegitimate at T=600 — the behaviour/belief
+      dissociation at 10,000-community scale"
+  manuscript_status: "NO manuscript changes in I021 (explore-before-writing honoured);
+    general-theory writing plan proposed to the author in the exploration report"

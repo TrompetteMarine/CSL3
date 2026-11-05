@@ -268,6 +268,165 @@ fn cell_stats(p: &P, gate: Gate, q1: [f64; 2], q2: [f64; 2], reps: usize, seed0:
     (mm2, vm2, ml2, vl2, pdw, pper, dw, vdw)
 }
 
+// ================= I021: M-community blocks on meta-/complex networks ============
+// Exposure matrix W: row c = w_in on itself + (1-w_in) over meta-neighbours
+// (equal split; population-weighted over all others for broadcast). Exact
+// block-uniform aggregation licenses community-level fields at every M.
+
+fn build_meta(m: usize, geom: &str, sizes: &[usize], w_in: f64, rng: &mut Rng)
+              -> Vec<Vec<(usize, f64)>> {
+    let mut rows: Vec<Vec<(usize, f64)>> = vec![vec![]; m];
+    let out = 1.0 - w_in;
+    if m == 1 { rows[0].push((0, 1.0)); return rows; }
+    if m == 2 {
+        for c in 0..2 { rows[c].push((c, w_in)); rows[c].push((1 - c, out)); }
+        return rows;
+    }
+    let mut adj: Vec<Vec<usize>> = vec![vec![]; m];
+    match geom {
+        "broadcast" => {
+            let tot: f64 = sizes.iter().sum::<usize>() as f64;
+            for c in 0..m {
+                rows[c].push((c, w_in));
+                let rest = tot - sizes[c] as f64;
+                for d in 0..m { if d != c {
+                    rows[c].push((d, out * sizes[d] as f64 / rest)); } }
+            }
+            return rows;
+        }
+        "ba" => {
+            // Barabasi-Albert m=2 over communities, seeded start triangle
+            let mut targets: Vec<usize> = vec![0, 1, 2, 0, 1, 2];
+            adj[0].push(1); adj[1].push(0); adj[1].push(2);
+            adj[2].push(1); adj[2].push(0); adj[0].push(2);
+            for v in 3..m {
+                let mut chosen: Vec<usize> = vec![];
+                while chosen.len() < 2 {
+                    let t = targets[(rng.f64() * targets.len() as f64) as usize
+                                    % targets.len()];
+                    if t != v && !chosen.contains(&t) { chosen.push(t); }
+                }
+                for &t in &chosen {
+                    adj[v].push(t); adj[t].push(v);
+                    targets.push(v); targets.push(t);
+                }
+            }
+        }
+        _ => {
+            // ring degree 4, then WS rewiring with prob p (geom "ring" => p=0)
+            let p = match geom { "ws001" => 0.01, "ws01" => 0.1, "ws1" => 1.0,
+                                 _ => 0.0 };
+            let mut edges: Vec<(usize, usize)> = vec![];
+            for c in 0..m { for k in [1usize, 2] {
+                edges.push((c, (c + k) % m)); } }
+            for e in edges.iter_mut() {
+                if p > 0.0 && rng.f64() < p {
+                    let mut t = (rng.f64() * m as f64) as usize % m;
+                    let mut guard = 0;
+                    while (t == e.0 || t == e.1) && guard < 50 {
+                        t = (rng.f64() * m as f64) as usize % m; guard += 1; }
+                    e.1 = t;
+                }
+            }
+            for (a, b) in edges { if a != b { adj[a].push(b); adj[b].push(a); } }
+        }
+    }
+    for c in 0..m {
+        adj[c].sort(); adj[c].dedup();
+        rows[c].push((c, w_in));
+        if adj[c].is_empty() { rows[c] = vec![(c, 1.0)]; continue; }
+        let share = out / adj[c].len() as f64;
+        for &d in &adj[c] { rows[c].push((d, share)); }
+    }
+    rows
+}
+
+struct MOut { m: Vec<f64>, l: Vec<f64> }
+
+fn run_mblock(p: &P, sizes: &[usize], rows: &[Vec<(usize, f64)>], losing: &[bool],
+              seed: u64, global_ref: bool) -> MOut {
+    let m = sizes.len(); let n: usize = sizes.iter().sum();
+    let mut comm = vec![0usize; n]; let mut off = vec![0usize; m + 1];
+    { let mut k = 0; for c in 0..m { off[c] = k; k += sizes[c]; } off[m] = n; }
+    for c in 0..m { for i in off[c]..off[c + 1] { comm[i] = c; } }
+    let mut rng = Rng::new(seed);
+    let mut q = vec![[0.0f64; 2]; n];
+    for i in 0..n { q[i] = if losing[comm[i]] { [0.38, 0.62] } else { [0.62, 0.38] }; }
+    let mut l = vec![p.l0; n]; let mut a = vec![p.a0; n];
+    let (mut pa, mut pc): (Option<Vec<u8>>, Option<Vec<f64>>) = (None, None);
+    let mut act = vec![0u8; n]; let mut cdec = vec![0.0f64; n]; let mut rew = vec![0.0f64; n];
+    let mut mt = vec![0.0f64; m]; let mut lt = vec![0.0f64; m];
+    let tail = p.t - 50;
+    for t in 0..p.t {
+        // community aggregates from t-1
+        let mut phi = vec![[0.0f64; 2]; m];
+        if let (Some(ca), Some(cc)) = (&pa, &pc) {
+            for i in 0..n { phi[comm[i]][ca[i] as usize] += cc[i]; }
+            for c in 0..m { for ar in 0..2 { phi[c][ar] /= sizes[c] as f64; } }
+        }
+        let mut s = vec![[0.0f64; 2]; m];
+        for c in 0..m { for &(d, w) in &rows[c] { for ar in 0..2 {
+            s[c][ar] += w * phi[d][ar]; } } }
+        // choices + rewards
+        for i in 0..n {
+            let c = comm[i];
+            let delta = (q[i][0] - q[i][1]) + p.lam * (s[c][0] - s[c][1]);
+            let p1 = sigmoid(p.beta2 * delta);
+            act[i] = if rng.f64() < p1 { 0 } else { 1 };
+            cdec[i] = (2.0 * p1 - 1.0).abs();
+            rew[i] = if rng.f64() < p.mu[act[i] as usize] { 1.0 } else { 0.0 };
+        }
+        // outcome aggregates
+        let mut rbar = vec![0.0f64; m];
+        let mut wm = vec![[0.0f64; 2]; m]; let mut wr = vec![[0.0f64; 2]; m];
+        for i in 0..n {
+            let c = comm[i]; let ar = act[i] as usize;
+            rbar[c] += rew[i]; wm[c][ar] += cdec[i]; wr[c][ar] += cdec[i] * rew[i];
+        }
+        let mut pop = 0.0;
+        for c in 0..m {
+            pop += rbar[c];
+            rbar[c] /= sizes[c] as f64;
+            for ar in 0..2 { wm[c][ar] /= sizes[c] as f64; wr[c][ar] /= sizes[c] as f64; }
+        }
+        pop /= n as f64;
+        let mut expo = vec![[0.0f64; 2]; m]; let mut erew = vec![[0.0f64; 2]; m];
+        let mut rref = vec![0.0f64; m];
+        for c in 0..m { for &(d, w) in &rows[c] {
+            for ar in 0..2 { expo[c][ar] += w * wm[d][ar]; erew[c][ar] += w * wr[d][ar]; }
+            rref[c] += w * rbar[d];
+        } }
+        // updates (synchronous, pre-update states)
+        for i in 0..n {
+            let c = comm[i]; let g = l[i];
+            let ar = act[i] as usize;
+            let delta = rew[i] - q[i][ar];
+            let soc0 = erew[c][0] - expo[c][0] * q[i][0];
+            let soc1 = erew[c][1] - expo[c][1] * q[i][1];
+            q[i][ar] += p.alpha * g * delta;
+            q[i][0] = clip01(q[i][0] + p.eta * g * soc0);
+            q[i][1] = clip01(q[i][1] + p.eta * g * soc1);
+            let z = a[i] - rew[i];
+            let df = p.phim * z.max(0.0) + p.phip * (-z).max(0.0);
+            l[i] = clip01(l[i] - p.nu_f * (df - p.tau_f).max(0.0)
+                          + p.nu_r * if df <= p.tau_f { 1.0 } else { 0.0 });
+            let rr = if global_ref { pop } else { rref[c] };
+            a[i] = clip01((1.0 - p.rho) * a[i]
+                          + p.rho * ((1.0 - p.chi) * rew[i] + p.chi * rr));
+        }
+        if t >= tail {
+            for i in 0..n {
+                let c = comm[i];
+                if act[i] == 0 { mt[c] += 1.0; }
+                lt[c] += l[i];
+            }
+        }
+        pa = Some(act.clone()); pc = Some(cdec.clone());
+    }
+    for c in 0..m { mt[c] /= 50.0 * sizes[c] as f64; lt[c] /= 50.0 * sizes[c] as f64; }
+    MOut { m: mt, l: lt }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     let mode = args.get(1).map(|s| s.as_str()).unwrap_or("validate");
@@ -756,6 +915,133 @@ fn main() {
                 }
                 eprintln!("morris traj {traj} done");
             }
+        }
+        "mnetval" => {
+            // I021 validation gate: M=2 blocks through the NEW path must sit in the
+            // pre-stated band (P_dw in [.78,.90], |m2-0.166|<=.06) before any battery use
+            let p = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            let sizes = vec![100usize, 100]; let losing = vec![false, true];
+            let mut dw = 0; let mut msum = 0.0; let reps = 300;
+            for r in 0..reps {
+                let mut grng = Rng::new(579000 + r);
+                let rows = build_meta(2, "ring", &sizes, 0.9, &mut grng);
+                let o = run_mblock(&p, &sizes, &rows, &losing, 79000 + r, false);
+                if o.m[1] < 0.3 && o.l[1] < 0.3 { dw += 1; }
+                msum += o.m[1];
+            }
+            println!("mnetval m2={:.4} P_dw={:.4} (bands: |m2-.166|<=.06, P in [.78,.90])",
+                     msum / reps as f64, dw as f64 / reps as f64);
+        }
+        "mnet" => {
+            // I021 frozen battery (00_freeze_I021.yaml); seeds 80000+cell*1000+run
+            let fcell = File::create("out/mnet_cells.csv").unwrap();
+            let mut wc = BufWriter::new(fcell);
+            writeln!(wc, "cell,m_comms,n_size,geom,place,run,frac_trap,frac_cbi,mean_m,mean_l").unwrap();
+            let fcomm = File::create("out/mnet_comm.csv").unwrap();
+            let mut wk = BufWriter::new(fcomm);
+            writeln!(wk, "cell,run,comm,deg,xexp,m,l,class").unwrap();
+            let base = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            // cell table: (id, M, n, geom, place, runs, comm_csv, global_ref)
+            let mut cells: Vec<(usize, usize, usize, &str, &str, u64, bool, bool)> = vec![
+                (0, 2, 5000, "ring", "clustered", 40, false, false),
+                (1, 10, 1000, "ring", "clustered", 40, false, false),
+                (2, 100, 100, "ring", "clustered", 40, false, false),
+                (3, 1000, 10, "ring", "clustered", 40, false, false),
+                (4, 10000, 10, "ring", "clustered", 20, false, false)];
+            let mut id = 5;
+            for &(mm, nn) in &[(10usize, 1000usize), (100, 100), (1000, 10)] {
+                for g in ["ring", "ws001", "ws01", "ws1", "ba", "broadcast"] {
+                    for pl in ["clustered", "scattered"] {
+                        cells.push((id, mm, nn, g, pl, 40, true, false)); id += 1;
+                    }
+                }
+            }
+            let uneq_big_loser = id; cells.push((id, 10, 0, "ring", "uneq_bigloser", 40, false, false)); id += 1;
+            let uneq_big_winner = id; cells.push((id, 10, 0, "ring", "uneq_bigwinner", 40, false, false)); id += 1;
+            cells.push((id, 100, 100, "broadcast", "clustered", 40, false, true));
+            for (cid, mm, nn, geom, place, runs, comm_csv, gref) in cells {
+                for r in 0..runs {
+                    let (sizes, losing): (Vec<usize>, Vec<bool>) =
+                        if cid == uneq_big_loser {
+                            (std::iter::once(5500).chain(std::iter::repeat(500).take(9)).collect(),
+                             std::iter::once(true).chain(std::iter::repeat(false).take(9)).collect())
+                        } else if cid == uneq_big_winner {
+                            (std::iter::once(5500).chain(std::iter::repeat(500).take(9)).collect(),
+                             std::iter::once(false).chain(std::iter::repeat(true).take(9)).collect())
+                        } else {
+                            let sz = vec![nn; mm];
+                            let lo: Vec<bool> = (0..mm).map(|c| match place {
+                                "scattered" => c % 2 == 0,
+                                _ => c < mm / 2,
+                            }).collect();
+                            (sz, lo)
+                        };
+                    let m = sizes.len();
+                    let seed = 80000 + cid as u64 * 1000 + r;
+                    let mut grng = Rng::new(seed + 500000);
+                    let rows = build_meta(m, geom, &sizes, 0.85, &mut grng);
+                    let o = run_mblock(&base, &sizes, &rows, &losing, seed, gref);
+                    let (mut nt, mut nc, mut nl) = (0.0, 0.0, 0.0);
+                    let (mut sm, mut sl) = (0.0, 0.0);
+                    for c in 0..m { if losing[c] {
+                        nl += 1.0; sm += o.m[c]; sl += o.l[c];
+                        if o.m[c] < 0.3 && o.l[c] < 0.3 { nt += 1.0; }
+                        if o.m[c] > 0.7 && o.l[c] < 0.3 { nc += 1.0; }
+                    } }
+                    writeln!(wc, "{cid},{m},{nn},{geom},{place},{r},{:.4},{:.4},{:.4},{:.4}",
+                             nt / nl, nc / nl, sm / nl, sl / nl).unwrap();
+                    if comm_csv {
+                        for c in 0..m { if losing[c] {
+                            let mut xe = 0.0; let mut deg = 0usize;
+                            for &(d, w) in &rows[c] {
+                                if d != c { deg += 1; if !losing[d] { xe += w; } }
+                            }
+                            let cl = if o.m[c] < 0.3 && o.l[c] < 0.3 { "trap" }
+                                     else if o.m[c] > 0.7 && o.l[c] < 0.3 { "cbi" }
+                                     else if o.m[c] > 0.7 && o.l[c] > 0.5 { "legit" }
+                                     else { "mixed" };
+                            writeln!(wk, "{cid},{r},{c},{deg},{xe:.4},{:.4},{:.4},{cl}",
+                                     o.m[c], o.l[c]).unwrap();
+                        } }
+                    }
+                }
+                eprintln!("mnet cell {cid} ({mm}x{nn} {geom} {place}) done");
+            }
+        }
+        "mnetT" => {
+            // I021 addendum cells (freeze addendum 1)
+            let f = File::create("out/mnetT.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "cell,run,frac_trap,frac_cred,frac_cbi,mean_m,mean_l").unwrap();
+            // (A) horizon cell: M=100 n=100 ring clustered T=2400
+            let pa = P { a0: 0.8, lam: 0.7, rho: 0.002, t: 2400, ..P::default() };
+            let sizes = vec![100usize; 100];
+            let losing: Vec<bool> = (0..100).map(|c| c < 50).collect();
+            for r in 0..20u64 {
+                let mut g = Rng::new(585000 + r);
+                let rows = build_meta(100, "ring", &sizes, 0.85, &mut g);
+                let o = run_mblock(&pa, &sizes, &rows, &losing, 85000 + r, false);
+                let (mut nt, mut ncr, mut ncb, mut sm, mut sl, mut nl) = (0.,0.,0.,0.,0.,0.);
+                for c in 0..100 { if losing[c] {
+                    nl += 1.0; sm += o.m[c]; sl += o.l[c];
+                    if o.m[c] < 0.3 && o.l[c] < 0.3 { nt += 1.0; }
+                    if o.m[c] < 0.3 && o.l[c] > 0.5 { ncr += 1.0; }
+                    if o.m[c] > 0.7 && o.l[c] < 0.3 { ncb += 1.0; }
+                } }
+                writeln!(w, "A,{r},{:.4},{:.4},{:.4},{:.4},{:.4}", nt/nl, ncr/nl, ncb/nl, sm/nl, sl/nl).unwrap();
+            }
+            eprintln!("mnetT A done");
+            // (B) ladder anchor: M=2 n=5000 w_in=0.90
+            let pb = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            let s2 = vec![5000usize, 5000]; let l2 = vec![false, true];
+            for r in 0..20u64 {
+                let mut g = Rng::new(586000 + r);
+                let rows = build_meta(2, "ring", &s2, 0.90, &mut g);
+                let o = run_mblock(&pb, &s2, &rows, &l2, 86000 + r, false);
+                let t = if o.m[1] < 0.3 && o.l[1] < 0.3 { 1.0 } else { 0.0 };
+                writeln!(w, "B,{r},{t:.1},0,0,{:.4},{:.4}", o.m[1], o.l[1]).unwrap();
+            }
+            eprintln!("mnetT B done");
         }
         _ => eprintln!("unknown mode"),
     }
