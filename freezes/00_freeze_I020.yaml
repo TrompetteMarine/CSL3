@@ -1,0 +1,32 @@
+iteration_id: "KGi-DISS-I020"
+mode: "author metadata + abstract/intro sharpening; generalisation battery DISCUSSED,
+  pending author go-ahead"
+freeze_time: "2026-11-05T10:40Z"
+user_directives:
+  - "correspondence g.l.s.bontemps@qmul.ac.uk"
+  - "author contributions: G.B. model, simulation, data analysis, software; A.B.
+    contributed to model, experimentation protocol, writing"
+  - "abstract shorter and more impactful; intro/lit review/research question sharper"
+  - "discuss: 10K agents, differently populated communities, different network
+    geometries as appendix robustness, anchored in the former NHB paper's general
+    theory (package found at uploads/nhb_revision_20261016 2: decision-generated
+    credibility; exact block aggregation any M incl. unequal sizes; fixed-M growing-n
+    vs sparse M-growing limits; WS meta-network battery at N=10,000-500,000)"
+done:
+  - "correspondence email updated; Author contributions written from the user's
+    attribution (G.B./A.B.)"
+  - "abstract rewritten ~230 -> ~160 words: question-first, reference-dependent
+    delegitimation as the central result, echo-chamber clause kept, honesty anchors
+    kept (designed validation, horizon); machine-verified clause moved out of
+    abstract (remains in Results footnote)"
+  - "intro: explicit research-question sentence closes paragraph 1; the single
+    3,800-character positioning paragraph split into two sharper paragraphs
+    (rational-rivals/dissonance-economics/SCE-escape; then supply-vs-uptake with the
+    echo-chamber angle leading) at ~25% reduction, all citations retained"
+  - "build: main 23pp clean"
+pending_decision: "I021 generalisation battery (design sketched to author): M-community
+  block engine extension on a WS meta-network (block-uniform exposure keeps the WP1
+  exact-aggregation theory applicable), N=10,000, sizes 20-500 incl. unequal mixes,
+  ring/WS(p=.01,.1,1)/broadcast, clustered vs scattered high-entitlement seeds;
+  frozen predictions incl. falsifiable ones (scattered seeds do not trap; shortcuts
+  dissolve the trap via exposure heterogeneity; broadcast = reference without uptake)"
