@@ -1043,6 +1043,121 @@ fn main() {
             }
             eprintln!("mnetT B done");
         }
+        "mnet2gate" => {
+            // I024 validation gate (00_freeze_I024.yaml): reproduce I021 cell 2
+            // (M=100 n=100 ring clustered, seeds 80000+2000+r) through the mnet2
+            // driver path; must match mnet_cells.csv cell-2 rows at 4 decimals.
+            let base = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            let sizes = vec![100usize; 100];
+            let losing: Vec<bool> = (0..100).map(|c| c < 50).collect();
+            for r in 0..40u64 {
+                let seed = 80000 + 2 * 1000 + r;
+                let mut grng = Rng::new(seed + 500000);
+                let rows = build_meta(100, "ring", &sizes, 0.85, &mut grng);
+                let o = run_mblock(&base, &sizes, &rows, &losing, seed, false);
+                let (mut nt, mut nc, mut nl) = (0.0f64, 0.0f64, 0.0f64);
+                let (mut sm, mut sl) = (0.0f64, 0.0f64);
+                for c in 0..100 { if losing[c] {
+                    nl += 1.0; sm += o.m[c]; sl += o.l[c];
+                    if o.m[c] < 0.3 && o.l[c] < 0.3 { nt += 1.0; }
+                    if o.m[c] > 0.7 && o.l[c] < 0.3 { nc += 1.0; }
+                } }
+                println!("2,100,100,ring,clustered,{r},{:.4},{:.4},{:.4},{:.4}",
+                         nt / nl, nc / nl, sm / nl, sl / nl);
+            }
+        }
+        "mnet2" | "mnet2ad" => {
+            // I024 frozen confirmatory battery (00_freeze_I024.yaml)
+            // seeds 90000 + cid*1000 + run; graph seeds +500000
+            // "mnet2ad" runs only the addendum-1 cells (cid 51-55) into mnet2ad_*.csv
+            let ad = mode == "mnet2ad";
+            let fcell = File::create(if ad { "out/mnet2ad_cells.csv" } else { "out/mnet2_cells.csv" }).unwrap();
+            let mut wc = BufWriter::new(fcell);
+            writeln!(wc, "cell,m_comms,n_size,geom,place,w_in,rho,t,run,frac_trap,frac_cred,frac_cbi,mean_m,mean_l").unwrap();
+            let fcomm = File::create(if ad { "out/mnet2ad_comm.csv" } else { "out/mnet2_comm.csv" }).unwrap();
+            let mut wk = BufWriter::new(fcomm);
+            writeln!(wk, "cell,run,comm,xexp,m,l,class").unwrap();
+            let mut cells: Vec<(usize, usize, usize, &str, &str, f64, f64, usize, u64)> = Vec::new();
+            let mut id = 0usize;
+            // arm A1: n=100, M in {10,100,1000}
+            for &(mm, runs) in &[(10usize, 40u64), (100, 40), (1000, 20)] {
+                for g in ["ring", "ws1", "ba", "broadcast"] {
+                    for pl in ["clustered", "scattered"] {
+                        cells.push((id, mm, 100, g, pl, 0.85, 0.002, 600, runs)); id += 1;
+                    }
+                }
+            }
+            // arm A2: n=10, M in {100,1000}
+            for &mm in &[100usize, 1000] {
+                for g in ["ring", "broadcast"] {
+                    for pl in ["clustered", "scattered"] {
+                        cells.push((id, mm, 10, g, pl, 0.85, 0.002, 600, 40)); id += 1;
+                    }
+                }
+            }
+            // arm B1: M=2 n=1000 w_in sweep
+            for &w in &[0.95, 0.90, 0.875, 0.85, 0.80] {
+                cells.push((id, 2, 1000, "ring", "clustered", w, 0.002, 600, 40)); id += 1;
+            }
+            // arm B2: M=100 ring scattered w_in sweep
+            for &w in &[0.775, 0.80, 0.85, 0.90] {
+                cells.push((id, 100, 100, "ring", "scattered", w, 0.002, 600, 40)); id += 1;
+            }
+            // arm B3: broadcast inequality
+            for &w in &[0.80, 0.775, 0.75] {
+                cells.push((id, 100, 100, "broadcast", "clustered", w, 0.002, 600, 40)); id += 1;
+            }
+            // arm C: (rho, T) hyperbola
+            for &(rr, tt) in &[(0.002f64, 750usize), (0.002, 920), (0.002, 1050),
+                               (0.004, 400), (0.004, 600), (0.0015, 1000), (0.0015, 1400)] {
+                cells.push((id, 100, 100, "ring", "clustered", 0.85, rr, tt, 20)); id += 1;
+            }
+            // addendum 1 (frozen post-battery, pre-run): two-clock cells 51-54 + edge cell 55
+            for &(rr, tt) in &[(0.002f64, 1100usize), (0.002, 1300), (0.002, 1600),
+                               (0.0015, 2100)] {
+                cells.push((id, 100, 100, "ring", "clustered", 0.85, rr, tt, 20)); id += 1;
+            }
+            cells.push((id, 2, 1000, "ring", "clustered", 0.8875, 0.002, 600, 40)); id += 1;
+            let _ = id;
+            if ad { cells.retain(|c| c.0 >= 51); } else { cells.retain(|c| c.0 < 51); }
+            for (cid, mm, nn, geom, place, w_in, rr, tt, runs) in cells {
+                let p = P { a0: 0.8, lam: 0.7, rho: rr, t: tt, ..P::default() };
+                let sizes = vec![nn; mm];
+                let losing: Vec<bool> = (0..mm).map(|c| match place {
+                    "scattered" => c % 2 == 0,
+                    _ => c < mm / 2,
+                }).collect();
+                for r in 0..runs {
+                    let seed = 90000 + cid as u64 * 1000 + r;
+                    let mut grng = Rng::new(seed + 500000);
+                    let rows = build_meta(mm, geom, &sizes, w_in, &mut grng);
+                    let o = run_mblock(&p, &sizes, &rows, &losing, seed, false);
+                    let (mut nt, mut ncred, mut ncbi, mut nl) = (0.0f64, 0.0f64, 0.0f64, 0.0f64);
+                    let (mut sm, mut sl) = (0.0f64, 0.0f64);
+                    for c in 0..mm { if losing[c] {
+                        nl += 1.0; sm += o.m[c]; sl += o.l[c];
+                        let (mv, lv) = (o.m[c], o.l[c]);
+                        if mv < 0.3 && lv < 0.3 { nt += 1.0; }
+                        else if mv < 0.3 && lv > 0.5 { ncred += 1.0; }
+                        else if mv > 0.7 && lv < 0.3 { ncbi += 1.0; }
+                    } }
+                    writeln!(wc, "{cid},{mm},{nn},{geom},{place},{w_in},{rr},{tt},{r},{:.4},{:.4},{:.4},{:.4},{:.4}",
+                             nt / nl, ncred / nl, ncbi / nl, sm / nl, sl / nl).unwrap();
+                    for c in 0..mm { if losing[c] {
+                        let mut xe = 0.0;
+                        for &(d, w) in &rows[c] { if d != c && !losing[d] { xe += w; } }
+                        let (mv, lv) = (o.m[c], o.l[c]);
+                        let cl = if mv < 0.3 && lv < 0.3 { "trap" }
+                                 else if mv < 0.3 && lv > 0.5 { "cred" }
+                                 else if mv > 0.7 && lv < 0.3 { "cbi" }
+                                 else if mv > 0.7 && lv > 0.5 { "legit" }
+                                 else { "mixed" };
+                        writeln!(wk, "{cid},{r},{c},{xe:.4},{mv:.4},{lv:.4},{cl}").unwrap();
+                    } }
+                }
+                eprintln!("mnet2 cell {cid} ({mm}x{nn} {geom} {place} w={w_in} rho={rr} T={tt}) done");
+            }
+        }
         _ => eprintln!("unknown mode"),
     }
 }

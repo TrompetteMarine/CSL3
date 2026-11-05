@@ -1,0 +1,171 @@
+iteration_id: "KGi-DISS-I024"
+mode: "EXPLORATION (results before writing): fresh preregistered confirmatory battery
+  for the exposure window — the window's laws stated BEFORE these runs, so a pass
+  converts the window from post-hoc account (I021 scorecard 2 fail / 3 partial / 1
+  pass) into an out-of-sample-confirmed law; plus the referee-implementation analysis
+  (94_referee_implementation_plan_I024.md). No manuscript edits in I024."
+freeze_time: "2026-11-05T14:25Z (before any engine edit or run)"
+user_directive: "understand referee comments, think how to implement them smartly;
+  explore the fresh preregistered confirmatory battery for the window (n held fixed
+  while M varies, a w_in sweep so x_B is a threshold in exposure units, and the t*
+  clock tested out of sample) via KGi"
+
+engine_extension:
+  mode_name: "mnet2"
+  design: "fully parameterized cells (M, n or sizes, geom, place, w_in, rho, T, runs);
+    reuses build_meta (w_in already a parameter) and run_mblock unchanged; per-cell P
+    overrides rho and T only; classification in driver: trap m<.3 & l<.3; cbi m>.7 &
+    l<.3; cred m<.3 & l>.5; legit m>.7 & l>.5; else mixed (terminal = last-50 mean,
+    unchanged). Outputs mnet2_cells.csv (cell,m_comms,n_size,geom,place,w_in,rho,T,
+    run,frac_trap,frac_cred,frac_cbi,mean_m,mean_l) and mnet2_comm.csv (cell,run,
+    comm,xexp,m,l,class) for all cells; xexp remains STRUCTURAL (W-row mass on the
+    initially-winning set, fixed at t=0) as in I021"
+  validation_gate: "before any battery output is used, the mnet2 driver configured
+    exactly as I021 cell 2 (M=100, n=100, ring, clustered, w_in=0.85, rho=0.002,
+    T=600, seeds 80000+2000+r, graph seeds +500000, 40 runs) must reproduce the
+    frozen mnet_cells.csv cell-2 rows bit-identically at 4 decimals (same code path,
+    same seeds => exact match required, not distributional); failure blocks the
+    battery"
+
+battery:  # seeds 90000 + cid*1000 + run; graph seeds +500000; frozen defaults
+          # everywhere except the swept parameter; losing fraction 1/2; A0=0.8,
+          # lam=0.7, chi=0.4; local exposure-weighted reference throughout
+  arm_A1_n_fixed_100: "n=100, w_in=0.85, rho=0.002, T=600; geoms {ring, ws1, ba,
+    broadcast} x places {clustered, scattered}; cid 0-7: M=10 (N=1,000, 40 runs);
+    cid 8-15: M=100 (N=10,000, 40 runs); cid 16-23: M=1000 (N=100,000, 20 runs).
+    Cell order within each M: ring(c,s), ws1(c,s), ba(c,s), broadcast(c,s)"
+  arm_A2_n_fixed_10: "n=10, w_in=0.85, rho=0.002, T=600; {ring, broadcast} x
+    {clustered, scattered}; cid 24-27: M=100 (N=1,000, 40 runs); cid 28-31: M=1000
+    (N=10,000, 40 runs)"
+  arm_B1_win_sweep_M2: "M=2, n=1000, clustered, rho=0.002, T=600; cid 32-36:
+    w_in in {0.95, 0.90, 0.875, 0.85, 0.80} => x = {0.05, 0.10, 0.125, 0.15, 0.20};
+    40 runs each"
+  arm_B2_win_sweep_M100: "M=100, n=100, ring, scattered, rho=0.002, T=600;
+    cid 37-40: w_in in {0.775, 0.80, 0.85, 0.90} => x = {0.1125, 0.10, 0.075, 0.05};
+    40 runs each (w_in=0.85 replicates A1 cid 9 under fresh seeds: internal
+    consistency row)"
+  arm_B3_broadcast_inequality: "M=100, n=100, broadcast, clustered, rho=0.002,
+    T=600; cid 41-43: w_in in {0.80, 0.775, 0.75} => x = (1-w_in)*(5000/9900) =
+    {0.1010, 0.1136, 0.1263}; 40 runs each. Out-of-distribution test: no broadcast
+    community in I021 ever had x above 0.084"
+  arm_C_clock: "M=100, n=100, ring, clustered, w_in=0.85; (rho, T) cells, 20 runs
+    each: cid 44 (0.002, 750, rhoT=1.50); cid 45 (0.002, 920, rhoT=1.84, KNIFE);
+    cid 46 (0.002, 1050, rhoT=2.10); cid 47 (0.004, 400, rhoT=1.60); cid 48
+    (0.004, 600, rhoT=2.40); cid 49 (0.0015, 1000, rhoT=1.50); cid 50 (0.0015,
+    1400, rhoT=2.10). rho=0.004 < rho_c=0.00641, so the trap forms before the
+    clock resolves it in every cell"
+  total: "51 cells, ~1,740 runs (160 at N=100,000)"
+
+power_and_smear_analysis:  # done at freeze time; grounds the band choices
+  agent_level_crossing_smear: "stationary sd of per-agent aspiration approx
+    sqrt(rho/2 * (1-chi)^2 * mu(1-mu)) = sqrt(0.001*0.36*0.24) ~ 0.0093; mean-path
+    slope at the A* crossing rho*(A*-A_eq) ~ 1.33e-4/trial at x=0 => crossing-time
+    smear ~ +/-70 trials, i.e. +/-0.14 in rhoT units"
+  excluded_test: "the clustered(t*=896)-vs-scattered(t*=935) resolution-ordering
+    test at T~920 is EXCLUDED as underpowered: the 39-trial gap sits inside the
+    +/-70-trial smear. Stated here so its absence is a design choice, not an
+    omission"
+  band_logic: "C-arm claim cells sit at rhoT <= 1.60 or >= 2.00, i.e. at least 1.1
+    smear-widths from the predicted boundary ln 6 = 1.792; the knife cell (1.84)
+    is pre-labelled transitional with no claim"
+
+frozen_predictions:  # falsifiable; failures reported verbatim
+  P1: "M-invariance at fixed n for exposure-matched placements: ring-scattered
+    n=100 trap >= 0.9 at every M in {10,100,1000}; broadcast n=100 (both
+    placements) trap >= 0.9 at every M; within each (n, geom, place) family the
+    max pairwise |delta trap| across M <= 0.2. (Clustered ring/ws cells are NOT
+    invariance cells: their x-distribution changes with M by construction; their
+    prediction is trap >= 0.9 at all M via interior shielding)"
+  P2: "the decisive anti-'corrects at scale' cells (we pre-side with R8's reading
+    against our own v10 phrasing): broadcast M=1000 n=100 trap >= 0.9 (I021 n=10
+    gave 0.000) and ring-scattered M=1000 n=100 trap >= 0.9 (I021 n=10 gave
+    0.097). If these fail, 'corrects at scale' is revived as a genuine M-effect
+    and the size-cascade account is refuted — reported either way"
+  P3: "cascade regime M-invariant at n=10: ring-scattered and broadcast (both
+    placements) trap <= 0.3 at M in {100, 1000} with |delta(M)| <= 0.2;
+    ring-clustered n=10 trap >= 0.9 at both M (clustering defeats cascades even
+    at n=10, as in I021)"
+  P4: "two-community threshold: M=2 n=1000 trap >= 0.9 at x in {0.05, 0.10};
+    trap <= 0.1 at x in {0.125, 0.15, 0.20} => x_B in (0.10, 0.125)"
+  P5: "threshold in exposure units at M=100: ring-scattered trap >= 0.8 at
+    x <= 0.10 and <= 0.2 at x = 0.1125 — the SAME interval as P4, so x_B is
+    invariant to w_in and M when stated in absolute exposure units"
+  P6: "broadcast inequality out of sample: broadcast M=100 clustered trap >= 0.9
+    at x = 0.1010, <= 0.1 at x = 0.1263; the edge cell x = 0.1136 is
+    unconstrained (reported, no claim)"
+  P7: "(rho,T) hyperbola — the t* clock out of sample at two NEW rho values:
+    trap >= 0.8 in all three rhoT <= 1.60 cells; trap <= 0.2 in all three
+    rhoT >= 2.00 cells; boundary = level set rho*T = ln[(A0-A_eq)/(A*-A_eq)] =
+    ln 6 at x=0, +/- 0.14 smear; knife cell transitional by design"
+  P8: "resolution split (secondary): in the three resolved C cells, credulous
+    fraction of losing communities in [0.3, 0.6] (anchor: 0.454 at T=2400,
+    I021 addendum A)"
+  P9: "window overlay: pooled P(trap|x) over arms A+B restricted to n=100
+    communities crosses 0.5 inside x in [0.08, 0.115], and
+    P(escape | x >= 0.1125) >= 0.95 — the I021 curve reproduced out of sample
+    at matched community size"
+refutation_meanings:
+  - "P2 fail => scale is real and the window account is wrong where it matters most"
+  - "P4/P5/P6 fail => x_B is not a threshold in exposure units (w_in- or
+    geometry-relative), and the 'measurable exposure threshold' language dies"
+  - "P7 fail => the 1/rho clock scaling is wrong and t* was an I021-battery artifact"
+honesty_rules:
+  - "exploration only: no manuscript claims until results are frozen and reviewed
+    with the author; surprises and failed predictions reported verbatim"
+  - "no frozen I021/I022 numbers regenerated or changed; the validation gate is an
+    exact-reproduction check of an existing record, not a replacement"
+  - "every cell/band above was written before the mnet2 code existed"
+addendum_1_pre_run:  # frozen 2026-11-05 after the main battery, BEFORE these cells run
+  motivation: "P7 failed as frozen: t* marks gate REOPENING, not resolution. Post-hoc
+    two-clock account derived from the same drift algebra (no fitting): after
+    reopening, repair drift dL/dt = nuR*mu2 - nuF*(1-mu2)*(A(t)-tauF) with A on the
+    rho clock; integrating from t* gives a resolution clock t** solving L(t)=0.3,
+    t** ~ 1.5-1.9x t*. Consistency: predicts trapped at T=1050 (L~0.07-0.14) and
+    resolved by T=2400 (L saturates ~1), matching the C-arm and I021 addendum A.
+    Observed L-bar runs 1.4-2x the mean-path integral (agent-level A-spread
+    convexity suspected), so claim cells are chosen robust to a multiplier k in
+    [1, 2.5]; one calibration cell sits where k decides"
+  cells: "M=100, n=100, ring, clustered, w_in=0.85, 20 runs each, seeds
+    90000+cid*1000+r (graph +500000): cid 51 (0.002, 1100); cid 52 (0.002, 1300,
+    CALIBRATION - no claim, outcome calibrates k); cid 53 (0.002, 1600); cid 54
+    (0.0015, 2100); cid 55 (M=2, n=1000, w_in=0.8875, T=600, EXPLORATORY - locates
+    the singleton upper edge between the P4 grid points 0.10 and 0.125)"
+  predictions:
+    AD1: "cid 51 (0.002, 1100): trap >= 0.8 (L < 0.3 under both k=1 [0.10] and
+      k=2.5 [0.21])"
+    AD2: "cid 53 (0.002, 1600): trap <= 0.2 (L > 0.3 under k >= 1 [0.68 at k=1]);
+      secondary: cred >= 0.1 (some interiors restore L before the correction front
+      arrives)"
+    AD3: "cid 54 (0.0015, 2100): trap <= 0.2 (L = 0.85 at k=1)"
+    AD4: "cid 52 and 55 carry NO claims (calibration / edge-location, reported
+      verbatim)"
+closing_record:
+  closed: "2026-11-05"
+  gates: "mnet2 driver exact-reproduction gate PASSED (40/40 rows bit-identical to
+    I021 cell 2); legacy five-gate validate unchanged"
+  battery: "51 main cells (1,740 runs) + addendum 5 cells (120 runs); records
+    mnet2_cells.csv, mnet2_comm.csv, mnet2ad_cells.csv, mnet2ad_comm.csv"
+  scorecard: "P1 PASS (side-claim ws1-clustered mis-binned: fails as shielding cell,
+    confirms invariance at drift 0.016); P2 PASS (broadcast M=1000 n=100 traps
+    1.000 - 'corrects at scale' dead as an M-claim); P3 PASS; P4 PASS; P5 FAIL as
+    frozen (edge one grid step lower: (0.075,0.100] at M=100 scattered); P6 FAIL
+    as frozen (edge (0.076,0.101]; flip mechanism confirmed); P7 FAIL as frozen
+    (rhoT>=2.0 cells all still trapped) -> two-clock account frozen as addendum 1
+    pre-run, AD1-AD3 ALL PASS, calibration t** ~ 1.4-1.5x t*; P8 FAIL at C cells
+    (consequence of P7; split appears in addendum resolved cells, cred 0.92/0.85);
+    P9 PASS (escape above 0.1125 = 0.9932 pooled at matched n)"
+  central_refinements:
+    - "two-level law quantified: conditional on n, x is a near-step (stratified
+      table; AUC 0.917 x alone -> 0.962 x+log n -> 0.972 +geometry)"
+    - "edge envelope: trap certain below x~0.075, escape certain above x~0.1125 in
+      every architecture incl. the M=2 singleton (addendum cell 55 corrects at
+      x=0.1125); inside the band cascade multiplicity decides; I021 pooled
+      x_B~0.11 = the singleton edge / upper envelope"
+    - "TWO CLOCKS: t* = gate reopening (closed form, confirmed); t** = resolution
+      (repair throttled by continuing failures while A decays; closed-form mean
+      path, empirical multiplier k~1.4-1.5), confirmed out of sample in addendum.
+      The I022 sentence 't* predicts both battery outcomes' OVER-CLAIMED and is
+      queued for correction in v11 (main window paragraph + S13.3)"
+  manuscript_status: "NO manuscript changes in I024 (explore-before-writing);
+    v11 worklist = 94_referee_implementation_plan_I024.md items + the four
+    consequences in 95_exploration_report_I024.md"
