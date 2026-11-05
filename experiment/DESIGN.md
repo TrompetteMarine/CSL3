@@ -30,11 +30,12 @@ Factor A, reference regime in the deprivation block: HIGH (visibly successful
 peer, realized mean in [.60,.70]) vs LOW (peer matched to the participant's own
 realized band ± .05). Factor B, restoration: FULL (.65/.35) vs MODERATE (.45/.35).
 
-Confirmatory allocation: N = 280 per reference arm post-exclusion, pooled across
-Factor B for H1a (Factor B diverges only in P3); within each reference arm,
-MODERATE : FULL = 2 : 1 (≈ 187 : 93). FULL is the positive control that the
-fairness instrument can move (a MODERATE flatline is otherwise confounded with
-slider insensitivity) and carries the H3 contrast. Total confirmatory N = 560.
+Confirmatory allocation: N = 320 per reference arm post-exclusion (the
+distribution-free worst-case N*; see §6), pooled across Factor B for H1a (Factor
+B diverges only in P3); within each reference arm, MODERATE : FULL = 2 : 1
+(≈ 213 : 107). FULL is the positive control that the fairness instrument can
+move (a MODERATE flatline is otherwise confounded with slider insensitivity)
+and carries the H3 contrast. Total confirmatory N = 640.
 
 Framing-probe module (secondary, separable): one additional arm, HIGH × MODERATE
 with group-contingent fixed-rate instructions ("the payout rule was set for your
@@ -44,9 +45,11 @@ Secondary α, one-sided; powered 0.76 at d = 0.5 (the rival-vs-gate gap here is
 large by both accounts). This module can be dropped without touching the
 confirmatory core.
 
-Recruitment: 560 + 90 = 650 post-exclusion; inflate by the PILOT exclusion
-forecast (planning value 12%) → ≈ 740 recruited for the main run, plus pilot 100.
-Indicative cost at current Prolific rates: ≈ £4,800 all-in.
+Recruitment: 640 + 90 = 730 post-exclusion (dose module adds 180; TASK_SPEC.md);
+inflate by the PILOT exclusion forecast (planning value 12%) → ≈ 1,020 recruited
+for the main run incl. dose cells, plus pilot 100. Indicative cost at current
+Prolific rates: ≈ £6,300 all-in. The simulated exclusion-selection power cell
+independently confirms 360 recruited per confirmatory arm suffices.
 
 ## 4. Task (v3, as built, with the I027 additions)
 
@@ -89,8 +92,14 @@ deception anywhere in the protocol.
 ## 6. Hypotheses and tests (serial gatekeeping; FWER = .005)
 
 As preregistered (prereg draft, I025 amendment) and tabulated in the manuscript's
-Table 1: H1a reference drop (one-sided Welch, N = 280/arm, power .91 at the
-d = .33 basis; at d = .25 power is .72, reported not claimed) → if it rejects,
+Table 1: H1a reference drop (one-sided Wilcoxon–Mann–Whitney at α = .005, effect
+measured as θ = P(drop_HIGH > drop_LOW); N = 320/arm gives power ≥ .90 at the
+design basis θ = .592 as the worst case over the frozen six-shape battery of
+`analysis/power_free.py` — bounded, rounded, zero-inflated, heavy-tailed, skewed
+and exclusion-selected shapes; mean-shift tests lose up to half their power under
+the skewed shapes, hence rank-primary with studentized permutation Welch
+co-reported; at the θ = .570 floor power is .65–.72, reported not claimed) → if
+it rejects,
 H1b the gate (HIGH × MODERATE: accuracy recovery above a pre-stated floor AND
 fairness TOST within ± δ_eq AND the band excludes the utility rival's predicted
 recovery). Secondaries: H2 midpoint-lag dissociation; H3 Reference × Restoration

@@ -1,0 +1,91 @@
+iteration_id: "KGi-DISS-I029"
+mode: "task specification + distribution-free power machinery. The power package is
+  computational (frozen DGP battery, then Monte Carlo); the spec package is design
+  only. No manuscript edits."
+freeze_time: "2026-11-05T17:50Z"
+user_directive: "next iteration; distribution-free power calculation, potentially
+  sample-bias corrected, because the sample will be weird"
+
+package_A_distribution_free_power:
+  rationale: "online-panel slider data violate every normal-theory premise: bounded
+    0-100 scales with floor/ceiling heaps, rounding to multiples of 5, a
+    non-responder mixture, right-skew and heavy tails, and exclusion-induced
+    selection. Power is therefore computed by Monte Carlo over a frozen battery of
+    generative shapes, with tests whose level does not depend on the shape."
+  tests:
+    H1a_primary: "one-sided Wilcoxon-Mann-Whitney (rank-sum) at alpha=.005, with the
+      studentized permutation Welch test as co-reported sensitivity (level exact
+      under exchangeability and asymptotically valid under heteroskedasticity,
+      Chung-Romano class); effect measure switched from Cohen d to the
+      distribution-free Mann-Whitney theta = P(drop_HIGH > drop_LOW), with
+      Hodges-Lehmann shift as the companion location summary"
+    effect_targets: "theta anchors chosen to correspond to the old d-basis under
+      normality but DEFINED without it: theta = .570 (~d=.25 floor), .592 (~d=.33
+      design basis), .625 (~d=.45); the design basis is theta=.592"
+    H1b: "equivalence by two one-sided rank tests (TOST analogue) with the band
+      delta_eq in raw slider units from pilot sigma_r; power function delivered as
+      code parameterised by (delta_eq, pilot shape), not as a number"
+  dgp_battery:  # frozen before any power run; exact generators in analysis/power_free.py
+    S1: "truncated normal drops, sd 20 (benchmark shape)"
+    S2: "zero-inflated censored-rounded: 15% exact-zero never-movers; remainder
+      N(25,20^2) clipped to [0,90], rounded to multiples of 5"
+    S3: "attention mixture: 80% responsive N(mu,15^2) + 20% non-responders N(0,8^2)
+      carrying no treatment effect"
+    S4: "heavy tails: mu + 15*t(3)"
+    S5: "right skew: mu + 12*(lognormal(0,0.8) - E[lognormal])"
+    S6: "S3 with the exclusion mechanism applied (preregistered screens remove a
+      simulated 12%, enriched in non-responders) - the sample-bias-corrected cell:
+      power computed on the post-exclusion distribution with selection simulated,
+      not assumed away"
+  mc_design: "per (shape, theta, N) cell: 4000 Monte Carlo replicates; treatment
+    effect injected as the location shift tau calibrated per shape by root-finding
+    so that P(X>Y)=theta (shift sized on the shape itself, never via d); N grid
+    {200,240,280,320,360,420,480} per arm; outputs power table + N*(0.90) per
+    shape, with the WORST-CASE N* across the battery as the design number"
+  pilot_correction: "once pilot data exist, power is re-estimated by resampling the
+    pilot empirical drop distribution (shifted by the HL estimate of tau at the
+    design theta), with the exclusion screens applied inside the resampling; the
+    small-pilot optimism of plug-in bootstrap power is corrected by a double
+    bootstrap (outer loop over pilot resamples). Specified in code now, executed at
+    pilot time."
+  estimand_note: "the estimand is the in-sample mechanism contrast, not a population
+    prevalence; no demographic raking is applied (stated explicitly); external
+    heterogeneity is carried by the rho-hat moderator, not by weights"
+
+package_B_task_spec: "experiment/TASK_SPEC.md: the market-skin isomorphism table
+  (two tickets <-> two arms, settlement rates <-> phase means, house-funded payout
+  <-> gains domain, AMM disclosure); the reference-dose module (mu_ref .45/.55
+  cells of n=90 each; the .65 point is the existing HIGH confirmatory arm, so the
+  step-vs-line test costs 180 participants); the P1 null-region prediction; pilot
+  wiring with the rho->effect-size formula; exploratory flags (BSR probability
+  reports, WTP) pending pilot; and the synthetic-recovery gate obligation on the
+  market-skinned generator BEFORE any prereg freeze"
+honesty_rules:
+  - "the DGP battery and theta anchors are frozen here before the first power run;
+    any added shape is an addendum"
+  - "worst-case N* is reported even if it is larger than the I025 N=280; the I025
+    normal-theory number is superseded, not defended"
+closing_record:
+  closed: "2026-11-05"
+  power_results: "frozen battery run (126 cells x 4000 MC reps; records/power_free.csv).
+    HEADLINE: the rank test is shape-stable — N*(0.90) at theta=.592 is 320/arm under
+    S1-S5 and 360 RECRUITED under the exclusion-selection cell S6 (consistent:
+    360 x 0.88 ~ 317 retained); design number = 320/arm post-exclusion, superseding
+    the I025 normal-theory 280. Welch COLLAPSES under the weird shapes (.318 at N=280
+    under lognormal skew, .611 under t(3)) — rank-primary is a power decision, not
+    only a level decision. Floor theta=.570 at N=320: .65-.72 (reported, not claimed).
+    Sanity: S1 Welch matches normal theory (.701 vs .721 at N=320, truncation gap)"
+  propagation: "manuscript v12.1 (main 25pp after small-type bibliography; Table 1
+    cell, predictions paragraph, power footnote, SI S12.12 all distribution-free);
+    DESIGN.md (N=320/arm, totals 640+90+180 post-exclusion, ~1,020+100 recruited,
+    ~GBP 6,300); TASK_SPEC.md section 5 concrete; prereg draft amended (theta
+    anchors, rank tests, rank-TOST H1b, double-bootstrap pilot correction,
+    supersession note). All four documents now agree"
+  task_spec: "experiment/TASK_SPEC.md delivered: isomorphism table, dose module
+    (.45/.55 cells n=90 each, .65 = existing HIGH arm), P1 null-region prediction,
+    pilot wiring incl. framing-comparison arm (market vs bandit skin, same seeds),
+    exploratory flags, three pre-prereg gates (synthetic recovery on market-skinned
+    generator r>=.7; pipeline consistency vs power engine; pilot rules)"
+  invariants_check: "battery and anchors frozen before the run; worst-case N
+    reported and adopted though larger than I025's number; estimand note (no
+    raking; in-sample mechanism contrast) stated in spec and prereg"
