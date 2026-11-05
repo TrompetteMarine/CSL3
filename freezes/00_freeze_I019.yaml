@@ -1,0 +1,19 @@
+iteration_id: "KGi-DISS-I019"
+mode: "title adoption + echo-chamber/cascade positioning; no runs, no claim changes"
+freeze_time: "2026-11-05T10:25Z"
+user_directive: "likes 'cognitive dissonance turns collective failure into
+  self-defending error' and 'Reference-dependent delegitimation'; position in the
+  echo-chamber and information-cascade literature"
+done:
+  title: "Reference-dependent delegitimation: cognitive dissonance turns collective
+    failure into self-defending error (both liked elements combined)"
+  positioning: "Nguyen 2020 bubble-vs-chamber distinction adopted as the conceptual
+    anchor: bubbles omit (supply side, = cascades, cured by exposure); chambers
+    discredit (uptake side, survive exposure); defensive wrong consensus = an echo
+    chamber in the strict sense, derived from outcome-entitlement gaps without a
+    congeniality taste; Bail 2018 (exposure backfire in field feeds) and Cinelli 2021
+    (homophilous-curation measurement) engaged as the empirical counterpart. Added:
+    abstract clause, intro aggregation-contrast sentence, Discussion
+    information-aggregation passage, S11 table row. All three citations verified
+    (Episteme 17(2):141-161; PNAS 115(37):9216-9221; PNAS 118(9):e2023301118)"
+  build: "main 24pp, SI 24pp, clean"

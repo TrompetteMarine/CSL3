@@ -53,3 +53,13 @@ All content-level claims limited to topic attribution; no internal theorem/figur
 - Lockwood2024: Nat Hum Behav 8(7):1403-1416, doi 10.1038/s41562-024-01899-4 (Birmingham Pure record + PMC11272586). vmPFC necessary for prosocial motivation.
 - Gueguen2025: Brain 148(10):3537-3550, doi 10.1093/brain/awaf056 (Birmingham Pure record). vmPFC lesions disrupt learning to reward others.
 Both concept attribution only.
+
+## I018 additions (verified 2026-11-05)
+- Muller2013: EM&S 48:37-48 (UFZ publisher-linked page). ODD+D protocol.
+- Grimm2020: JASSS 23(2):7, doi 10.18564/jasss.4259 (USGS record + RePEc). ODD second update.
+
+## I019 additions (verified 2026-11-05; echo-chamber positioning)
+- Nguyen2020: Episteme 17(2):141-161 (PhilArchive record + Cambridge issue). Bubble/echo-chamber distinction (omission vs discrediting).
+- Bail2018: PNAS 115(37):9216-9221, doi 10.1073/pnas.1804840115 (Duke Scholars). Cross-cutting exposure can backfire.
+- Cinelli2021: PNAS 118(9):e2023301118, doi 10.1073/pnas.2023301118 (Recercat record). Echo-chamber measurement/homophilous structure.
+All concept attribution only.
