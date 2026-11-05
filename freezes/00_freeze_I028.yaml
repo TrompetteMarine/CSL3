@@ -1,0 +1,64 @@
+iteration_id: "KGi-DISS-I028"
+mode: "RESEARCH (theory + design logic, no runs, no manuscript edits): the
+  experimental-task foundations for the shared abstract-market / prediction-market
+  engine. Four questions, bounded: (1) what the paper's frozen quantities calibrate
+  in the task; (2) how to parameterise the task so the hypothesis is emergent-or-
+  absurd (severity placement relative to the theory's own frontiers); (3) the
+  logical structure of the inference (what each outcome entails, where Duhem-Quine
+  holism is localized by controls); (4) what each test outcome does to the model
+  (the pre-stated revision map). Canonical anchors first, SotA positioned after."
+freeze_time: "2026-11-05T17:12Z"
+user_directive: "a lot of research first with KGi; think about the experimental
+  task; what we can use from the paper to calibrate; parametrise the task to make
+  the hypothesis either emergent or absurd; the logical structure of the inference;
+  what hypothesis testing does to our model, given the abstract market + predictive
+  market"
+method_constraints:
+  - "all calibration arithmetic from frozen quantities only (A*, rho_c, t*, t**,
+    permanence condition, phase means, chi recovery status); every number in the
+    document recomputed, not recalled"
+  - "canonical literature cited from stable knowledge is listed in a verification
+    queue; nothing enters a manuscript before primary-source verification per
+    00_citation_verification discipline; frontier (post-2024) positioning via
+    search, flagged separately"
+  - "severity logic: each proposed cell is placed relative to a theory-derived
+    frontier (permanence chi_min, t* vs phase length, threshold vs graded), with
+    the rival's prediction stated for the same cell; no cell without a stated
+    discriminating role"
+  - "the inference map pre-states which component (core, auxiliary, instrument)
+    each possible outcome implicates, and what revision it forces -- written before
+    any data exist, so outcomes cannot be reinterpreted after the fact"
+closing_record:
+  closed: "2026-11-05"
+  deliverable: "96_task_inference_research_I028.md (repo: experiment/TASK_INFERENCE.md;
+    Project mirror)"
+  central_findings:
+    - "the HIGH/LOW manipulation IS the relative-deprivation theorem's permanence
+      condition realized as a design cell: chi_min(muref=.65) = .31-.39 across task
+      own-rates, inside the model's chi=.4; muref=.55 and .45 are outside -> the
+      theory forces a QUALITATIVE contrast and muref is the severity dial"
+    - "step-versus-line dose cell (muref in {.45,.55,.65}): gate predicts a
+      threshold at the frontier, the surviving rival (inequity-in-utility) predicts
+      a graded line; the dose cell doubles as a structural chi measurement through
+      chi_min(muref)"
+    - "rho-band risk as an equation: H1a anchor gap = chi*(muref-mu_own)*(1-e^(-rho*150)),
+      .044 to .162 across plausible (chi,rho) -> the pilot rho-hat PREDICTS the
+      effect size and the P2-lengthening remedy has a derived dose"
+    - "null-region prediction added (P1 fairness invariant to the peer board):
+      a within-session falsifiability region"
+    - "inference tree formalized: H1a eliminates {R1-global, R2, own-outcome}; H1b
+      + FULL control localizes the Duhem-Quine escape (flatline AND FULL-moves ->
+      core, not instrument); each auxiliary gets its own independent check; R5
+      excluded by demarcation, stated in advance"
+    - "revision map pre-stated for all five outcome branches, incl. the damaging
+      one (H1b fail -> uptake-side echo-chamber derivation dies, relative-
+      deprivation statics survive)"
+    - "market-skin threats disposed: house-funded tickets (gains domain),
+      minimal-information BSR with legitimacy never riding on scored reports,
+      truthful AMM disclosure with fixed within-phase prices"
+  verification_queue: "Smith 62/76; Plott-Sunder 88; SSW 88; Hanson 03/07; IEM
+    Forsythe et al. 92; Hossain-Okui 13; Danz-Vespa-Wilson AER 2022 (confirmed via
+    search: AER 112(9):2851-83); Thaler-Johnson 90; Platt 64; Mayo 18; Kunda 90;
+    Benabou-Tirole 16 — primary-source verification before any manuscript use"
+  next: "task spec iteration: isomorphism table, dose module, pilot wiring,
+    synthetic-recovery gate on the market-skinned generator BEFORE prereg freeze"
