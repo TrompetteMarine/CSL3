@@ -1,0 +1,67 @@
+iteration_id: "KGi-DISS-I022"
+mode: "manuscript integration of the I021 generalisation; no new runs (figures and
+  tables from the frozen I021 records only)"
+freeze_time: "2026-11-05T11:20Z"
+user_directives:
+  - "write the general theory into the main text (two-community as worked example)"
+  - "the window helps the experimental validation — connect it"
+  - "manuscript circa 25 pages TOTAL; more footnotes; non-essential material to SI"
+plan:
+  new_main_figure: "fig_window (3 panels from frozen records): a) P(class|x) across
+    pooled geometries (the exposure-window collapse, x_B marked); b) trapped fraction
+    heatmap, geometry x M, both placements, clustered annotated; c) horizon
+    resolution at M=100 ring clustered: T=600 vs T=2400 class shares"
+  main_text: "general exposure-matrix setup W enters the collective section (B(Gamma)
+    = the worked example, stated at first use); new subsection 'The window: from two
+    communities to ten thousand' after the transparency block (window statement:
+    grievance side exact at the equilibrium reference, behavioural threshold
+    x_B~0.11 measured, exact in the two-community map; broadcast dissociation;
+    degree-flat BA; horizon clause); echo-chamber sentence (the window IS the chamber
+    condition); predictions/Discussion sentence linking HIGH/LOW reference to a
+    within-window manipulation of x and the field analysis to measuring x
+    distributions"
+  si: "new Section S13: setup under exact block aggregation, window derivation from
+    the equilibrium-reference Corollary, battery tables (ladder, geometry grid, BA
+    degree, unequal sizes, broadcast, T=2400), honest limits; nets figure moves from
+    main to SI (appended as Supp Fig 8, numbering 1-7 stable); full-grid heatmap as
+    Supp Fig 9 if budget allows, else table only"
+  page_budget: "target main <= 25 pp: nets figure -> SI (~ -0.7pp); model-implied
+    power sentence and assorted technicalities -> footnotes; new figure + ~0.8pp
+    prose added"
+  invariants: "no frozen number changes; horizon-indexed language everywhere; the
+    window's closed-form (lambda,chi,rho) dependence claimed only for the
+    two-community case; all battery numbers quoted from mnet_* records"
+closing_record:
+  closed: "2026-11-05"
+  delivered: "main v10 (24 pp, <= 25 budget), supplement 27 pp; both 0 undefined refs"
+  main_changes:
+    - "fig:nets moved to SI as Supplementary Fig 8 (SI figs 1-7 stable); main refs re-pointed"
+    - "new subsection 'The window: from two communities to ten thousand' after the scope
+       paragraph, with fig_window (Fig 9; figure order now mech/theory/abm/pt1/pt2/race/
+       regmap/flow/window/trans/pred)"
+    - "Methods Model generalized to row-stochastic W with B(Gamma) as the worked case;
+       Statistics subsection notes the M-engine validation gate + battery counts"
+    - "abstract gains one generalisation clause; predictions gain the HIGH/LOW =
+       within-window x-displacement sentence; Discussion gains the field-stage
+       x-distribution sentence; power numbers footnoted"
+  si_changes: "new Section S13 (setup, pooled window table, two closed forms, battery
+    tables with mean exposures, honest limits); Supplementary-figures section is now S14;
+    five hard-coded main-fig numbers decremented (4c->3c, 5a->4a, 7a->6a, 8->7, 9->8;
+    10d unchanged)"
+  derived_results_no_new_runs:
+    - "permanent-grievance threshold evaluated: x > (A*(mu2)-mu2)/(chi(mu1-mu2)) = 5/6
+       at frozen defaults -- unreachable in every battery cell (x <= 0.15), so every
+       observed trap is horizon-indexed, as the T=2400 rerun found empirically"
+    - "gate-reopening clock t*(x) = (1/rho) ln[(A0-Aeq)/(A*-Aeq)], Aeq = mu2 +
+       chi x (mu1-mu2): t* in [896, 980] across realized exposures -- brackets the
+       600/2400 horizons with nothing fitted, predicting both battery outcomes;
+       dt*/dx > 0 (cross-exposure lengthens grievance)"
+  correction: "the I021 exploration report framed the equilibrium-reference condition as
+    the window's measured lower edge; evaluation shows it governs PERMANENCE (x > 5/6,
+    never met), while the measured lower edge is the t* clock at a finite horizon.
+    Corrected in main text and SI S13 before any submission; noted here per the honesty
+    rule."
+  invariants_check: "no frozen numbers changed; horizon-indexed language kept; closed
+    forms claimed exact only for the two-community map (block-level exact for general W
+    under block-uniform exposure); all battery numbers quoted from mnet_* records and
+    re-verified against the CSVs at integration time"

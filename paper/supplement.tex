@@ -790,7 +790,7 @@ entitlement as $N$ grows (a finite-size displacement of the effective basin boun
 while the across-run variance peak stays bounded near $0.25$---the maximum attainable by a
 bounded bimodal variable---at every size. Together with the strict bimodality of terminal
 outcomes (Supplementary Fig.~\ref{fig:bimodal}) and the bistability of the mean-field flow
-(main-text Fig.~9), this identifies the phenomenon as \emph{stochastic selection between
+(main-text Fig.~8), this identifies the phenomenon as \emph{stochastic selection between
 coexisting deterministic attractors}. The convergence is now quantified rather than
 asserted (Supplementary Fig.~\ref{fig:scaling}d): the front location is linear in
 $N^{-1/2}$ across all six sizes and extrapolates to $A_0^*(\infty)=0.580$, against a
@@ -841,8 +841,8 @@ at the trapped and rescued cells: the map reproduces the collapse timing, the
 behavioural lock-in, and the $\rho$-dependent escape, with the largest deviations at the
 stochastic regime-selection stage early in the run---the residual anticipated in
 Lemma~\ref{l:choicemap}. The map's predictions are also drawn on the dense maps
-themselves: its basin boundary on main-text Fig.~5a (dashed) and its behaviour and
-legitimacy seams on main-text Fig.~8 (dashed and dotted), so the reader can judge the
+themselves: its basin boundary on main-text Fig.~4a (dashed) and its behaviour and
+legitimacy seams on main-text Fig.~7 (dashed and dotted), so the reader can judge the
 homogeneous-limit approximation against every grid, not two cells.
 
 \subsection{Structural and field-form perturbations}
@@ -984,13 +984,84 @@ mix; the preregistration's design floor of $d=0.25$ remains the binding basis fo
 sample size, and these numbers serve only to show the design is not powered at the edge
 of its own theory.
 
+\section{The $M$-community generalisation and the exposure window}
+\label{s:mnet}
+
+\subsection{Setup}
+The architecture generalises by replacing the two-community coupling $B(\Gamma)$ with a row-stochastic exposure matrix $W$ over $M$ communities of sizes $n_c$: agent fields, the retrospective channel and the reference channel aggregate per community and mix through the rows of $W$. Because exposure is block-uniform, community-level aggregation is exact at every $M$ and any size profile---no mean-field approximation is introduced by scale. The battery builds $W$ from meta-network geometries with within-community weight $w_{\mathrm{in}}=0.85$ and the remaining $0.15$ split over meta-neighbours: a degree-4 ring; Watts--Strogatz rewiring of that ring at $p\in\{0.01,0.1,1\}$; Barab\'asi--Albert preferential attachment ($m=2$); and a common broadcast ($0.15$ on the population-weighted mean of all other communities). Losing communities (half the population) are initialised on the inferior arm, either clustered (contiguous on the meta-graph) or scattered (alternating); unequal-size and global-reference variants are included. All dynamical parameters are the frozen defaults of the main text; $N=10{,}000$ throughout ($N=100{,}000$ at $M=10{,}000$); 40 runs per cell (20 at the largest scale); 44 cells, 1,740 runs, 266,400 community-level records. The new engine path reproduced the frozen confirmatory cell distributionally before any battery output was used ($P_{\mathrm{dw}}=0.803$, $\bar m_2=0.208$, within the pre-stated gate), and the original two-community path is untouched and still bit-identical on its frozen gates.
+
+\subsection{The exposure window}
+Define a losing community's cross-exposure to corrected communities, $x_c=\sum_{d\,\mathrm{corrected}}W_{cd}\in[0,0.15]$. Pooled over every geometry, placement and size profile, the terminal class at the 600-trial horizon is organised by $x_c$ alone:
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+$x_c$ bin & $P(\mathrm{trap})$ & $P(\mathrm{cbi})$ & records \\
+\hline
+$[0,0.02)$ & $0.991$ & $0.004$ & $76{,}639$ \\
+$[0.02,0.05)$ & $0.921$ & $0.032$ & $15{,}765$ \\
+$[0.05,0.08)$ & $0.276$ & $0.302$ & $141{,}981$ \\
+$[0.08,0.11)$ & $0.154$ & $0.279$ & $17{,}384$ \\
+$[0.11,0.14)$ & $0.001$ & $0.219$ & $6{,}984$ \\
+$[0.14,0.15]$ & $0.000$ & $0.056$ & $7{,}647$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent The behavioural threshold sits at $x_B\approx0.11$: $P(\mathrm{escape}\mid x\ge0.1125)=0.999$. Within the window, community size decides between persistence and fluctuation-seeded escape---ten-agent communities at the same mean exposure that traps hundred-agent communities generate escapes that cascade (geometry grid below).
+
+\subsection{Two closed forms: permanence and the clock}
+Both statements are exact for the two-community map and exact at block level for general $W$ under block-uniform exposure; both are evaluated at the frozen defaults, with nothing fitted.
+
+\emph{Permanence.} At the equilibrium exposure-weighted reference, a losing community's aspiration settles at $A^{\mathrm{eq}}(x)=\mu_2+\chi x(\mu_1-\mu_2)$, so grievance persists indefinitely only if
+\[
+\chi\,x\,(\mu_1-\mu_2) \;>\; \Astar(\mu_2)-\mu_2
+\qquad\Longleftrightarrow\qquad
+x \;>\; \frac{\Astar(\mu_2)-\mu_2}{\chi(\mu_1-\mu_2)} \;=\; \frac{1/15}{0.08} \;=\; \frac{5}{6}.
+\]
+No community in any battery cell has $x>0.15$, so \emph{no observed trap is permanent}: every defensive wrong consensus in the battery is horizon-indexed. (Permanent delegitimation would require near-total exposure to winners under strong anchoring, or larger outcome gaps $\mu_1-\mu_2$---the relative-deprivation regime proper.)
+
+\emph{The clock.} While the community is trapped, the expected aspiration follows the linear recursion $\mathbb{E}[A_{t+1}]=(1-\rho)\mathbb{E}[A_t]+\rho A^{\mathrm{eq}}$, so the gate reopens (aspiration falls below $\Astar$) at
+\[
+t^{*}(x)\;=\;\frac{1}{\rho}\,\ln\!\frac{A_0-A^{\mathrm{eq}}(x)}{\Astar(\mu_2)-A^{\mathrm{eq}}(x)},
+\qquad
+t^{*}(0)=896,\quad t^{*}(0.075)=935,\quad t^{*}(0.15)=980.
+\]
+Every realized exposure gives $t^{*}\in[896,980]$---after the 600-trial horizon and before the 2400-trial one. The closed form therefore predicts the battery's central horizon fact with no free parameter: every community inside the window is still trapped at $T=600$ and resolved by $T=2400$. It also implies $dt^{*}/dx>0$: cross-exposure \emph{lengthens} grievance, because visible winners hold the reference---and with it entitlement---above what own outcomes alone would sustain. The $T=2400$ rerun of the fully trapped $M=100$ ring cell confirms the resolution and its split: $45.4\%$ of losing communities resign into credulous error ($\bar L=0.983$, behaviour still wrong) and the rest correct.
+
+\subsection{Battery tables}
+Trapped fraction of losing communities (40 runs per cell; 80 where ladder and grid coincide), with the mean realized cross-exposure $\bar x$ in parentheses:
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+\hline
+ & ring & WS $p{=}.01$ & WS $p{=}.1$ & WS $p{=}1$ & BA & broadcast \\
+\hline
+$M{=}10$, clustered & $1.00\,(.045)$ & $1.00\,(.045)$ & $0.98\,(.051)$ & $0.72\,(.084)$ & $1.00\,(.049)$ & $1.00\,(.083)$ \\
+$M{=}10$, scattered & $1.00\,(.075)$ & $1.00\,(.076)$ & $1.00\,(.074)$ & $0.80\,(.079)$ & $0.83\,(.081)$ & $1.00\,(.083)$ \\
+$M{=}100$, clustered & $1.00\,(.005)$ & $1.00\,(.005)$ & $1.00\,(.011)$ & $0.75\,(.077)$ & $1.00\,(.035)$ & $1.00\,(.076)$ \\
+$M{=}100$, scattered & $1.00\,(.075)$ & $0.99\,(.075)$ & $0.95\,(.075)$ & $0.79\,(.074)$ & $0.80\,(.074)$ & $1.00\,(.076)$ \\
+$M{=}1000$, clustered & $1.00\,(.000)$ & $1.00\,(.001)$ & $1.00\,(.007)$ & $0.36\,(.076)$ & $0.89\,(.035)$ & $0.00\,(.075)$ \\
+$M{=}1000$, scattered & $0.10\,(.075)$ & $0.11\,(.075)$ & $0.18\,(.075)$ & $0.37\,(.075)$ & $0.38\,(.075)$ & $0.00\,(.075)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Three structures in this table carry the account. (i) \emph{Clustered shielding}: on the ring and at weak rewiring, interior losing communities have $\bar x\to0$ as $M$ grows, and trap completely---harder than the two-community confirmatory cell ($0.843$), whose losing block has $x=0.10$. The $M{=}2$ ladder anchor at $w_{\mathrm{in}}=0.90$ ($\Gamma=0.1$, $n=5{,}000$) traps $20/20$: the confirmatory cell's escapes were finite-size fluctuations, as the main-text scaling analysis claimed; the $M{=}2$ cell at the battery's $w_{\mathrm{in}}=0.85$ ($x=0.15>x_B$) corrects. The $M{=}10{,}000$ cell (ring, clustered, $N=100{,}000$) traps $20/20$. (ii) \emph{Scattering without smallness is not enough}: alternation on the degree-4 ring pins every loser at $x=0.075$---inside the window---so scattered losers stay trapped at $M\le100$ and correct only at $M=1000$, where ten-agent communities seed cascades (trap $0.10$, cbi $0.37$). (iii) \emph{Degree is not protective}: on BA meta-graphs the trap probability is flat in meta-degree ($0.62$--$0.71$ across degree quantiles)---hubs escape no more often than peripheries, because degree does not move the \emph{composition} of exposure. This is the discriminating contrast with hub-centric intuitions about network centrality.
+
+\emph{Unequal sizes.} Exposure composition dominates size: one large losing community ($5{,}500$ agents) among nine small winners has $x=0.15$ and corrects ($0/40$ trapped); nine small losing communities around one large winner sit at low $x$ and trap ($1.00$). \emph{Broadcast}: the common field traps everything at $M\le100$ (it spreads whatever corrects, and nothing corrects without fluctuation seeds) yet at $M=1000$, $n=10$ it fully corrects behaviour while leaving $45\%$ of losing communities corrected-but-illegitimate at the horizon ($\bar L=0.31$)---the main text's behaviour--belief dissociation at ten-thousand-community scale. The global-reference variant (broadcast reference replacing the exposure-weighted one, $M=100$) traps completely, as the shielding account requires.
+
+\subsection{Honest limits}
+All thresholds are measured at the frozen defaults ($\lambda=0.7$, $\rho=0.002$, $\chi=0.4$, $w_{\mathrm{in}}=0.85$); the closed-form $(\lambda,\chi,\rho)$-dependence of the window edges is stated exactly only for the two-community map. Exposure is block-uniform (the exact-aggregation class); arbitrary agent-level graphs remain outside the theory, as in the main text. Six pre-run predictions were frozen for this battery; two failed cleanly (degree ordering on BA; size monotonicity under unequal splits) and three held only in part, and the window account above is what absorbs all of them---the full scorecard is in the repository's freeze record. An earlier internal report framed the equilibrium-reference condition as the window's measured lower edge; the evaluation above corrects this: the condition governs \emph{permanence} ($x>5/6$, never met), and the measured lower edge is the $t^{*}$ clock seen at a finite horizon.
+
 \section{Supplementary figures}
 \label{s:supfigs}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=.72\textwidth]{fig_bimodal.pdf}
-\caption{\textbf{Bimodality at the regime boundary.} Distribution of the losing community's terminal optimal mass across 60 gate-on runs at the confirmatory cell (vermilion) and 60 gate-off runs (grey): identical parameters yield a bimodal outcome under the gate---most runs freeze near $m_2\approx0$, a minority escape to $m_2\approx1$---while every ungated run corrects. The across-run variance peak of main-text Fig.~4c is this bimodality seen through its second moment.}
+\caption{\textbf{Bimodality at the regime boundary.} Distribution of the losing community's terminal optimal mass across 60 gate-on runs at the confirmatory cell (vermilion) and 60 gate-off runs (grey): identical parameters yield a bimodal outcome under the gate---most runs freeze near $m_2\approx0$, a minority escape to $m_2\approx1$---while every ungated run corrects. The across-run variance peak of main-text Fig.~3c is this bimodality seen through its second moment.}
 \label{fig:bimodal}
 \end{figure}
 
@@ -1017,7 +1088,7 @@ near $0.4$ at the horizon.}
 \centering
 \includegraphics[width=\textwidth]{fig_race3.pdf}
 \caption{\textbf{Unselected race trajectories: the first three pre-declared seeds.} The
-race-anatomy panel of main-text Fig.~7a shows the first seed of a pre-declared sequence
+race-anatomy panel of main-text Fig.~6a shows the first seed of a pre-declared sequence
 whose run meets the frozen defensive-wrong criterion; the selection rule and the skipped
 draws are part of the frozen record. Here are the first three seeds of that sequence
 unconditionally: seeds 38001 (\textbf{a}) and 38011 (\textbf{b}) drew escape runs---the
@@ -1028,6 +1099,72 @@ fate shown in the main text. The two escape draws are not failures of the mechan
 its other basin, and their legitimacy lag is the timescale dissociation seen from inside
 an escape.}
 \label{fig:race3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize,
+  agent/.style={circle, fill=black!50, inner sep=1.05pt},
+  aA/.style={agent, fill=blu!75!black}, aB/.style={agent, fill=verm!80!black},
+  wedge/.style={black!22, line width=.35pt},
+  xedge/.style={blu, line width=.75pt},
+  refedge/.style={verm!85!black, densely dashed, line width=.55pt, -{Stealth[length=1.5mm]}},
+  blab/.style={font=\scriptsize, align=center, text=black!70}]
+% ---------- (a) two-community block ----------
+\begin{scope}
+\node[font=\bfseries] at (-1.2,1.35) {a};
+\foreach \i in {0,...,9} \node[aA] (A\i) at ({0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
+\foreach \i in {0,...,9} \node[aB] (B\i) at ({2.9+0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
+\foreach \i/\j in {0/3,1/5,2/7,4/8,6/9,0/6,3/8} {\draw[wedge] (A\i)--(A\j); \draw[wedge] (B\i)--(B\j);}
+\draw[xedge] (A0) -- (B5); \draw[xedge] (A1) -- (B4); \draw[xedge] (A9) -- (B6);
+\node[text=blu, font=\scriptsize\bfseries] at (1.45,0.62) {$\Gamma$};
+\node[blab] at (1.45,-1.25) {two-community block $B(\Gamma)$\\ balanced, $N_c=N/2$};
+\end{scope}
+% ---------- (b) isolation ----------
+\begin{scope}[shift={(5.9,0)}]
+\node[font=\bfseries] at (-1.2,1.35) {b};
+\foreach \i in {0,...,9} \node[aA] (C\i) at ({0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
+\foreach \i in {0,...,9} \node[aB] (D\i) at ({2.9+0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
+\foreach \i/\j in {0/3,1/5,2/7,4/8,6/9,0/6,3/8} {\draw[wedge] (C\i)--(C\j); \draw[wedge] (D\i)--(D\j);}
+\node[text=black!60, font=\scriptsize\bfseries] at (1.45,0.15) {$\Gamma=0$};
+\node[blab] at (1.45,-1.25) {isolation\\ no corrective field};
+\end{scope}
+% ---------- (c) reference channels ----------
+\begin{scope}[shift={(11.8,0)}]
+\node[font=\bfseries] at (-1.2,1.35) {c};
+\foreach \i in {0,...,5} \node[aA] (E\i) at ({0.52*cos(60*\i)},{0.52*sin(60*\i)-0.28}) {};
+\foreach \i in {0,...,5} \node[aB] (F\i) at ({2.4+0.52*cos(60*\i)},{0.52*sin(60*\i)-0.28}) {};
+\node[draw=verm!85!black, fill=verm!8, rounded corners=1.5pt, inner sep=2pt,
+      font=\scriptsize] (RR) at (1.2,1.05) {$\bar R^{\mathrm{ref}}$};
+\draw[refedge] (E1) to[bend left=12] (RR);
+\draw[refedge] (F2) to[bend right=12] (RR);
+\draw[refedge] (RR) to[bend right=10] (E0);
+\draw[refedge] (RR) to[bend left=10] (F1);
+\draw[refedge, black!45] (E0) to[bend right=22] node[below=1pt, font=\tiny, black!55]{local: along $B$} (F3);
+\node[blab] at (1.2,-1.25) {reference channel\\ global mean or local exposure};
+\end{scope}
+% ---------- (d) single agent + peer display ----------
+\begin{scope}[shift={(16.6,0)}]
+\node[font=\bfseries] at (-0.8,1.35) {d};
+\node[aA, inner sep=2.2pt] (ag) at (0.4,-0.1) {};
+\node[below=1.5pt of ag, font=\tiny, black!60] {agent};
+\node[draw=black!50, fill=blu!6, rounded corners=1.5pt, inner sep=2.5pt,
+      font=\tiny, align=center] (scr) at (2.0,0.55) {peer\\ display};
+\draw[refedge] (scr.west) to[bend right=10] (ag);
+\draw[-{Stealth[length=1.5mm]}, black!55, line width=.55pt] (0.4,0.78) node[above, font=\tiny, black!60]{arms} -- (ag);
+\node[blab] at (1.2,-1.25) {single agent\\ yoked peer stream};
+\end{scope}
+\end{tikzpicture}}%
+\caption{\textbf{Network configurations tested.} \textbf{a}, The balanced two-community
+block with permeability $\Gamma$ carries the confirmatory experiment and the dense
+maps. \textbf{b}, Isolation ($\Gamma=0$) is the boundary column of those maps and,
+with the local reference, the credulous-error cell. \textbf{c}, The two reference
+channels of the aspiration update: population mean (global visibility, vermilion) or
+exposure-weighted neighbour mean (local, grey). \textbf{d}, The single-agent
+configuration behind the analytical checks and the prediction generator (yoked peer
+stream in place of a community).}
+\label{sfig:nets}
 \end{figure}
 
 \bibliographystyle{unsrtnat}
