@@ -1,0 +1,81 @@
+iteration_id: "KGi-DISS-I030"
+mode: "main-text readability rewrite (v13). Prose only. The supplement stays
+  technical by design; Methods stays conventionally technical with light smoothing;
+  abstract, introduction, Results narration and Discussion are rewritten for a
+  human reader."
+freeze_time: "2026-11-05T21:52Z"
+user_directive: "main text too hard to read, too dry, too technical, not smooth —
+  abstract too; supplement may be dry, main text absolutely not; check academic
+  writing best practice; smooth and shorten the main text to be intelligible,
+  interesting, scientific, insightful to humans"
+writing_contract:
+  may_change: "sentence structure and length; paragraph boundaries and openings;
+    placement of symbols and numbers within sentences (narrative first, support
+    after); em-dash and semicolon density; nominalizations to verbs; passive to
+    active; clause-stacked parentheticals unpacked or dropped where redundant;
+    section openers rewritten as plain-language topic sentences"
+  may_not_change: "any frozen number or interval; any claim's content or scope;
+    citations and their placement obligations; the honesty anchors (designed-
+    validation framing for 0.843; horizon indexing; class conditioning; the
+    corrected power statements; the S13.6 out-of-sample sentence; 'reported, not
+    claimed' floors); figure/table content and captions (already compressed at
+    I018); equation set; section order; Oxford English"
+  principles_applied: "Gopen & Swan stress/topic positions and subject-verb
+    proximity; context-content-conclusion at paragraph scale (Mensh-Kording); one
+    plain-language topic sentence per paragraph with symbols demoted to support;
+    Nature summary-paragraph formula for the abstract (setting, problem, 'here we
+    show', result, implication); shorter mean sentence length; characters as
+    subjects, actions as verbs (Williams); classic style (Pinker) - the reader is
+    shown, not processed"
+  length: "net shorter; main stays <= 25 pp"
+verification: "rebuild clean (0 undefined, 0 ??); page check; frozen-number grep
+  audit after rewrite (every numeric literal present before must be present after,
+  or its removal listed in the closing record); honesty-anchor grep audit"
+package_B_arbitrary_M:  # added pre-execution on the author's mid-iteration directive
+  directive: "generalise to arbitrary M -> infinity communities, not 10,000"
+  main_text: "theory stated for arbitrary M (block aggregation is exact at every M;
+    nothing in the W construction caps it); one limit sentence in the window
+    section + abstract clause 'arbitrarily many communities (tested from two to
+    ten thousand)'; ladder = finite-M verification of the limit"
+  si_S13_7: "new subsection 'The infinite-communities limit': (a) finite-horizon
+    locality lemma — the T-step per-community law is a function of the depth-T
+    meta-neighbourhood (3-line induction on the update's 1-step dependence
+    radius; model-level statement with i.i.d. agent draws); (b) consequence:
+    exact M-invariance of interior communities once depth-T balls embed, with
+    the measured effective radius far smaller (out-weight decay per hop;
+    invariance observed already at M=10); (c) M -> infinity limit of the
+    per-community law along locally convergent meta-network sequences (ring,
+    WS, BA), cited to the generic local-weak-convergence literature
+    (Benjamini-Schramm; Aldous-Steele objective method; van der Hofstad), not
+    to unpublished companion work; (d) broadcast excluded from the local limit
+    and given its own M -> infinity limit via the winner-share formula
+    x -> (1-w_in) * winning population share; (e) honest limits: fixed horizon
+    T throughout (the framework is horizon-indexed by design, which is exactly
+    why locality holds); T and M limits not interchanged, not claimed"
+  verification_queue_add: "Benjamini-Schramm 2001 EJP; Aldous-Steele 2004 (The
+    Objective Method); van der Hofstad RGCN vol 2 — verify before manuscript use"
+closing_record:
+  closed: "2026-11-05"
+  delivered: "main v13 25 pp, SI 29 pp, both clean (0 undefined, 0 ??)"
+  package_A: "readability rewrite applied to abstract, all five intro paragraphs,
+    contributions, Results narration (functional, A*, confirmatory incl. paragraph
+    split, boundary, persistence, transparency incl. paragraph split, window,
+    predictions walk-through incl. split) and four Discussion paragraphs; mean
+    sentence length sharply down, symbols demoted from topic positions, em-dash
+    chains broken, plain-language topic sentences throughout; Methods left
+    conventionally technical per contract"
+  package_B: "arbitrary-M generalisation: window section retitled 'from two
+    communities to arbitrarily many' and opens with the limit statement
+    (finite-horizon locality -> per-community law exactly M-invariant once
+    neighbourhoods stabilize, converges as M->infinity along locally convergent
+    meta-networks; battery tests structure, not scale); abstract says 'at any
+    number of communities, tested from two to ten thousand'; NEW SI S13.7
+    (locality lemma by induction, ring stabilization, effective radius via
+    out-weight attenuation, broadcast's own M-free winner-share limit, honest
+    limits: fixed T, limits not interchanged; no unverified citations used -
+    'rooted local sense' stated descriptively, formal refs remain in the
+    verification queue)"
+  audits: "frozen-number audit vs last pushed version: zero numbers lost (only
+    addition = the S13.7 reference); honesty-anchor audit: all counts preserved
+    (designed validation 2/2, reported-rather-than-claimed 1/1, 253-of-300 1/1,
+    never-failure-alone 1/1, out-of-sample 3/3, class-conditional 1/1)"

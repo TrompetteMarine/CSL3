@@ -1131,6 +1131,41 @@ Watts--Strogatz listed as a shielding architecture; it is an invariance one,
 drift $0.016$ across $M$) and is reported as written. All records, the freeze
 and the addendum are in the repository.
 
+\subsection{The infinite-communities limit}
+The battery stops at $M=10{,}000$; the theory does not. Two observations make the
+arbitrary-$M$ statement precise.
+
+\emph{Finite-horizon locality.} Community aggregates update through the rows of
+$W$: the state of community $c$ at $t+1$ is a function of its own and its
+meta-neighbours' aggregates at $t$, together with within-community randomness
+(i.i.d.\ across agents in the model). By induction on $t$, the joint law of
+community $c$'s trajectory up to a fixed horizon $T$ is a measurable function of
+the parameters, sizes and driving randomness of the communities within
+meta-distance $T$ of $c$, and of nothing else.
+
+\emph{Consequence.} Consider meta-network sequences in which the rooted
+neighbourhood of a community eventually stabilizes as $M$ grows---interior
+communities of growing rings and lattices trivially, and more generally any
+sequence converging in the rooted local sense. For such communities the
+depth-$T$ neighbourhood is eventually constant in $M$, so by locality the
+per-community law at horizon $T$ is \emph{exactly} invariant in $M$ from that
+point on, and therefore converges as $M\to\infty$. The worst-case dependence
+radius $T$ is loose: each hop attenuates influence by the out-weight
+($1-w_{\mathrm{in}}=0.15$ at the defaults), so the effective radius is a few
+hops, and the batteries find $M$-invariance already at $M=10$
+(Section~S13.6). The broadcast is the excluded global coupling: it has no local
+limit, but its $M\to\infty$ behaviour is elementary, because a losing
+community's structural exposure under broadcast is $x=(1-w_{\mathrm{in}})$
+times the winning population share, which is $M$-free at fixed shares---the
+winner-share arithmetic of Section~S13.4.
+
+Two honest limits. The statement is at fixed horizon $T$. This is no
+restriction here---the entire framework is horizon-indexed by design, and
+finite-horizon locality is precisely why the horizon-indexed theory is
+$M$-stable---but it means the $T\to\infty$ and $M\to\infty$ limits are not
+interchanged, and nothing is claimed about infinite-horizon behaviour of
+infinite systems.
+
 \section{Supplementary figures}
 \label{s:supfigs}
 
