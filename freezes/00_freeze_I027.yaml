@@ -1,0 +1,57 @@
+iteration_id: "KGi-DISS-I027"
+mode: "design only; no runs, no manuscript edits. Two deliverables in sequence:
+  (A) the complete online-experiment design (supersedes experiment/DESIGN.md v1),
+  (B) the complete empirical (field) project design, parameterised by the lab
+  outputs so it is fully specified up to the constants the experiment will supply"
+freeze_time: "2026-11-05T16:48Z"
+user_directive: "design the online experiment to validate the model; then, after the
+  experiment side is done, a complete design of an empirical project"
+constraints_carried:
+  - "division of labour (I025): ABM covers everything non-human; experiment =
+    minimal humans x treatments; gatekeeping H1a/H1b at FWER .005; N=280/reference
+    arm pooled, MODERATE:FULL 2:1, total confirmatory N=560"
+  - "R7 repairs are design requirements: display provenance + truthful disclosure,
+    believability/suspicion funnel with blind preregistered exclusions, at least one
+    incentive-compatible legitimacy measure, slider-reactivity check, rho-band pilot
+    anchoring with pre-stated decision rules"
+  - "pilot precedes OSF filing and fixes sigma_r -> delta_eq, rho-hat mass rule,
+    MODERATE calibration, believability; pilot data never enter confirmatory tests"
+  - "field design obeys R8's four conditions: adjudicable correctness domains;
+    engagement-weighted exposure stated as an impressions proxy; pre-specified
+    partition + sensitivity; exogenous exposure variation for any causal x-claim.
+    Numeric x_B is never exported; the shape battery is (step transition,
+    horizon-indexing, dissociation ordering, dt*/dx>0)"
+  - "model->lab->field chain per experiment/PRIORS.md; priors locked before any
+    field outcome extraction; the ABM is the power engine for the field design"
+honesty_rules:
+  - "every design constant either frozen now, assigned to the pilot, or assigned to
+    the lab posterior -- no silent free parameters"
+  - "truthfulness audit on the peer display and the rule-switch (WTP) probe: no
+    deceptive element enters the design"
+closing_record:
+  closed: "2026-11-05"
+  deliverable_A: "experiment/DESIGN.md v2 — complete online-experiment design:
+    Prolific logistics + cost (~GBP 4.8k, ~740 recruited main + 100 pilot);
+    truthful pilot-sourced peer-stream pool (dev placeholder retired) with
+    stratified HIGH selection; WTP rule-switch probe (truthful re-seed) as the
+    incentive-compatible legitimacy secondary; funnel/believability block;
+    gatekept H1a/H1b with the I025 allocation (560 confirmatory + 90 framing-probe
+    module, separable); pilot N=100 (60 dense / 40 sparse elicitation) with five
+    pre-stated decision rules (delta_eq = max(5, 0.5 sigma_r); rho-band 30%/150-trial
+    rule; 20% believability trigger; 0.2 SD reactivity trigger; MODERATE
+    calibration); 7 enumerated oTree build deltas; ethics and timeline"
+  deliverable_B: "field/FIELD_DESIGN.md — complete empirical project design:
+    retail-finance Reddit communities primary (adjudicable correctness), sports
+    betting secondary; subreddit partition + two-resolution sensitivity +
+    size-stratified replication; L-hat delegitimation classifier (kappa >= .75
+    validation, locked pre-extraction); structural engagement-weighted x-hat
+    stated as impressions proxy; F1 event-study (P-A prior), F2 censored survival
+    dissociation (P-B), F3 ban/quarantine natural experiments for the causal
+    step-shape + dt*/dx>0 sign test, F4 quantitative predicted-vs-observed
+    persistence distribution via t*/t** (P-C) by quantile calibration; ABM as the
+    frozen power engine; negative-control communities (losses without visible
+    winners -> resignation, not delegitimation); numeric x_B never exported,
+    shape battery only"
+  invariants_check: "every constant frozen, PILOT-assigned, or LAB-assigned; no
+    deceptive element (display and WTP probe truthful by construction); R8's four
+    field conditions and R7's repairs embedded as requirements"

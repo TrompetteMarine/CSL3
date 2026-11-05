@@ -1,92 +1,160 @@
-# Task v3 — experimental design and ethics-readiness note (KGi-DISS-I006)
+# Online experiment design — reference-dependent delegitimation (v2, I027)
 
-Status: implementation complete and bot-validated; **for author review before OSF
-registration and ethics submission**. The governing scientific document is the
-preregistration draft (I003/M4); this note records how the built instrument realizes
-it, the decisions the prereg left open, and the gates still ahead.
+Supersedes the I006 design document (v1 remains in repository history). Status:
+complete design; constants marked PILOT are fixed by the pilot before OSF filing;
+constants marked LAB feed the field project (see `../field/FIELD_DESIGN.md` and
+`PRIORS.md`). The oTree 6 app `diss_bandit` implements the task; the build deltas
+from v1 are listed in §10.
 
-## 1. Instrument
+## 1. What the experiment must do, and nothing else
 
-oTree 6 app `diss_bandit` (project `diss-otree/`): two-armed bandit, 450 trials in
-three 150-trial blocks delivered on three live pages (no page reload per trial),
-~28 min. Phases (invisible): P1 (.65/.35), P2 (.30/.15), P3 restoration per Factor B.
-Announced non-contingent bonus (+3 points) every 15th trial. Yoked peer-earnings
-panel on every trial. Every 5th trial, two sliders: fairness ("the payout rule is
-fair", 0–100) and entitlement ("what I deserve to earn per choice", 0–100 = % of
-max). Side assignment of the better arm counterbalanced per participant; outcome
-sequences pre-generated per participant from a session seed (reproducible, CRN-style).
+The simulations cover every question that does not require a human. The experiment
+is the smallest humans × treatments grid that (i) confirms the central prediction
+and (ii) identifies what no simulation can: whether the legitimacy gate exists in
+people (restoration dissociation), the magnitude of reference-dependent
+delegitimation against its utility rival, and the human distribution of aspiration
+rigidity ρ (the lab-to-field instrument). Everything below is organised around
+those three outputs.
 
-## 2. Factors and cells
+## 2. Platform and logistics
 
-- **Factor A (reference regime of the P2 block)**: HIGH (yoked peer in the .60–.70
-  earnings band) vs LOW (peer matched to own trailing 15-trial band ±.05). P1/P3
-  block regimes counterbalanced at participant level; the primary contrast is the
-  P2-block regime, per the prereg.
-- **Factor B (P3 restoration)**: FULL (.65/.35) vs MODERATE (.45/.35).
-- 4 cells × 320 post-exclusion (power: prereg §3, d = .25 floor, α = .005) + pilots.
+Prolific, desktop only, English-fluent, approval ≥ 97%, no prior participation in
+pilot or pool sessions. Session ≈ 28 minutes. Payment: base £4.20 (≈ £9/hr) +
+performance bonus (expected £1.10, realized from points incl. windfalls) + the
+WTP endowment residue (§5). Server: the existing oTree deployment (Lightsail or
+Heroku tier as in v1); waves of ≤ 60 concurrent to protect yoking and server load.
 
-## 3. No-deception yoking
+## 3. Treatments and allocation (between-subject)
 
-The peer panel replays an *actual* earnings stream of a prior participant. Production
-pool: streams harvested from pilot/earlier sessions, keyed by realized hit-rate band;
-HIGH draws from the .60–.70 band, LOW matches the participant's own trailing band at
-each block boundary. The instruction line "the payout rule used in your session is
-one of several rules used across sessions" is made true by running separate
-throwaway sessions with alternative rules. The development pool shipped in the repo
-is bot-generated and **flagged `placeholder: true`**; it must be replaced by the
-harvested pool before any session whose data will be analyzed.
+Factor A, reference regime in the deprivation block: HIGH (visibly successful
+peer, realized mean in [.60,.70]) vs LOW (peer matched to the participant's own
+realized band ± .05). Factor B, restoration: FULL (.65/.35) vs MODERATE (.45/.35).
 
-## 4. Payment
+Confirmatory allocation: N = 280 per reference arm post-exclusion, pooled across
+Factor B for H1a (Factor B diverges only in P3); within each reference arm,
+MODERATE : FULL = 2 : 1 (≈ 187 : 93). FULL is the positive control that the
+fairness instrument can move (a MODERATE flatline is otherwise confounded with
+slider insensitivity) and carries the H3 contrast. Total confirmatory N = 560.
 
-Points = earned rewards + bonuses (expected ≈ 290–330 points over 450 trials).
-Default conversion £0.02/point + £2.00 participation fee ≈ £8–9 for ~28 min
-(≈ £17–19/hr), within Prolific fair-pay guidance. Rates are settings-level
-parameters; final values are an author/ethics decision.
+Framing-probe module (secondary, separable): one additional arm, HIGH × MODERATE
+with group-contingent fixed-rate instructions ("the payout rule was set for your
+group as a whole at a fixed rate"), n = 90. Gate predicts the P2 drop persists;
+the group-contingent Bayesian banks first-phase evidence and predicts no drop.
+Secondary α, one-sided; powered 0.76 at d = 0.5 (the rival-vs-gate gap here is
+large by both accounts). This module can be dropped without touching the
+confirmatory core.
 
-## 5. Exclusions (enforced in the analysis pipeline, never silently in the app)
+Recruitment: 560 + 90 = 650 post-exclusion; inflate by the PILOT exclusion
+forecast (planning value 12%) → ≈ 740 recruited for the main run, plus pilot 100.
+Indicative cost at current Prolific rates: ≈ £4,800 all-in.
 
-Completion < 90% of trials; zero variance on both sliders; P1 accuracy below
-chance + 2SE (enforced for human data; flag-only on bot smoke runs); median choice
-RT < 300 ms. Every exclusion is written to the pipeline's audit log with its reason.
+## 4. Task (v3, as built, with the I027 additions)
 
-## 6. Pilot gates (before main data collection)
+Two-armed bandit, 450 trials, three 150-trial phases invisible to participants:
+P1 rich (.65/.35), P2 deprivation (.30/.15), P3 restoration (Factor B). Announced
+non-contingent +3 windfall every 15th trial. Arm-side counterbalanced; outcome
+sequences seeded and reproducible. Every 5 trials, two sliders: "the payout rule
+is fair" (0–100) and "what I deserve per trial" (entitlement). RTs recorded,
+preregistered as exploratory only (the choice rule is a first-passage reduction;
+no RT claims).
 
-1. **MODERATE calibration (Factor B)**: MODERATE = (.45/.35) is an I006 design
-   decision, not prereg-frozen. Pilot check: elicited late-P2 entitlement should
-   typically sit *above* .45 ×100 on the slider scale, so that MODERATE restoration
-   lands near the resignation boundary (theory: reopening time diverges there).
-   Adjust within (.40–.55) on pilot evidence only, before registration.
-2. **H5 cell**: the equal-misery (EQUAL) regime is pilot-gated per the prereg; the
-   pipeline detects its absence and reports it as such.
-3. **Yoked-pool coverage**: pilot must produce enough streams in the HIGH band and
-   across LOW bands; otherwise band tolerances widen (documented change).
-4. **Timing**: confirm ≈ 28 min median with the second slider.
+Peer display, truthful by construction: every trial shows the running earnings of
+"another participant who previously completed this task." The displayed streams
+are drawn from the pool of real pilot-session participants (the pilot is the pool
+source; the v1 dev-pool placeholder is retired). HIGH streams: pool members whose
+realized P2-window earnings fall in [.60,.70], stratified on trajectory shape
+(terciles of within-block variance) so selection is on mean, not on volatility.
+LOW streams: yoked to the participant's own realized earnings band (± .05),
+re-matched each block. Instructions disclose exactly this provenance; no
+deception anywhere in the protocol.
 
-## 7. Analysis pipeline (frozen logic, built and smoke-tested)
+## 5. Measures
 
-`analysis/pipeline.py` implements H1 (primary, Welch, α = .005), H2
-(recovery-midpoint lag, censoring at 450 = no recovery), H3 (regime × restoration
-on P3 rating slope; refuses incomplete crossings), H4 (MixedLM increment asymmetry
-against elicited entitlement shortfall), H5 (runs only if the EQUAL cell exists),
-and the model-free aspiration-rigidity moderator (slider-adaptation coefficient).
-Computational layer per prereg §7: individual ρ preregistered (aspiration slider is
-in the instrument); no individual claims about (ν_F, ν_R, τ^F); ν_R excluded even at
-group level; model comparison exploratory only. Operationalizations the prereg left
-open are marked `DESIGN-DECISION` inline in the code.
+1. Choices per trial (behavioural accuracy = optimal-arm rate).
+2. Fairness slider (primary legitimacy measure; rating = 100·L link stated as an
+   auxiliary assumption, not a fact).
+3. Entitlement slider (manipulation check + the ρ identification lever; slider-
+   instrumented individual ρ, synthetic recovery r = .91).
+4. Incentive-compatible legitimacy (new, preregistered secondary): at two fixed
+   points (end of P2, mid-P3) a one-shot option to pay from a dedicated 20-point
+   endowment to have the computer replace the payout rule with a fresh rule
+   generated the same way (truthful: the engine re-seeds the same generative
+   process; the phase schedule is unaffected). Willingness-to-pay = revealed
+   distrust of the standing rule. Elicited as a 0–20 price list; unspent endowment
+   paid out.
+5. Manipulation/believability block (post-task): perceived peer success (1–7),
+   perceived peer realness (1–7), funnel debrief (free-text purpose guess, rig
+   suspicion probe), demographics.
 
-## 8. Validation record (I006 gates)
+## 6. Hypotheses and tests (serial gatekeeping; FWER = .005)
 
-- `otree test` completes full 450-trial sessions for all bot configs (random and
-  DISS-gate bots; the DISS bot runs the frozen I002 defaults ν_F=.05, ν_R=.0125,
-  τ^F=.3, φ=(1,.25), α=.2 with slow/fast ρ and χ ∈ {0,.6} variants).
-- Custom export schema validated: 450 trial rows + 90 rating rows per participant.
-- Pipeline runs end-to-end on the combined bot export and emits the smoke report
-  (labeled BOT DATA); DISS bots show the qualitative signature (mean fairness
-  82.7 → 41.5 → 30.9 across phases) — a sanity check on plumbing, not evidence.
+As preregistered (prereg draft, I025 amendment) and tabulated in the manuscript's
+Table 1: H1a reference drop (one-sided Welch, N = 280/arm, power .91 at the
+d = .33 basis; at d = .25 power is .72, reported not claimed) → if it rejects,
+H1b the gate (HIGH × MODERATE: accuracy recovery above a pre-stated floor AND
+fairness TOST within ± δ_eq AND the band excludes the utility rival's predicted
+recovery). Secondaries: H2 midpoint-lag dissociation; H3 Reference × Restoration
+threshold interaction; H4 shortfall-scaled decrements vs capped increments; H5
+pilot-gated shared-failure contrast; WTP convergence with the slider (construct
+validation); framing probe (§3). Rigidity moderator: slider-instrumented ρ̂,
+within-subject, no cells of its own. Analysis by the frozen pipeline with blind,
+preregistered exclusions.
 
-## 9. Open author decisions before registration
+## 7. Pilot (N = 100; precedes ethics-final + OSF filing; its outputs are design constants)
 
-MODERATE value (pilot gate 1); payment rates; comprehension-check items (not yet
-written); Prolific screening criteria; ethics text (information sheet + consent
-wording beyond the in-app consent); OSF registration of the prereg draft with the
-§7 identification fallback as already frozen.
+Arms: 60 standard-elicitation (40 HIGH-MODERATE, 10 LOW-MODERATE, 10 HIGH-FULL) +
+40 sparse-elicitation (sliders every 10 trials) for the reactivity check.
+Pre-stated outputs and decision rules:
+- σ_r (rating noise) → δ_eq and H1b equivalence power; δ_eq = max(5 points,
+  0.5·σ_r) unless the pilot shows floor effects, in which case the rule is
+  re-stated before filing.
+- ρ̂ distribution → the band rule: if fewer than 30% of pilot participants show an
+  entitlement half-life ≥ 150 trials, P2 is lengthened to 225 trials (session
+  ≈ 33 min) or the within-session persistence secondaries are dropped ex ante,
+  stated in the preregistration either way.
+- Believability: if > 20% fail the realness probe or name the yoking in the
+  funnel, the display protocol is revised (provenance wording, stream selection)
+  and the pilot repeated on the failing arm; exclusion forecast updated from the
+  observed rate.
+- Slider reactivity: dense vs sparse arms compared on P2 drop and entitlement
+  drift; if elicitation density moves the primary by > 0.2 SD, the main run
+  adopts sparse elicitation and the power arithmetic is restated.
+- MODERATE calibration: realized fairness trajectory against the generator band;
+  the .45/.35 setting is confirmed or shifted before filing.
+- Pool generation: pilot streams (with consent) become the yoked display pool.
+No pilot datum enters any confirmatory analysis.
+
+## 8. Ethics
+
+No-deception protocol (the display and the rule-switch are truthful as specified);
+information sheet names earnings display of prior participants; anonymised
+Prolific IDs only; standard withdrawal; payment floor independent of performance;
+ethics application under the QMUL template (contact g.l.s.bontemps@qmul.ac.uk),
+with the pilot covered by the same application as a named phase.
+
+## 9. Decision rules (what refutes what)
+
+Per the preregistration draft: H1a null at sensitivity d = .25 → reference-
+dependent gating refuted in humans; programme reverts to the theory/ABM
+contribution. H1a pass + H1b fail → reference dependence confirmed, gate not
+identified; mechanism language demoted accordingly in any resulting paper. H1a+b
+pass → the gate exists in people; ρ̂ and the magnitude ratio go to the field
+project as priors. All intermediate patterns are enumerated in the prereg.
+
+## 10. Build deltas from the v1 oTree app (small, enumerated)
+
+(1) 2:1 MODERATE:FULL allocation switch; (2) WTP probe pages + endowment
+accounting + truthful re-seed hook; (3) funnel debrief + manipulation-check
+block; (4) pool loader replacing the dev stream generator (pilot-sourced,
+stratified HIGH selection); (5) TOST/equivalence module in `pipeline.py` for H1b;
+(6) framing-probe instruction variant; (7) sparse-elicitation toggle for the
+pilot arm. Nothing else changes; bots and the smoke suite re-run after each
+delta.
+
+## 11. Timeline (indicative)
+
+Build deltas 1–2 weeks, in parallel with ethics (2–4 weeks). Pilot: one week of
+collection + one of analysis → constants frozen → OSF registration. Main run:
+2–3 weeks in waves. Confirmatory analysis: push-button on the frozen pipeline
+within days. Field project priors (PRIORS.md) issued from the lab posteriors
+immediately after.
