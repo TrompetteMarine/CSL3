@@ -634,7 +634,7 @@ threshold by threshold$/g$ plus one increment.
 \emph{What escapes the class.} A hierarchical prior with a vanishing regime-switching
 rate can slow trust recovery arbitrarily; it thereby exits the class above (its effective
 likelihood becomes state-dependent) and pays elsewhere: it predicts neither the
-entitlement dependence of collapse (main-text Fig.~10d) nor capped repair, and its
+entitlement dependence of collapse (main-text Fig.~11d) nor capped repair, and its
 switching rate plays exactly the role $\rho$ plays for the gate, so the discrimination
 runs---as preregistered---on which elicited latent the recovery clock tracks (aspiration
 against posterior odds), not on model selection.
@@ -791,7 +791,7 @@ entitlement as $N$ grows (a finite-size displacement of the effective basin boun
 while the across-run variance peak stays bounded near $0.25$---the maximum attainable by a
 bounded bimodal variable---at every size. Together with the strict bimodality of terminal
 outcomes (Supplementary Fig.~\ref{fig:bimodal}) and the bistability of the mean-field flow
-(main-text Fig.~8), this identifies the phenomenon as \emph{stochastic selection between
+(main-text Fig.~9), this identifies the phenomenon as \emph{stochastic selection between
 coexisting deterministic attractors}. The convergence is now quantified rather than
 asserted (Supplementary Fig.~\ref{fig:scaling}d): the front location is linear in
 $N^{-1/2}$ across all six sizes and extrapolates to $A_0^*(\infty)=0.580$, against a
@@ -842,8 +842,8 @@ at the trapped and rescued cells: the map reproduces the collapse timing, the
 behavioural lock-in, and the $\rho$-dependent escape, with the largest deviations at the
 stochastic regime-selection stage early in the run---the residual anticipated in
 Lemma~\ref{l:choicemap}. The map's predictions are also drawn on the dense maps
-themselves: its basin boundary on main-text Fig.~4a (dashed) and its behaviour and
-legitimacy seams on main-text Fig.~7 (dashed and dotted), so the reader can judge the
+themselves: its basin boundary on main-text Fig.~5a (dashed) and its behaviour and
+legitimacy seams on main-text Fig.~8 (dashed and dotted), so the reader can judge the
 homogeneous-limit approximation against every grid, not two cells.
 
 \subsection{Structural and field-form perturbations}
@@ -1132,7 +1132,7 @@ and the addendum are in the repository.
 \begin{figure}[H]
 \centering
 \includegraphics[width=.72\textwidth]{fig_bimodal.pdf}
-\caption{\textbf{Bimodality at the regime boundary.} Distribution of the losing community's terminal optimal mass across 60 gate-on runs at the confirmatory cell (vermilion) and 60 gate-off runs (grey): identical parameters yield a bimodal outcome under the gate---most runs freeze near $m_2\approx0$, a minority escape to $m_2\approx1$---while every ungated run corrects. The across-run variance peak of main-text Fig.~3c is this bimodality seen through its second moment. The $11/60$ escape share here against $47/300$ in the confirmatory record is sampling variation across frozen sets; the Wilson intervals overlap.}
+\caption{\textbf{Bimodality at the regime boundary.} Distribution of the losing community's terminal optimal mass across 60 gate-on runs at the confirmatory cell (vermilion) and 60 gate-off runs (grey): identical parameters yield a bimodal outcome under the gate---most runs freeze near $m_2\approx0$, a minority escape to $m_2\approx1$---while every ungated run corrects. The across-run variance peak of main-text Fig.~4c is this bimodality seen through its second moment. The $11/60$ escape share here against $47/300$ in the confirmatory record is sampling variation across frozen sets; the Wilson intervals overlap.}
 \label{fig:bimodal}
 \end{figure}
 
@@ -1159,7 +1159,7 @@ near $0.4$ at the horizon.}
 \centering
 \includegraphics[width=\textwidth]{fig_race3.pdf}
 \caption{\textbf{Unselected race trajectories: the first three pre-declared seeds.} The
-race-anatomy panel of main-text Fig.~6a shows the first seed of a pre-declared sequence
+race-anatomy panel of main-text Fig.~7a shows the first seed of a pre-declared sequence
 whose run meets the frozen defensive-wrong criterion; the selection rule and the skipped
 draws are part of the frozen record. Here are the first three seeds of that sequence
 unconditionally: seeds 38001 (\textbf{a}) and 38011 (\textbf{b}) drew escape runs---the
@@ -1170,72 +1170,6 @@ fate shown in the main text. The two escape draws are not failures of the mechan
 its other basin, and their legitimacy lag is the timescale dissociation seen from inside
 an escape.}
 \label{fig:race3}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[font=\scriptsize,
-  agent/.style={circle, fill=black!50, inner sep=1.05pt},
-  aA/.style={agent, fill=blu!75!black}, aB/.style={agent, fill=verm!80!black},
-  wedge/.style={black!22, line width=.35pt},
-  xedge/.style={blu, line width=.75pt},
-  refedge/.style={verm!85!black, densely dashed, line width=.55pt, -{Stealth[length=1.5mm]}},
-  blab/.style={font=\scriptsize, align=center, text=black!70}]
-% ---------- (a) two-community block ----------
-\begin{scope}
-\node[font=\bfseries] at (-1.2,1.35) {a};
-\foreach \i in {0,...,9} \node[aA] (A\i) at ({0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
-\foreach \i in {0,...,9} \node[aB] (B\i) at ({2.9+0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
-\foreach \i/\j in {0/3,1/5,2/7,4/8,6/9,0/6,3/8} {\draw[wedge] (A\i)--(A\j); \draw[wedge] (B\i)--(B\j);}
-\draw[xedge] (A0) -- (B5); \draw[xedge] (A1) -- (B4); \draw[xedge] (A9) -- (B6);
-\node[text=blu, font=\scriptsize\bfseries] at (1.45,0.62) {$\Gamma$};
-\node[blab] at (1.45,-1.25) {two-community block $B(\Gamma)$\\ balanced, $N_c=N/2$};
-\end{scope}
-% ---------- (b) isolation ----------
-\begin{scope}[shift={(5.9,0)}]
-\node[font=\bfseries] at (-1.2,1.35) {b};
-\foreach \i in {0,...,9} \node[aA] (C\i) at ({0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
-\foreach \i in {0,...,9} \node[aB] (D\i) at ({2.9+0.78*cos(36*\i)},{0.78*sin(36*\i)}) {};
-\foreach \i/\j in {0/3,1/5,2/7,4/8,6/9,0/6,3/8} {\draw[wedge] (C\i)--(C\j); \draw[wedge] (D\i)--(D\j);}
-\node[text=black!60, font=\scriptsize\bfseries] at (1.45,0.15) {$\Gamma=0$};
-\node[blab] at (1.45,-1.25) {isolation\\ no corrective field};
-\end{scope}
-% ---------- (c) reference channels ----------
-\begin{scope}[shift={(11.8,0)}]
-\node[font=\bfseries] at (-1.2,1.35) {c};
-\foreach \i in {0,...,5} \node[aA] (E\i) at ({0.52*cos(60*\i)},{0.52*sin(60*\i)-0.28}) {};
-\foreach \i in {0,...,5} \node[aB] (F\i) at ({2.4+0.52*cos(60*\i)},{0.52*sin(60*\i)-0.28}) {};
-\node[draw=verm!85!black, fill=verm!8, rounded corners=1.5pt, inner sep=2pt,
-      font=\scriptsize] (RR) at (1.2,1.05) {$\bar R^{\mathrm{ref}}$};
-\draw[refedge] (E1) to[bend left=12] (RR);
-\draw[refedge] (F2) to[bend right=12] (RR);
-\draw[refedge] (RR) to[bend right=10] (E0);
-\draw[refedge] (RR) to[bend left=10] (F1);
-\draw[refedge, black!45] (E0) to[bend right=22] node[below=1pt, font=\tiny, black!55]{local: along $B$} (F3);
-\node[blab] at (1.2,-1.25) {reference channel\\ global mean or local exposure};
-\end{scope}
-% ---------- (d) single agent + peer display ----------
-\begin{scope}[shift={(16.6,0)}]
-\node[font=\bfseries] at (-0.8,1.35) {d};
-\node[aA, inner sep=2.2pt] (ag) at (0.4,-0.1) {};
-\node[below=1.5pt of ag, font=\tiny, black!60] {agent};
-\node[draw=black!50, fill=blu!6, rounded corners=1.5pt, inner sep=2.5pt,
-      font=\tiny, align=center] (scr) at (2.0,0.55) {peer\\ display};
-\draw[refedge] (scr.west) to[bend right=10] (ag);
-\draw[-{Stealth[length=1.5mm]}, black!55, line width=.55pt] (0.4,0.78) node[above, font=\tiny, black!60]{arms} -- (ag);
-\node[blab] at (1.2,-1.25) {single agent\\ yoked peer stream};
-\end{scope}
-\end{tikzpicture}}%
-\caption{\textbf{Network configurations tested.} \textbf{a}, The balanced two-community
-block with permeability $\Gamma$ carries the confirmatory experiment and the dense
-maps. \textbf{b}, Isolation ($\Gamma=0$) is the boundary column of those maps and,
-with the local reference, the credulous-error cell. \textbf{c}, The two reference
-channels of the aspiration update: population mean (global visibility, vermilion) or
-exposure-weighted neighbour mean (local, grey). \textbf{d}, The single-agent
-configuration behind the analytical checks and the prediction generator (yoked peer
-stream in place of a community).}
-\label{sfig:nets}
 \end{figure}
 
 \bibliographystyle{unsrtnat}

@@ -1085,7 +1085,44 @@ fig_race3();   println("race3 ok")
 
 # ---------------- Fig (I022): the exposure window at every scale ------------------
 function fig_window()
-    f = Figure(size=(1180, 330))
+    f = Figure(size=(1500, 330))
+    # --- a: the ladder, M = 2 .. 10,000 -------------------------------------------
+    dc0 = readcsv(joinpath(RS,"mnet_cells.csv"))
+    d2 = readcsv(joinpath(RS,"mnet2_cells.csv"))
+    dT = readcsv(joinpath(RS,"mnetT.csv"))
+    anchor = mean(Float64.(dT["frac_trap"][strip.(string.(dT["cell"])).=="B"]))
+    ladm(M) = mean(Float64.(dc0["frac_trap"][(dc0["m_comms"].==M) .&
+              (strip.(string.(dc0["geom"])).=="ring") .&
+              (strip.(string.(dc0["place"])).=="clustered")]))
+    lM = [2,10,100,1000,10000]
+    lad = [anchor; [ladm(M) for M in [10,100,1000,10000]]]
+    s2(g,pl,n,M) = begin
+        idx = (strip.(string.(d2["geom"])).==g) .& (strip.(string.(d2["place"])).==pl) .&
+              (d2["n_size"].==n) .& (d2["m_comms"].==M) .& (d2["w_in"].==0.85) .& (d2["t"].==600)
+        sum(idx)==0 ? NaN : mean(Float64.(d2["frac_trap"][idx]))
+    end
+    Ms3 = [10,100,1000]; Ms2 = [100,1000]
+    rs100 = [s2("ring","scattered",100,M) for M in Ms3]
+    bc100 = [s2("broadcast","clustered",100,M) for M in Ms3]
+    rs10  = [s2("ring","scattered",10,M) for M in Ms2]
+    bc10  = [s2("broadcast","clustered",10,M) for M in Ms2]
+    ax0 = Axis(f[1,1], xscale=log10,
+               xticks=([2,10,100,1000,10000],["2","10","10\u00b2","10\u00b3","10\u2074"]),
+               xlabel="communities M", ylabel="fraction of losing communities trapped",
+               title="scale changes nothing; size does",
+               subtitle="the ladder at T = 600 (frozen batteries)",
+               limits=(1.5, 17000, -.06, 1.14))
+    scatterlines!(ax0, lM, lad, color=VER, linewidth=2.2, marker=:circle, markersize=9)
+    scatterlines!(ax0, Ms3, rs100 .- 0.025, color=VER, linewidth=1.4, linestyle=:dash,
+                  marker=:utriangle, markersize=8)
+    scatterlines!(ax0, Ms3, bc100 .- 0.05, color=VER, linewidth=1.4, linestyle=:dot,
+                  marker=:rect, markersize=7)
+    scatterlines!(ax0, Ms2, rs10, color=ORA, linewidth=2, marker=:utriangle, markersize=8)
+    scatterlines!(ax0, Ms2, bc10, color=BLU, linewidth=2, marker=:rect, markersize=7)
+    text!(ax0, 2.1, .82, text="communities of \u2265 100 agents: trapped at every M\n(ring \u2022, scattered \u25b3, broadcast \u25a1; offsets for visibility)",
+          fontsize=8, color=VER, align=(:left,:top))
+    text!(ax0, 120, .17, text="n = 10, scattered: cascades", fontsize=8, color=ORA, align=(:left,:bottom))
+    text!(ax0, 120, .035, text="n = 10, broadcast: all correct", fontsize=8, color=BLU, align=(:left,:bottom))
     # --- a: P(class | x) pooled over all geometry-grid cells ----------------------
     d = readcsv(joinpath(RS,"mnet_comm.csv"))
     xs = Float64.(d["xexp"]); cls = strip.(string.(d["class"]))
@@ -1099,7 +1136,7 @@ function fig_window()
         push!(pt, sum(cls[idx].=="trap")/n); push!(pc, sum(cls[idx].=="cbi")/n)
         push!(pl2, sum(cls[idx].=="legit")/n); push!(pm, sum(cls[idx].=="mixed")/n)
     end
-    ax1 = Axis(f[1,1], xlabel="cross-exposure to corrected communities x",
+    ax1 = Axis(f[1,2], xlabel="structural cross-exposure x (to initially-corrected)",
                ylabel="probability at T = 600",
                title="exposure locates the edges; size decides inside",
                subtitle="266,400 community outcomes, all geometries and sizes pooled",
@@ -1126,7 +1163,7 @@ function fig_window()
         sum(idx)==0 ? NaN : mean(Float64.(dc["frac_trap"][idx]))
     end
     Z = [getcell(g, M, "clustered") for M in Ms, g in geoms]
-    ax2 = Axis(f[1,2], xticks=(1:6, glabs), yticks=(1:3, string.(Ms)),
+    ax2 = Axis(f[1,3], xticks=(1:6, glabs), yticks=(1:3, string.(Ms)),
                xlabel="meta-network geometry", ylabel="communities M (N = 10,000)",
                title="geometry acts only through exposure",
                subtitle="fraction of losing communities trapped at T = 600 (clustered)",
@@ -1137,13 +1174,13 @@ function fig_window()
         text!(ax2, j, i, text=@sprintf("%.2f", v), fontsize=8.5,
               color=(v > .55 ? :white : INK), align=(:center,:center))
     end
-    Colorbar(f[1,3], hm, label="fraction trapped")
+    Colorbar(f[1,4], hm, label="fraction trapped")
     # --- c: the horizon resolves the trap ------------------------------------------
     dt = readcsv(joinpath(RS,"mnetT.csv"))
     ia = strip.(string.(dt["cell"])).=="A"
     credT = mean(Float64.(dt["frac_cred"][ia])); mT = mean(Float64.(dt["mean_m"][ia]))
     corrT = mT  # corrected share ~ mean optimal mass across losing communities
-    ax3 = Axis(f[1,4], xticks=(1:2, ["T = 600","T = 2400"]),
+    ax3 = Axis(f[1,5], xticks=(1:2, ["T = 600","T = 2400"]),
                ylabel="share of losing communities",
                title="the trap has two clocks",
                subtitle="M = 100, ring, clustered; aspiration clock 1/ρ", limits=(nothing,nothing,0,1.12))
@@ -1154,7 +1191,7 @@ function fig_window()
     text!(ax3, 2, 1.03, text="none trapped:\nresigned or corrected", fontsize=8.5, color=INK, align=(:center,:bottom))
     text!(ax3, 2, credT/2, text="credulous\n(resigned, L ≈ 1)", fontsize=8, color=:white, align=(:center,:center))
     text!(ax3, 2, credT + (1-credT)/2, text="corrected", fontsize=8, color=:white, align=(:center,:center))
-    for (i,(pos,l)) in enumerate(zip([1,2,4],["a","b","c"])); panel!(f,(1,pos),l); end
+    for (i,(pos,l)) in enumerate(zip([1,2,3,5],["a","b","c","d"])); panel!(f,(1,pos),l); end
     save(joinpath(OUT,"fig_window.pdf"), f)
 end
 fig_window(); println("window ok")
