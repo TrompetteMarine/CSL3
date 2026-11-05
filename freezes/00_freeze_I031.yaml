@@ -1,0 +1,54 @@
+iteration_id: "KGi-DISS-I031"
+mode: "deep length cut of the main text (v14). Volume, not just smoothness: target
+  roughly a third of the narrative prose removed. Supplement untouched except
+  where a cut needs an SI pointer."
+freeze_time: "2026-11-05T22:18Z"
+user_directive: "there is still way too much text in the main text"
+cutting_contract:
+  principles: "cut redundancy and elaboration, never content: (1) material stated
+    twice (intro positioning vs Discussion; Results aggregation paragraph vs
+    Discussion echo-chamber paragraph; prediction walk-through vs Table 1 and the
+    figure caption) is stated once, in the stronger place; (2) figure captions
+    carry panel description -- body text stops re-describing panels; (3) rival and
+    mechanism descriptions get one sentence each, not three; (4) the roadmap
+    paragraph goes; (5) Methods untouched"
+  invariants: "every frozen number kept in the main text or already present in SI
+    (ledger below must stay EMPTY or list each removal); every citation kept
+    somewhere in the main text; every honesty anchor kept at its current count;
+    all equations, figures, Table 1 kept; section order kept"
+  targets: "intro 6 paragraphs -> 4 (positioning pair merged); Results narration
+    cut 30-45% per section; the information-aggregation paragraph deleted in
+    favour of its Discussion twin plus one bridging sentence; prediction
+    walk-through cut to one paragraph (Table 1 and Fig. caption carry the
+    detail); Discussion paragraphs cut 15-45%"
+  verification: "frozen-number and anchor grep audits against v13 (as pushed,
+    664d448); rebuild clean; removed-number ledger in the closing record"
+closing_record:
+  closed: "2026-11-05"
+  delivered: "main v14: 23 pp (from 25), clean build (0 undefined, 0 ??); supplement
+    untouched"
+  cuts_applied: "three passes. Pass 1-2 (per freeze targets): intro 6->4 paragraphs
+    (positioning pair merged, roadmap deleted); functional/confirmatory/boundary/
+    persistence trimmed; four-regimes aggregation paragraph DELETED in favour of its
+    Discussion twin plus a one-line bridge (DeGroot1974 verified still cited in intro;
+    also added to the Discussion's naive-pooling clause); transparency, window,
+    measured (lead paragraph folded in), predictions walk-through 2 paragraphs -> 1;
+    Discussion all five paragraphs. Pass 3: caption-duplicate narration cut (race
+    panels, task-strip description), H1a statistics deduplicated against Table 1,
+    corner/parenthetical compressions"
+  removed_number_ledger: "EMPTY - set-based numeric audit vs v13 (664d448): zero
+    literals lost, zero gained"
+  audits: "citations: zero lost; anchors at exact v13 counts (designed-validation 3/3
+    - one was dropped by the boundary trim and restored same-session, reported-not-
+    claimed 1/1, 253-of-300 1/1, never-failure-alone 1/1, out-of-sample 3/3,
+    class-conditional 1/1, horizon-indexed 3/3); equations 4/4, figures 13/13,
+    tables 2/2; Methods untouched per contract"
+  target_miss_reported: "narrative prose (abstract+intro+Results+Discussion, figures/
+    tables/Methods excluded) 6,548 -> 5,170 words = -21.0%, SHORT of the frozen
+    ~one-third target. Cause: the empty-ledger invariant binds - the surviving prose
+    is definitional or number-bearing (every frozen quantity kept in main text, the
+    power footnote being the sole main-text home of the floor-power numbers). The
+    two targets (one-third volume, empty ledger) proved jointly infeasible; the
+    ledger was kept empty and the volume shortfall is reported rather than papered
+    over. A further cut requires moving number-bearing material to SI with ledger
+    entries - an author decision, not taken unilaterally"
