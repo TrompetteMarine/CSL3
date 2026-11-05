@@ -1101,7 +1101,7 @@ function fig_window()
     end
     ax1 = Axis(f[1,1], xlabel="cross-exposure to corrected communities x",
                ylabel="probability at T = 600",
-               title="one variable governs the fate of a community",
+               title="exposure locates the edges; size decides inside",
                subtitle="266,400 community outcomes, all geometries and sizes pooled",
                limits=(0,.155,-.03,1.06))
     band!(ax1, mids, zeros(length(mids)), replace(pt, NaN=>0.0), color=(VER,.15))
@@ -1110,7 +1110,7 @@ function fig_window()
     lines!(ax1, mids, pm, color=(INK2,.8), linewidth=1.6, linestyle=:dash)
     lines!(ax1, mids, pl2, color=BLU, linewidth=2)
     vlines!(ax1, [0.11], color=INK, linestyle=:dot, linewidth=1.2)
-    text!(ax1, .112, .95, text="x_B ≈ 0.11:\nescape certain above", fontsize=8, color=INK, align=(:left,:center))
+    text!(ax1, .112, .95, text="x ≈ 0.11: escape\nin every architecture", fontsize=8, color=INK, align=(:left,:center))
     text!(ax1, .022, .62, text="defensive wrong\n(trapped at horizon)", fontsize=8.5, color=VER, align=(:left,:center))
     text!(ax1, .085, .40, text="in transit (mixed)", fontsize=8, color=INK2, align=(:left,:center))
     text!(ax1, .120, .30, text="corrected but\nillegitimate", fontsize=8, color=ORA, align=(:left,:center))
@@ -1145,7 +1145,7 @@ function fig_window()
     corrT = mT  # corrected share ~ mean optimal mass across losing communities
     ax3 = Axis(f[1,4], xticks=(1:2, ["T = 600","T = 2400"]),
                ylabel="share of losing communities",
-               title="the trap is a horizon, not a fate",
+               title="the trap has two clocks",
                subtitle="M = 100, ring, clustered; aspiration clock 1/ρ", limits=(nothing,nothing,0,1.12))
     barplot!(ax3, [1,1,2,2,2], [1.0, 0.0, 0.0, credT, 1-credT],
              stack=[1,2,1,2,3],

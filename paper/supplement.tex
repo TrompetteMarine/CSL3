@@ -36,7 +36,7 @@
 \definecolor{verm}{HTML}{D55E00}
 \definecolor{blu}{HTML}{0072B2}
 
-\title{\bfseries Supplementary Information\\[1mm] \large When losing delegitimizes the game: cognitive dissonance turns collective failure into self-defending error}
+\title{\bfseries Supplementary Information\\[1mm] \large Reference-dependent delegitimation: cognitive dissonance turns collective failure into self-defending error}
 \author{Gabriel Bontemps \and Abhishek Banerjee}
 \date{\today}
 
@@ -520,7 +520,7 @@ scale.
 \section{Stochastic-approximation connections and open mathematics}
 \label{s:sa}
 
-Equation~\eqref{eq:Qfull} at fixed gate is a constant-step Robbins--Monro scheme; its ODE limit is $\dot Q(a)=L(\mu_a-Q(a))$ on visited arms, with the gated Bellman operator a contraction of modulus $1-\alpha L$ (T5a) and geometric $n$-step decay (T5b). The standard machinery goes a long way here, and we use it rather than reprove it: constant-gain interpolations converge weakly to the mean ODE on finite rescaled horizons\cite{KushnerYin2003,Borkar2008}; the interpolated process is an asymptotic pseudotrajectory of the limiting semiflow, so its accumulation points are constrained to the flow's chain-recurrent set\cite{Benaim1999}; finite-population averages admit exponential deterministic-approximation bounds on finite horizons\cite{BenaimWeibull2003}; drift conditions with bounded increments convert the sign results of Section~\ref{s:drift} into hitting- and occupation-time bounds\cite{Hajek1982}; and the slow--fast decomposition at $\rho\ll\nu_F$ is the two-timescale configuration\cite{Borkar2008}. The coupled system retains two genuinely non-standard features that these results do not cover globally: the step size $L_t$ is itself a state variable driven by a reflected, threshold-censored recursion \eqref{eq:Lfull}, and the drift field is only piecewise smooth across the R0--R3 regions of Section~\ref{s:drift} (a stochastic recursive inclusion in the sense of Chapter~5 of ref.~\citenum{Borkar2008} at the kinks). We therefore claim convergence and absorption results only at the levels established: deterministic mean field (closed forms above), algebraic identities (machine-checked), finite-horizon tracking (cited above), and finite-size behaviour (simulation with frozen designs and distributional cross-validation). \textbf{Not proved here}: almost-sure statements for the coupled $(Q,L,A)$ chain under constant gains beyond finite horizons; fluid limits for the network with decisiveness-weighted fields; metastable escape asymptotics for the locked phase. These are stated as open so the record cannot be misread as claiming them.
+Equation~\eqref{eq:Qfull} at fixed gate is a constant-step Robbins--Monro scheme; its ODE limit is $\dot Q(a)=L(\mu_a-Q(a))$ on visited arms, with the gated Bellman operator a contraction of modulus $1-\alpha L$ (T5a) and geometric $n$-step decay (T5b). The standard machinery goes a long way here, and we use it rather than reprove it: constant-gain interpolations converge weakly to the mean ODE on finite rescaled horizons\cite{KushnerYin2003,Borkar2008}; the interpolated process is an asymptotic pseudotrajectory of the limiting semiflow, so its accumulation points are constrained to the flow's chain-recurrent set\cite{Benaim1999}; finite-population averages admit exponential deterministic-approximation bounds on finite horizons\cite{BenaimWeibull2003}; drift conditions with bounded increments convert the sign results of Section~\ref{s:drift} into hitting- and occupation-time bounds\cite{Hajek1982}; and the slow--fast decomposition at $\rho\ll\nu_F$ is the two-timescale configuration\cite{Borkar2008}. The coupled system retains two genuinely non-standard features that these results do not cover globally: the step size $L_t$ is itself a state variable driven by a reflected, threshold-censored recursion \eqref{eq:Lfull}, and the drift field is only piecewise smooth across the R0--R3 regions of Section~\ref{s:drift} (a stochastic recursive inclusion in the sense of Chapter~5 of ref.~\citenum{Borkar2008} at the kinks). We therefore claim convergence and absorption results only at the levels established: deterministic mean field (closed forms above), algebraic identities (machine-checked), finite-horizon tracking (cited above), and finite-size behaviour (simulation with frozen designs and distributional cross-validation). \textbf{Not proved here}: almost-sure statements for the coupled $(Q,L,A)$ chain under constant gains beyond finite horizons; fluid limits for the network with decisiveness-weighted fields; metastable escape asymptotics for the locked phase; and a monotonicity lemma for the reflected comparison used in Proposition~S4.1(ii)---the claim that the projection at $L=1$ can only tighten the occupation bound is argued, not proved. These are stated as open so the record cannot be misread as claiming them.
 
 \section{Machine-checked statements}
 \label{s:lean}
@@ -630,6 +630,7 @@ clipping bounds the increments, the strong law gives $\ell_t/t\to g$, and Wald's
 bounds the mean first passage of a positive-drift bounded-increment walk over any fixed
 threshold by threshold$/g$ plus one increment.
 \end{proof}
+\noindent\emph{Scope caveat.} The implemented rival evaluates the likelihood at a plug-in $\hat\mu=Q(a)$ that is itself still moving during recovery, so the proposition applies to it exactly only once $Q$ has settled; the gap is one of horizon, not of class, and the simulated recovery speeds sit inside the proposition's bound.
 \emph{What escapes the class.} A hierarchical prior with a vanishing regime-switching
 rate can slow trust recovery arbitrarily; it thereby exits the class above (its effective
 likelihood becomes state-dependent) and pays elsewhere: it predicts neither the
@@ -874,9 +875,7 @@ A frozen sweep of $\nu_R/\nu_F$ at the confirmatory cell ($\nu_F=0.05$ fixed, 60
 point; Supplementary Fig.~\ref{fig:robust}a) bounds the knife-edge disclosure of the
 Methods quantitatively: $P_{\mathrm{dw}}\ge0.90$ across $\nu_R/\nu_F\in[0.1,0.25]$
 (the frozen default $0.25$ sits on the plateau), falling through $0.267$ at $0.30$ to
-$0.000$ by $0.35$. The collapse location is the point at which $\Astar(0.6)=\tau^F+1.5\,
-\nu_R/\nu_F$ overtakes the winners' anchor, so the boundary is itself an instance of the
-$\Astar$ arithmetic rather than an unexplained sensitivity.
+$0.000$ by $0.35$. The collapse location is clock arithmetic: raising the repair ratio raises $\Astar(0.4)=\tau^F+\tfrac{2}{3}\,\nu_R/\nu_F$, which shortens the gate-reopening time $t^{*}$ (Section~S13.3); at the cell's population-mean reference the deterministic crossing of the 600-trial horizon sits at $\nu_R/\nu_F\approx0.37$, and agent-level aspiration spread ($\pm\approx70$ trials) completes the collapse by $0.35$. An earlier draft attributed the location to $\Astar(0.6)$ overtaking the winners' anchor; that identity does not reproduce the boundary and is withdrawn.
 
 \subsection{Global screening}
 A Morris elementary-effects screening (12 parameters, frozen trap-context ranges, 30
@@ -918,7 +917,7 @@ an OFF control identical except $L\equiv1$), and per-subject dual-rate $Q$-learn
 ($\alpha^+$ for $\delta\ge0$, $\alpha^-$ for $\delta<0$, inverse temperature; choices
 only; maximum likelihood, four starts) is fitted separately to the rich (P1) and
 deprivation (P2) windows. Median $\log(\alpha^+/\alpha^-)$: dissonance
-$-0.17\to+0.30$ under HIGH reference and $-0.23\to+0.10$ under LOW; OFF control
+$-0.174\to+0.302$ (a $+0.476$ shift) under HIGH reference and $-0.230\to+0.096$ under LOW; OFF control
 $-0.25\to-0.19$ and $-0.21\to-0.10$. Two qualifications, recorded as frozen: the
 estimator carries a negative baseline of $\approx-0.2$ on near-greedy bounded data
 (visible in the OFF control and in every P1 cell), so all claims are shift- or
@@ -978,11 +977,14 @@ From the 300 simulated subjects per condition of the prediction generator
 specification are: H1 (P2 fairness drop, HIGH vs LOW): $d=1.82$; H2 (recovery-midpoint
 lag): $d=2.26$; H3 (P3 slope, full vs moderate restoration under HIGH): $d=3.34$; H4
 (within-subject shortfall coefficient): $d=6.58$ (one-sample). At the preregistered
-$N=320$ per group and $\alpha=0.005$, implied power exceeds $0.999$ for all four. These
-are \emph{model-based upper bounds} under homogeneous agents with the stated rigidity
-mix; the preregistration's design floor of $d=0.25$ remains the binding basis for the
-sample size, and these numbers serve only to show the design is not powered at the edge
-of its own theory.
+allocation, implied power exceeds $0.999$ for all four. These are \emph{model-based
+upper bounds} under homogeneous agents with the stated rigidity mix. The binding design
+arithmetic is human and minimal, per the division of labour stated in the main text:
+H1a at power $0.91$ ($d=0.33$ basis, $N=280$ per reference arm pooled across
+restoration arms, one-sided $\alpha=0.005$; at $d=0.25$ the power is $0.72$ and is
+reported, not claimed); H1b's equivalence band and power are fixed from pilot rating
+noise before registration. The model-implied numbers serve only to show the design is
+not powered at the edge of its own theory.
 
 \section{The $M$-community generalisation and the exposure window}
 \label{s:mnet}
@@ -991,7 +993,7 @@ of its own theory.
 The architecture generalises by replacing the two-community coupling $B(\Gamma)$ with a row-stochastic exposure matrix $W$ over $M$ communities of sizes $n_c$: agent fields, the retrospective channel and the reference channel aggregate per community and mix through the rows of $W$. Because exposure is block-uniform, community-level aggregation is exact at every $M$ and any size profile---no mean-field approximation is introduced by scale. The battery builds $W$ from meta-network geometries with within-community weight $w_{\mathrm{in}}=0.85$ and the remaining $0.15$ split over meta-neighbours: a degree-4 ring; Watts--Strogatz rewiring of that ring at $p\in\{0.01,0.1,1\}$; Barab\'asi--Albert preferential attachment ($m=2$); and a common broadcast ($0.15$ on the population-weighted mean of all other communities). Losing communities (half the population) are initialised on the inferior arm, either clustered (contiguous on the meta-graph) or scattered (alternating); unequal-size and global-reference variants are included. All dynamical parameters are the frozen defaults of the main text; $N=10{,}000$ throughout ($N=100{,}000$ at $M=10{,}000$); 40 runs per cell (20 at the largest scale); 44 cells, 1,740 runs, 266,400 community-level records. The new engine path reproduced the frozen confirmatory cell distributionally before any battery output was used ($P_{\mathrm{dw}}=0.803$, $\bar m_2=0.208$, within the pre-stated gate), and the original two-community path is untouched and still bit-identical on its frozen gates.
 
 \subsection{The exposure window}
-Define a losing community's cross-exposure to corrected communities, $x_c=\sum_{d\,\mathrm{corrected}}W_{cd}\in[0,0.15]$. Pooled over every geometry, placement and size profile, the terminal class at the 600-trial horizon is organised by $x_c$ alone:
+Define a losing community's \emph{structural} cross-exposure to initially-corrected communities, $x_c=\sum_{d\,\mathrm{correct\,at}\,t=0}W_{cd}\in[0,0.15]$---fixed by the graph and the initial assignment, measured at $t=0$, so it is never an outcome of the dynamics it predicts. Pooled over every geometry, placement and size profile, the terminal class at the 600-trial horizon is organised by $x_c$ alone:
 
 \begin{center}
 \begin{tabular}{lccc}
@@ -1008,7 +1010,23 @@ $[0.14,0.15]$ & $0.000$ & $0.056$ & $7{,}647$ \\
 \end{tabular}
 \end{center}
 
-\noindent The behavioural threshold sits at $x_B\approx0.11$: $P(\mathrm{escape}\mid x\ge0.1125)=0.999$. Within the window, community size decides between persistence and fluctuation-seeded escape---ten-agent communities at the same mean exposure that traps hundred-agent communities generate escapes that cascade (geometry grid below).
+\noindent Escape is near-certain above $x=0.1125$: $P(\mathrm{escape}\mid x\ge0.1125)=0.999$. The graded middle of the pooled table is composition. Conditional on community size, $x$ is close to a step:
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+$x$ bin & $n=10$ & $n=100$ & $n=1000$ \\
+\hline
+$[0,.02)$ & $.991$ & $1.000$ & $1.000$ \\
+$[.02,.05)$ & $.910$ & $1.000$ & $1.000$ \\
+$[.05,.08)$ & $.196$ & $.996$ & $.995$ \\
+$[.08,.11)$ & $.042$ & $.889$ & $.993$ \\
+$[.11,.15]$ & $.000$ & $.006$ & $.008$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Predictively (run-split logistic, AUC): $x$ alone $0.917$; $x+\log n$ $0.962$; adding geometry dummies $0.972$---geometry acts through the exposure and size profiles it induces. Ten-agent communities at exposures that trap hundred-agent communities generate escapes that cascade, and a corrected fellow loser adds corrective exposure beyond the structural $x$, which is why the upper edge's \emph{location} depends on cascade multiplicity (Section~S13.6). The run is the replication unit for all pooled fractions here; community records within a run share one trajectory.
 
 \subsection{Two closed forms: permanence and the clock}
 Both statements are exact for the two-community map and exact at block level for general $W$ under block-uniform exposure; both are evaluated at the frozen defaults, with nothing fitted.
@@ -1027,7 +1045,14 @@ t^{*}(x)\;=\;\frac{1}{\rho}\,\ln\!\frac{A_0-A^{\mathrm{eq}}(x)}{\Astar(\mu_2)-A^
 \qquad
 t^{*}(0)=896,\quad t^{*}(0.075)=935,\quad t^{*}(0.15)=980.
 \]
-Every realized exposure gives $t^{*}\in[896,980]$---after the 600-trial horizon and before the 2400-trial one. The closed form therefore predicts the battery's central horizon fact with no free parameter: every community inside the window is still trapped at $T=600$ and resolved by $T=2400$. It also implies $dt^{*}/dx>0$: cross-exposure \emph{lengthens} grievance, because visible winners hold the reference---and with it entitlement---above what own outcomes alone would sustain. The $T=2400$ rerun of the fully trapped $M=100$ ring cell confirms the resolution and its split: $45.4\%$ of losing communities resign into credulous error ($\bar L=0.983$, behaviour still wrong) and the rest correct.
+Every realized exposure gives $t^{*}\in[896,980]$---after the 600-trial horizon---so the clock predicts, with no free parameter, that every community inside the window is still trapped at $T=600$; and $dt^{*}/dx>0$: cross-exposure \emph{lengthens} grievance, because visible winners hold the reference---and with it entitlement---above what own outcomes alone would sustain.
+
+$t^{*}$ is a \emph{reopening} clock, not a resolution clock: an earlier draft read it as predicting resolution, and the out-of-sample battery of Section~S13.6 refuted that reading (communities are still fully trapped at $T=1050$). A reopened gate repairs against a continuing failure stream. While the community remains on the inferior arm, the legitimacy drift after reopening is
+\[
+\frac{d\bar L}{dt} \;=\; \nu_R\,\mu_2 \;-\; \nu_F\,(1-\mu_2)\,\bigl(\phi^-A(t)-\tau^F\bigr)^{+},
+\qquad A(t)=\mu_2+(A_0-\mu_2)e^{-\rho t},
+\]
+which integrates in closed form from $t^{*}$ and crosses the classification threshold at a \emph{resolution} clock $t^{**}$. On the mean path $t^{**}\approx1350$ at the frozen defaults ($x=0$); empirically resolution completes between $1{,}100$ (all trapped) and $1{,}300$ (trap $0.026$), i.e.\ $t^{**}\approx1.4$--$1.5\times t^{*}$, the difference from the mean path being agent-level aspiration spread (crossing-time smear $\pm\approx70$ trials), whose multiplier is calibrated, not derived. The $T=2400$ rerun of the fully trapped $M=100$ ring cell shows the completed resolution and its split: $45.4\%$ of losing communities resign into credulous error ($\bar L=0.983$, behaviour still wrong) and the rest correct, the correction front spreading in from the cluster's edge on a slower timescale still (at $T=1600$, $92\%$ of losing communities are credulous and behaviour has barely moved).
 
 \subsection{Battery tables}
 Trapped fraction of losing communities (40 runs per cell; 80 where ladder and grid coincide), with the mean realized cross-exposure $\bar x$ in parentheses:
@@ -1048,12 +1073,58 @@ $M{=}1000$, scattered & $0.10\,(.075)$ & $0.11\,(.075)$ & $0.18\,(.075)$ & $0.37
 \end{tabular}
 \end{center}
 
-\noindent Three structures in this table carry the account. (i) \emph{Clustered shielding}: on the ring and at weak rewiring, interior losing communities have $\bar x\to0$ as $M$ grows, and trap completely---harder than the two-community confirmatory cell ($0.843$), whose losing block has $x=0.10$. The $M{=}2$ ladder anchor at $w_{\mathrm{in}}=0.90$ ($\Gamma=0.1$, $n=5{,}000$) traps $20/20$: the confirmatory cell's escapes were finite-size fluctuations, as the main-text scaling analysis claimed; the $M{=}2$ cell at the battery's $w_{\mathrm{in}}=0.85$ ($x=0.15>x_B$) corrects. The $M{=}10{,}000$ cell (ring, clustered, $N=100{,}000$) traps $20/20$. (ii) \emph{Scattering without smallness is not enough}: alternation on the degree-4 ring pins every loser at $x=0.075$---inside the window---so scattered losers stay trapped at $M\le100$ and correct only at $M=1000$, where ten-agent communities seed cascades (trap $0.10$, cbi $0.37$). (iii) \emph{Degree is not protective}: on BA meta-graphs the trap probability is flat in meta-degree ($0.62$--$0.71$ across degree quantiles)---hubs escape no more often than peripheries, because degree does not move the \emph{composition} of exposure. This is the discriminating contrast with hub-centric intuitions about network centrality.
+\noindent Three structures in this table carry the account. (i) \emph{Clustered shielding}: on the ring and at weak rewiring, interior losing communities have $\bar x\to0$ as $M$ grows, and trap completely---harder than the two-community confirmatory cell ($0.843$), whose losing block has $x=0.10$. The $M{=}2$ ladder anchor at $w_{\mathrm{in}}=0.90$ ($\Gamma=0.1$, $n=5{,}000$) traps $20/20$: the confirmatory cell's escapes were finite-size fluctuations, as the main-text scaling analysis claimed; the $M{=}2$ cell at the battery's $w_{\mathrm{in}}=0.85$ ($x=0.15>x_B$) corrects. The $M{=}10{,}000$ cell (ring, clustered, $N=100{,}000$) traps $20/20$. (ii) \emph{Scattering without smallness is not enough}: alternation on the degree-4 ring pins every loser at $x=0.075$---inside the window---so scattered losers stay trapped at $M\le100$ and correct only at $M=1000$, where ten-agent communities seed cascades (trap $0.10$, cbi $0.37$). (iii) \emph{Degree is not protective}: on BA meta-graphs the trap probability is flat in meta-degree ($0.62$--$0.71$ across degree quantiles)---hubs escape no more often than peripheries, because degree does not move the \emph{composition} of exposure. This is the discriminating contrast with hub-centric intuitions about network centrality---with the caveat, stated plainly, that the flatness is guaranteed by the fixed exposure budget ($w_{\mathrm{in}}=0.85$): volume variation across degrees is outside this battery's design.
 
 \emph{Unequal sizes.} Exposure composition dominates size: one large losing community ($5{,}500$ agents) among nine small winners has $x=0.15$ and corrects ($0/40$ trapped); nine small losing communities around one large winner sit at low $x$ and trap ($1.00$). \emph{Broadcast}: the common field traps everything at $M\le100$ (it spreads whatever corrects, and nothing corrects without fluctuation seeds) yet at $M=1000$, $n=10$ it fully corrects behaviour while leaving $45\%$ of losing communities corrected-but-illegitimate at the horizon ($\bar L=0.31$)---the main text's behaviour--belief dissociation at ten-thousand-community scale. The global-reference variant (broadcast reference replacing the exposure-weighted one, $M=100$) traps completely, as the shielding account requires.
 
 \subsection{Honest limits}
-All thresholds are measured at the frozen defaults ($\lambda=0.7$, $\rho=0.002$, $\chi=0.4$, $w_{\mathrm{in}}=0.85$); the closed-form $(\lambda,\chi,\rho)$-dependence of the window edges is stated exactly only for the two-community map. Exposure is block-uniform (the exact-aggregation class); arbitrary agent-level graphs remain outside the theory, as in the main text. Six pre-run predictions were frozen for this battery; two failed cleanly (degree ordering on BA; size monotonicity under unequal splits) and three held only in part, and the window account above is what absorbs all of them---the full scorecard is in the repository's freeze record. An earlier internal report framed the equilibrium-reference condition as the window's measured lower edge; the evaluation above corrects this: the condition governs \emph{permanence} ($x>5/6$, never met), and the measured lower edge is the $t^{*}$ clock seen at a finite horizon.
+All thresholds are measured at the frozen defaults ($\lambda=0.7$, $\rho=0.002$, $\chi=0.4$, $w_{\mathrm{in}}=0.85$); the closed-form $(\lambda,\chi,\rho)$-dependence of the window edges is stated exactly only for the two-community map. Exposure is block-uniform (the exact-aggregation class); arbitrary agent-level graphs remain outside the theory, as in the main text. Six pre-run predictions were frozen for this battery; two failed cleanly (degree ordering on BA; size monotonicity under unequal splits) and three held only in part, and the window account above is what absorbs all of them---the full scorecard is in the repository's freeze record. An earlier internal report framed the equilibrium-reference condition as the window's measured lower edge; the evaluation above corrects this: the condition governs \emph{permanence} ($x>5/6$, never met), and the measured lower edge is the $t^{*}$ clock seen at a finite horizon. The one-clock reading of resolution was itself superseded by the second battery (Section~S13.6).
+
+\subsection{Out-of-sample confirmation: the second, preregistered battery}
+Because the window account was assembled from a battery whose own pre-stated
+predictions it superseded, its laws were re-frozen as predictions and run again:
+design, seeds, nine numeric bands and their refutation meanings fixed before any
+run (repository freeze I024), and the new engine path required to reproduce a
+frozen I021 cell bit-identically ($40/40$ runs) before any output was used. The
+battery holds 56 cells and 1,860 runs in three arms: (A) community size held
+fixed ($n=100$ and $n=10$) while $M$ varies from 10 to 1{,}000 across four
+geometries and both placements---breaking the $M$--$n$ confound of the first
+battery; (B) a $w_{\mathrm{in}}$ sweep at $M=2$ and $M=100$ plus
+broadcast-weight cells, so the edges are tested in absolute exposure units; (C)
+a $(\rho,T)$ grid at two new $\rho$ values, testing the clock's $1/\rho$
+scaling out of sample.
+
+\emph{Results, verbatim against the frozen bands.} (i) $M$-invariance at fixed
+size: confirmed in every exposure-matched family (largest drift across $M$:
+$0.076$); broadcast at $M=1000$, $n=100$ traps $1.000$ (against $0.000$ at
+$n=10$), ring-scattered likewise---correction at scale is a community-size
+effect, not an $M$ effect, and the $n=10$ cascade regime is itself
+$M$-invariant. (ii) Edges: every sweep shows a one-grid-step transition, but
+its location moves with architecture: the $M=2$ singleton edge lies in
+$(0.100,0.1125]$ (the singleton corrects at $x=0.1125$), $M=100$ ring-scattered
+in $(0.075,0.100]$, broadcast in $(0.076,0.101]$. The envelope holds: trap
+near-certain below $x\approx0.075$ and escape near-certain above
+$x\approx0.1125$ in every architecture ($P(\mathrm{escape}\mid x\ge0.1125)=
+0.993$ pooled at matched size); inside the band, cascade multiplicity decides.
+The two pre-stated edge-location bands failed by one grid step in exactly this
+direction and are superseded by the band statement. (iii) Clocks: all three
+$\rho T\le1.6$ cells were fully trapped as predicted; the three cells past the
+naive one-clock resolution time ($\rho T\ge2.0$) were \emph{also} still fully
+trapped, refuting the one-clock reading. The two-clock account of
+Section~S13.3 was then frozen as a pre-run addendum and passed all three claim
+cells (trap $1.000$ at $T=1{,}100$; $0.000$ at $T=1{,}600$ with $92\%$ of
+losing communities credulous; $0.000$ at $\rho=0.0015$, $T=2{,}100$), the
+calibration cell placing $t^{**}$ at $1{,}250$--$1{,}300$ trials.
+
+\emph{Scorecard.} Five of nine frozen predictions passed as written
+($M$-invariance; the decisive fixed-size cells; the cascade regime; the $M=2$
+grid; the pooled overlay). The four failures---two edge locations, and the
+one-clock resolution cells with their split---are each absorbed by the two
+refinements above, one of which was itself confirmed out of sample within the
+same iteration. One side-claim was mis-binned at freeze time (fully rewired
+Watts--Strogatz listed as a shielding architecture; it is an invariance one,
+drift $0.016$ across $M$) and is reported as written. All records, the freeze
+and the addendum are in the repository.
 
 \section{Supplementary figures}
 \label{s:supfigs}
@@ -1061,7 +1132,7 @@ All thresholds are measured at the frozen defaults ($\lambda=0.7$, $\rho=0.002$,
 \begin{figure}[H]
 \centering
 \includegraphics[width=.72\textwidth]{fig_bimodal.pdf}
-\caption{\textbf{Bimodality at the regime boundary.} Distribution of the losing community's terminal optimal mass across 60 gate-on runs at the confirmatory cell (vermilion) and 60 gate-off runs (grey): identical parameters yield a bimodal outcome under the gate---most runs freeze near $m_2\approx0$, a minority escape to $m_2\approx1$---while every ungated run corrects. The across-run variance peak of main-text Fig.~3c is this bimodality seen through its second moment.}
+\caption{\textbf{Bimodality at the regime boundary.} Distribution of the losing community's terminal optimal mass across 60 gate-on runs at the confirmatory cell (vermilion) and 60 gate-off runs (grey): identical parameters yield a bimodal outcome under the gate---most runs freeze near $m_2\approx0$, a minority escape to $m_2\approx1$---while every ungated run corrects. The across-run variance peak of main-text Fig.~3c is this bimodality seen through its second moment. The $11/60$ escape share here against $47/300$ in the confirmatory record is sampling variation across frozen sets; the Wilson intervals overlap.}
 \label{fig:bimodal}
 \end{figure}
 

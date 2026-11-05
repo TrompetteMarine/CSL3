@@ -1,0 +1,111 @@
+iteration_id: "KGi-DISS-I025"
+mode: "manuscript v11 (round-3 referee repairs + I024 battery integration) + the
+  minimal-experiment redesign; no new simulation runs — every new number quoted from
+  the frozen mnet2_* / mnet2ad_* records or derived in closed form at frozen defaults"
+freeze_time: "2026-11-05T15:30Z"
+user_directives:
+  - "write v11 and freeze it"
+  - "power analysis: the ABM covers everything non-human (already in hand); MINIMIZE
+    the number of participants to hire; the experiment = humans x treatments designed
+    to absolutely identify what the ABM cannot + confirm the prediction experimentally"
+
+experiment_redesign:  # the division-of-labour principle, applied
+  principle: "simulation answers every question that does not require a human
+    (collective dynamics, robustness, scale, effect-size generation); the human grid
+    is the smallest that (i) confirms the one confirmatory prediction and (ii)
+    identifies what no simulation can: whether the gate exists in people (the
+    restoration dissociation) and the human distribution of aspiration rigidity
+    (the lab-to-field instrument)"
+  structure: "serial gatekeeping, FWER 0.005, no alpha split: H1a (one-sided Welch,
+    P1->P2 fairness drop, HIGH vs LOW reference) tested first; H1b (gate existence:
+    under HIGH x MODERATE restoration, choice accuracy recovers above a pre-stated
+    floor while rated fairness stays inside an equivalence band +/-delta_eq that
+    excludes the utility rival's predicted recovery) tested only if H1a rejects"
+  allocation: "reference arms HIGH/LOW, N=280 per arm POOLED across restoration arms
+    (every participant contributes to H1a because restoration diverges only in P3);
+    within each reference arm, MODERATE:FULL = 2:1 (~187:93) — mass where H1b lives,
+    FULL retained as the positive control that the fairness instrument can move
+    (without it a MODERATE flatline is confounded with slider insensitivity) and as
+    the H3 threshold secondary. Total N = 560 (vs 1,280 on the 4x320 reading):
+    participants minimized by pooling H1a across restoration arms and by demoting
+    FULL to control-sized cells"
+  power: "H1a: 0.908 at the d=0.33 design basis (N=280/arm, alpha=.005 one-sided);
+    the erroneous 'powered at d=0.25' sentence is REMOVED (round-3 unanimous catch:
+    actual power 0.72 at that floor). d=0.25 reported, if at all, as a smaller
+    effect of interest with its true power stated. H1b: equivalence power requires
+    pilot sigma_r — delta_eq and final N are pilot outputs; the pilot precedes
+    filing (94_referee_implementation_plan_I024.md keystone). Model-implied effect
+    sizes stay labelled upper bounds (SI), used only to show the design is not
+    powered at the edge of its own theory"
+  rho_instrument: "the entitlement-slider rho measurement is within-subject and
+    needs no cells of its own — every participant yields a rho posterior (the P-C
+    prior instrument), which is exactly 'what the ABM cannot supply'"
+
+v11_edit_set:
+  main:
+    - "abstract: trim to <=160 words; horizon-indexed envelope phrasing replaces
+      'correction certain above a measurable exposure threshold'"
+    - "window section recast: two-level law (x locates edges and clocks; community
+      size selects inside), structural-x renaming ('cross-exposure to
+      initially-corrected communities', fixed at t=0), envelope statement (trap
+      certain below ~0.075, escape certain above ~0.1125 in every architecture;
+      cascade multiplicity decides inside; the singleton edge is ~0.11), TWO clocks
+      (t* reopening, t** resolution ~1.4-1.5x t*, out-of-sample confirmed), the
+      I022 't* predicts both battery outcomes' sentence corrected, broadcast
+      restated as the weight-x-share flip ('corrects at scale' retired as an
+      M-claim; it is an n=10 cascade effect), BA degree-flatness stated as
+      composition-only by construction, one epistemic-status sentence pointing to
+      the preregistered out-of-sample battery (S13.6)"
+    - "fig:window caption updated to the band/envelope reading (no re-render)"
+    - "predictions section: division-of-labour paragraph; gatekeeping H1a/H1b;
+      minimal-N power statement per experiment_redesign; wrong power footnote
+      replaced"
+    - "statistics subsection: mnet2 battery + exact-reproduction gate counts; the
+      run stated as the replication unit for pooled community-level fractions"
+    - "minors: Ham-Jenkins 'candidate paradigm'; rho_c 'at the confirmatory cell';
+      253/300 stated once; two-clock sentence in Discussion horizon passage"
+  supplement:
+    - "TITLE fixed to the adopted one (shipped bug, round-3 unanimous)"
+    - "S13 rewrite: structural-x renaming; S13.3 becomes the two-clock subsection
+      (t* and t**, drift integral, calibration k~1.4-1.5); S13.4 edge band updated;
+      NEW S13.6 'Out-of-sample confirmation' = I024 battery design, gate, verbatim
+      scorecard incl. failures, stratified two-level table, AUC comparison,
+      addendum results"
+    - "S12.7 replacement: t*-clock account (deterministic crossing r~0.37 at the
+      cell's global reference; finite-size spread completes collapse by 0.35);
+      the A*(0.6) identity withdrawn (R9 M1 sustained)"
+    - "S12.12 power subsection rewritten to the new design; dual-alpha +0.476 extra
+      decimal; Prop S8.1 plug-in mu-hat caveat; S6 open list gains the
+      reflection-monotonicity lemma; windfall framing unified; Supp Fig 5 caption
+      sampling-variation sentence"
+  invariants:
+    - "no frozen confirmatory numbers change; all new numbers from mnet2_*/mnet2ad_*
+      records or closed forms at frozen defaults (t* values, 5/6, t** calibration)"
+    - "main <= 25 pp; horizon-indexed language everywhere; failures in S13.6 verbatim"
+    - "prereg draft doc updated to match the gatekeeping/minimal-N design (consistency
+      with the manuscript); filing remains author-gated on the pilot"
+closing_record:
+  closed: "2026-11-05"
+  delivered: "main v11 25 pp (circa-25 budget), SI 29 pp; both 0 undefined refs, 0 '??'"
+  applied:
+    - "abstract 177 words; two-level/two-clock clause; 'derived' softened to the
+      timing/condition claim"
+    - "window section recast per freeze (structural x, envelope, two clocks with the
+      I022 over-claim corrected in place, broadcast weight-x-share flip, 'correction
+      at scale' retired, epistemic sentence pointing to S13.6); fig_window panel
+      titles re-rendered to match (edges/size; two clocks)"
+    - "predictions: division-of-labour paragraph; H1a/H1b serial gatekeeping; N=280
+      per reference arm pooled across restoration arms (power .91 at d=.33), MODERATE:
+      FULL 2:1, total N=560 (halved from the 4x320 reading); wrong d=.25 power claim
+      removed everywhere and restated honestly (.72, reported not claimed)"
+    - "SI: title fixed (shipped bug); S13.2 stratified two-level table + AUC + the
+      run as replication unit; S13.3 two clocks with t** derivation and the
+      refuted one-clock reading stated; S13.6 out-of-sample confirmation with the
+      verbatim I024 scorecard incl. the mis-binned side-claim; S12.7 A*(0.6) identity
+      withdrawn and replaced by the t* account; S12.12 rewritten; dual-alpha decimals;
+      S8.1 plug-in caveat; S6 reflection-lemma open item; Supp Fig 5 sampling note"
+    - "prereg draft (Project doc) amended to match: gatekeeping, minimal N, pilot
+      section 3a with decision rules, corrected power statement, H1a/H1b decision
+      rules"
+  invariants_check: "no frozen numbers changed; all new numbers from mnet2_*/mnet2ad_*
+    records or closed forms; failures reported verbatim in S13.6"
