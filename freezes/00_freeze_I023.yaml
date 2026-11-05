@@ -60,3 +60,34 @@ honesty_rules:
   - "referee findings reported verbatim, including any error they find in the new
     S13 closed forms; no silent fixes"
   - "no frozen numbers change in either package"
+closing_record:
+  closed: "2026-11-05"
+  package_A: "experiment/PRIORS.md frozen and pushed (CSL3 276d4e0); P-A/P-B/P-C with
+    model->lab->field chain, estimators, exclusions, window/t* mapping"
+  package_B:
+    verdicts: "R7/R8/R9 all REJECT for NHB as-is (P non-desk 0.10-0.15), all flip to
+      major-revision-with-path on a successful experiment; PsychRev 0.55-0.65 best
+      data-free home; JASSS 0.90-0.95 floor; round-2 ladder confirmed"
+    unanimous_findings:
+      - "power at the d=0.25 floor is 0.72, not 'powered' (all three independently;
+        our recomputation confirms 0.721; design basis was d=0.33 -> 0.945) — must be
+        fixed before the preregistration is filed"
+      - "H1 alone cannot carry the gate: promote a learning-side contrast (P3
+        moderate-restoration dissociation) to co-confirmatory"
+      - "supplement title stale (pre-I019) — confirmed bug"
+    sustained_technical: "R9 M1: S12.7's 'A*(0.6) overtakes the winners anchor'
+      identity unsubstantiated; replacement = t* clock at A*(0.4) under the cell's
+      global reference (deterministic crossing r~0.37; collapse by 0.35 via
+      finite-size spread) — computed and logged"
+    refuted_or_resolved:
+      - "R7 +0.48/+0.47 discrepancy: rounding artifact; frozen record gives +0.476"
+      - "R8 M2 x endogeneity: engine computes structural exposure to the
+        initially-winning set (code-verified); wording fix only"
+      - "R8 broadcast arithmetic confirmed exactly; R9 full closed-form log confirmed"
+    i024_worklist: "12-item convergent list in 92_referee_reports_I023.md (window
+      two-level recast + horizon-indexed abstract; x renamed structural; broadcast
+      inequality; scorecard-in-main tension flagged for author; fresh preregistered
+      confirmatory battery w/ n-fixed arm + w_in sweep + dispersion boundary;
+      experiment-bridge repairs incl. rho-band pilot; theory lemmas; abstract trim)"
+  honesty_note: "referee reports verbatim in 92_referee_reports_I023.md, excluded from
+    the public repo as before; no manuscript edits made in I023"
