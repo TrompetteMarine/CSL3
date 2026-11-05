@@ -1,0 +1,43 @@
+iteration_id: "KGi-DISS-I018"
+mode: "writing polish + core refocus; no new runs, no claim changes"
+freeze_time: "2026-11-05T10:15Z"
+user_directives:
+  - "less long, clearer figure captions"
+  - "anything technical into footnotes"
+  - "reference-dependent delegitimation as the core of the paper"
+  - "machine-checking stated in a precise footnote, not a paragraph"
+  - "ABM protocol documented as ODD+D with a GitHub pointer, in a footnote"
+plan:
+  odd_d: "write ODD_D.md (full ODD+D description of the ABM from the SI S1 spec) and
+    push to CSL3 BEFORE the paper footnote claims it exists; verified refs: Muller et
+    al. 2013 EM&S 48:37-48; Grimm et al. 2020 JASSS 23(2):7"
+  refocus: "abstract and intro name reference-dependent delegitimation as the central
+    object; contributions reordered (entitlement/reference theory first, as-if
+    representation second); section emphasis sentences aligned; title unchanged
+    (alternative proposed to author, not applied)"
+  footnotes: "Methods machine-check subsection deleted -> single precise footnote at
+    the theory-section Lean mention (merged with the certified-chain footnote);
+    redundant Lean footnote at eq. (2) removed; ODD+D footnote at the Methods model
+    subsection; Simulation protocol header merged into Statistics and reproducibility"
+  captions: "all 11 main captions + ED Fig 1 compressed ~40-60%: bold claim leads,
+    panel sentences minimal, protocol counts reduced to the shortest parenthetical or
+    delegated to Methods; SI captions untouched (SI is the technical home)"
+  invariants: "no number changes; referee-fix content (R beside probabilities, horizon
+    qualifiers, class conditioning, honesty framings) preserved; everything cut
+    remains in SI or repo"
+closing_record:
+  closed: "2026-11-05"
+  build: "v9: main 23pp (from 24), ~800 words lighter, 0 undefined refs, 0 '??'"
+  done: "all 12 main captions + ED1 compressed 40-60% (claim-led, protocol counts
+    minimal); reference-dependent delegitimation named as the central object in
+    abstract + intro + contributions (reordered: theory first, representation
+    second); machine-checking now ONE precise footnote at eq. (2) (theorem list,
+    axiom closure, scope, repo pointer) with the Methods subsection and the
+    second Lean footnote removed; ODD+D footnote at the Methods model subsection
+    pointing to CSL3/ODD_D.md (document written and pushed BEFORE the footnote,
+    commit 40d5c6b); Simulation protocol merged into a single Statistics and
+    reproducibility subsection; race-caption seed rule moved to Methods/SI pointer;
+    Muller2013 + Grimm2020 verified and added"
+  author_options_flagged: "title alternative proposed (not applied):
+    'Reference-dependent delegitimation: how losing to visible winners makes
+    collective error self-defending'"
