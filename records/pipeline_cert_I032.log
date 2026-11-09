@@ -25,3 +25,10 @@
 {'generator': 'rival_us', 'shape': 'M2', 'B': 1000, 'a': '0.0578', 'h1a_rate': '0.0020', 'welch_rate': '0.0010', 'theta_mean': '0.4998', 'acc_rate_gated': '1.0000', 'tost_rate_gated': '1.0000', 'nonsup_rate_gated': '1.0000', 'r3x_rate_gated': '0.0000', 'verdict_frozen_rate': '0.0000', 'verdict_repair_rate': '0.0000', 'deq_mean': '5.0000', 'sigma_r_mean': '9.9763'} [886s]
 {'generator': 'rival_us', 'shape': 'M6', 'B': 1000, 'a': '0.0559', 'h1a_rate': '0.0040', 'welch_rate': '0.0070', 'theta_mean': '0.4999', 'acc_rate_gated': '1.0000', 'tost_rate_gated': '1.0000', 'nonsup_rate_gated': '1.0000', 'r3x_rate_gated': '0.0000', 'verdict_frozen_rate': '0.0000', 'verdict_repair_rate': '0.0000', 'deq_mean': '5.0000', 'sigma_r_mean': '9.6287'} [928s]
 == dose module ==
+{'generator': 'gate', 'chi': 0.6, 'B': 500, 'reject_rate': 0.04, 'C_mean': 0.03273721906030986}
+{'generator': 'gate', 'chi': 0.4, 'B': 500, 'reject_rate': 0.026, 'C_mean': 0.06174349779199613}
+{'generator': 'rival_au', 'chi': 0.6, 'B': 500, 'reject_rate': 0.044, 'C_mean': 0.03335930151192579}
+== framing module ==
+{'generator': 'gate', 'B': 500, 'reject_rate': 0.876}
+{'generator': 'rival_us', 'B': 500, 'reject_rate': 0.01}
+done in 1382s -> /home/claude/csl3/records/pipeline_cert_I032.csv

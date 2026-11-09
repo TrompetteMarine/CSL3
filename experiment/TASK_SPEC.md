@@ -112,6 +112,17 @@ tails (.61) — rank-primary is a power decision, not only a level decision. At
 the θ = .570 floor, power at N = 320 is .65–.72, reported not claimed.
 H1b equivalence runs as two one-sided rank tests with the band δ_eq from pilot
 σ_r; its power is a pilot-time computation by the same engine.
+*I032: superseded pending author decision.* The certification
+(records/95_pipeline_cert_I032.md) shows that the absolute-band H1b has zero
+power at the design basis and a 23% false-positive rate against a no-gate
+R3+R4 population. The certified candidate is the drop-conditioned
+scale-invariant H1b-SIc (DESIGN.md §6).
+
+H1a power on the market-skinned generator (I032 certification): the realized
+power of the full pipeline, with screens inside the simulation, is .911–.963
+across the six measurement shapes and .944 under AR(1) slider anchoring, at a
+calibrated θ ≈ .592 and N = 320 per arm (360 recruited in the exclusion cell).
+This confirms the I029 engine number on the actual task.
 
 Pilot-time correction: power is re-estimated by resampling the pilot's
 empirical drop distribution with the exclusion screens applied inside the
@@ -135,3 +146,11 @@ power engine's rejection rates on its own battery draws (consistency check).
 (iii) Pilot decision rules per DESIGN.md §7, with the framing-comparison arm
 added (market skin vs bandit skin, same seeds, PILOT n split 50/50 within the
 standard-elicitation arm).
+
+Gate status at I032 close: **(i) G1 PASSED.** r(ρ̂, ρ) = .914 on the market
+skin with app windfall semantics and task-v3 geometry; χ r = .619; the I003
+profile is reproduced (τF and ν_F CIs cover 0, ν_R excluded), but the ν_F
+point estimate moved from +1.5% to −7.0% [−15.4, +1.0]. **(ii) G2 PASSED.**
+Pipeline WMW agrees with the engine on all 6,000 shared draws; rates within
+±.011 of records/power_free.csv. **(iii) open**, author-gated (pilot). **A new
+blocking item from the certification: the H1b form** (above; DESIGN.md §6).

@@ -129,7 +129,36 @@ co-reported; at the θ = .570 floor power is .65–.72, reported not claimed) �
 it rejects,
 H1b the gate (HIGH × MODERATE: accuracy recovery above a pre-stated floor AND
 fairness TOST within ± δ_eq AND the band excludes the utility rival's predicted
-recovery). Secondaries: H2 midpoint-lag dissociation; H3 Reference × Restoration
+recovery).
+
+**H1b status after the I032 certification: OPEN, author decision before
+filing** (records/95_pipeline_cert_I032.md). The frozen form above failed
+certification in both directions. *Power:* at the design basis the
+gate-vs-utility P3 dissociation compresses to about 2 slider points, inside
+the 5-point band, so gate verdict power is 0.000 in every measurement shape.
+It is also 0.000 at full scale, where the gate's real P3 decline lies outside
+the band. *Specificity:* a population with no gate in anyone (R3 types plus R4
+types) passes H1a at .92, and the frozen H1b then declares the gate in 23% of
+replicates. The pilot cannot fix this, because the defect is in the form of
+the test, not in a constant.
+
+The certified candidate, frozen before it was run (freeze I032 AD3/AD4), is
+**H1b-SIc**. Restrict to HIGH × MODERATE participants whose P2 drop is above
+the cohort median; compute c_i = (late-P3 − P2 fairness) − κ·(P1 − P2 fairness)
+with κ = .25; reject H0: median c_i ≥ 0 by a one-sided Wilcoxon signed-rank
+test at α = .005. The accuracy floor .70 still applies, and so does the
+scale-free (iii): κ < R3's normalized recovery. Its ingredients are
+attenuation-invariant (a subject's recovery is measured against their own
+drop), and conditioning on high-drop subjects tests the gate's same-person
+conjunction, which the composite rival cannot mimic. Certified results: gate
+power .904–.966 across shapes under the attenuation reading and .948 in a
+gate+R4 population; false positives .000 against pure R3 (both readings) and
+.000 against the no-gate composite. Unconditional H1b-SI fails that last test
+at .042. κ = .25 was fixed from latent ratios before the run; the sensitivity
+κ = .40 raises the composite false-positive rate of the unconditional form to
+.164, so κ is not a free dial.
+
+Secondaries: H2 midpoint-lag dissociation; H3 Reference × Restoration
 threshold interaction; H4 shortfall-scaled decrements vs capped increments; H5
 pilot-gated shared-failure contrast; WTP convergence with the slider (construct
 validation); framing probe (§3). Rigidity moderator: slider-instrumented ρ̂,
