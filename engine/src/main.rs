@@ -1158,6 +1158,37 @@ fn main() {
                 eprintln!("mnet2 cell {cid} ({mm}x{nn} {geom} {place} w={w_in} rho={rr} T={tt}) done");
             }
         }
+        "invcal" => {
+            // POST-I032 EXPLORATORY (inverse calibration; not a certification).
+            // Questions, written before the run: at the confirmatory cell
+            // (A0=.8, lam=.7, rho=.002, chi=.4, n=200, T=600), how weak can the gate be
+            // before the paper's trap stops being the typical outcome (P_dw < .5)?
+            //  part s:     speed scaling, nu_F=.05s and nu_R=.0125s (ratio .25, A* fixed)
+            //  part ratio: sensitivity, nu_R/nu_F in .25..31 at s=1 (refines nfsweep)
+            //  part joint: s x ratio grid near both edges
+            // 200 runs per cell; seeds 61000 + 1000*cell; existing modes untouched.
+            let f = File::create("out/invcal.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "part,s,ratio,m2,l2,p_dw,p_persist,reps").unwrap();
+            let mut cell = 0u64;
+            let mut emit = |w: &mut BufWriter<File>, part: &str, s: f64, ratio: f64, cell: u64| {
+                let p = P { a0: 0.8, lam: 0.7, rho: 0.002, nu_f: 0.05 * s,
+                            nu_r: 0.05 * s * ratio, ..P::default() };
+                let (m2, _v, l2, _vl, pdw, pper, _, _) = cell_stats(&p, Gate::Diss,
+                    wrong.0, wrong.1, 200, 61000 + cell * 1000);
+                writeln!(w, "{part},{s},{ratio},{m2:.5},{l2:.5},{pdw:.4},{pper:.4},200").unwrap();
+                eprintln!("invcal {part} s={s} ratio={ratio} P_dw={pdw:.3}");
+            };
+            for s in [2.0, 1.5, 1.25, 1.0, 0.8, 0.65, 0.5, 0.4, 0.3, 0.2] {
+                emit(&mut w, "s", s, 0.25, cell); cell += 1;
+            }
+            for ratio in [0.25, 0.26, 0.27, 0.28, 0.29, 0.30, 0.31] {
+                emit(&mut w, "ratio", 1.0, ratio, cell); cell += 1;
+            }
+            for s in [1.0, 0.75, 0.5, 0.35] { for ratio in [0.25, 0.27, 0.29] {
+                emit(&mut w, "joint", s, ratio, cell); cell += 1;
+            } }
+        }
         _ => eprintln!("unknown mode"),
     }
 }
