@@ -1,0 +1,27 @@
+{{ block title }}A few final questions{{ endblock }}
+{{ block content }}
+
+<p>Before the results, a few questions about your experience. There are no right
+or wrong answers.</p>
+
+<p><b>The other participant shown on the trader board…</b></p>
+<p>…was successful at the task (1 = not at all, 7 = extremely):
+{{ formfield 'peer_success' }}</p>
+<p>…was a real previous participant (1 = certainly not, 7 = certainly):
+{{ formfield 'peer_real' }}</p>
+
+<p><b>The settlements in your session</b> were manipulated against you
+specifically (1 = certainly not, 7 = certainly):
+{{ formfield 'rig_suspicion' }}</p>
+
+<p>How familiar are you with betting or prediction markets
+(1 = not at all, 7 = very):
+{{ formfield 'betting_familiarity' }}</p>
+
+<p>In your own words, what do you think this study was about?
+{{ formfield 'purpose_guess' }}</p>
+
+<p>Optional: your age {{ formfield 'age' }} and gender {{ formfield 'gender' }}</p>
+
+{{ next_button }}
+{{ endblock }}

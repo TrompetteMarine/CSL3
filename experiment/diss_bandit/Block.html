@@ -3,8 +3,9 @@
 <style>
   .db-wrap { max-width: 680px; margin: 0 auto; font-size: 1.05rem; }
   .db-arms { display: flex; gap: 28px; justify-content: center; margin: 26px 0; }
-  .db-arm { width: 180px; height: 130px; font-size: 1.4rem; border-radius: 12px;
+  .db-arm { width: 200px; height: 140px; font-size: 1.3rem; border-radius: 12px;
             border: 2px solid #555; background: #f4f4f2; cursor: pointer; }
+  .db-arm small { display: block; color: #666; font-size: .85rem; margin-top: 6px; }
   .db-arm:disabled { opacity: .55; cursor: default; }
   .db-feedback { text-align: center; min-height: 64px; font-size: 1.25rem; }
   .db-win { color: #0072B2; font-weight: 700; }
@@ -13,10 +14,10 @@
   .db-peer { border-top: 1px solid #ddd; margin-top: 18px; padding-top: 10px;
              color: #444; text-align: center; }
   .db-progress { color: #888; text-align: center; font-size: .9rem; }
-  #ratingModal { display: none; position: fixed; inset: 0;
-                 background: rgba(0,0,0,.45); z-index: 50; }
-  #ratingModal .inner { background: #fff; max-width: 520px; margin: 12vh auto;
-                        padding: 26px 30px; border-radius: 10px; }
+  .db-modal { display: none; position: fixed; inset: 0;
+              background: rgba(0,0,0,.45); z-index: 50; }
+  .db-modal .inner { background: #fff; max-width: 540px; margin: 10vh auto;
+                     padding: 26px 30px; border-radius: 10px; }
   .db-slider { width: 100%; }
   .db-sl-row { margin: 18px 0 6px; }
   .db-sl-labels { display: flex; justify-content: space-between; color: #777;
@@ -24,31 +25,34 @@
 </style>
 
 <div class="db-wrap">
-  <div class="db-progress">choice <span id="tNow">–</span> of 450 &nbsp;·&nbsp;
-    total points: <span id="pts">0</span></div>
+  <div class="db-progress">round <span id="tNow">–</span> of 450 &nbsp;·&nbsp;
+    total points: <span id="pts">0</span> &nbsp;·&nbsp;
+    <span id="skinNote"></span></div>
 
   <div class="db-arms">
-    <button class="db-arm" id="armLeft">Box A</button>
-    <button class="db-arm" id="armRight">Box B</button>
+    <button class="db-arm" id="armLeft"><span id="tkLeft">A</span>
+      <small>market price: <span id="prLeft">–</span></small></button>
+    <button class="db-arm" id="armRight"><span id="tkRight">B</span>
+      <small>market price: <span id="prRight">–</span></small></button>
   </div>
 
   <div class="db-feedback" id="fb">&nbsp;</div>
 
   <div class="db-peer">
-    Previous participant: last choice earned <b id="peerR">–</b>,
+    Trader board — previous participant: last ticket paid <b id="peerR">–</b>,
     overall rate <b id="peerRate">–</b>
   </div>
 </div>
 
-<div id="ratingModal">
+<div id="ratingModal" class="db-modal">
   <div class="inner">
     <div class="db-sl-row">
-      <div>“<b>The payout rule is fair.</b>”</div>
+      <div>“<b>The market settles fairly.</b>”</div>
       <input type="range" class="db-slider" id="slFair" min="0" max="100" value="50">
       <div class="db-sl-labels"><span>completely disagree</span><span>completely agree</span></div>
     </div>
     <div class="db-sl-row">
-      <div>“<b>What I deserve to earn per choice.</b>”</div>
+      <div>“<b>What I deserve to win per round.</b>”</div>
       <input type="range" class="db-slider" id="slEnt" min="0" max="100" value="50">
       <div class="db-sl-labels"><span>nothing</span><span>the maximum</span></div>
     </div>
@@ -56,10 +60,49 @@
   </div>
 </div>
 
+<div id="bsrModal" class="db-modal">
+  <div class="inner">
+    <div class="db-sl-row">
+      <div><b>Quick forecast:</b> how likely is it that the <b>SQUARE</b> ticket
+        pays this round? A more accurate forecast gives you a higher chance of a
+        bonus. <a href="#" onclick="document.getElementById('bsrDetail').style.display='block';return false;">details</a></div>
+      <div id="bsrDetail" style="display:none;color:#666;font-size:.85rem">
+        One forecast round is drawn at the end. You win a 10-point bonus with
+        probability 1 − (outcome − your forecast)², where the outcome is 1 if
+        SQUARE paid and 0 if not, and your forecast is on the 0–1 scale.</div>
+      <input type="range" class="db-slider" id="slBsr" min="0" max="100" value="50">
+      <div class="db-sl-labels"><span>certainly not</span><span>certainly</span></div>
+    </div>
+    <button class="btn btn-primary" id="bsrGo" style="margin-top:14px">Continue</button>
+  </div>
+</div>
+
+<div id="wtpModal" class="db-modal">
+  <div class="inner">
+    <div class="db-sl-row">
+      <div><b>One-time offer.</b> You can pay points from your separate
+        <b>20-point allowance</b> to have the computer <b>replace the payout
+        rule with a fresh rule generated the same way</b>. The schedule of the
+        session is unaffected. State the <b>most</b> you would pay (0 = keep the
+        current rule). A price between 1 and 20 is then drawn at random: if your
+        maximum is at least that price, you pay the drawn price and the rule is
+        re-generated; otherwise nothing happens. Unspent allowance is paid out.</div>
+      <input type="range" class="db-slider" id="slWtp" min="0" max="20" value="0">
+      <div class="db-sl-labels"><span>0</span><span id="wtpVal">0</span><span>20</span></div>
+    </div>
+    <button class="btn btn-primary" id="wtpGo" style="margin-top:14px">Submit</button>
+    <div id="wtpOut" style="margin-top:10px;color:#444"></div>
+  </div>
+</div>
+
 <script>
-  let t0 = performance.now(), ratT0 = 0, blockDone = false;
+  let t0 = performance.now(), ratT0 = 0, bsrT0 = 0, wtpT0 = 0, blockDone = false;
+  let queue = [];
+  let fairInit = 50, entInit = 50, bsrInit = 50;
   const L = document.getElementById('armLeft'), R = document.getElementById('armRight');
   const fb = document.getElementById('fb');
+  const market = (js_vars.skin !== 'bandit');
+  document.getElementById('skinNote').textContent = market ? 'ticket market' : '';
 
   function lock(b) { L.disabled = b; R.disabled = b; }
   function send(side) {
@@ -69,17 +112,75 @@
   L.onclick = () => send('left');
   R.onclick = () => send('right');
 
+  function randInit(el) {
+    const v = Math.floor(Math.random() * 101);
+    el.value = v; return v;
+  }
+
+  function nextModal() {
+    const m = queue.shift();
+    if (m === 'wtp') {
+      wtpT0 = performance.now();
+      document.getElementById('slWtp').value = 0;
+      document.getElementById('wtpVal').textContent = 0;
+      document.getElementById('wtpOut').textContent = '';
+      document.getElementById('wtpModal').style.display = 'block';
+    } else if (m === 'bsr') {
+      bsrT0 = performance.now();
+      bsrInit = randInit(document.getElementById('slBsr'));
+      document.getElementById('bsrModal').style.display = 'block';
+    } else if (m === 'rating') {
+      ratT0 = performance.now();
+      fairInit = randInit(document.getElementById('slFair'));
+      entInit = randInit(document.getElementById('slEnt'));
+      document.getElementById('ratingModal').style.display = 'block';
+    } else if (blockDone) {
+      document.getElementById('form').submit();
+    } else {
+      setTimeout(() => { lock(false); t0 = performance.now(); }, 350);
+    }
+  }
+
+  document.getElementById('slWtp').oninput = function () {
+    document.getElementById('wtpVal').textContent = this.value;
+  };
   document.getElementById('ratingGo').onclick = function () {
     document.getElementById('ratingModal').style.display = 'none';
     liveSend({type: 'rating',
               fairness: +document.getElementById('slFair').value,
               entitlement: +document.getElementById('slEnt').value,
+              fairness_init: fairInit, entitlement_init: entInit,
               rt_ms: Math.round(performance.now() - ratT0)});
+  };
+  document.getElementById('bsrGo').onclick = function () {
+    document.getElementById('bsrModal').style.display = 'none';
+    liveSend({type: 'bsr', report: +document.getElementById('slBsr').value,
+              report_init: bsrInit,
+              rt_ms: Math.round(performance.now() - bsrT0)});
+  };
+  document.getElementById('wtpGo').onclick = function () {
+    liveSend({type: 'wtp', wtp: +document.getElementById('slWtp').value,
+              rt_ms: Math.round(performance.now() - wtpT0)});
   };
 
   function liveRecv(data) {
     if (data.type === 'trial') {
       document.getElementById('tNow').textContent = data.t;
+      if (market) {
+        document.getElementById('tkLeft').textContent =
+          (data.good_side === 'left') ? data.good_ticket
+            : js_vars.tickets.filter(x => x !== data.good_ticket)[0];
+        document.getElementById('tkRight').textContent =
+          (data.good_side === 'right') ? data.good_ticket
+            : js_vars.tickets.filter(x => x !== data.good_ticket)[0];
+        document.getElementById('prLeft').textContent = data.prices[0];
+        document.getElementById('prRight').textContent = data.prices[1];
+      } else {
+        document.getElementById('tkLeft').textContent = 'Box A';
+        document.getElementById('tkRight').textContent = 'Box B';
+        document.getElementById('prLeft').parentElement.style.display = 'none';
+        document.getElementById('prRight').parentElement.style.display = 'none';
+      }
       lock(false); t0 = performance.now();
     }
     if (data.type === 'feedback') {
@@ -87,23 +188,28 @@
       document.getElementById('pts').textContent = data.points;
       document.getElementById('peerR').textContent = data.peer_reward + ' point' + (data.peer_reward === 1 ? '' : 's');
       document.getElementById('peerRate').textContent = (100 * data.peer_rate).toFixed(0) + '%';
-      let h = data.reward ? '<span class="db-win">+1 point</span>'
-                          : '<span class="db-zero">0 points</span>';
-      if (data.bonus) h += ' &nbsp; <span class="db-bonus">bonus +' + data.bonus + '</span>';
+      let h = data.reward ? '<span class="db-win">ticket paid: +1 point</span>'
+                          : '<span class="db-zero">ticket did not pay</span>';
+      if (data.bonus) h += ' &nbsp; <span class="db-bonus">windfall +' + data.bonus + '</span>';
       fb.innerHTML = h;
       blockDone = data.block_done;
-      if (data.ask_rating) {
-        ratT0 = performance.now();
-        document.getElementById('ratingModal').style.display = 'block';
-      } else if (blockDone) {
-        document.getElementById('form').submit();
-      } else {
-        setTimeout(() => { lock(false); t0 = performance.now(); }, 350);
-      }
+      queue = [];
+      if (data.ask_wtp) queue.push('wtp');
+      if (data.ask_bsr) queue.push('bsr');
+      if (data.ask_rating) queue.push('rating');
+      nextModal();
     }
-    if (data.type === 'rating_ok') {
-      if (data.block_done) { document.getElementById('form').submit(); }
-      else { lock(false); t0 = performance.now(); }
+    if (data.type === 'rating_ok') { nextModal(); }
+    if (data.type === 'bsr_ok') { nextModal(); }
+    if (data.type === 'wtp_ok') {
+      const out = data.switched
+        ? 'Drawn price: ' + data.price + '. You paid it — the rule has been replaced with a fresh rule generated the same way.'
+        : 'Drawn price: ' + data.price + '. Above your maximum — the current rule stays.';
+      document.getElementById('wtpOut').textContent = out;
+      setTimeout(() => {
+        document.getElementById('wtpModal').style.display = 'none';
+        nextModal();
+      }, 1800);
     }
   }
   document.addEventListener('DOMContentLoaded', () => { lock(true); liveSend({type: 'start'}); });
