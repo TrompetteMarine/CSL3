@@ -130,6 +130,17 @@ Both measures are flagged exploratory until the pilot shows the BSR layer does
 not contaminate the fairness measure (Danz–Vespa–Wilson is the reason for
 caution).
 
+> **I032 correction to §3's step-versus-line cell.** The pipeline
+> certification found the frozen gate's dose response *linear* in μ_ref over
+> the session horizon (records/95_pipeline_cert_I032.md, E6;
+> records/dose_posthoc_I032.txt). The χ_min frontier is a permanence statement:
+> it fixes whether grievance is sustained as t → ∞, and does not predict a step
+> in a 150-trial drop. The qualitative contrast this section claims is
+> therefore asymptotic only. The separating signature visible in-session is the
+> sign and slope of the P3 response across μ_ref (the "richer winner, longer
+> grievance" cell below), which is post-hoc until it is frozen and certified.
+> The original text is kept unchanged above for the record.
+
 ## 4. The logical structure of the inference
 
 Let G be the gate model, and the rival class R = {R1 fixed-hypothesis Bayesian,

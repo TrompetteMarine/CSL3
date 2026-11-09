@@ -53,6 +53,20 @@ I032 AD1). The **sign** of C then reads out where the frontier lies. The
 certification ran this module at both χ settings (records/pipeline_cert_I032.csv,
 dose section).
 
+**Certification result (I032): the dose module FAILED and is suspended pending
+an author decision.** Gate rejection of linearity was .040 (χ = .6) and .026
+(χ = .4), the same as R3's .044. The cause is theoretical. Over the session
+horizon the frozen gate's dose response is *linear* in μ_ref (curvature ratio
+≤ .02 in the P2 drop; records/dose_posthoc_I032.txt, post-hoc), because the
+χ_min frontier governs permanence as t → ∞, not a 150-trial drop. The
+step-versus-line contrast of TASK_INFERENCE.md §3 is refuted at the session
+horizon. Post-hoc, the gate and R3 separate in the **slope** of the P3
+response across μ_ref (gate −11 → −33, R3 flat at about +12). That observation
+can become a test only through a new freeze and certification (I033
+candidate). The options for the 180 participants are (a) drop the module,
+(b) re-specify it as the P3-slope test and certify it first, or (c) keep it as
+a descriptive χ readout only.
+
 Null-region prediction (free): P1 fairness ratings are invariant to the trader
 board (own outcomes at or above aspiration ⇒ the gate predicts no reference
 effect). Preregistered as a falsification region: a reliable P1 reference

@@ -1,0 +1,96 @@
+# KG delta — KGi-DISS-I032 (on top of the I001–I003 deltas and the I004–I031 freeze
+# records; scoped transaction; historical nodes untouched)
+version: 1
+baseline_snapshot: "CSL3 main a3dcaaf (I031 close); freezes I025–I031 read at recovery;
+  Project docs task-spec, experiment-design, prereg-draft, prior-elicitation-spec,
+  i028-task-inference, i024-implementation-plan"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-H1
+    old_status: "H1a/H1b serial gatekeeping; H1b = absolute-band rank TOST, band from pilot"
+    new_status: "H1a CERTIFIED on the market-skinned generator (power .911–.963, six
+      shapes + anchoring .944; R1-global/R4 level contained). H1b OPEN — author decision"
+  - id: DISS-H1b-TOST
+    old_status: "co-confirmatory test form (I025/I029)"
+    new_status: "REFUTED as a test form (I032 certification): gate verdict power .000 at
+      the design basis (attenuation reading) and at full scale; false-positive .230
+      against a no-gate R3+R4 composite. Defect is structural (absolute band vs
+      attenuation; pooled test vs between-subject composite); not pilot-repairable"
+    lifecycle: refuted
+  - id: DISS-S1
+    new_status: "re-established on the market skin (gate G1): rho r = .914, chi r = .619;
+      tauF +3.0% [-3.2,+10.5]; nuF -7.0% [-15.4,+1.0] (sign moved from I003 +1.5%,
+      CI still covers 0); nuR -23.4% [-35.0,-11.6] still excluded"
+  - id: DISS-DOSE-STEP
+    old_status: "I028/I029: gate predicts a step at the chi_min frontier in mu_ref; dose
+      module tests step vs line"
+    new_status: "REFUTED at the session horizon (E6 FAIL: .040/.026 vs R3 .044); post-hoc
+      latent diagnostic: gate dose response linear in mu_ref within 450 trials
+      (curvature ratio <= .02). The chi_min step is asymptotic (permanence) only"
+    lifecycle: qualified
+
+new_nodes:
+  - id: DISS-H1b-SIc
+    kind: statistical
+    status: certified-synthetic (candidate; adoption author-gated)
+    statement: "Among HIGH x MODERATE subjects with P2 drop above the cohort median,
+      c_i = rec_i - .25*drop_i; one-sided Wilcoxon signed-rank H0 median c >= 0 at
+      .005; accuracy floor .70; scale-free (iii) kappa < R3 normalized recovery"
+    evidence: "records/pipeline_cert_I032_run3.csv: gate power .904–.966 (attenuation),
+      .948 (gate+R4 full scale); false positives .000 vs pure R3 (both readings) and
+      vs no-gate composite. Frozen pre-run in AD3/AD4"
+    limitations: "certified only against the composite shapes simulated; the
+      attenuated-composite cell was not run; kappa fixed from latent ratios"
+  - id: DISS-RIVAL-COMPOSITE
+    kind: model
+    status: proposed-rival (named threat)
+    statement: "no-gate population of R3 (reference effect, P3 recovery) + R4
+      (no reference effect, P3 decline under MODERATE) mimics both gate signatures in
+      pooled statistics"
+    evidence: "AD4; run 3 composite cell (R3 share .5595): H1a .920, frozen H1b .230,
+      H1b-SI .042, H1b-SIc .000"
+  - id: DISS-MEAS-ATTENUATION
+    kind: model
+    status: supported-synthetic
+    statement: "the design-basis effect (theta .592) corresponds to a measurement
+      attenuation a ~ .046–.063 of the latent legitimacy signal under the frozen gate;
+      every within-subject dynamic compresses by the same factor"
+    evidence: "records/pipeline_cert_I032_calib.csv"
+  - id: DISS-S7-TOLERANCE
+    kind: statistical
+    status: supported-synthetic
+    statement: "one-sided WMW level at .005 survives residual asymmetric contamination
+      only up to ~0.2 pts (~3% of the design effect); ~3x nominal at 7%, 4–7x at 14%"
+    evidence: "records/power_free_s7.csv (S7 addendum, 27 null cells x 2000)"
+  - id: DISS-P3-SLOPE-DOSE
+    kind: statistical
+    status: proposed (post-hoc; needs freeze + certification)
+    statement: "across mu_ref, gate P3-P2 response slope strongly negative (-11 -> -33),
+      R3 flat positive (~+12)"
+    evidence: "records/dose_posthoc_I032.txt (post-hoc, seed 132900)"
+  - id: PIPE-G2
+    kind: implementation
+    status: passed
+    evidence: "records/g2_consistency.csv: per-draw agreement 1.000 at S1/S2/S6"
+
+new_edges:
+  - {from: DISS-H1, to: DISS-H1b-SIc, type: qualified_by, note: "candidate H1b form"}
+  - {from: DISS-H1b-TOST, to: DISS-MEAS-ATTENUATION, type: refuted_by, note: "power"}
+  - {from: DISS-H1b-TOST, to: DISS-RIVAL-COMPOSITE, type: refuted_by, note: "specificity"}
+  - {from: DISS-H1b-SIc, to: DISS-RIVAL-COMPOSITE, type: tested_by}
+  - {from: DISS-DOSE-STEP, to: DISS-P3-SLOPE-DOSE, type: qualified_by,
+     note: "the in-session separating signature is slope, not curvature (post-hoc)"}
+  - {from: DISS-H1, to: DISS-S7-TOLERANCE, type: requires,
+     note: "level depends on differential-suspicion load staying under tolerance"}
+  - {from: DISS-H1, to: PIPE-G2, type: implemented_by}
+
+defeated_preserved:
+  - "run 1 of the certification (dispatch defect; INVALID log preserved)"
+  - "E4 pre-run prediction (frozen TOST fails under gate): wrong — it passes; fails via (iii)"
+  - "coupling test spearman(drop, rec) < 0: rejected pre-run (gate's own coupling +.475)"
+  - "I028 step-versus-line in-session claim"
+integrity: {circular_proof_check: pass, application_bridge: "synthetic only; human
+  readings undecided until pilot"}
+persistence: "written to CSL3 freezes/kg_delta_I032.yaml and mirrored to the Project;
+  no remote Cortex/KG service exists for this programme"

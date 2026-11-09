@@ -481,3 +481,74 @@ deliverables:
     Project docs"
   - "memory condense + append (DISS file)"
   - "author-decision paragraph in the closing report"
+
+# ================================================================== CLOSING RECORD
+closing_record:
+  closed: "2026-11-09"
+  headline: "THE FROZEN H1b FAILS CERTIFICATION IN BOTH DIRECTIONS and blocks the
+    preregistration as drafted: gate verdict power .000 at the design basis
+    (attenuation reading) and at full scale; false-positive .230 against a no-gate
+    R3+R4 population. Not pilot-repairable (defect is the test's form). Certified
+    candidate H1b-SIc (frozen AD3/AD4 before run 3): powered .904-.966 / .948 and
+    specific (.000 vs pure R3 and vs the composite). Adoption = author decision."
+  scorecard:  # verbatim against the frozen expectations
+    G2_E8: "PASS — pipeline WMW = engine on 6,000 shared draws (agreement 1.000; rates
+      within .011 of records/power_free.csv)"
+    G1_E5: "PASS — r(rho_hat, rho) = .914 (60/60); chi .619; tauF +3.0% [-3.2,+10.5];
+      nuR -23.4% [-35.0,-11.6] excluded; nuF -7.0% [-15.4,+1.0] (sign moved from I003
+      +1.5%; CI covers 0) — reported"
+    E1: "PASS — gate H1a power .911/.944/.945/.934/.963/.938 (M1-M6), anchoring .944"
+    E2: "PASS — R1-global .000/.000 (theta .220/.225 reversed); R4 .002/.004"
+    E3: "PASS but VACUOUS — R3 frozen verdict .000 because criterion (iii) fails for
+      every generator"
+    E4: "WRONG PRE-RUN PREDICTION — frozen TOST PASSES under the gate (1.000 given
+      H1a); verdict 0 via (iii); the prediction reasoned in latent units"
+    E6: "FAIL — dose module: gate .040 (chi .6), .026 (chi .4) vs R3 .044; post-hoc
+      cause: gate dose response linear in-session; chi_min step is asymptotic"
+    E7: "PASS — framing: gate .876; R4 fixed-rate .010"
+    E9: "PASS — H1b-SI gate power .916/.967/.943/.930/.945/.931"
+    E10: "PASS — H1b-SI R3 .000 in all six shapes"
+    E11_E14: "diagnostic — gate+R4 (share .5765): frozen .000, SI .948, SIc .948;
+      gate+R3 INFEASIBLE (theta .731 / .764 at the endpoints, .592 unreachable)"
+    E12: "PASS — pure R3 at a=1: H1a 1.000; frozen/SI/SIc .000"
+    E13: "PASS — composite R3+R4: H1b-SIc .000 (frozen .230, SI .042 reported)"
+    S7: "addendum run — tolerance ~0.2 pts residual asymmetric load (~3% of design
+      effect); symmetric-suspicion power .924"
+  defects_found_and_fixed:
+    - "run-1 dispatch defect ('gate' -> R1-global kernel); run 1 invalidated, preserved"
+    - "randomized slider starts defeat the zero-variance screen -> zero-movement screen"
+    - "forecast scored against an already-settled round -> next-round forecast"
+    - "dose-test null would have tested distribution equality (AD1, pre-run)"
+  B: "market-skin oTree build (deltas 1-11 + comprehension quiz, slider step 5,
+    WTP draws wording, ITI jitter knob); pipeline.py v2; bots green on 5 bot configs,
+    bandit-skin pilot arm and a 24-bot full-path session; G2 PASS"
+  C: "experiment/TECHNIQUES.md (17 decided cards); freezes/00_citation_verification_I032.md
+    (15 V-claim, 9 V-biblio, PENDING list); corrections: 'contagion of wishful
+    thinking' = Seybert-Bloomfield 2009 not Forsythe; approval filter not a quality
+    control (Peer et al. 2022)"
+  D: "experiment/BIAS_INVENTORY.md (13 entries); premise corrected: rank tests absorb
+    only a COMMON monotone transform, not individual nonlinear scale use (level-safe
+    by randomization, power-only)"
+  E_amendments:
+    - "DESIGN.md: approval filter re-described; slider conventions; WTP wording;
+      next-round forecasts; S7 differential-suspicion pilot rule; partial-mover rule;
+      H1b OPEN + H1b-SIc candidate; d->theta in §9; build status"
+    - "TASK_SPEC.md: dose step chi-contingent (D4) + dose module FAILED/suspended;
+      measures order; H1b superseded pending decision; H1a certified numbers; gate
+      status G1/G2 PASS"
+    - "PRIORS.md: stale confirmatory paragraph (D1) corrected"
+    - "TASK_INFERENCE.md: contagion attribution; I032 correction box on the
+      step-versus-line cell (original text kept)"
+    - "prereg draft (Project doc): I032 amendments marked throughout; H1b OPEN"
+  main_text_flags:  # NOT edited (prompt rule); flagged for the author
+    - "Table 1 H1b row ('stays flat'; 'TOST band from pilot noise') and the matching
+      experiment paragraph (~l.342): contradicted by certification"
+    - "~l.360 'flatlining under moderate restoration (43 and 14)': the frozen generator
+      DECLINES under MODERATE (P2 52 -> late-P3 ~12); gate predicts decline, not flatline"
+    - "power footnote 'H1b's band and power come from pilot noise': contradicted"
+  verification: "every expected outcome frozen before its run; addenda AD1-AD4 dated
+    pre-run; run 1 invalidated not reinterpreted; post-hoc diagnostics labelled"
+  kg: "freezes/kg_delta_I032.yaml (+ Project mirror)"
+  next: "author decisions (H1b form; dose module; main-text H1b wording); I033
+    candidates: freeze+certify the P3-slope dose test; attenuated-composite cell;
+    pilot (author-gated)"
