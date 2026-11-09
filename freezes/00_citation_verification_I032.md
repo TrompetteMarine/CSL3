@@ -69,3 +69,15 @@ conditions of Hossain–Okui; the authors and venue of the slider-defaults study
    al. find reputation does not predict quality. Fix in E: the filter is kept
    (harmless, standard) but re-described; data quality is carried by the
    in-task screens, not by approval rating.
+
+## Audit addendum (post-close, 2026-11-09)
+
+| Reference | Level | What was verified | Where |
+|---|---|---|---|
+| Ham, H. & Jenkins, A. C. (2025) Social inequity disrupts reward-based learning. *Commun. Psychol.* 3:125. doi:10.1038/s44271-025-00300-y | V-claim | Authors as printed: **Huang Ham** & Adrianna C. Jenkins (Penn; Princeton). Three studies, a reinforcement-learning task with rewards split with a partner: learning slower and less successful when receiving the smaller share. Supports its use as the source class for the inequity-in-utility rival (R3) | author's preprint PDF (title page) + publication page |
+
+**Correction applied:** `paper/refs.bib` entry `HamJenkins2025` had the first
+author as "Ham, Hackjin" (wrong given name) and lacked the article number.
+Corrected to "Ham, Huang", with pages={125}. Bibliography metadata only; no
+manuscript prose changed. The entry predates I032 and had no verification record
+in the repo.

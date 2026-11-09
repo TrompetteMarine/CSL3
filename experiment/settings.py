@@ -5,7 +5,11 @@ from os import environ
 BASE_CELL = dict(
     num_demo_participants=4,
     app_sequence=['diss_bandit'],
-    points_to_currency=0.02,       # GBP per point; see DESIGN.md for payment
+    # AUDIT: aligned to DESIGN.md §2 (base £4.20 + expected performance bonus ~£1.10).
+    # ~315 points expected (≈203 settlements + 90 windfalls + ~8 forecast bonus +
+    # ~15 unspent allowance) x £0.0035 ≈ £1.10. The I006 value (0.02) would have
+    # paid ~£6.30 per participant, ~5.7x the budgeted bonus. Author to confirm.
+    points_to_currency=0.0035,
     session_seed=20261104,
     peer_pool_path='',             # production: pilot-sourced pool (tools/)
     skin='market',                 # I032 default; 'bandit' = I006 skin
@@ -43,6 +47,12 @@ SESSION_CONFIGS = [
     dict(name='pilot_bandit_skin', display_name='PILOT bandit skin (same seeds)',
          p2_regime='HIGH', restoration='MODERATE',
          **{**BASE_CELL, 'skin': 'bandit'}),
+    # ---- AUDIT: pool-source session with the RICH rule (.65/.35 in every phase).
+    # Under the standard schedule nobody earns ~.65 in P2, so a truthful HIGH
+    # trader board needs streams from participants who played under this rule
+    # (disclosed by the 'one of several rules' line). Author decision: wording.
+    dict(name='pool_rich', display_name='POOL source: rich rule all phases',
+         p2_regime='LOW', restoration='FULL', schedule='rich', **BASE_CELL),
     # ---- pipeline-validation bot sessions (never human evidence) -----------
     dict(name='bots_random_HIGH_FULL', display_name='BOTS random (HIGH/FULL)',
          p2_regime='HIGH', restoration='FULL', bot_kind='random', **BASE_CELL),
@@ -54,10 +64,13 @@ SESSION_CONFIGS = [
          p2_regime='HIGH', restoration='MODERATE', bot_kind='diss', **BASE_CELL),
     dict(name='bots_diss_main', display_name='BOTS diss (main_confirmatory assignment)',
          assign_factors='participant', bot_kind='diss', **BASE_CELL),
+    dict(name='bots_refresh', display_name='BOTS reload/duplicate robustness test',
+         assign_factors='participant', bot_kind='diss', bot_refresh_test=True,
+         **BASE_CELL),
 ]
 
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1.00,
-                               participation_fee=2.00, doc="")
+                               participation_fee=4.20, doc="")   # AUDIT: DESIGN §2
 
 PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []
@@ -70,5 +83,8 @@ ROOMS = []
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 DEMO_PAGE_INTRO_HTML = """diss_bandit — task v3 market skin (KGi-DISS-I032)"""
-SECRET_KEY = 'dev-only-not-for-production'
+# AUDIT: secret from the environment; refuse the dev key in production mode.
+SECRET_KEY = environ.get('OTREE_SECRET_KEY', 'dev-only-not-for-production')
+if environ.get('OTREE_PRODUCTION') and SECRET_KEY == 'dev-only-not-for-production':
+    raise RuntimeError('Set OTREE_SECRET_KEY in production.')
 INSTALLED_APPS = ['otree']

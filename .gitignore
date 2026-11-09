@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+experiment/db.sqlite3
+experiment/_static/
+experiment/staticfiles/
+experiment/be*/
+experiment/bp*/
+experiment/botexport*/
+experiment/analysis/smoke_report_participants.csv.bak

@@ -38,7 +38,21 @@ import stats_v2 as sv
 ALPHA = 0.005
 TRIALS = 450
 PHASE_OF = lambda t: int(np.ceil(t / 150))
-R3_PRED_RECOVERY = None   # set from records/pipeline_cert_I032_calib.csv at run
+R3_PRED_RECOVERY = None   # frozen-form criterion (iii), absolute units (design basis)
+KAPPA = 0.25              # H1b-SI / H1b-SIc (freeze I032 AD3/AD4)
+# Scale-free criterion (iii): kappa must sit below R3's predicted normalized
+# recovery; certified minimum across measurement shapes (records/
+# pipeline_cert_I032_run3.csv, attenuation rows, column r3_norm_recovery).
+_RUN3 = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..',
+                     'records', 'pipeline_cert_I032_run3.csv')
+try:
+    _r = pd.read_csv(_RUN3)
+    R3_NORM_RECOVERY = float(_r[_r.reading == 'attenuation'].r3_norm_recovery.min())
+except Exception:          # record absent: criterion reported as not evaluated
+    R3_NORM_RECOVERY = None
+# AUDIT: the confirmatory analysis set. Dose, framing, pilot and pool sessions
+# share p2_regime labels with the core and must never enter H1a/H1b.
+CONFIRMATORY_PREFIXES = ('main_confirmatory', 'cell_', 'bots_')
 SUSPICION_CUT = None      # pilot-calibrated (prereg: applied blind); None = off
 UNMOVED_CUT = None        # pilot-calibrated partial-mover screen; None = off
 
@@ -137,6 +151,8 @@ def per_participant(trials, ratings):
             adapt = np.polyfit(trail_at[:k][~np.isnan(trail_at[:k])],
                                ent[:k][~np.isnan(trail_at[:k])], 1)[0]
         p1r = ra[ra.phase == 1].fairness
+        endp2 = ra[(ra.t >= 280) & (ra.t <= 300)].fairness.mean()
+        late3 = p3r[p3r.t > 375].fairness.mean() if len(p3r) else np.nan
         rows.append(dict(
             participant=pid, p2_regime=meta.cell_p2_regime,
             restoration=meta.restoration, bot_kind=meta.bot_kind,
@@ -147,8 +163,9 @@ def per_participant(trials, ratings):
             lag=m_rat - m_beh, p3_slope=slope, adapt=adapt,
             p1_sd=p1r.std(ddof=1) if len(p1r) > 2 else np.nan,
             f3_late=p3r[p3r.t > 375].fairness.mean() if len(p3r) else np.nan,
-            recovery=(p3r[p3r.t > 375].fairness.mean() - f[2])
-                     if len(p3r) else np.nan))
+            recovery=(late3 - f[2]) if len(p3r) else np.nan,
+            end_p2=endp2, d3=(late3 - endp2) if len(p3r) else np.nan,
+            config_name=(meta.config_name if 'config_name' in tr.columns else '')))
     return pd.DataFrame(rows)
 
 
@@ -182,7 +199,16 @@ def run(path, out_md):
     if exlog:
         L.append("\nExclusion log: " + "; ".join(f"{p}: {r}" for p, r in exlog))
 
-    hi = pp[pp.p2_regime == 'HIGH']; lo = pp[pp.p2_regime == 'LOW']
+    # AUDIT: confirmatory set by session config; modules analysed separately
+    if pp.config_name.astype(str).str.len().gt(0).any():
+        conf = pp[pp.config_name.astype(str).str.startswith(CONFIRMATORY_PREFIXES)]
+        L.append(f"Confirmatory analysis set: {len(conf)} of {len(pp)} participants "
+                 f"(config prefixes {CONFIRMATORY_PREFIXES}).")
+    else:
+        conf = pp
+        L.append("WARNING: export has no config_name column (pre-audit export); "
+                 "all participants treated as confirmatory.")
+    hi = conf[conf.p2_regime == 'HIGH']; lo = conf[conf.p2_regime == 'LOW']
     dh = hi.drop_p2.dropna().values; dl = lo.drop_p2.dropna().values
 
     # ---- H1a (confirmatory): one-sided WMW, HIGH drops > LOW drops ----
@@ -202,31 +228,49 @@ def run(path, out_md):
         L.append("\n## H1a — too few participants per arm in this dataset.")
 
     # ---- H1b (gatekept): only if H1a rejects ----
+    # Four forms are computed and labelled; WHICH is confirmatory is fixed by the
+    # preregistration text in force (author decision after I032; records/
+    # 95_pipeline_cert_I032.md, 97_h1b_anatomy_I032pc.md):
+    #   FROZEN  two-sided rank TOST on late-P3 - P2mean within +/-delta_eq
+    #           (FAILED certification: unpowered at every slider gain; 23% false
+    #           positives vs a no-gate composite)
+    #   SI      one-sided signed-rank on c = rec - kappa*drop, all HIGH x MOD
+    #   SIc     SI on the above-median-drop half (certified candidate)
+    #   SIc-E   SIc with the end-of-P2 baseline (d3 = late-P3 - mean(t=280..300));
+    #           EXPLORATORY, not certified (I033 obligation)
     if h1a:
-        cell = hi[(hi.restoration == 'MODERATE')]
-        rec = cell.recovery.dropna().values
+        cell = hi[(hi.restoration == 'MODERATE')].dropna(subset=['recovery', 'drop_p2'])
+        rec, drp = cell.recovery.values, cell.drop_p2.values
         deq, sig = sv.delta_eq_rule(cell.p1_sd.dropna().values)
         accm = cell.acc_late.mean()
         acc_ok = accm >= 0.70
         tost_ok, p_up, p_lo = sv.h1b_tost_frozen(rec, deq)
-        ns_ok, p_ns = sv.h1b_nonsuperiority(rec, deq)
-        r3line = ""
-        r3_ok = True
-        if R3_PRED_RECOVERY is not None:
-            r3_ok = deq < R3_PRED_RECOVERY
-            r3line = (f" Criterion (iii): delta_eq {deq:.1f} "
-                      f"{'<' if r3_ok else '>='} R3 predicted recovery "
-                      f"{R3_PRED_RECOVERY:.1f} -> {'PASS' if r3_ok else 'FAIL'}.")
+        r3_abs_ok = True if R3_PRED_RECOVERY is None else deq < R3_PRED_RECOVERY
+        si_iii = None if R3_NORM_RECOVERY is None else KAPPA < R3_NORM_RECOVERY
+        c = rec - KAPPA * drp
+        up = drp > np.median(drp)
+        si_ok, p_si = sv._signed_rank_less(c, ALPHA)
+        sic_ok, p_sic = sv._signed_rank_less(c[up], ALPHA)
+        ce = (cell.d3.values - KAPPA * drp)[up]
+        sice_ok, p_sice = sv._signed_rank_less(ce[~np.isnan(ce)], ALPHA)
+        iii_txt = ("not evaluated (record absent)" if si_iii is None else
+                   f"kappa {KAPPA} {'<' if si_iii else '>='} R3 normalized recovery "
+                   f"{R3_NORM_RECOVERY:.3f} -> {'PASS' if si_iii else 'FAIL'}")
+        verdict = lambda ok: 'PASS' if (acc_ok and ok and si_iii is not False) else 'FAIL'
         L.append(f"\n## H1b (co-confirmatory, gatekept) — HIGH x MODERATE "
-                 f"(n = {len(cell)})\n"
-                 f"late-P3 accuracy = {accm:.3f} (floor 0.70: "
-                 f"{'PASS' if acc_ok else 'FAIL'}); sigma_r = {sig:.1f}, "
-                 f"delta_eq = {deq:.1f}; mean recovery = {np.mean(rec):.1f} pts. "
-                 f"Frozen two-sided rank TOST: {'PASS' if tost_ok else 'FAIL'} "
-                 f"(p_upper = {p_up:.3g}, p_lower = {p_lo:.3g}); one-sided "
-                 f"non-superiority form: {'PASS' if ns_ok else 'FAIL'} "
-                 f"(p = {p_ns:.3g}).{r3line} The confirmatory form is the one "
-                 f"fixed in the preregistration text in force.")
+                 f"(n = {len(cell)}; above-median-drop half n = {int(up.sum())})\n"
+                 f"(i) late-P3 accuracy = {accm:.3f} (floor 0.70: "
+                 f"{'PASS' if acc_ok else 'FAIL'}); scale-free (iii): {iii_txt}.\n"
+                 f"- FROZEN two-sided TOST (failed certification): sigma_r = {sig:.1f}, "
+                 f"delta_eq = {deq:.1f}, mean rec = {np.mean(rec):.1f}: "
+                 f"{'PASS' if (acc_ok and tost_ok and r3_abs_ok) else 'FAIL'} "
+                 f"(p_upper {p_up:.3g}, p_lower {p_lo:.3g}).\n"
+                 f"- SI (all): {verdict(si_ok)} (p = {p_si:.3g}).\n"
+                 f"- **SIc (certified candidate)**: {verdict(sic_ok)} (p = {p_sic:.3g}).\n"
+                 f"- SIc-E end-of-P2 baseline (exploratory, uncertified): "
+                 f"{verdict(sice_ok)} (p = {p_sice:.3g}); mean d3 = "
+                 f"{np.nanmean(cell.d3.values):.1f}.\n"
+                 f"The confirmatory form is the one fixed in the preregistration in force.")
     else:
         L.append("\n## H1b — gatekept: not tested (H1a did not reject).")
 
@@ -287,29 +331,20 @@ def run(path, out_md):
         L.append("\n## H5 — shared-failure cell absent from this dataset "
                  "(pilot-gated).")
 
-    # ---- dose module (when cells present) ----
-    doses = {}
-    if 'dose_cell' in trials.columns:
-        pass
-    # dose cells are identified by session config name in the export's session
-    # column convention dose_45/dose_55; DESIGN-DECISION: the .65 point is the
-    # HIGH confirmatory arm.
-    sess = trials.groupby('participant').session.first()
-    pp2 = pp.merge(sess.rename('session_code'), left_on='participant',
-                   right_index=True, how='left')
-    d45 = pp2[pp2.session_code.astype(str).str.contains('dose_45', na=False)].drop_p2.dropna().values
-    d55 = pp2[pp2.session_code.astype(str).str.contains('dose_55', na=False)].drop_p2.dropna().values
+    # ---- dose module (SUSPENDED after I032 certification; computed if present) ----
+    cfgn = pp.config_name.astype(str)
+    d45 = pp[cfgn == 'dose_45'].drop_p2.dropna().values
+    d55 = pp[cfgn == 'dose_55'].drop_p2.dropna().values
     if len(d45) > 10 and len(d55) > 10 and len(dh) > 10:
         rej, Cst, tst, p = sv.dose_second_difference(d45, d55, dh)
-        L.append(f"\n## Dose module — second-difference contrast "
-                 f"C = {Cst:.1f}, t = {tst:.2f}, p = {p:.4g} "
-                 f"({'reject linearity' if rej else 'no rejection'}; two-sided, "
-                 f"alpha .05, within-cell-centered bootstrap).")
+        L.append(f"\n## Dose module (SUSPENDED: failed certification, E6) — "
+                 f"second difference C = {Cst:.1f}, t = {tst:.2f}, p = {p:.4g} "
+                 f"({'reject linearity' if rej else 'no rejection'}; descriptive only).")
     else:
         L.append("\n## Dose module — dose cells absent from this dataset.")
 
     # ---- framing probe (when present) ----
-    fr = pp2[pp2.session_code.astype(str).str.contains('framing', na=False)].drop_p2.dropna().values
+    fr = pp[cfgn == 'framing_probe'].drop_p2.dropna().values
     if len(fr) > 10 and len(dl) > 10:
         rejf, zf = sv.framing_test(fr, dl)
         L.append(f"\n## Framing probe — one-sided WMW framing vs LOW: z = {zf:.2f} "

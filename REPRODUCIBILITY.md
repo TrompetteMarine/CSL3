@@ -98,5 +98,27 @@ Frozen design files (`00_freeze_*.yaml`), all result records (JSON/CSV), the pri
 engine, the scalar audit implementation, the Rust mapping engine and its
 cross-validation report, the Julia figure scripts, the Lean sources with verification
 logs, the identification-study code (I003), the prediction generator
-(`predict_taskv3.py`), and the review-round records (simulated referee reports and
-dispositions).
+(`predict_taskv3.py`). Simulated referee reports and their dispositions are kept out
+of this public repository by design (they live with the authors' private records).
+
+## Experiment pipeline certification (I032) — how to reproduce and verify
+
+Everything below is seeded; reruns from the committed code reproduce the committed
+records bit-for-bit (verified in the I032 audit; `records/manifest_I032.sha256`
+lists the hashes).
+
+| Step | Command (from the repo root) | Output |
+|---|---|---|
+| Test suite (port vs scalar reference of `predict_taskv3.py`; statistics vs references and null levels; pipeline end-to-end; screens) | `python -m pytest -q experiment/analysis/tests` | pass/fail |
+| G2 pipeline = power engine | `python experiment/analysis/g2_consistency.py` | `records/g2_consistency.csv` |
+| S7 suspicion-contamination addendum | `python analysis/power_free_s7.py` | `records/power_free_s7.csv` |
+| G1 rho recovery, market skin | `python experiment/analysis/g1_recovery.py` | `records/g1_recovery_I032.csv` |
+| Certification run 2 (H1a, frozen H1b, dose, framing) | `python experiment/analysis/pipeline_cert.py` | `records/pipeline_cert_I032{,_calib}.csv` |
+| Certification run 3 (H1b-SI/SIc, heterogeneity) | `python experiment/analysis/pipeline_cert_run3.py` | `records/pipeline_cert_I032_run3.csv` |
+| Post-hoc H1b anatomy and baseline test | `python experiment/analysis/explore_h1b_anatomy.py`; `... explore_h1b_baseline.py` | `records/h1b_*_I032pc.*` |
+| oTree bots (all configs; reload/duplicate robustness) | `cd experiment && otree test bots_refresh 12` (and each `bots_*`, `pilot_*`, `pool_rich`) | pass/fail |
+| Hash check | `sha256sum -c records/manifest_I032.sha256` | OK lines |
+
+Run order matters only for run 3 and the anatomy scripts, which read
+`records/pipeline_cert_I032_calib.csv` written by run 2. Freezes, addenda and the
+post-close audit are in `freezes/00_freeze_I032.yaml` and `records/98_audit_I032.md`.

@@ -40,7 +40,7 @@
 
   <div class="db-peer">
     Trader board — previous participant: last ticket paid <b id="peerR">–</b>,
-    overall rate <b id="peerRate">–</b>
+    win rate over their last <span id="peerWin">15</span> rounds <b id="peerRate">–</b>
   </div>
 </div>
 
@@ -108,6 +108,7 @@
   const fb = document.getElementById('fb');
   const market = (js_vars.skin !== 'bandit');
   document.getElementById('skinNote').textContent = market ? 'ticket market' : '';
+  if (js_vars.peer_window) document.getElementById('peerWin').textContent = js_vars.peer_window;
 
   function lock(b) { L.disabled = b; R.disabled = b; }
   function send(side) {
@@ -169,8 +170,11 @@
   };
 
   function liveRecv(data) {
+    if (data.duplicate) return;   // AUDIT: ignore duplicate acknowledgements
     if (data.type === 'trial') {
+      // AUDIT: also the resume payload after a reload (state kept server-side)
       document.getElementById('tNow').textContent = data.t;
+      if (data.points !== undefined) document.getElementById('pts').textContent = data.points;
       if (market) {
         document.getElementById('tkLeft').textContent =
           (data.good_side === 'left') ? data.good_ticket
@@ -186,7 +190,11 @@
         document.getElementById('prLeft').parentElement.style.display = 'none';
         document.getElementById('prRight').parentElement.style.display = 'none';
       }
-      lock(false); t0 = performance.now();
+      blockDone = !!data.block_done;
+      queue = (data.pending || []).slice();
+      if (queue.length) { lock(true); nextModal(); }
+      else if (blockDone) { document.getElementById('form').submit(); }
+      else { lock(false); t0 = performance.now(); }
     }
     if (data.type === 'feedback') {
       document.getElementById('tNow').textContent = data.t;
