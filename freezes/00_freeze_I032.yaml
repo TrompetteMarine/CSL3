@@ -352,6 +352,30 @@ pre_run_addendum_AD2:  # dated 2026-11-09T12:45Z, BEFORE the G1 run
     would have broken comparability. The primary criterion r(rho_hat, rho) >= .7
     is unchanged."
 
+# ------------------------------------------------- run-1 defect (recorded verbatim)
+run1_defect:  # 2026-11-09T~13:10Z, discovered mid-run, BEFORE any result was read as evidence
+  what: "pipeline_cert.py passed kind='gate'; market_generator.simulate_latent
+    branched on kind=='diss', so 'gate' fell through to the else-branch and ran
+    the R1-global (fixed-hypothesis Bayesian) kernel. Every 'gate' H1a cell and
+    every 'gate' dose cell in run 1 therefore measured R1-global, not the gate."
+  symptom: "gate cells returned theta~0.003-0.10 and H1a power 0.000; calibration
+    pinned the attenuation at its 1.5 ceiling for every shape (theta never
+    reached .592). This is R1-global's REVERSED contrast (latent HIGH drop -0.3
+    vs LOW +63), which is why it looked like a sign flip."
+  diagnosis: "direct latent measurement confirmed the kernels themselves are
+    correct (diss HIGH +43.5 / LOW +24.3, gap +19.2 vs frozen +21.5; R3 gap +6.9;
+    R1-global -63.5; R4 -0.2); the defect was the dispatch, not the model"
+  fix: "'gate' aliased to 'diss'; any unknown kind now RAISES (no silent default
+    kernel). Verified 'gate' bit-identical to 'diss' on a fixed seed."
+  scope: "run 1 is INVALID in full and is not used for any number; its log is
+    preserved as records/pipeline_cert_I032_run1_INVALID.log. G1 (own
+    self-contained generator) and S7/G2 (frozen power engine) are unaffected.
+    Run 2 uses the IDENTICAL frozen spec, seeds and expected outcomes — no
+    expected outcome, cell, or threshold was changed after seeing run 1."
+  lesson_for_D: "a silent fall-through in generator dispatch is a pipeline
+    failure mode of exactly the kind certification exists to catch; recorded as
+    a pipeline-integrity finding"
+
 # ------------------------------------------------------------------ discipline
 invariants:
   - "freeze precedes every certification run; pre-run addenda only, dated"

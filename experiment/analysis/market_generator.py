@@ -55,6 +55,15 @@ def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
       acc1/acc2/acc3/acc_late (n,) accuracy means; resto (n,) str array;
       rho (n,) frozen mixture.
     """
+    # Kind guard (I032 run-1 defect): 'gate' is an alias of 'diss'; any other
+    # unknown kind RAISES. Run 1 passed 'gate', which silently fell through to
+    # the else-branch below and ran the R1-global kernel, invalidating every
+    # gate and dose cell (records/pipeline_cert_I032_run1_INVALID.log).
+    if kind == 'gate':
+        kind = 'diss'
+    if kind not in ('diss', 'rival', 'rival_us', 'rival_au'):
+        raise ValueError(f"unknown generator kind {kind!r}")
+
     # participant-level factors
     m, f = resto_mix
     resto_full = (np.arange(n) % (m + f)) >= m          # 2:1 MODERATE:FULL
