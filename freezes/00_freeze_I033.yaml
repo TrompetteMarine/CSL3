@@ -164,3 +164,50 @@ author_gated: "adoption of the theory-edge design basis; D-I033 (replay board, P
   screen (not modelled; changes salience only); payment"
 flags_not_patched: "the confirmatory ABM trap needs a fast gate (s* = .895); the
   manuscript does not state this speed edge"
+
+# =================================================================== ADDENDUM AD-S1 (pre-run, 2026-11-09 ~17:10Z)
+# Author directive: "humans can't do 450 rounds ... use ABMs to calibrate everything
+# that is not human-necessary, and focus the number of humans to the minimal amount."
+AD_S1_design_minimisation:
+  human_necessary: "only (1) whether the gate exists in people (H1a, H1b), (2) the
+    measurement gain/noise of the sliders (pilot), (3) whether human ratings move
+    UP at all (FULL restoration: rules out a ratings-only-go-down artefact that
+    would mimic a moderate-restoration flatline), (4) the human rigidity (rho)
+    distribution. Everything else (effect sizes, edges, kappa, N, phase lengths,
+    odds, cadence) is set by simulation."
+  generator: "experiment/analysis/design_generator.py (frozen kernels; bit-identical
+    to market_generator at 150/150/150, tests/test_design_generator.py)"
+  cells: "HIGH x MOD (board HIGH in P2-P3), LOW x MOD (board LOW), HIGH x FULL
+    (board HIGH; small positive control). H1a = HIGH x MOD vs LOW x MOD drop (FULL
+    not pooled; conservative)."
+  grid: "T1 in {40, 60}; T2 in {60, 90, 120}; T3 in {45, 75}; P2 odds in
+    {(.30,.15), (.25,.10)}; cadence 5; mu_ref .65; MODERATE .45/.35; FULL .65/.35;
+    plus the 150/150/150 baseline"
+  points: "P0-P4 of T2_points; P4's chi recomputed per design as chi_min(.25) at
+    p = .77*good + .23*bad of that design's P2 odds"
+  kappa: "per design by the frozen T5 rule (midpoint of max gate and min R3 latent
+    recovery fraction over inside points)"
+  power: "M2 measurement, a = .25 (primary) and .5; B = 200 subsamples from 12k
+    pools per cell; n grid {40,60,80,100,130,160,200,250,320};
+    n_min = smallest grid n (linear interpolation) with H1a >= .90 AND
+    conjunction SId-S x SId-BA >= .90 at EVERY inside point; n_F_min = smallest n
+    in {20,30,40,60,80} with one-sided signed-rank (.005) HIGH x FULL rec_end > 0
+    power >= .90 at every inside point"
+  session_minutes: "5 + (2.0 s x rounds + 4.5 s x rating pairs + 4 s x forecasts
+    (every 15) + 30 s WTP)/60  (reproduces ~29 min at 450 rounds)"
+  stage_2_selection: "the 3 designs with smallest total N = 2 n_min + n_F_min among
+    those with session <= 15 min, plus the baseline: conjunction false positives
+    (R3 chi .4/.6, composite, R3-int eta .01) at their n_min for a in {.25, .5, 1};
+    worst shape M5 power at n_min; A0 in {.4, .6} power at n_min; rho
+    classification AUC (.002 vs .02) from the LOW x MOD entitlement-slider drop
+    end-P1 -> end-P2 at a = .25"
+  seeds: "133400 (stage 1), 133500 (stage 2)"
+  expected:
+    ES1: "shorter P2 lowers the gate's depth and the H1a gap; n_min rises as T2
+      falls; at T2 = 60 n_min may exceed 320"
+    ES2: "harsher P2 (.25/.10) raises the erosion rate and partly compensates"
+    ES3: "at least one design with <= 15 min and <= 250 rounds reaches n_min <= 250
+      per cell at a = .25 (uncertain)"
+    ES4: "n_F_min <= 40"
+    ES5: "rho classification AUC falls in short designs (slow rho is a 500-trial
+      clock); the rigidity output may need a dedicated module"
