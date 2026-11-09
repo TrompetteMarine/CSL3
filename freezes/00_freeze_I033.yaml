@@ -232,3 +232,12 @@ AD_S2_after_stage1:
     design at rating cadence 3 (power curve at a = .25 and .5; session minutes
     recomputed), to test whether denser measurement substitutes for gain."
   script: "experiment/analysis/design_search_I033_stage2.py (seed 133500)"
+
+# =================================================================== AD-S2 RESULT (stage 2 scorecard, verbatim)
+AD_S2_result:
+  record: "records/design_search_I033_stage2.txt; memo records/102_design_minimisation_I033.md"
+  ES5: "PASS (small). rho classification AUC at a = .25: baseline .714; short designs
+    .675-.691. Weak in every design."
+  unexpected: "initial entitlement A0 = .4 collapses the conjunction at the ratio edge
+    in every design incl. 450 rounds (.00-.01); A0 = .6 weakens H1a (worst .49-.88).
+    Short designs leak against R3-int eta .01 at full gain (.195-.335; baseline 0)."

@@ -111,3 +111,9 @@ details not retrieved).
 |---|---|---|---|
 | Lakens, D., Scheel, A. M. & Isager, P. M. (2018) Equivalence testing for psychological research: a tutorial. *AMPPS* 1(2). doi:10.1177/2515245918770963 | V-claim (abstract) | equivalence tests against a smallest effect size of interest (SESOI); the paper explains a range of approaches to setting the SESOI. NOT verified: any statement that the SESOI may be taken from a theory's prediction (full text not retrieved) — not attributed | APS journal page; CORE record |
 | Gelman, A. & Carlin, J. (2014) Beyond power calculations: assessing Type S (sign) and Type M (magnitude) errors. *Perspect. Psychol. Sci.* 9(6). doi:10.1177/1745691614551642 | V-claim (abstract) | design calculations for sign and magnitude errors; the hard part is choosing plausible effect sizes from external information | APS journal page |
+
+## Design-minimisation addendum (2026-11-09; records/102_design_minimisation_I033.md)
+
+| Reference | Level | What was verified | Where |
+|---|---|---|---|
+| Wittes, J. & Brittain, E. (1990) The role of internal pilot studies in increasing the efficiency of clinical trials. *Stat. Med.* doi:10.1002/sim.4780090113 | V-claim (abstract) | an internal pilot designates part of the main trial as a pilot phase; preselected parameters are recomputed and the sample size recalculated; the final analysis uses all data; in a two-normal-means example the α effect was negligible. Volume/pages not re-checked | Scilit record (abstract); DOI from the publisher link |
