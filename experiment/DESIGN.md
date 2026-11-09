@@ -136,8 +136,10 @@ filing** (records/95_pipeline_cert_I032.md). The frozen form above failed
 certification in both directions. *Power:* at the design basis the
 gate-vs-utility P3 dissociation compresses to about 2 slider points, inside
 the 5-point band, so gate verdict power is 0.000 in every measurement shape.
-It is also 0.000 at full scale, where the gate's real P3 decline lies outside
-the band. *Specificity:* a population with no gate in anyone (R3 types plus R4
+It is also 0.000 at full scale. *(Erratum, post-close: not because the gate
+declines in P3. Measured from the end of P2 it is flat, −3.9 points against
+R3's +12.4. The frozen statistic's P2-mean baseline books the gate's
+unfinished P2 collapse as P3 change; records/97_h1b_anatomy_I032pc.md.)* *Specificity:* a population with no gate in anyone (R3 types plus R4
 types) passes H1a at .92, and the frozen H1b then declares the gate in 23% of
 replicates. The pilot cannot fix this, because the defect is in the form of
 the test, not in a constant.
@@ -147,7 +149,11 @@ The certified candidate, frozen before it was run (freeze I032 AD3/AD4), is
 the cohort median; compute c_i = (late-P3 − P2 fairness) − κ·(P1 − P2 fairness)
 with κ = .25; reject H0: median c_i ≥ 0 by a one-sided Wilcoxon signed-rank
 test at α = .005. The accuracy floor .70 still applies, and so does the
-scale-free (iii): κ < R3's normalized recovery. Its ingredients are
+scale-free (iii): κ < R3's normalized recovery. Caveat (post-close anatomy): H1b-SIc inherits the P2-mean baseline, and at
+the design basis its power leans on the gate's P2-collapse ramp, which any
+slowly integrating rival would share; an end-of-P2 baseline is specific but
+underpowered there (.27). Both need I033 certification against an
+integrating-utility rival. Its ingredients are
 attenuation-invariant (a subject's recovery is measured against their own
 drop), and conditioning on high-drop subjects tests the gate's same-person
 conjunction, which the composite rival cannot mimic. Certified results: gate

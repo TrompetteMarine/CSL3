@@ -14,8 +14,12 @@ market-skinned synthetic cohorts with known truth, the frozen absolute-band
 H1b never confirms the gate when the gate is present. Its power is .000 at the
 design basis, because matching the gate to θ = .592 compresses the P3
 dissociation to about 2 slider points inside a 5-point band. It is also .000 at
-full scale, because the gate *declines* in P3 rather than flatlining and leaves
-the band. And it confirms a gate that is absent 23% of the time when the
+full scale. *(Erratum, post-close: I first wrote that this is because the gate
+declines in P3 rather than flatlining. That is wrong. Measured from the end of
+P2, the gate's restoration response is −3.9 points against R3's +12.4, which
+is a flatline. The frozen statistic's P2-mean baseline books the gate's still
+unfinished P2 collapse (−28.7 of −32.6) as a P3 change. See
+records/97_h1b_anatomy_I032pc.md.)* And it confirms a gate that is absent 23% of the time when the
 population mixes utility types with group-contingent types. A candidate
 frozen before it was run, H1b-SIc, is powered (.904–.966) and specific (.000)
 in every simulated cell. It compares each high-drop participant's P3 recovery
@@ -56,11 +60,13 @@ non-specific, or commission a different form for certification. Nothing can be
 filed until this is settled. (2) **Dose module (180 participants, roughly
 £1.1k):** drop it, re-specify it as the P3-slope test and certify that first
 (I033), or keep it as a descriptive χ readout. (3) **Main text:** the
-certification contradicts three stated items, flagged and not edited: Table 1's
-H1b row and its test, the experiment paragraph's band-from-pilot-noise
-sentence and power footnote, and "flatlining under moderate restoration (43 and
-14)", where the generator's own numbers show a decline. Whether and when to
-revise them is the author's call. (4) **Market display:** whether to show
+certification contradicts two stated items, flagged and not edited: Table 1's
+H1b *test* cell ("TOST band ±δ_eq from pilot noise"), and the experiment
+paragraph's band-from-pilot-noise sentence and power footnote. *(Erratum,
+post-close: I first listed a third, "flatlining under moderate restoration (43
+and 14)", as contradicted by a decline. It is not contradicted; the gate does
+flatline, and the prediction column of Table 1 is correct. Withdrawn.)*
+Whether and when to revise the two is the author's call. (4) **Market display:** whether to show
 market-maker prices at all (fixed 50/50 quotes against an experienced ~65%
 rate could seed a "mispriced market" suspicion, which is harmless only while
 it is symmetric across arms). (5) Unchanged and still author-side: pilot

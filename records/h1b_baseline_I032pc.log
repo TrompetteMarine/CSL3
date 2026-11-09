@@ -1,0 +1,13 @@
+== B1 latent restoration response d3 = late-P3 - endP2 (MODERATE, HIGH arm, n=40000) ==
+gate      endP2  25.4  late-P3  21.5  d3 mean   -3.9  (frozen rec  -32.6) | P3 HIGH d3  -9.5, P3 LOW d3  +1.9
+rival_au  endP2  79.7  late-P3  92.1  d3 mean  +12.4  (frozen rec  +12.8)
+rival_us  endP2  85.2  late-P3  60.9  d3 mean  -24.3  (frozen rec  -34.7)
+
+== B2 measured verdict rates (gated by H1a + accuracy floor; B = 200) ==
+gate, a*=.0578           [power ] H1a 0.960 | S0 (certified SIc) 0.960 | S1 end-baseline 0.270 | S2 end-baseline+high-drop 0.030
+R3, a*=.0578             [false+] H1a 0.145 | S0 (certified SIc) 0.000 | S1 end-baseline 0.000 | S2 end-baseline+high-drop 0.000
+gate, a=1                [power ] H1a 1.000 | S0 (certified SIc) 1.000 | S1 end-baseline 1.000 | S2 end-baseline+high-drop 1.000
+R3, a=1                  [false+] H1a 1.000 | S0 (certified SIc) 0.000 | S1 end-baseline 0.000 | S2 end-baseline+high-drop 0.000
+composite R3+R4, a=1     [false+] H1a 0.915 | S0 (certified SIc) 0.000 | S1 end-baseline 0.010 | S2 end-baseline+high-drop 0.000
+gate+R4 mixture, a=1     [power ] H1a 0.965 | S0 (certified SIc) 0.965 | S1 end-baseline 0.965 | S2 end-baseline+high-drop 0.965
+

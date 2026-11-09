@@ -552,3 +552,24 @@ closing_record:
   next: "author decisions (H1b form; dose module; main-text H1b wording); I033
     candidates: freeze+certify the P3-slope dose test; attenuated-composite cell;
     pilot (author-gated)"
+
+# ======================================================= POST-CLOSE ERRATUM (2026-11-09)
+post_close_erratum:
+  found_by: "post-hoc anatomy exploration (records/97_h1b_anatomy_I032pc.md),
+    scripts committed with their questions before running"
+  wrong_statement: "closing report, cert record E11 row, DESIGN.md H1b status and
+    the prereg amendment said the gate DECLINES in P3 under MODERATE rather than
+    flatlining, and listed main-text 'flatlining (43 and 14)' as contradicted"
+  correct_statement: "the gate flatlines: latent trust 21.7 at t=300, 21.4-22.1
+    through P3; restoration response from end of P2 = -3.9 (R3 +12.4). The frozen
+    statistic's -32.6 is -28.7 unfinished P2 collapse (P2 mean 54.2 vs end-P2 25.4)
+    + -3.9 P3. The P2-MEAN BASELINE is the defect that kills frozen-H1b power at
+    full scale, not a gate decline"
+  main_text_flags_amended: "flag 2 ('flatlining (43 and 14)' contradicted) WITHDRAWN;
+    flags 1 and 3 (H1b test cell; band-from-pilot-noise sentence/footnote) stand"
+  unchanged: "every scorecard number; the headline (frozen H1b unpowered and
+    non-specific) stands, with its mechanism corrected: baseline + scale +
+    aggregation, three separable defects"
+  new_caveat: "H1b-SIc's design-basis power leans on the same P2-mean baseline;
+    end-of-P2 baseline variant: full-scale perfect, design-basis power .27 (all) /
+    .03 (high-drop). Integrating-utility rival not simulated. I033 obligation"

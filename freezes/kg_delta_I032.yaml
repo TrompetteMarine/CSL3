@@ -94,3 +94,30 @@ integrity: {circular_proof_check: pass, application_bridge: "synthetic only; hum
   readings undecided until pilot"}
 persistence: "written to CSL3 freezes/kg_delta_I032.yaml and mirrored to the Project;
   no remote Cortex/KG service exists for this programme"
+
+# ----------------------------------------------------- post-close erratum (2026-11-09)
+erratum_post_close:
+  node_updates:
+    - id: DISS-H1b-TOST
+      amended_status: "REFUTED as a test form; mechanism CORRECTED: three separable
+        defects — (1) P2-mean baseline books the gate's unfinished P2 collapse
+        (-28.7 of -32.6) as P3 change (kills full-scale power); (2) absolute band vs
+        slider gain (band fits between gate and R3 only for a > .4 even with a correct
+        baseline; never with the P2-mean baseline); (3) pooled test of a same-person
+        conjunction (no-gate composite pooled median +2.3 inside band). The earlier
+        'gate declines in P3' mechanism is withdrawn"
+    - id: DISS-H1b-SIc
+      added_limitation: "design-basis power leans on the P2-mean-baseline ramp; end-of-P2
+        baseline variant powered at full scale (1.000) but .27/.03 at a = .058;
+        integrating-utility rival not simulated"
+  new_nodes:
+    - id: DISS-GATE-P3-FLATLINE
+      kind: model
+      status: supported-synthetic
+      statement: "under MODERATE restoration the frozen gate's trust stops collapsing at
+        restoration and stays flat (end-P2 25.4 -> late-P3 21.5, d3 -3.9; R3 +12.4;
+        R4 -24.3); split by P3 regime: HIGH -9.5, LOW +1.9"
+      evidence: "records/h1b_baseline_I032pc.txt, records/h1b_anatomy_I032pc.txt"
+  new_edges:
+    - {from: DISS-H1b-TOST, to: DISS-GATE-P3-FLATLINE, type: refuted_by,
+       note: "the baseline defect: the test reads the P2 ramp as P3 change"}
