@@ -154,8 +154,8 @@ for j, (cname, _, _) in enumerate(CELLS):
             ax.set_ylim(0, 1.0 if key == 'better' else 100)
             if key == 'fair_a025':
                 ax.set_ylim(30, 70)
-            if i == 1 and j == 2:
-                ax.legend(frameon=False, loc='lower right', fontsize=8)
+            if i == 1 and j == 0:
+                ax.legend(frameon=False, loc='lower left', fontsize=8)
         if i == 0:
             ax.set_title(cname + ('  (board held HIGH in P3)' if 'HIGH' in cname else '  (board held LOW)'),
                          color=INK, fontsize=10, loc='left')

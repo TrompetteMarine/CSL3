@@ -1,0 +1,91 @@
+Participant-view predictions at the theory edges (seed 133100; n=9000/arm; P3 regime = arm)
+fair_a1 = 100L (theory link); fair_a025 = 50 + .25(100L - 50); ent_a1 = 100A
+
+         point        cell   phase  own_rate  board_rate  wins_per_15  fair_a1  fair_a025  ent_a1  better_ticket
+      P0 paper  HIGH x MOD      P1     0.615       0.630        9.226   97.522     61.880  55.102          0.882
+      P0 paper  HIGH x MOD      P2     0.266       0.649        3.984   53.853     50.963  52.755          0.773
+      P0 paper  HIGH x MOD P3 late     0.436       0.650        6.538   15.473     41.368  54.036          0.866
+      P0 paper   LOW x MOD      P1     0.616       0.630        9.236   97.553     61.888  55.137          0.880
+      P0 paper   LOW x MOD      P2     0.264       0.284        3.958   73.055     55.764  43.833          0.760
+      P0 paper   LOW x MOD P3 late     0.427       0.427        6.406   73.366     55.842  43.173          0.791
+      P0 paper HIGH x FULL      P1     0.614       0.629        9.213   97.526     61.882  55.136          0.879
+      P0 paper HIGH x FULL      P2     0.263       0.651        3.946   53.551     50.888  52.636          0.764
+      P0 paper HIGH x FULL P3 late     0.641       0.648        9.608   57.697     51.924  58.568          0.975
+        P1 ABM  HIGH x MOD      P1     0.615       0.630        9.223   97.673     61.918  54.915          0.879
+        P1 ABM  HIGH x MOD      P2     0.266       0.650        3.985   61.223     52.806  49.522          0.770
+        P1 ABM  HIGH x MOD P3 late     0.435       0.651        6.530   38.621     47.155  50.616          0.839
+        P1 ABM   LOW x MOD      P1     0.614       0.629        9.203   97.661     61.915  54.859          0.880
+        P1 ABM   LOW x MOD      P2     0.264       0.284        3.965   73.987     55.997  43.691          0.762
+        P1 ABM   LOW x MOD P3 late     0.430       0.431        6.447   73.526     55.882  43.307          0.787
+        P1 ABM HIGH x FULL      P1     0.615       0.630        9.230   97.633     61.908  54.933          0.878
+        P1 ABM HIGH x FULL      P2     0.264       0.650        3.966   61.025     52.756  49.436          0.764
+        P1 ABM HIGH x FULL P3 late     0.644       0.651        9.653   78.215     57.054  57.509          0.978
+ P2 ratio edge  HIGH x MOD      P1     0.614       0.630        9.206   98.146     62.036  54.877          0.879
+ P2 ratio edge  HIGH x MOD      P2     0.264       0.651        3.955   65.756     53.939  49.470          0.762
+ P2 ratio edge  HIGH x MOD P3 late     0.432       0.650        6.473   56.284     51.571  50.490          0.813
+ P2 ratio edge   LOW x MOD      P1     0.612       0.630        9.182   98.089     62.022  55.001          0.877
+ P2 ratio edge   LOW x MOD      P2     0.265       0.285        3.976   78.519     57.130  43.369          0.764
+ P2 ratio edge   LOW x MOD P3 late     0.426       0.426        6.393   83.639     58.410  43.204          0.770
+ P2 ratio edge HIGH x FULL      P1     0.614       0.629        9.206   98.144     62.036  54.838          0.880
+ P2 ratio edge HIGH x FULL      P2     0.266       0.650        3.989   65.929     53.982  49.535          0.768
+ P2 ratio edge HIGH x FULL P3 late     0.641       0.652        9.621   91.819     60.455  57.283          0.970
+ P3 speed edge  HIGH x MOD      P1     0.614       0.629        9.208   97.919     61.980  54.875          0.880
+ P3 speed edge  HIGH x MOD      P2     0.264       0.651        3.956   65.086     53.772  49.454          0.766
+ P3 speed edge  HIGH x MOD P3 late     0.434       0.651        6.509   44.240     48.560  50.501          0.828
+ P3 speed edge   LOW x MOD      P1     0.612       0.628        9.187   97.863     61.966  54.776          0.877
+ P3 speed edge   LOW x MOD      P2     0.263       0.282        3.948   76.723     56.681  43.644          0.760
+ P3 speed edge   LOW x MOD P3 late     0.429       0.430        6.431   75.981     56.495  43.297          0.782
+ P3 speed edge HIGH x FULL      P1     0.613       0.628        9.193   97.871     61.968  54.942          0.875
+ P3 speed edge HIGH x FULL      P2     0.264       0.649        3.965   65.168     53.792  49.415          0.774
+ P3 speed edge HIGH x FULL P3 late     0.642       0.650        9.628   80.547     57.637  57.296          0.974
+P4 anchor edge  HIGH x MOD      P1     0.614       0.630        9.212   97.679     61.920  54.856          0.880
+P4 anchor edge  HIGH x MOD      P2     0.265       0.651        3.971   63.952     53.488  48.164          0.768
+P4 anchor edge  HIGH x MOD P3 late     0.432       0.652        6.483   49.614     49.903  49.137          0.823
+P4 anchor edge   LOW x MOD      P1     0.613       0.629        9.194   97.688     61.922  54.807          0.878
+P4 anchor edge   LOW x MOD      P2     0.264       0.284        3.965   74.623     56.156  43.442          0.761
+P4 anchor edge   LOW x MOD P3 late     0.427       0.430        6.412   74.413     56.103  43.293          0.783
+P4 anchor edge HIGH x FULL      P1     0.614       0.628        9.210   97.676     61.919  54.825          0.880
+P4 anchor edge HIGH x FULL      P2     0.266       0.649        3.991   64.198     53.549  48.187          0.774
+P4 anchor edge HIGH x FULL P3 late     0.646       0.649        9.688   84.747     58.687  57.004          0.977
+     R3 chi .4  HIGH x MOD      P1     0.614       0.629        9.216   97.926     61.982  54.960          0.881
+     R3 chi .4  HIGH x MOD      P2     0.267       0.651        4.001   81.915     57.979  49.525          0.781
+     R3 chi .4  HIGH x MOD P3 late     0.429       0.651        6.437   92.281     60.570  50.460          0.793
+     R3 chi .4   LOW x MOD      P1     0.613       0.629        9.196   97.914     61.979  54.836          0.879
+     R3 chi .4   LOW x MOD      P2     0.270       0.289        4.044   86.476     59.119  43.824          0.791
+     R3 chi .4   LOW x MOD P3 late     0.428       0.428        6.427   96.078     61.520  43.460          0.788
+     R3 chi .4 HIGH x FULL      P1     0.614       0.630        9.217   97.940     61.985  54.870          0.878
+     R3 chi .4 HIGH x FULL      P2     0.268       0.650        4.013   81.914     57.979  49.565          0.780
+     R3 chi .4 HIGH x FULL P3 late     0.640       0.648        9.606   98.357     62.089  57.333          0.977
+     R3 chi .6  HIGH x MOD      P1     0.613       0.627        9.188   97.784     61.946  54.930          0.879
+     R3 chi .6  HIGH x MOD      P2     0.268       0.650        4.018   79.373     57.343  52.622          0.781
+     R3 chi .6  HIGH x MOD P3 late     0.427       0.650        6.405   89.716     59.929  53.874          0.781
+     R3 chi .6   LOW x MOD      P1     0.613       0.627        9.199   97.775     61.944  54.951          0.877
+     R3 chi .6   LOW x MOD      P2     0.269       0.290        4.038   86.262     59.065  44.005          0.791
+     R3 chi .6   LOW x MOD P3 late     0.429       0.430        6.431   95.998     61.500  43.531          0.782
+     R3 chi .6 HIGH x FULL      P1     0.613       0.630        9.199   97.709     61.927  55.112          0.878
+     R3 chi .6 HIGH x FULL      P2     0.268       0.651        4.012   79.243     57.311  52.760          0.778
+     R3 chi .6 HIGH x FULL P3 late     0.639       0.650        9.589   97.887     61.972  58.496          0.971
+
+Perceptibility (median rounds after the switch until own last-15 rate first crosses half-way)
+         point        cell  p2_switch_rounds  p3_switch_rounds  own_late_p1  own_late_p2  own_late_p3
+      P0 paper  HIGH x MOD               7.0               6.0        0.628        0.268        0.435
+      P0 paper   LOW x MOD               7.0               6.0        0.627        0.266        0.427
+      P0 paper HIGH x FULL               7.0               6.0        0.627        0.268        0.640
+        P1 ABM  HIGH x MOD               7.0               6.0        0.626        0.269        0.435
+        P1 ABM   LOW x MOD               7.0               6.0        0.627        0.266        0.430
+        P1 ABM HIGH x FULL               7.0               6.0        0.627        0.270        0.643
+ P2 ratio edge  HIGH x MOD               7.0               6.0        0.625        0.266        0.432
+ P2 ratio edge   LOW x MOD               7.0               6.0        0.623        0.270        0.426
+ P2 ratio edge HIGH x FULL               7.0               6.0        0.624        0.272        0.641
+ P3 speed edge  HIGH x MOD               7.0               6.0        0.626        0.268        0.434
+ P3 speed edge   LOW x MOD               7.0               6.0        0.626        0.265        0.428
+ P3 speed edge HIGH x FULL               7.0               6.0        0.629        0.268        0.641
+P4 anchor edge  HIGH x MOD               7.0               6.0        0.628        0.269        0.432
+P4 anchor edge   LOW x MOD               7.0               6.0        0.627        0.268        0.427
+P4 anchor edge HIGH x FULL               7.0               6.0        0.627        0.269        0.647
+     R3 chi .4  HIGH x MOD               7.0               6.0        0.628        0.272        0.429
+     R3 chi .4   LOW x MOD               7.0               5.0        0.626        0.274        0.427
+     R3 chi .4 HIGH x FULL               7.0               6.0        0.630        0.271        0.642
+     R3 chi .6  HIGH x MOD               7.0               6.0        0.626        0.273        0.426
+     R3 chi .6   LOW x MOD               7.0               6.0        0.630        0.272        0.428
+     R3 chi .6 HIGH x FULL               7.0               6.0        0.625        0.273        0.640

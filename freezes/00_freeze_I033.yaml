@@ -1,0 +1,166 @@
+iteration_id: "KGi-DISS-I033"
+mode: "theory -> experiment calibration, frozen. This file freezes the APPROACH
+  (how the experiment is calibrated from the theory) and the certification agenda
+  that will run under it. It is written before any I033 run. Nothing here is a
+  result. No human recruitment, no OSF filing, no ethics claims (author-gated).
+  Main text not edited; contradictions are flagged, never patched."
+freeze_time: "2026-11-09T17:30Z"
+baseline:
+  repo: "github.com/TrompetteMarine/CSL3 main 2e92c17 + this freeze"
+  exploratory_inputs: "records/100_inverse_calibration_I032pc.md (+ invcal.csv,
+    inverse_calibration{,_b,_c}_I032pc.txt); records/101_participant_view_I033pre.md
+    (+ pov_theory_edge_I033pre.{csv,txt}, figures/pov_theory_edge_I033pre.png).
+    All reproduce bit-identically. Parts b/c of the inverse calibration are post
+    hoc in form; this freeze is what makes them testable."
+user_directive: "2026-11-09: calibrate the experiment from what the theory says we
+  should see (the paper's ABM), not from a generic design-basis effect; see how the
+  theory edge works inside the market task and from the participant's point of
+  view; freeze the theory -> experiment approach."
+
+# =================================================================== THE APPROACH
+approach:
+  principle: "The theory supplies the latent effect; the pilot supplies the
+    measurement gain; the design supplies N. The experiment is powered at the
+    EDGE of the region where the paper's own ABM headline holds, never at the
+    paper's point prediction (no circularity). The external-prior basis theta =
+    .592 is kept as a reported robustness row only."
+
+  T1_theory_region:
+    definition: "R = { gate parameter vectors at which the paper's pre-declared
+      confirmatory ABM cell yields defensive wrong consensus with probability
+      >= .5 } intersected with the task's relative-deprivation permanence
+      frontier chi >= chi_min(ratio; mu_ref, p_own)."
+    abm_cell: "A0 .8, lambda .7, rho .002, chi .4, n 200, T 600, Gamma .1, wrong
+      initial values (.62/.38 vs .38/.62); engine mode invcal; 200 runs per cell"
+    edges_frozen:
+      s_star: 0.895          # speed scaling of (nuF, nuR); P_dw .82 at s=1, .21 at .8
+      ratio_star: 0.2918     # nuR/nuF; P_dw .54 at .29, .315 at .30
+      chi_min_at_ratio_025: 0.322
+      chi_min_at_ratio_star: 0.363
+      chi_min_formula: "(A*(p) - p)/(mu_ref - p), A*(p) = .3 + ratio*p/(1-p),
+        p = .27 (own P2 rate), mu_ref = .65"
+    monte_carlo_note: "200 runs per cell: binomial s.e. <= .035 per P_dw; the
+      edges are interpolations, not estimates with stated intervals. Agenda E
+      checks them at neighbouring cells."
+
+  T2_points:
+    inside: {P0_paper: [1.0, 0.25, 0.6], P1_abm_chi: [1.0, 0.25, 0.4],
+             P2_ratio_edge: [1.0, 0.2918, 0.4], P3_speed_edge: [0.895, 0.25, 0.4],
+             P4_anchor_edge: [1.0, 0.25, 0.322]}   # [s, ratio, chi]
+    outside_reference: {P5_joint_corner: [0.895, 0.2918, 0.363]}   # reported, not required
+    rule: "a test form is admissible only if it is powered at EVERY inside point"
+
+  T3_market_mapping:
+    generator: "experiment/analysis/market_generator.py (frozen kernels; the
+      optional trace output draws no random numbers)"
+    design_variant: "D-I033: P3 board regime = the participant's P2 arm (HIGH
+      stays HIGH, LOW stays LOW); HIGH displayed level mu_ref .65 (centre of the
+      proposed replay band [.60, .72]); restoration MODERATE .45/.35 and FULL
+      .65/.35 at 2:1 within arm; windfalls non-evidential; dose module dropped.
+      Adoption of D-I033 is author-gated; this freeze certifies it as a
+      candidate."
+    measurement: "shapes M1-M6 + AR(1) anchoring variant (freeze I032 + AD1);
+      gain grid a in {1, .5, .35, .25, .15, .1}; a_cert = .25"
+
+  T4_participant_view_predictions:
+    frozen_artefacts: "records/pov_theory_edge_I033pre.csv (per-rating series by
+      point x cell), .txt (per-phase table), figures/pov_theory_edge_I033pre.png"
+    use: "descriptive reference trajectories the pilot is laid against (shape of
+      the P2 collapse, P3 response by cell, entitlement gap). Not a test."
+
+  T5_tests:
+    H1a: "one-sided WMW at .005 on the P1 -> P2 fairness drop (mean P1 ratings minus
+      mean P2 ratings), HIGH vs LOW, restoration pooled, preregistered screens"
+    H1b: "conjunction (intersection-union, each leg at .005) of
+      SId-S: HIGH x MODERATE, board held HIGH in P3; select subjects whose
+        depth_sel = mean(P1 ratings 1-15) - mean(P2 ratings 51-56) is above the
+        cell median; on them test c = (late-P3 mean - endP2) - kappa*(mean(P1
+        ratings 16-30) - endP2), endP2 = mean(P2 ratings 57-60), one-sided
+        Wilcoxon signed rank H0: c >= 0;
+      SId-BA: unconditional c (P1 ratings 1-30) in HIGH x MODERATE (board HIGH)
+        vs LOW x MODERATE (board LOW), one-sided WMW, HIGH lower;
+      plus the accuracy floor .70 (late-P3 better-ticket share, HIGH x MOD)."
+    rating_index_convention: "ratings numbered 1-90 (every 5th round); P1 = 1-30,
+      P2 = 31-60, P3 = 61-90, late P3 = 76-90"
+    kappa: 0.364
+    kappa_rule: "midpoint of (max gate latent recovery fraction rec_end/depth over
+      inside points = .169, ratio edge) and (min R3 fraction over the same points
+      = .560, P0). Fixed here; not re-tuned on certification draws."
+
+  T6_rivals: "R1-global, R4 group-contingent, R3 aspiration-in-utility (chi .4 and
+    .6), no-gate composite (R3 share .5595 + R4; I032 AD4), integrating-utility
+    R3-int = EMA_eta of R3's latent trust, eta in {.02, .01, .005}"
+
+  T7_pilot_rule:
+    statistic: "HIGH x MODERATE mean measured depth D = mean(P1 ratings) - mean(last
+      4 P2 ratings), slider points, after preregistered screens"
+    threshold: "D* = the expected measured depth at the inside point with the
+      smallest latent depth, at a = a_cert, under shape M2 (computed in agenda C
+      on fresh seeds, then frozen by addendum before any pilot)"
+    decision: "GO if the one-sided 80% lower confidence bound of D (pilot n = 40)
+      >= D*; otherwise NO-GO for the confirmatory H1b as designed (H1a may still
+      run; the reason is reported: blunt slider or a gate weaker than the paper's
+      headline needs)"
+
+# =================================================================== AGENDA (runs under this freeze)
+agenda:
+  A_certification: "fresh base seed 133300; B = 1000 replicates per cell; points
+    P0-P5 x gains x shapes; H1a, SId-S, SId-BA, conjunction, accuracy floor;
+    false positives for every T6 rival at a in {1, .35, .15}; n = 213 per H1b
+    cell, N = 320 per arm for H1a."
+  B_sample_size: "n_min per H1b cell: smallest n in steps of 10 with conjunction
+    power >= .90 at every inside point at a = a_cert under the worst of M1-M6;
+    N_min per arm for H1a likewise. Report the worst shape."
+  C_pilot_rule: "compute D*; operating characteristics of the GO rule at pilot
+    n = 40: P(GO | inside points, a = .25) and P(GO | a = .1), all shapes."
+  D_slow_integrator: "exploratory only (no pass/fail): kinetics forms that could
+    separate the gate from R3-int eta = .005 (capped repair vs symmetric
+    relaxation, H4; FULL-vs-MODERATE threshold, H3). Output = candidate forms for
+    a later freeze."
+  E_edge_robustness: "ABM P_dw over s in {.8, .9, 1.0} and ratio in {.27, .29, .31}
+    at four neighbouring cells (lambda .6/.8 with A0 .8; A0 .75/.85 with lambda
+    .7); 200 runs per cell; seeds 62000+."
+
+# =================================================================== EXPECTED OUTCOMES (stated before running)
+expected_outcomes:
+  E1: "H1a power >= .90 at N = 320 at every inside point for a >= .1 under M1-M3
+    and M6; M4/M5 (gain heterogeneity) may need a >= .15."
+  E2: "conjunction power >= .90 at every inside point for a >= .25 under M2 (the
+    exploratory value); under M5 a >= .35 may be required."
+  E3: "conjunction false positives <= .01 against R3, R1-global, R4 and the
+    composite at every gain."
+  E4: "R3-int eta = .005: conjunction false positives > .05 at a >= .35 (expected
+    FAIL, reported verbatim; the reason agenda D exists). eta = .01: <= .02."
+  E5: "n_min per H1b cell <= 213 at a_cert under M2; possibly larger under M5."
+  E6: "pilot rule: P(GO | inside, a = .25) >= .80 and P(GO | a = .10) <= .20 under
+    M2; uncertain under M5."
+  E7: "edges move by less than .1 in s and .02 in ratio at neighbouring cells
+    (uncertain; a larger move means the theory region is cell-specific and the
+    design basis must be stated per cell)."
+
+pass_fail:
+  certified_if: "E1, E2, E3 hold under the worst shape at a_cert (or at a stated
+    larger a_cert, which then replaces .25 everywhere including D*)."
+  if_E3_fails: "the failing leg is removed from H1b and the remaining leg is
+    certified alone if E2/E3 hold for it; otherwise H1b stays OPEN."
+  if_E4_fails_as_expected: "the claim is scoped: H1b separates the gate from R3,
+    the composite and integrators with time constants up to about 100 trials;
+    slower integrators are named as unexcluded in the prereg."
+
+# =================================================================== PARTICIPANT VIEW: what the pilot must read
+participant_view_commitments:  # from records/101_participant_view_I033pre.md
+  PV1: "gain: the HIGH x MOD depth in slider points (T7) and the P1 fairness level"
+  PV2: "never-movers and anchoring: share with zero slider movement; lag-1
+    autocorrelation of P1 ratings"
+  PV3: "asymmetric suspicion: board-realness and rig-suspicion probes by arm (S7
+    tolerance ~0.2 points)"
+  PV4: "comparison strength: perceived peer success by arm; entitlement HIGH-LOW
+    gap in P2 (predicted only 5-9 points at a = 1, so it is a weak check at low
+    gain and is reported, not gated)"
+  PV5: "noticing: free-text debrief on whether payouts changed and when"
+
+author_gated: "adoption of the theory-edge design basis; D-I033 (replay board, P3
+  regime = arm, dose dropped); showing the participant's own last-15 win rate on
+  screen (not modelled; changes salience only); payment"
+flags_not_patched: "the confirmatory ABM trap needs a fast gate (s* = .895); the
+  manuscript does not state this speed edge"
