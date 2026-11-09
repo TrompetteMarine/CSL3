@@ -431,6 +431,39 @@ pre_run_addendum_AD3:  # 2026-11-09T~14:00Z — written after reading the run-2 
     reported as evidence for an author decision, never substituted into the
     prereg without that decision and a dated amendment"
 
+# ------------------------------------------------------- pre-run addendum AD4
+pre_run_addendum_AD4:  # 2026-11-09T~14:15Z, BEFORE run 3 exists
+  new_rival_identified: "COMPOSITE no-gate population: R3 types (reference effect,
+    P3 recovery) + R4 types (no reference effect, but P3 fairness DECLINE under
+    MODERATE: frozen record rival_us HIGHxMOD P3 slope -14.35/100 trials, P2->
+    late-P3 -35.7). Pooled, the composite can mimic both gate signatures (H1a
+    from R3 subjects, P3 non-recovery from R4 subjects) with no gate in anyone.
+    Neither the frozen H1b nor H1b-SI was designed against it."
+  considered_and_rejected_pre_run: "a within-subject coupling test
+    (spearman(drop_i, rec_i) < 0 for the gate). Frozen record pred_subjects.csv,
+    HIGHxMOD: spearman(drop, P3 slope) = +.475 gate, +.085 R3, +.222 R4, -.070
+    R1 — the gate's own coupling is POSITIVE, so the test cannot separate it from
+    the composite. Not frozen, not run."
+  candidate_H1b_SIc:  # drop-conditioned scale-invariant H1b
+    statistic: "H1b-SI (kappa .25) restricted to HIGH x MODERATE subjects with
+      drop_i above the cohort median (pre-stated split, analyzed cohort)"
+    rationale: "frozen record: in the composite the P3 decliners are the
+      subjects who did NOT drop in P2 (R4 drop 2.9); the high-drop subjects are
+      R3 (recover). In the gate the high-drop subjects decline. Conditioning on
+      the subjects who carry H1a tests the gate's same-person conjunction."
+  cells: "heterogeneity reading only (a = 1, M2 layer), B = 500, seed base
+    132000 + 50000: composite R3+R4 with R3 share w root-found for theta=.592;
+    mixture gate+R4 with gate share root-found; mixture gate+R3 per AD3
+    (feasibility reported); pure R3 at a = 1 (E12). Attenuated-composite cell
+    NOT run this iteration (open item: under attenuation the median split is
+    noise-dominated; stated, not tested)."
+  expected_outcomes_AD4:
+    E13: "composite (no gate): conditional H1b-SIc false-positive verdict rate
+      <= .005 + 2 MC SE. Frozen H1b and unconditional H1b-SI false-positive
+      rates REPORTED (no expectation; the vulnerability measurement). If E13
+      fails, the composite is an unaddressed rival and becomes headline item 2."
+    E14: "gate+R4 mixture and pure gate: H1b-SIc power reported (diagnostic)"
+
 # ------------------------------------------------------------------ discipline
 invariants:
   - "freeze precedes every certification run; pre-run addenda only, dated"
