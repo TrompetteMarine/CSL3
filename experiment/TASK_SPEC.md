@@ -35,10 +35,23 @@ gatekept H1a/H1b structure, N per the distribution-free arithmetic of §5.
 Reference-dose module (step-versus-line): two added cells at μ_ref = .45 and
 .55, n = 90 each, MODERATE restoration; the .65 point is the existing HIGH arm,
 so the full dose curve costs 180 participants. Preregistered prediction: the
-gate places the sustained-grievance threshold between .55 and .65 (the
-χ_min frontier of TASK_INFERENCE.md §2); the inequity-in-utility rival predicts
-a graded response ∝ (μ_ref − μ_own). The dose module's secondary payoff is a
-structural χ estimate from the frontier location.
+gate places a sustained-grievance threshold at the χ_min frontier of
+TASK_INFERENCE.md §2, while the inequity-in-utility rival predicts a graded
+response ∝ (μ_ref − μ_own). The dose module's secondary payoff is a structural
+χ estimate from the frontier location.
+
+*Amended I032 (forced by D4, a frozen-artifact inconsistency):* **where** the
+step falls depends on χ. The I028/I029 sentence "between .55 and .65" assumed
+χ = .4 (the recovery_v3 prior location). The frozen generator predict_taskv3.py
+uses χ = .6, and at μ_own = .225 that gives χ_min(.45) = .656 > .6 > χ_min(.55)
+= .454, which puts the step between .45 and .55 instead. Human χ is the unknown
+(recovered only descriptively, r = .62), so the preregistered statistic must
+not presume the location. It is the location-free second difference
+C = d̄(.65) − 2d̄(.55) + d̄(.45), tested two-sided (step-shaped curves have
+C ≠ 0, a line has C = 0) with a within-cell-centred bootstrap null (freeze
+I032 AD1). The **sign** of C then reads out where the frontier lies. The
+certification ran this module at both χ settings (records/pipeline_cert_I032.csv,
+dose section).
 
 Null-region prediction (free): P1 fairness ratings are invariant to the trader
 board (own outcomes at or above aspiration ⇒ the gate predicts no reference
@@ -65,8 +78,11 @@ table from ρ̂ to expected effect size.
 
 ## 4. Measures
 
-As DESIGN.md §5, with the market renames of §1. Order within a round: ticket
-choice → settlement → (every 5th) sliders. WTP probes at end-P2 and mid-P3.
+As DESIGN.md §5, with the market renames of §1. Order within a round (as built,
+I032): ticket choice → settlement → (rounds 300 and 375) WTP probe → (round
+t ≡ 7 mod 15) next-round settlement forecast → (every 5th round) sliders, with
+randomized start positions, step 5. WTP probes at end-P2 and mid-P3 never
+coincide with a forecast round, so a re-draw cannot race a forecast.
 Funnel debrief includes the market-specific suspicion probes ("were the
 settlements fair/random?", trader-board realness).
 

@@ -19,7 +19,10 @@ those three outputs.
 ## 2. Platform and logistics
 
 Prolific, desktop only, English-fluent, approval ≥ 97%, no prior participation in
-pilot or pool sessions. Session ≈ 28 minutes. Payment: base £4.20 (≈ £9/hr) +
+pilot or pool sessions. (I032: the approval filter is kept as a standard
+platform filter but is not a quality control. Peer et al. 2022 find
+reputation does not predict data quality on Prolific. Quality is carried by the
+in-task screens of §5 and the exclusions of §6.) Session ≈ 28 minutes. Payment: base £4.20 (≈ £9/hr) +
 performance bonus (expected £1.10, realized from points incl. windfalls) + the
 WTP endowment residue (§5). Server: the existing oTree deployment (Lightsail or
 Heroku tier as in v1); waves of ≤ 60 concurrent to protect yoking and server load.
@@ -61,6 +64,18 @@ is fair" (0–100) and "what I deserve per trial" (entitlement). RTs recorded,
 preregistered as exploratory only (the choice rule is a first-passage reduction;
 no RT claims).
 
+As built (I032), the task runs in the market skin of TASK_SPEC.md §1 (tickets,
+seeded settlement, fixed quotes, trader board); the bandit skin remains behind
+`skin='bandit'` for the pilot framing comparison. Slider conventions (forced by
+TECHNIQUES.md #10): step 5 (21 points), matching the round-to-5 measurement
+model the certification passed under; a **randomized start position on every
+elicitation**, logged, because fixed defaults on 101-point sliders draw excess
+responses at the default (midpoint included). A comprehension quiz on the
+market rules and the peer's provenance precedes the task, repeated until
+correct, with no exclusion attached (TECHNIQUES.md #7). An `iti_jitter_ms`
+session knob (off online) keeps the shared engine imaging-compatible
+(TECHNIQUES.md #14).
+
 Peer display, truthful by construction: every trial shows the running earnings of
 "another participant who previously completed this task." The displayed streams
 are drawn from the pool of real pilot-session participants (the pilot is the pool
@@ -79,15 +94,27 @@ deception anywhere in the protocol.
 3. Entitlement slider (manipulation check + the ρ identification lever; slider-
    instrumented individual ρ, synthetic recovery r = .91).
 4. Incentive-compatible legitimacy (new, preregistered secondary): at two fixed
-   points (end of P2, mid-P3) a one-shot option to pay from a dedicated 20-point
-   endowment to have the computer replace the payout rule with a fresh rule
-   generated the same way (truthful: the engine re-seeds the same generative
-   process; the phase schedule is unaffected). Willingness-to-pay = revealed
-   distrust of the standing rule. Elicited as a 0–20 price list; unspent endowment
-   paid out.
+   points (end of P2, mid-P3) a one-shot BDM option to pay from a dedicated
+   20-point endowment to have the **random draws for the remaining rounds
+   replaced with fresh draws generated the same way**. The screen states that
+   the chances each ticket pays stay exactly as set and only the random draws
+   change (I032 wording, TECHNIQUES.md #4). Truthful: the engine re-draws the
+   remaining sequence at unchanged phase rates. With this wording a participant
+   who believes the draws are fair values the switch at exactly 0, so a positive
+   WTP reveals the belief that the draws are arranged against them. (The earlier
+   "fresh rule" wording let WTP mix distrust with a belief that switching
+   redraws the rates.) Stated maximum 0–20, price drawn uniformly 1–20, BDM
+   dominance (Becker–DeGroot–Marschak 1964); unspent endowment paid out.
 5. Manipulation/believability block (post-task): perceived peer success (1–7),
-   perceived peer realness (1–7), funnel debrief (free-text purpose guess, rig
-   suspicion probe), demographics.
+   perceived peer realness (1–7), rig-suspicion probe (1–7), betting
+   familiarity (exploratory moderator), funnel debrief (free-text purpose
+   guess), demographics.
+6. Settlement forecasts (exploratory, pilot-gated): every 15 rounds
+   (t mod 15 = 7) a minimal-information binarized-scoring-rule forecast of the
+   **next** round's SQUARE settlement, one forecast paid at random. (I032 fix:
+   the first build scored a forecast against the round just settled, which a
+   SQUARE chooser had already seen.) Legitimacy is never elicited on a scored
+   report.
 
 ## 6. Hypotheses and tests (serial gatekeeping; FWER = .005)
 
@@ -125,6 +152,20 @@ Pre-stated outputs and decision rules:
   funnel, the display protocol is revised (provenance wording, stream selection)
   and the pilot repeated on the failing arm; exclusion forecast updated from the
   observed rate.
+- Differential suspicion (I032, forced by the S7 addendum,
+  records/power_free_s7.csv). Suspicion of the HIGH board is an *asymmetric*
+  contamination and threatens the level of H1a, not just its power. At
+  α = .005 the level holds within Monte Carlo error only while the residual
+  load (q̂_H − q̂_L)·ŝ·(1 − π̂) stays ≲ 0.2 points, about 3% of the design effect.
+  Here q̂ is the share flagged by the suspicion probe per arm, ŝ the drop
+  inflation among the flagged, and π̂ the blind probe's capture rate. Rule: if
+  the upper 80% bound of the pilot load exceeds 0.2, tighten the probe or revise
+  the display before filing. The suspicion-exclusion cut (`SUSPICION_CUT`) is
+  set from the pilot, blind to condition.
+- Partial slider movers: the share of ratings left at the randomized start is
+  measured; a partial-mover threshold (`UNMOVED_CUT`) is fixed before filing or
+  explicitly left off. Complete non-movers are already excluded by the
+  translated zero-movement screen (§6).
 - Slider reactivity: dense vs sparse arms compared on P2 drop and entitlement
   drift; if elicitation density moves the primary by > 0.2 SD, the main run
   adopts sparse elicitation and the power arithmetic is restated.
@@ -143,7 +184,8 @@ with the pilot covered by the same application as a named phase.
 
 ## 9. Decision rules (what refutes what)
 
-Per the preregistration draft: H1a null at sensitivity d = .25 → reference-
+Per the preregistration draft: H1a null at sensitivity θ = .570 (≈ d = .25
+under normality; I032 corrects the stale d-only wording) → reference-
 dependent gating refuted in humans; programme reverts to the theory/ABM
 contribution. H1a pass + H1b fail → reference dependence confirmed, gate not
 identified; mechanism language demoted accordingly in any resulting paper. H1a+b
@@ -159,6 +201,14 @@ stratified HIGH selection); (5) TOST/equivalence module in `pipeline.py` for H1b
 (6) framing-probe instruction variant; (7) sparse-elicitation toggle for the
 pilot arm. Nothing else changes; bots and the smoke suite re-run after each
 delta.
+
+Status (I032): all seven are built, together with the market skin and the
+I032 additions: dose-cell configs, participant-level 2:1 assignment
+(`main_confirmatory`), randomized slider starts, comprehension quiz,
+next-round forecasts, sharpened WTP wording, and the ITI-jitter knob. The full
+list is in `freezes/00_freeze_I032.yaml`. Bots pass on every bot config and on
+the bandit-skin pilot arm. `pipeline.py` v2 implements the prereg tests; gate
+G2 (agreement with the power engine) passed (records/g2_consistency.csv).
 
 ## 11. Timeline (indicative)
 

@@ -10,9 +10,16 @@ model-generated number is never used as a field prior once the lab posterior
 exists, and no lab-confirmed claim is recycled as a field prior without this
 chain being stated.
 
-**Confirmatory discipline.** Only H1 is confirmatory (one-sided Welch on the
-P1→P2 legitimacy drop, HIGH vs LOW reference; α = 0.005, N = 320/cell, d = 0.25
-design floor). P-B is a preregistered secondary; P-C is instrumental. Neither
+**Confirmatory discipline.** Only H1 is confirmatory. *Amended I032 (D1): the
+I023 wording here — one-sided Welch, N = 320/cell, d = 0.25 design floor — was
+superseded by I025 and I029 but missed by the I029 propagation; the original is
+preserved in git history.* As of I029/I032: H1a is a one-sided
+Wilcoxon–Mann–Whitney test on the P1→P2 legitimacy drop, HIGH vs LOW reference,
+α = .005, effect measured as θ = P(drop_HIGH > drop_LOW). N = 320 per arm
+post-exclusion gives power ≥ .90 at the design basis θ = .592 (certified on the
+market-skinned generator in I032: .911–.963 across shapes). The floor θ = .570
+is reported, not claimed. H1b, the gate, is gatekept behind H1a. P-B is a
+preregistered secondary; P-C is instrumental. Neither
 is promoted post hoc. Model-implied effect sizes (d = 1.8–6.6) are upper bounds
 under homogeneous agents and play no role in the design basis.
 

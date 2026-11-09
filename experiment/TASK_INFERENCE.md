@@ -16,7 +16,9 @@ institution, which is what makes "the game is rigged" objectively false and the
 rival class disciplined. From prediction markets (Hanson's market scoring rules;
 the Iowa Electronic Markets): the bet as an incentive-compatible belief statement,
 and the documented failure mode that matters to us — wishful betting by invested
-traders (the IEM partisan-trader results; "contagion of wishful thinking" in
+traders (the IEM partisan-trader results, verified I032: Forsythe et al. 1992
+§III Table 8; "contagion of wishful thinking", which is Seybert & Bloomfield
+2009, *Manag. Sci.* 55(5) — attribution added I032; in
 market settings) — which is evidence that motivated distortions survive market
 discipline, i.e., that the construct we hunt lives in this habitat. From the
 belief-elicitation literature: proper scoring is behaviourally fragile — showing
