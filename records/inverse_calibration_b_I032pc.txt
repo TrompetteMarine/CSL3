@@ -1,0 +1,30 @@
+POST-I032 exploratory inverse calibration, part b (seed 133000)
+
+latent HIGH x MOD (reference fixed): fraction = rec_end/depth  (rec_end, depth)
+  P0 paper           gate -0.118 (-8.6, 73.1)   R3 +0.560 (+10.2, 18.1)
+  P1 ABM chi         gate -0.019 (-1.1, 57.8)   R3 +0.614 (+9.0, 14.6)
+  P2 ratio edge      gate +0.169 (+8.5, 50.0)   R3 +0.614 (+9.0, 14.6)
+  P3 speed edge      gate -0.031 (-1.6, 51.9)   R3 +0.614 (+9.0, 14.6)
+  P4 anchor edge     gate +0.065 (+3.4, 51.9)   R3 +0.633 (+8.4, 13.3)
+  P5 joint corner*   gate +0.219 (+9.3, 42.3)   R3 +0.623 (+8.7, 14.0)
+kappa rule: max gate fraction (inside) = +0.169; min R3 fraction (inside) = +0.560; kappa = 0.364
+
+H1b-SId power (above-median-depth | unconditional), n = 213, alpha .005
+     a        P0 paper      P1 ABM chi   P2 ratio edge   P3 speed edge  P4 anchor edge  P5 joint corne
+ 1.000     1.00 | 1.00     1.00 | 1.00     1.00 | 1.00     1.00 | 1.00     1.00 | 1.00     1.00 | 0.94
+ 0.500     1.00 | 1.00     1.00 | 1.00     1.00 | 1.00     1.00 | 1.00     1.00 | 1.00     0.98 | 0.96
+ 0.350     1.00 | 1.00     1.00 | 1.00     0.99 | 1.00     1.00 | 1.00     1.00 | 1.00     0.76 | 0.94
+ 0.250     1.00 | 1.00     1.00 | 1.00     0.72 | 1.00     1.00 | 1.00     1.00 | 1.00     0.09 | 0.74
+ 0.150     1.00 | 1.00     0.87 | 1.00     0.01 | 0.92     0.75 | 1.00     0.23 | 1.00     0.00 | 0.40
+ 0.100     0.91 | 1.00     0.03 | 1.00     0.00 | 0.50     0.01 | 1.00     0.00 | 0.93     0.00 | 0.18
+
+false positives of H1b-SId (above-median-depth | unconditional)
+  R3 chi .6            latent frac +0.560 (rec +10.2, depth 18.1)   a=1: 0.000|0.000  a=0.35: 0.000|0.000  a=0.15: 0.000|0.000
+  R3 chi .4            latent frac +0.614 (rec +9.0, depth 14.6)   a=1: 0.000|0.000  a=0.35: 0.000|0.000  a=0.15: 0.000|0.000
+  R3-int .01 chi .4    latent frac +0.378 (rec +4.5, depth 11.9)   a=1: 0.000|0.000  a=0.35: 0.000|0.007  a=0.15: 0.000|0.005
+  R3-int .005 chi .4   latent frac +0.140 (rec +1.1, depth 7.9)   a=1: 0.000|0.843  a=0.35: 0.000|0.235  a=0.15: 0.000|0.028
+  R3-int .01 chi .6    latent frac +0.301 (rec +4.2, depth 14.1)   a=1: 0.000|0.037  a=0.35: 0.000|0.050  a=0.15: 0.000|0.018
+  R3-int .005 chi .6   latent frac +0.060 (rec +0.6, depth 9.3)   a=1: 0.060|1.000  a=0.35: 0.000|0.652  a=0.15: 0.000|0.122
+  R4 alone: latent frac -1.732 (rec -23.7, depth 13.7)
+  composite R3(0.6)+R4, above-median-depth: a=1: 0.000  a=0.35: 0.000  a=0.15: 0.000
+  composite R3(0.4)+R4, above-median-depth: a=1: 0.000  a=0.35: 0.000  a=0.15: 0.000

@@ -104,3 +104,10 @@ in the repo.
 Not used (could not verify claims): Maier & Seligman (2016) *Psychol. Rev.*
 123(4):349–367 (no abstract retrievable); Behrens et al. (2007) (journal
 details not retrieved).
+
+## Inverse-calibration addendum (post-close, 2026-11-09; records/100_inverse_calibration_I032pc.md)
+
+| Reference | Level | What was verified | Where |
+|---|---|---|---|
+| Lakens, D., Scheel, A. M. & Isager, P. M. (2018) Equivalence testing for psychological research: a tutorial. *AMPPS* 1(2). doi:10.1177/2515245918770963 | V-claim (abstract) | equivalence tests against a smallest effect size of interest (SESOI); the paper explains a range of approaches to setting the SESOI. NOT verified: any statement that the SESOI may be taken from a theory's prediction (full text not retrieved) — not attributed | APS journal page; CORE record |
+| Gelman, A. & Carlin, J. (2014) Beyond power calculations: assessing Type S (sign) and Type M (magnitude) errors. *Perspect. Psychol. Sci.* 9(6). doi:10.1177/1745691614551642 | V-claim (abstract) | design calculations for sign and magnitude errors; the hard part is choosing plausible effect sizes from external information | APS journal page |

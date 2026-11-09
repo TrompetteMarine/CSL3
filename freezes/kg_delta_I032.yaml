@@ -195,3 +195,37 @@ brainstorm_post_close:
     - id: DISS-PEER-SOURCE
       added_limitation: "rich-rule source creates the unmodeled rival R5; same-rule replay
         proposed"
+
+# ----------------------------------------------------- post-close inverse calibration (2026-11-09)
+inverse_calibration_post_close:
+  record: "records/100_inverse_calibration_I032pc.md (exploratory; parts b/c post hoc in form)"
+  new_nodes:
+    - id: DISS-TRAP-SPEED-EDGE
+      kind: model
+      status: supported-synthetic (exploratory)
+      statement: "the confirmatory trap requires a fast gate: scaling (nuF, nuR) by s gives
+        P_dw 1.00 (s>=1.5), .82 (1), .21 (.8), ~0 (<=.65); s* = .895. Ratio edge .292.
+        Not stated in the manuscript (flagged, not patched)"
+      evidence: "records/invcal.csv (engine mode invcal, 200 runs/cell)"
+    - id: DISS-DESIGN-BASIS-THEORY-EDGE
+      kind: design
+      status: proposed (author decision)
+      statement: "design basis = the theory edge (s*, ratio*, chi_min) measured at a
+        pilot-verified slider gain; theta=.592 kept as an external-prior row; H1a powered
+        >=.9 at N=320 for a>=.1, N_.9 <= 115/arm at a>=.25"
+      evidence: "records/inverse_calibration_I032pc.txt"
+    - id: DISS-H1b-SID
+      kind: statistical
+      status: proposed (needs I033 freeze + certification)
+      statement: "depth-normalised restoration test with reference fixed in P3:
+        c = rec_end - .364*depth; SId-S (split-sample selection) AND SId-BA (between arms);
+        power >=.9 at every inside theory point for a>=.25; excludes R3, the no-gate
+        composite and eta=.01 integrators; NOT a very slow integrator (eta=.005) at high gain"
+      evidence: "records/inverse_calibration_b_I032pc.txt, records/inverse_calibration_c_I032pc.txt"
+  node_updates:
+    - id: DISS-H1b-SIc
+      added_limitation: "fails at the ABM ratio edge in its end-of-P2 variant (gate recovers
+        +8.5, R3 +9); normalisation by the P2-mean drop understates the gate's depth"
+    - id: DISS-MEAS-ATTENUATION
+      added_limitation: "a ~ .05 was a device to hit an imported theta; the pilot should
+        measure the gain (HIGH x MOD depth in points) rather than assume it"
