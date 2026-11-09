@@ -376,6 +376,61 @@ run1_defect:  # 2026-11-09T~13:10Z, discovered mid-run, BEFORE any result was re
     failure mode of exactly the kind certification exists to catch; recorded as
     a pipeline-integrity finding"
 
+# ------------------------------------------------------- pre-run addendum AD3
+pre_run_addendum_AD3:  # 2026-11-09T~14:00Z — written after reading the run-2 CALIBRATION
+  # table and the first run-2 verdict row; BEFORE run 3 exists. Run 2 itself is
+  # untouched and is reported in full against its frozen expectations E1-E8.
+  trigger_observed: "run-2 calibration needs attenuation a = .046-.063 in every
+    shape to bring the gate to theta=.592. At that a the P3 dynamics compress:
+    gate measured recovery -1.48..-2.04 pts, R3 +0.56..+0.78 pts; delta_eq =
+    max(5,.5*sigma_r) = 5 (sigma_r ~ 10). Criterion (iii) [delta_eq < R3
+    recovery] therefore FAILS in every shape -> gate verdict power 0 at the
+    design basis. The frozen two-sided TOST PASSES under the gate (1.000 in the
+    first row), i.e. pre-run prediction E4 was WRONG: it reasoned in latent
+    units (-40) and ignored the calibration's compression of P3."
+  diagnosis: "an absolute equivalence band in slider points is not invariant to
+    measurement attenuation; H1a's design basis and H1b's band are mutually
+    inconsistent at a single attenuation (H1b would need a > ~5/12 ~ .4, where
+    H1a is grossly over-powered). The ratio of a subject's P3 recovery to their
+    own P2 drop IS attenuation-invariant (a cancels)."
+  candidate_H1b_SI:  # scale-invariant H1b, CANDIDATE ONLY — adoption is an author decision
+    statistic: "per subject in HIGH x MODERATE: c_i = rec_i - kappa*drop_i,
+      rec_i = late-P3 fairness mean - P2 fairness mean, drop_i = P1 - P2"
+    kappa: "0.25, fixed now. Rationale from latent ratios computed in this
+      diagnostic (no run-3 output exists): gate rec/drop ~ -0.75, R3 ~ +0.66;
+      kappa = .25 lets a FLATLINE gate (rec ~ 0) pass and requires R3-type
+      recovery to fall below a quarter of its own drop to pass"
+    test: "one-sided Wilcoxon signed-rank, H0: median c_i >= 0 vs H1: < 0,
+      alpha .005; criteria (i) accuracy floor .70 unchanged; scale-free (iii):
+      kappa < R3 predicted normalized recovery (ratio of cell means at the
+      calibrated a), checked per shape"
+    companions_reported_not_adopted: "kappa = 0 (pure non-superiority at
+      margin zero) and kappa = .40 as sensitivity"
+  run3_cells:
+    attenuation_reading: "gate x {M1..M6}, R3 x {M1..M6}; same calibrated a as
+      run 2 (read from records/pipeline_cert_I032_calib.csv); B = 1000; seed
+      base 132000 + 40000"
+    heterogeneity_reading: "MIXTURE cohort at FULL scale (a = 1, M2 noise
+      layer): each subject is a gate agent w.p. pi, else an R3 agent; pi
+      root-found so theta(HIGH,LOW) = .592; this is the competing account of
+      why the human effect is 5-20x below the model's — population
+      heterogeneity, not slider attenuation. Cells: mixture x M2 with H1b-SI
+      and the frozen H1b; plus pure-R3 at a = 1 as its level control"
+  expected_outcomes_AD3:  # frozen before run 3
+    E9: "attenuation reading: gate H1b-SI verdict power >= .80 in every shape
+      (H1a power ~.90 is the ceiling since H1b is gatekept)"
+    E10: "attenuation reading: R3 H1b-SI verdict rate <= .005 + 2 MC SE in
+      every shape"
+    E11: "heterogeneity reading: no frozen expectation on the mixture's verdict
+      — it is a DIAGNOSTIC; the reported quantity is the gate verdict rate as a
+      function of the realized pi, with the statement that H1b's meaning is
+      reading-dependent if it differs from E9"
+    E12: "pure-R3 at a = 1: frozen-H1b and H1b-SI verdict rates <= .005 + 2 MC SE"
+  status_rule: "whatever run 3 shows, the frozen H1b's failure at the design
+    basis stands as the run-2 result and is the iteration headline; H1b-SI is
+    reported as evidence for an author decision, never substituted into the
+    prereg without that decision and a dated amendment"
+
 # ------------------------------------------------------------------ discipline
 invariants:
   - "freeze precedes every certification run; pre-run addenda only, dated"
