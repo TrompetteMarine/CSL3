@@ -211,3 +211,24 @@ AD_S1_design_minimisation:
     ES4: "n_F_min <= 40"
     ES5: "rho classification AUC falls in short designs (slow rho is a 500-trial
       clock); the rigidity output may need a dedicated module"
+
+# =================================================================== ADDENDUM AD-S2 (after stage 1, before stage 2; 2026-11-09)
+AD_S2_after_stage1:
+  stage1_scorecard_verbatim:
+    ES1: "PASS. P2 = 60 rounds never reaches power .9 with <= 320 per cell at a = .25
+      or .5; n_min falls as P2 lengthens."
+    ES2: "PASS. Harsher P2 odds (.25/.10) lower n_min in every matched pair."
+    ES3: "FAIL. No design of <= 15 min reaches n_min <= 250 per cell at a = .25;
+      none of the 24 short designs is adequate at a = .25 with <= 320 per cell
+      (closest: 60/90/75 at .25/.10, conjunction .83 at the ratio edge and H1a .90
+      at the anchoring edge, n = 320). Baseline 450 rounds: n_min 222 at a = .25."
+    ES4: "MIXED. n_F_min = 20 at the baseline; 50-77 in short designs with P3 = 75;
+      not reached (> 80) with P3 = 45 at a = .25."
+  consequence: "the frozen stage-2 selection rule (<= 15 min, finite N at a = .25)
+    selects nothing. Amended selection, fixed here before stage 2 runs: the 3
+    designs with smallest total N at a = .5 among those with session <= 18 min,
+    plus the baseline; stage-2 checks run at a = .5 and at each design's
+    n_min(a = .5), and at a = .25 at n = 320 for the record. Added: the best
+    design at rating cadence 3 (power curve at a = .25 and .5; session minutes
+    recomputed), to test whether denser measurement substitutes for gain."
+  script: "experiment/analysis/design_search_I033_stage2.py (seed 133500)"
