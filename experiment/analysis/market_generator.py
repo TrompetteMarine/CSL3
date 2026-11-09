@@ -48,7 +48,7 @@ def _sigmoid(x):
 
 
 def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
-                    framing=False, resto_mix=(2, 1)):
+                    framing=False, resto_mix=(2, 1), rho_override=None):
     """One latent cohort. p2_regime: 'HIGH' or 'LOW' (scalar; one arm per call).
     Returns dict of latent per-subject arrays:
       ratings (n, 90) trust in [0,1]; ent (n, 90) aspiration proxy in [0,1];
@@ -73,6 +73,8 @@ def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
     reg2 = np.full(n, p2_regime == 'HIGH')
     regimes = [reg1, reg2, reg3]
     rho = np.where(np.arange(n) % 2 == 0, .002, .02)     # frozen mixture
+    if rho_override is not None:                         # post-I032 exploration only
+        rho = np.full(n, float(rho_override))
 
     Q = np.full((n, 2), 0.5)
     L = np.full(n, L0)
@@ -174,7 +176,7 @@ def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
     return dict(ratings=ratings, ent=ent_out,
                 acc1=acc_sum[:, 0] / 150, acc2=acc_sum[:, 1] / 150,
                 acc3=acc_sum[:, 2] / 150, acc_late=acc_late / 75,
-                resto_full=resto_full, rho=rho)
+                resto_full=resto_full, rho=rho, reg1=reg1, reg3=reg3)
 
 
 # ------------------------------------------------------------- measurement layer
