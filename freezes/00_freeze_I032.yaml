@@ -1,0 +1,328 @@
+iteration_id: "KGi-DISS-I032"
+mode: "synthetic pipeline certification (centrepiece) + oTree build deltas +
+  literature-technique pass + bias inventory + design consolidation. No human
+  recruitment, no OSF filing, no ethics claims (author-gated). Main text not
+  edited unless a pipeline result contradicts a stated prediction (then flagged,
+  never patched)."
+freeze_time: "2026-11-09T12:05Z"
+baseline:
+  repo: "github.com/TrompetteMarine/CSL3 main a3dcaaf (I031 close; verified)"
+  canonical_docs: "experiment/DESIGN.md (I027 v2 + I029), experiment/TASK_SPEC.md
+    (I029), experiment/PRIORS.md (I023), experiment/TASK_INFERENCE.md (I028),
+    prereg draft (Project doc, I003 amended I025/I029)"
+  power_record: "records/power_free.csv (I029, frozen battery S1-S6)"
+  generator_record: "records/pred_series.csv / pred_subjects.csv (I008+I014
+    frozen generator predict_taskv3.py)"
+user_directive: "continuation prompt I032 (Project doc
+  kgi-diss-i032-continuation-prompt.md): A synthetic pipeline certification;
+  B oTree deltas + G2; C literature-technique pass; D bias inventory; E design
+  consolidation; freeze before run; surprises verbatim; worst-case adopted"
+
+# ------------------------------------------------------------------ discrepancies
+discrepancies_found_at_recovery:  # reported, not silently reconciled
+  D1: "experiment/PRIORS.md 'Confirmatory discipline' paragraph (frozen I023)
+    still states one-sided Welch, N=320/cell, d=.25 design floor — superseded by
+    I025 (H1a/H1b gatekeeping) and I029 (WMW, theta anchors, N=320/arm
+    post-exclusion worst-case). I029 propagation list did not include PRIORS.md.
+    Fix in E as a logged amendment; frozen original preserved in git history."
+  D2: "experiment/analysis/pipeline.py is the I006 build: H1 two-sided Welch, no
+    WMW, no gatekeeping, no rank-TOST, no dose/framing modules, no suspicion
+    screen hook. Expected (it IS the B work); recorded so the pre-I032 pipeline
+    is never mistaken for the certified one."
+  D3: "oTree app diss_bandit is the I006 bandit skin: no market screens, dev
+    placeholder pool (flagged), no WTP/BSR/funnel/dose/sparse. Expected (B work)."
+  D4: "chi inconsistency between frozen artifacts: predict_taskv3.py freezes
+    CHI=.6; recovery_v3.py DISS prior_mu chi=.40 and TASK_INFERENCE/TASK_SPEC
+    dose arithmetic uses 'the model's chi=.4' to place the step between .55 and
+    .65. At chi=.6, chi_min(.45)=.656 > .6 > chi_min(.55)=.454: the step sits
+    between .45 and .55. The spec's step-location sentence is chi-contingent.
+    Consequences frozen below: (i) the dose statistic is location-free; (ii) the
+    gate-generator dose cell runs at BOTH chi=.6 (frozen generator) and chi=.4;
+    (iii) E restates the spec's dose prediction as chi-contingent, logged as a
+    forced amendment; (iv) author-decision item."
+  D5: "windfall semantics differ between recovery_v3.py (windfall trial: R:=1,
+    Q-update skipped, L/A updated with R=1) and the oTree app (windfall = +3
+    points ON TOP of a normal trial; reward series unaffected). The I003 r=.91
+    was obtained under recovery_v3 semantics. G1 re-establishes recovery under
+    the APP semantics + market measurement (that is what the gate is for)."
+  D6: "recovery_v3.py restoration geometry is (.70,.45) (I003-era), not task v3's
+    FULL (.65,.35)/MODERATE (.45,.35). G1 runs on the task-v3 geometry."
+
+# ------------------------------------------------------------- pre-run predictions
+pre_run_predictions_from_frozen_records:  # stated before any new run
+  P_H1b_frozen_form_fails_under_gate: "records/pred_series.csv (frozen I008/I014):
+    gate generator HIGH x MODERATE trust CONTINUES TO FALL in P3 (P2 52.0 ->
+    late-P3 11.7, change -40.2 under fixed-HIGH regime). The frozen H1b criterion
+    (ii) — two-sided rank TOST 'P3 fairness change inside +/-delta_eq' — is
+    therefore predicted to FAIL under the gate's own generator (a change of -40
+    is outside any plausible band). The gate's prediction is 'no recovery, or
+    further decline', not 'flatline at zero'. Both operationalizations are frozen
+    below; if the run confirms the failure, the prereg amendment (one-sided
+    non-superiority) is forced and logged in E. This contradiction between the
+    frozen prereg wording and the frozen generator prediction is flagged here,
+    before the run, per the no-silent-patch rule."
+  P_R3_recovery_exceeds_band: "R3 (rival_au) HIGH x MODERATE P2->late-P3 recovery
+    +10.7 (fixed-regime record) > delta_eq = max(5, .5 sigma_r) at sigma_r <= 10:
+    criterion (iii) [band excludes R3's recovery] is implementable; direction
+    frozen (R3 recovery positive, gate non-positive)."
+  P_drop_ordering: "frozen fixed-regime drop profile (pred_subjects.csv): gate
+    HIGH +44.9 / LOW +23.4 (gap 21.5); R3 +18.9/+12.2 (gap 6.7, same sign, ~half);
+    R1-global -0.1/+58.7 (REVERSED: successful peer rescues the rigged-world
+    hypothesis); R4 group-contingent +3.0/+3.0 (null). Certification cohorts use
+    the DESIGN regime structure (P1/P3 iid per participant, P2 = arm), so exact
+    values will differ; the orderings above are the frozen directional anchors."
+
+# ------------------------------------------------------------------- agenda
+agenda:
+  A: "synthetic pipeline certification (centrepiece; spec below)"
+  B: "oTree build deltas (I027 seven + market skin + randomized slider starts +
+     sparse toggle + 2:1 allocation + framing variant) + rank/TOST analysis
+     modules in pipeline.py; bots green; G2 record"
+  C: "literature-technique pass: one claim card per technique, primary-text
+     verification before any use; decided adopt/adapt/reject table"
+  D: "bias inventory -> design counters table; representability audit of every
+     'absorbed by battery' claim; new shapes become frozen addenda (S7 declared
+     below, pre-run)"
+  E: "design consolidation: DESIGN.md / TASK_SPEC.md / PRIORS.md (D1 fix) /
+     prereg draft agree with the certified pipeline; every amendment listed in
+     the closing record; mirrors to Project docs; memory condense+append;
+     author-decision paragraph"
+
+# --------------------------------------------------- A. certification spec (frozen)
+certification_spec:
+  generators:  # latent kernels ported VERBATIM from frozen predict_taskv3.py
+    gate: "DISS kernel (NUF .05, NUR .0125, TAUF .3, PHIM 1, PHIP .25, ALPHA .2,
+      BETA 12, CHI .6, A0 .5, L0 1); rho mixture {.002,.02} half-half (frozen
+      generator mixture) in MC cohorts"
+    R1_global: "'rival' kernel (fixed-hypothesis Bayesian, MURIG .3, PI0 .9)"
+    R4_group: "'rival_us' kernel (group-contingent: peer outcomes carry no
+      likelihood)"
+    R3_util: "'rival_au' kernel (aspiration-in-utility, GAM_AU .85)"
+    regime_structure: "DESIGN/prereg structure: P1/P3 regimes iid HIGH/LOW per
+      participant, P2 regime = assigned arm; LOW peer = own trailing-15 band;
+      HIGH peer rate .65 (dose cells: mu_ref); windfalls every 15 announced,
+      NON-evidential to all kernels (app semantics, D5); outcomes seeded"
+  measurement_battery:  # injected at the rating layer; S1-S6 correspondence stated
+    common: "ratings every 5 trials on 0-100; reported = clip[0,100] round5
+      ( 50 + g_i*(100*latent - 50) + eps_t ); eps_t ~ N(0, sigma_eps=10)
+      per rating (I003 SIGR on the 0-100 scale); g_i = per-subject scale-use
+      factor, the theta-calibration dial (below)"
+    M1: "g_i ~ LogNormal(mu_g, sigma_g), no further distortion (~S1 benchmark)"
+    M2: "M1 + 15% never-movers (rating parked at initial value -> drop 0;
+      zero-inflation) (~S2; round5+clip already in common layer)"
+    M3: "M1 + 20% non-responders: ratings = clip round5(u_i + N(0,8)) unrelated
+      to latent state, u_i ~ U(20,80); carry no treatment effect (~S3)"
+    M4: "heavy-tailed scale use: g_i = max(.05, 1 + 0.6*t_i(3)/sqrt(3)) (~S4)"
+    M5: "right-skewed scale use: g_i ~ LogNormal with sigma_g doubled (~S5)"
+    M6: "M3 + exclusion mechanism inside the simulation: stochastic screen
+      failure p_ex = .075 responsive / .30 non-responders (~12% overall,
+      enriched 3x in non-responders, matching frozen S6) PLUS the deterministic
+      preregistered screens applied by the pipeline (zero slider variance;
+      completion; median RT; P1 accuracy) on simulated fields; recruited
+      360/arm -> ~317 post (~S6)"
+    anchoring_variant: "gate x M2 + AR(1) reporting (reported_t = .3*reported_{t-1}
+      + .7*(latent-based value)); one reported cell; counter = randomized initial
+      slider positions (B delta); power attenuation reported, not a gate"
+  theta_calibration: "per measurement shape, sigma_g (the between-subject
+    scale-use SD; for M4 the 0.6 multiplier; location mu_g set so E[g]=1) is
+    root-found so that the GATE generator's realized Mann-Whitney
+    theta(drop_HIGH, drop_LOW) = .592 on a 40k-subject calibration draw; the
+    frozen agent parameters are never touched; the same calibrated measurement
+    layer is then applied unchanged to every generator in that shape's cells
+    (so rival cells are measured exactly as the gate cell is). Rationale: the
+    power claim is AT the design-basis theta, as in power_free.py, where the
+    shift was calibrated per shape; here the attenuation dial is measurement
+    dispersion, the only dial that does not alter the frozen model."
+  pipeline_under_test: "exclusions -> H1a one-sided WMW (tie-corrected normal
+    approx, identical statistic to power_free.wmw_reject) at alpha=.005, theta-hat
+    + Hodges-Lehmann co-computed; plain one-sided Welch co-reported in MC (the
+    studentized permutation Welch is implemented for real-data runs; its MC
+    power is approximated by the plain statistic per the I029 note) ->
+    gatekept H1b (only if H1a rejects) -> dose module -> framing module ->
+    model-free rho moderator (adapt coefficient). MAP rho estimation runs as
+    the separate G1 cohort study, not inside the MC loop."
+  H1b_operationalizations:  # both frozen; see pre-run prediction above
+    frozen_form: "(i) HIGH x MODERATE late-P3 accuracy mean >= floor 0.70
+      [floor derived pre-run from frozen record: gate .874, R1 .748 at MODERATE;
+      0.70 sits below the gate with margin and above degraded baselines;
+      pilot may revise before filing] AND (ii) two-sided rank TOST: per-subject
+      recovery (late-P3 fairness mean - P2 fairness mean) inside +/-delta_eq by
+      two one-sided Wilcoxon signed-rank tests at alpha=.005 AND (iii)
+      delta_eq < R3 predicted recovery (design-level exclusion check).
+      delta_eq = max(5, .5*sigma_r), sigma_r = median within-subject SD of P1
+      fairness ratings in the analyzed cohort (pre-stated operationalization;
+      pilot supplies the real value before filing)"
+    repair_candidate: "(ii') ONE-SIDED non-superiority: Wilcoxon signed-rank
+      rejects H0: recovery >= +delta_eq in favour of recovery < +delta_eq at
+      alpha=.005 (gate predicts non-positive recovery; R3 predicts recovery >
+      delta_eq); (i) and (iii) unchanged. Adopted in E iff the run confirms the
+      pre-run prediction that the frozen form fails under the gate generator."
+  dose_module: "cells mu_ref in {.45,.55,.65}, n=90/90/320 post-exclusion,
+    all MODERATE; statistic = location-free second-difference contrast
+    C = meandrop(.65) - 2*meandrop(.55) + meandrop(.45), TWO-SIDED studentized
+    permutation test at alpha=.05 (module-level secondary; D4 makes the sign
+    chi-contingent so no one-sided form is frozen); gate cell run at chi=.6
+    (frozen generator) AND chi=.4 (D4 companion cell); step location reported
+    as the structural chi readout"
+  framing_module: "framing arm = HIGH x MODERATE under group-contingent
+    fixed-rate instructions, n=90; gate agent unchanged by framing; R4 under
+    fixed-rate framing = rival_us with own/peer log-LR terms zeroed (the
+    announcement makes the rate uninformative between fair-fixed and rigged;
+    frozen I012 anchor: '~no P2 drop'); test = one-sided WMW framing-HIGH drops
+    vs LOW-arm drops at alpha=.05 one-sided (secondary)"
+  G1_recovery_study: "n=60 synthetic gate subjects, rho_i ~ U(.002,.05) (I003
+    sampling range), chi fixed .6 (hold-out note: chi descriptive only), task-v3
+    geometry (D6), app windfall semantics (D5), MODERATE:FULL 2:1, P1/P3 regimes
+    iid, market measurement = common layer at the M2 setting WITHOUT the
+    calibrated sigma_g inflation (g_i=1: G1 asks whether rho survives the
+    market frame's rounding/clipping/noise, not the worst-case power
+    attenuation); fit = DISS MAP (recovery_v3 priors) with L+A rating
+    likelihoods (quasi-likelihood unchanged under rounding, stated), 6
+    Nelder-Mead starts; gate G1 PASSES iff pearson r(rho_hat, rho) >= .7;
+    group-level bias profile recomputed (nuF, tauF group-mean bias with CIs;
+    nuR bias) and compared to the I003 profile (+1.5%/+2.4% cover zero; nuR
+    -30% excluded); a changed nuR picture is a surprise to report, not a repair"
+  mc_budgets:
+    h1a_cells: "B=1000 replicates per (generator x shape) cell; fresh latent
+      draws per replicate, vectorized"
+    cells_run: "gate x {M1..M6} (power); R3 x {M1..M6} (verdict level via H1b);
+      R1-global x {M2,M6}; R4 x {M2,M6} (verdict level via H1a); gate x
+      anchoring variant (reported)"
+    dose_framing: "B=500 per cell"
+    N: "320/arm post-exclusion (360 recruited in M6 cells)"
+    seeds: "master 132000; G1 132100; dose 132200; framing 132300; S7 132400;
+      G2 132500; per-cell offsets recorded in the run record"
+  expected_outcomes:  # the gates; a failure is the headline, not a repair target
+    E1: "gate generator: H1a WMW power >= .90 at calibrated theta=.592, N=320,
+      under EVERY shape M1-M6 (M6 at 360 recruited). Anchor: power_free S1-S6
+      N*=320 (S6: 360 recruited)."
+    E2: "R1-global and R4 generators: P(H1a rejects) <= .005 + 2*MC SE
+      (one-sided test against reversed/null contrasts); hence verdict level
+      <= .005."
+    E3: "R3 generator: P(verdict 'gate confirmed') <= .005 + 2*MC SE under every
+      shape — H1a will reject (frozen gap 6.7, huge at N=320); containment must
+      come from H1b (criteria ii/ii' + iii)."
+    E4: "gate generator: H1b frozen form (two-sided TOST) FAILS (pass rate ~0)
+      — the pre-run prediction above; repair candidate (ii') passes with
+      probability >= .90 in the same cells. If instead the frozen form passes,
+      the pre-run prediction was wrong and is reported as such."
+    E5: "G1: r(rho_hat, rho) >= .7 (gate G1). FAIL blocks prereg and is the
+      iteration headline."
+    E6: "dose: P(second-difference test rejects | gate) >= .80 at both chi
+      settings; P(rejects | R3) <= .05 + 2*MC SE."
+    E7: "framing: P(one-sided WMW rejects | gate) >= .76 (the frozen powered
+      claim at d=.5); P(rejects | R4-framing) <= .05 + 2*MC SE."
+    E8: "G2: pipeline WMW rejection rates reproduce records/power_free.csv on
+      power-engine battery draws at frozen anchor cells (S1,S2,S6 x basis x
+      N=320; B=2000) within +/- .02 (~2 MC SE)."
+  honesty: "all expected outcomes frozen here before the first certification
+    run; failures reported verbatim in the record and the closing scorecard;
+    worst-case numbers adopted; no cell added or dropped after seeing results
+    except as a dated pre-run addendum"
+
+# ---------------------------------------------------------- S7 pre-run addendum
+power_battery_addendum_S7:  # declared NOW, before D's audit formally demands it
+  reason: "the continuation prompt's bias battery names 'suspicion contamination';
+    S1-S6 cannot represent it because every S-shape applies the same mechanism
+    to both arms (effects injected as shifts) — differential believability of
+    the HIGH display is an ASYMMETRIC contamination and a LEVEL threat, not a
+    power threat. New shape required by the representability rule."
+  spec: "power_free_s7.py (imports power_free machinery; separate seed 132400;
+    records/power_free_s7.csv; S1-S6 records untouched): null-level cells
+    (tau=0, S3 base): fraction q_H of the HIGH arm only carries a suspicion
+    drop-inflation s; suspicion-probe exclusion removes each contaminated
+    subject with probability pi_probe. Grid: q_H in {.05,.10,.20} x s in
+    {5,10,15} x pi_probe in {0,.5,.8}, N=320/arm, B=2000. Output: realized
+    one-sided WMW level per cell; the tolerance statement = max residual
+    contamination load q_H*s*(1-pi_probe) keeping level <= .005. One power cell
+    (theta=.592, symmetric q=.10 suspicion both arms, s=10, pi_probe=.5)
+    reported for completeness."
+  design_counter: "pilot believability trigger (20%) + blind pilot-calibrated
+    suspicion-probe exclusions are the existing counters; S7 quantifies the
+    probe-sensitivity they must deliver; result feeds D's table and the pilot
+    section of DESIGN.md in E"
+
+# ------------------------------------------------------------------- B. build
+otree_deltas_frozen:  # implemented on diss_bandit (oTree 6.0.15); bots must pass
+  - "1 market-skin screens: tickets SQUARE/TRIANGLE, truthful AMM rule disclosure
+    in instructions, fixed within-phase prices displayed, settlement feedback;
+    bandit skin retained behind config skin='bandit' for the pilot framing
+    comparison (same seeds)"
+  - "2 seeded-settlement plumbing: phase-fixed displayed prices from config;
+    settlement = the existing seeded outcome sequences (invariant preserved)"
+  - "3 minimal-information BSR probability reports on settlement (0-100 chance
+    the SQUARE ticket pays), cadence t % 15 == 7 (offset from windfalls and
+    sliders; DESIGN-DECISION flagged for author), qualitative incentive wording
+    with details available on request (Danz-Vespa-Wilson minimal-info), scored
+    by binarized scoring rule on a random subset; legitimacy NEVER elicited on
+    scored reports (invariant)"
+  - "4 WTP rule-switch probe end-P2 and mid-P3: 0-20 price list from a dedicated
+    20-point endowment, truthful re-seed hook, unspent endowment paid"
+  - "5 dose cells: session configs mu_ref .45/.55 (peer bands [.40,.50],
+    [.50,.60]); .65 = existing HIGH band"
+  - "6 believability/funnel block: perceived peer success 1-7, realness 1-7,
+    free-text purpose guess, rig-suspicion probe, betting-familiarity screen
+    item (exploratory moderator), minimal demographics"
+  - "7 pool loader protocol: tools/make_pool_from_pilot.py — pilot-sourced
+    streams, HIGH selection stratified on P2-window mean in band and trajectory
+    within-block-variance terciles, provenance metadata; dev placeholder stays
+    flagged and bot-only"
+  - "8 2:1 MODERATE:FULL participant-level assignment + 1:1 p2_regime in a
+    'main_confirmatory' config (DESIGN-DECISION: factor assignment moves from
+    session-level to participant-level for wave logistics; per-cell configs
+    retained)"
+  - "9 framing-probe instruction variant (config framing='group_fixed_rate')"
+  - "10 sparse-elicitation toggle (slider_every=10) for the pilot arm"
+  - "11 randomized initial slider positions on every elicitation (C-sourced
+    anchoring counter; applies to fairness, entitlement, BSR)"
+  analysis_modules: "pipeline.py v2: one-sided tie-corrected WMW (+theta-hat,
+    Hodges-Lehmann), studentized permutation Welch co-report, serial-gatekept
+    H1b (both frozen operationalizations switchable), dose second-difference
+    permutation test, framing WMW, suspicion-probe exclusion hook, MAP rho
+    module (recovery port, app semantics), G2 consistency script"
+  G2: "scripts/g2 check: pipeline WMW on power_free battery draws at the three
+    frozen anchor cells; tolerance +/- .02; record records/g2_consistency.csv"
+  security: "no credentials in code, prompts, KG nodes, logs, manifests"
+
+# ---------------------------------------------------------------- C. verification
+verification_queue:  # primary-text verification before any deliverable use
+  carried_verified: ["Danz-Vespa-Wilson AER 2022 112(9):2851-83 (I028)",
+    "Thaler-Johnson 1990 (I002/I028 log)",
+    "Lockwood et al. 2024 NHB 8(7):1403-16 (I016)",
+    "Gueguen et al. 2025 Brain 148(10):3537-50 (I016)"]
+  queued_I028: ["Smith 1962/1976 induced value", "Plott-Sunder 1988",
+    "Smith-Suchanek-Williams 1988", "Hanson 2003/2007 LMSR",
+    "Forsythe-Nelson-Neumann-Wright 1992 IEM", "Hossain-Okui 2013 BSR",
+    "Platt 1964 strong inference", "Mayo 2018 severity", "Kunda 1990",
+    "Benabou-Tirole 2016"]
+  added_I032: ["de Quidt-Haushofer-Roth experimenter demand bounds",
+    "Zizzo demand taxonomy", "Charness et al. belief-elicitation practice",
+    "Becker-DeGroot-Marschak 1964 mechanics", "attention/comprehension screen
+    norms for online panels (Oppenheimer IMC / Berinsky / Prolific-era)",
+    "slider/VAS psychometrics incl. randomized initial positions",
+    "Lefebvre et al. 2017 / Palminteri dual-alpha practice",
+    "Wittmann et al. dmPFC social-comparison paradigm",
+    "fMRI/EEG event-timing standards for reward-learning tasks (jittered ITI;
+    shared-engine constraint from the companion Social Cognition study)"]
+  rule: "one claim card per technique: identification problem solved, bias
+    killed, cost in trials/N/complexity, adopt/adapt/reject with reason; no
+    unverified citation enters any deliverable; the log lists what was checked
+    and where"
+
+# ------------------------------------------------------------------ discipline
+invariants:
+  - "freeze precedes every certification run; pre-run addenda only, dated"
+  - "simulated referee documents stay out of the public repo"
+  - "honesty anchors in manuscript-adjacent text untouchable at current counts"
+  - "standard commit attribution; git fetch origin main before pushing"
+  - "memory file near cap: condense I011-I013 entries before appending I032"
+deliverables:
+  - "closed freeze with scorecard (this file, closing_record appended)"
+  - "records/pipeline_cert_I032.csv + records/95_pipeline_cert_I032.md with seeds"
+  - "oTree deltas pushed, bots green, records/g2_consistency.csv"
+  - "experiment/TECHNIQUES.md (decided table) + experiment/BIAS_INVENTORY.md +
+    freezes/00_citation_verification_I032.md"
+  - "updated DESIGN.md / TASK_SPEC.md / PRIORS.md / prereg draft, mirrored to
+    Project docs"
+  - "memory condense + append (DISS file)"
+  - "author-decision paragraph in the closing report"
