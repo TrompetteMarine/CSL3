@@ -48,12 +48,16 @@ def _sigmoid(x):
 
 
 def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
-                    framing=False, resto_mix=(2, 1), rho_override=None):
+                    framing=False, resto_mix=(2, 1), rho_override=None, trace=False):
     """One latent cohort. p2_regime: 'HIGH' or 'LOW' (scalar; one arm per call).
     Returns dict of latent per-subject arrays:
       ratings (n, 90) trust in [0,1]; ent (n, 90) aspiration proxy in [0,1];
       acc1/acc2/acc3/acc_late (n,) accuracy means; resto (n,) str array;
       rho (n,) frozen mixture.
+    trace=True (post-I032, participant-view records only) additionally returns
+    per-trial own outcome R, chosen arm (0 = better ticket) and peer outcome as
+    (n, 450) int8 arrays. It draws no extra random numbers, so every other
+    output is identical with or without it.
     """
     # Kind guard (I032 run-1 defect): 'gate' is an alias of 'diss'; any other
     # unknown kind RAISES. Run 1 passed 'gate', which silently fell through to
@@ -92,6 +96,10 @@ def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
     acc_late = np.zeros(n)
     ri = 0
     rows = np.arange(n)
+    if trace:
+        tr_R = np.empty((n, T), dtype=np.int8)
+        tr_arm = np.empty((n, T), dtype=np.int8)
+        tr_peer = np.empty((n, T), dtype=np.int8)
 
     for t in range(T):
         ph = 0 if t < 150 else (1 if t < 300 else 2)
@@ -121,6 +129,10 @@ def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
         peer_R = (rng.random(n) < p_peer).astype(np.float64)
         peer_hits += peer_R
         peer_rate = peer_hits / (t + 1)
+        if trace:
+            tr_R[:, t] = R
+            tr_arm[:, t] = arm
+            tr_peer[:, t] = peer_R
 
         # append own outcome to the ring
         ring[:, t % 15] = R
@@ -173,10 +185,13 @@ def simulate_latent(kind, n, p2_regime, rng, mu_ref=0.65, chi=CHI_FROZEN,
             ent_out[:, ri] = ent
             ri += 1
 
-    return dict(ratings=ratings, ent=ent_out,
-                acc1=acc_sum[:, 0] / 150, acc2=acc_sum[:, 1] / 150,
-                acc3=acc_sum[:, 2] / 150, acc_late=acc_late / 75,
-                resto_full=resto_full, rho=rho, reg1=reg1, reg3=reg3)
+    out = dict(ratings=ratings, ent=ent_out,
+               acc1=acc_sum[:, 0] / 150, acc2=acc_sum[:, 1] / 150,
+               acc3=acc_sum[:, 2] / 150, acc_late=acc_late / 75,
+               resto_full=resto_full, rho=rho, reg1=reg1, reg3=reg3)
+    if trace:
+        out.update(R=tr_R, arm=tr_arm, peer=tr_peer)
+    return out
 
 
 # ------------------------------------------------------------- measurement layer
