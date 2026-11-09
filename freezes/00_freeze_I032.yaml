@@ -309,6 +309,37 @@ verification_queue:  # primary-text verification before any deliverable use
     unverified citation enters any deliverable; the log lists what was checked
     and where"
 
+# ------------------------------------------------------- pre-run addendum AD1
+pre_run_addendum_AD1:  # dated 2026-11-09T12:20Z, BEFORE any certification run
+  dose_test_null_fix: "the frozen wording 'studentized permutation test' for the
+    dose second-difference contrast is replaced by 'studentized within-cell-
+    centered bootstrap test'. Reason: permuting cell labels tests equality of
+    the three cell DISTRIBUTIONS, which the graded-linear rival violates by
+    construction (its cell means differ linearly) — a permutation test would
+    reject under R3 and E6's level requirement would fail by design error, not
+    by evidence. The correct null is C = 0 with unequal cell means allowed:
+    T = C/SE(C), SE from cell variances, null distribution by resampling each
+    cell centered at its own mean. Pre-run spec repair, not a post-hoc one."
+  calibration_dial_unified: "the theta-calibration dial is the global attenuation
+    a in reported = clip5(50 + a*g_i*(100*latent - 50) + eps_t), root-found per
+    shape so the gate generator's theta = .592; g_i keeps a shape-FIXED
+    distribution (M1: g=1; M2: g=1 + wobble-parked never-movers; M3/M6: g=1 +
+    non-responders; M4: g=max(.05, 1+0.6*t(3)/sqrt(3)); M5: g=LogNormal(-.32,.8)),
+    E[g]=1 preserved. Reason: a single monotone dial that works identically for
+    every shape (theta increasing in a, -> .5 as a -> 0 against the eps floor),
+    mirroring power_free's per-shape shift calibration without touching the
+    frozen agent parameters. Supersedes the sigma_g-as-dial wording above."
+  M2_never_movers: "M2/S2 zero-inflation = wobble-parked raters: ratings =
+    clip5(park_i + eps_t), park_i ~ U(20,80) — drop ~ 0 (the S2 semantics)
+    while slider variance stays > 0, so the preregistered zero-variance screen
+    does not mechanically delete the shape it is meant to stress."
+  screens_active_in_cert: "exclusion screens applied inside the certification:
+    zero slider variance; P1 accuracy below chance+2SE; M6/M7 stochastic screen
+    failure (the suspicion-probe + completion + RT stand-in, p_ex .075/.30 as
+    frozen). Completion and median-RT screens are not separately simulated
+    (no RT process in the frozen generator); stated here so the cert record
+    cannot be read as validating those two screens."
+
 # ------------------------------------------------------------------ discipline
 invariants:
   - "freeze precedes every certification run; pre-run addenda only, dated"
