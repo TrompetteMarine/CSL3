@@ -40,6 +40,7 @@ TRIALS = 450
 PHASE_OF = lambda t: int(np.ceil(t / 150))
 R3_PRED_RECOVERY = None   # set from records/pipeline_cert_I032_calib.csv at run
 SUSPICION_CUT = None      # pilot-calibrated (prereg: applied blind); None = off
+UNMOVED_CUT = None        # pilot-calibrated partial-mover screen; None = off
 
 
 def load(path):
@@ -75,9 +76,25 @@ def apply_exclusions(trials, ratings, funnel):
                                  f'(bot data: flagged only)'))
         if g.rt_ms.median() < 300:
             drop.add(pid); log.append((pid, 'medianRT<300ms'))
+    # Zero-variance screen, translated for randomized slider starts (I032,
+    # TECHNIQUES.md #10b): with a random start on every rating, a participant
+    # who never touches the slider reports a fresh random value each time, so
+    # 'zero variance of the report' no longer catches them. The frozen screen's
+    # intent is restored exactly as 'zero MOVEMENT': reported == logged start on
+    # every rating of both sliders. When no start values are logged (I006
+    # exports), the original zero-variance rule applies unchanged.
+    has_init = ('fairness_init' in ratings.columns and
+                pd.to_numeric(ratings.fairness_init, errors='coerce').ge(0).any())
     for pid, g in ratings.groupby('participant'):
-        if g.fairness.var() == 0 and g.entitlement.var() == 0:
+        if has_init:
+            fi = pd.to_numeric(g.fairness_init, errors='coerce')
+            ei = pd.to_numeric(g.entitlement_init, errors='coerce')
+            if ((g.fairness == fi) & (g.entitlement == ei)).all():
+                drop.add(pid); log.append((pid, 'zero slider movement (randomized starts)'))
+        elif g.fairness.var() == 0 and g.entitlement.var() == 0:
             drop.add(pid); log.append((pid, 'zero slider variance'))
+    # Reserved (pilot-calibrated, OFF until the pilot sets it): partial movers,
+    # fraction of unmoved ratings >= UNMOVED_CUT. Not a preregistered screen yet.
     if SUSPICION_CUT is not None and len(funnel):
         for _, row in funnel.iterrows():
             try:

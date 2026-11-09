@@ -139,6 +139,27 @@ class Player(BasePlayer):
     block_regime = models.StringField(initial='')
     peer_stream_id = models.StringField(initial='')
     block_points = models.IntegerField(initial=0)
+    # I032 C#7: comprehension quiz, repeat until correct (Oppenheimer et al.
+    # 2009 prefer prompting rereading to excluding failers). No exclusion.
+    cq_cost = models.StringField(
+        label='Do you pay for the tickets you choose?',
+        choices=['No — tickets are free (house-funded)', 'Yes — each costs a point'],
+        widget=widgets.RadioSelect)
+    cq_prices = models.StringField(
+        label='Do the displayed market prices change during your session?',
+        choices=['No — they are held fixed', 'Yes — other traders move them'],
+        widget=widgets.RadioSelect)
+    cq_draws = models.StringField(
+        label='How is each settlement decided?',
+        choices=['By a rule fixed before my session, using pre-drawn random draws',
+                 'By the experimenter, live, as I play'],
+        widget=widgets.RadioSelect)
+    cq_board = models.StringField(
+        label='Who is shown on the trader board?',
+        choices=['A real participant who previously completed this task',
+                 'A computer simulation'],
+        widget=widgets.RadioSelect)
+    cq_attempts = models.IntegerField(initial=0)
     # delta 6: believability / funnel block (round 3 only)
     peer_success = models.IntegerField(min=1, max=7, blank=True)
     peer_real = models.IntegerField(min=1, max=7, blank=True)
@@ -354,6 +375,43 @@ class Intro(Page):
             return "Consent is required to take part."
 
 
+CQ_KEY = {
+    'cq_cost': 'No — tickets are free (house-funded)',
+    'cq_prices': 'No — they are held fixed',
+    'cq_draws': 'By a rule fixed before my session, using pre-drawn random draws',
+    'cq_board': 'A real participant who previously completed this task',
+}
+
+
+class Comprehension(Page):
+    """I032 C#7. Shown only for the market skin; repeat until correct; the
+    attempt count is recorded (descriptive), never an exclusion criterion."""
+    form_model = 'player'
+    form_fields = list(CQ_KEY)
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return (player.round_number == 1 and
+                player.session.config.get('skin', 'market') == 'market')
+
+    @staticmethod
+    def error_message(player: Player, values):
+        player.cq_attempts += 1
+        wrong = [k for k, v in CQ_KEY.items() if values.get(k) != v]
+        if wrong:
+            return {k: 'Not quite — see the instructions: ' + {
+                'cq_cost': 'tickets are house-funded; you never pay for one.',
+                'cq_prices': 'the market maker\'s quotes are held fixed.',
+                'cq_draws': 'settlements come from a rule fixed in advance with '
+                            'pre-drawn random draws.',
+                'cq_board': 'the board shows a real previous participant.',
+            }[k] for k in wrong}
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.comprehension_ok = True
+
+
 class Block(Page):
     live_method = live_trial
 
@@ -363,7 +421,8 @@ class Block(Page):
                     trials_per_block=C.TRIALS_PER_BLOCK,
                     block=player.round_number,
                     skin=player.session.config.get('skin', 'market'),
-                    tickets=list(C.TICKETS))
+                    tickets=list(C.TICKETS),
+                    iti_jitter_ms=player.session.config.get('iti_jitter_ms'))
 
 
 class Funnel(Page):                                    # delta 6
@@ -391,7 +450,7 @@ class Results(Page):
                     money=cu((pts + wtp_left) * rate))
 
 
-page_sequence = [Intro, Block, Funnel, Results]
+page_sequence = [Intro, Comprehension, Block, Funnel, Results]
 
 
 # ----------------------------- custom export -------------------------------------
@@ -557,6 +616,8 @@ class PlayerBot(Bot):
     def play_round(self):
         if self.round_number == 1:
             yield Submission(Intro, {'consent': True}, check_html=False)
+            if self.session.config.get('skin', 'market') == 'market':
+                yield Submission(Comprehension, dict(CQ_KEY), check_html=False)
         yield Submission(Block, check_html=False)
         if self.round_number == C.NUM_ROUNDS:
             yield Submission(Funnel,

@@ -1,0 +1,14 @@
+{{ block title }}Quick check{{ endblock }}
+{{ block content }}
+
+<p>Before you start, four quick questions about how the task works. If an answer
+is not right, you will see the relevant part of the instructions again and can
+try once more. This check does not affect your payment.</p>
+
+{{ formfield 'cq_cost' }}
+{{ formfield 'cq_prices' }}
+{{ formfield 'cq_draws' }}
+{{ formfield 'cq_board' }}
+
+{{ next_button }}
+{{ endblock }}

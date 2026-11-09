@@ -48,12 +48,12 @@
   <div class="inner">
     <div class="db-sl-row">
       <div>“<b>The market settles fairly.</b>”</div>
-      <input type="range" class="db-slider" id="slFair" min="0" max="100" value="50">
+      <input type="range" class="db-slider" id="slFair" min="0" max="100" step="5" value="50">
       <div class="db-sl-labels"><span>completely disagree</span><span>completely agree</span></div>
     </div>
     <div class="db-sl-row">
       <div>“<b>What I deserve to win per round.</b>”</div>
-      <input type="range" class="db-slider" id="slEnt" min="0" max="100" value="50">
+      <input type="range" class="db-slider" id="slEnt" min="0" max="100" step="5" value="50">
       <div class="db-sl-labels"><span>nothing</span><span>the maximum</span></div>
     </div>
     <button class="btn btn-primary" id="ratingGo" style="margin-top:14px">Continue</button>
@@ -70,7 +70,7 @@
         One forecast round is drawn at the end. You win a 10-point bonus with
         probability 1 − (outcome − your forecast)², where the outcome is 1 if
         SQUARE paid and 0 if not, and your forecast is on the 0–1 scale.</div>
-      <input type="range" class="db-slider" id="slBsr" min="0" max="100" value="50">
+      <input type="range" class="db-slider" id="slBsr" min="0" max="100" step="5" value="50">
       <div class="db-sl-labels"><span>certainly not</span><span>certainly</span></div>
     </div>
     <button class="btn btn-primary" id="bsrGo" style="margin-top:14px">Continue</button>
@@ -81,9 +81,10 @@
   <div class="inner">
     <div class="db-sl-row">
       <div><b>One-time offer.</b> You can pay points from your separate
-        <b>20-point allowance</b> to have the computer <b>replace the payout
-        rule with a fresh rule generated the same way</b>. The schedule of the
-        session is unaffected. State the <b>most</b> you would pay (0 = keep the
+        <b>20-point allowance</b> to have the computer <b>replace the random draws</b> that settle your
+        remaining rounds with <b>fresh draws generated the same way</b>. The
+        chances that each ticket pays stay <b>exactly as set by the rule</b>;
+        only the random draws are replaced. State the <b>most</b> you would pay (0 = keep the
         current rule). A price between 1 and 20 is then drawn at random: if your
         maximum is at least that price, you pay the drawn price and the rule is
         re-generated; otherwise nothing happens. Unspent allowance is paid out.</div>
@@ -98,6 +99,10 @@
 <script>
   let t0 = performance.now(), ratT0 = 0, bsrT0 = 0, wtpT0 = 0, blockDone = false;
   let queue = [];
+  function nextGap() {
+    const j = js_vars.iti_jitter_ms;   // [lo, hi] ms or null (online default: fixed 350)
+    return j ? j[0] + Math.random() * (j[1] - j[0]) : 350;
+  }
   let fairInit = 50, entInit = 50, bsrInit = 50;
   const L = document.getElementById('armLeft'), R = document.getElementById('armRight');
   const fb = document.getElementById('fb');
@@ -113,7 +118,7 @@
   R.onclick = () => send('right');
 
   function randInit(el) {
-    const v = Math.floor(Math.random() * 101);
+    const v = 5 * Math.floor(Math.random() * 21);
     el.value = v; return v;
   }
 
@@ -137,7 +142,7 @@
     } else if (blockDone) {
       document.getElementById('form').submit();
     } else {
-      setTimeout(() => { lock(false); t0 = performance.now(); }, 350);
+      setTimeout(() => { lock(false); t0 = performance.now(); }, nextGap());
     }
   }
 
@@ -203,8 +208,8 @@
     if (data.type === 'bsr_ok') { nextModal(); }
     if (data.type === 'wtp_ok') {
       const out = data.switched
-        ? 'Drawn price: ' + data.price + '. You paid it — the rule has been replaced with a fresh rule generated the same way.'
-        : 'Drawn price: ' + data.price + '. Above your maximum — the current rule stays.';
+        ? 'Drawn price: ' + data.price + '. You paid it — the remaining draws have been replaced with fresh draws generated the same way.'
+        : 'Drawn price: ' + data.price + '. Above your maximum — the current draws stay.';
       document.getElementById('wtpOut').textContent = out;
       setTimeout(() => {
         document.getElementById('wtpModal').style.display = 'none';
