@@ -1,0 +1,4 @@
+shape,tau_frozen,B,N_per_arm,rate_engine,rate_pipeline,agreement,ref_power_WMW,abs_dev_vs_record,pass_tol_.02,pass_agreement
+S1,6.55,2000,320,0.9320,0.9320,1.0000,0.922,0.0100,True,True
+S2,7.19,2000,320,0.8970,0.8970,1.0000,0.905,0.0080,True,True
+S6,6.56,2000,320,0.8915,0.8915,1.0000,0.881,0.0105,True,True

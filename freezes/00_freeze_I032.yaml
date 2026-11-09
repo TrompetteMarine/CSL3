@@ -340,6 +340,18 @@ pre_run_addendum_AD1:  # dated 2026-11-09T12:20Z, BEFORE any certification run
     (no RT process in the frozen generator); stated here so the cert record
     cannot be read as validating those two screens."
 
+# ------------------------------------------------------- pre-run addendum AD2
+pre_run_addendum_AD2:  # dated 2026-11-09T12:45Z, BEFORE the G1 run
+  g1_sampling_design: "the G1 cohort samples the FULL DISS parameter vector from
+    the generative ranges of recovery_v3.MODELS['DISS']['sample'] (as the I003
+    identification study did), with rho_i ~ U(.002,.05) (unchanged — it is that
+    range) and chi_i ~ U(.2,.6) (replacing 'chi fixed .6' in the spec above).
+    Reason: the gate requires REPRODUCING the I003 group-level bias profile
+    (nuF +1.5%, tauF +2.4% covering zero; nuR -30% excluded), which is defined
+    under the I003 sampling design; fixing chi was an over-specification that
+    would have broken comparability. The primary criterion r(rho_hat, rho) >= .7
+    is unchanged."
+
 # ------------------------------------------------------------------ discipline
 invariants:
   - "freeze precedes every certification run; pre-run addenda only, dated"
