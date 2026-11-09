@@ -315,9 +315,13 @@ def live_trial(player: Player, data):
     if data.get('type') == 'bsr':                      # delta 3
         tib = state.get('t_in_block', 0)
         t = total_trial(player.round_number, tib)
-        # the report asks about the SQUARE ticket; map ticket -> arm
+        # The report is a FORECAST of the NEXT round's SQUARE settlement,
+        # scored against that settlement (0-based index t = trial t+1). I032 D
+        # audit fix: the first build scored it against the round just settled,
+        # which a SQUARE chooser had already seen. Cadence t % 15 == 7 keeps
+        # t <= 442, so a next round always exists.
         sq_arm = 'good' if part.vars['good_ticket'] == 'SQUARE' else 'bad'
-        outcome = part.vars['outcomes'][sq_arm][t - 1] if tib else -1
+        outcome = part.vars['outcomes'][sq_arm][t] if tib else -1
         BsrReport.create(player=player, t=t, report=int(data['report']),
                          outcome=int(outcome),
                          report_init=int(data.get('report_init', -1)),
