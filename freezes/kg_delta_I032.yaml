@@ -150,3 +150,48 @@ audit_post_close:
   reproduction: "all seeded I032 records reproduced from committed code (see audit
     record, Reproduction); closes the launched-before-commit provenance gap"
   citation_fix: "HamJenkins2025 first author corrected to Huang Ham; verified"
+
+# ----------------------------------------------------- post-close brainstorm (2026-11-09)
+brainstorm_post_close:
+  record: "records/99_brainstorm_I032pc.md (exploratory; no frozen record altered)"
+  new_nodes:
+    - id: DISS-RIVAL-R5-RULE-INFERENCE
+      kind: model
+      status: proposed-rival (named threat; created by the rich-rule pool build)
+      statement: "a HIGH participant told that rules differ across sessions can correctly
+        infer the peer's rule is better and rate the market less fair for a true
+        distributive reason, with no reference mechanism; in no generator"
+    - id: DISS-PEER-REPLAY
+      kind: implementation
+      status: proposed (author decision)
+      statement: "same-rule replay board: HIGH = P1 stretch of a same-restoration
+        standard-schedule participant replayed in the participant's P2, level band on the
+        displayed window; disclosure identical across arms; removes R5 and pool sessions"
+      evidence: "records/peer_source_I032pc.txt (agent proxies: P1 stretches p50 .59-.61,
+        share >= .60 .47-.66)"
+    - id: DISS-RIVAL-R3INT
+      kind: model
+      status: proposed-rival (exploratory evidence)
+      statement: "integrating-utility rival: reported fairness = EMA_eta of R3 satisfaction;
+        SI c (P2-mean baseline) < 0 for eta <= .01 (latent) -> H1b-SIc not specific"
+      evidence: "records/h1b_candidates_I032pc.txt"
+    - id: DISS-H1b-FIXED-REF
+      kind: design
+      status: proposed (needs freeze + certification)
+      statement: "hold the reference regime fixed across restoration (P3 regime = arm):
+        between-arm restoration contrast gate -13.8, R3 +3.6, R4 +0.1 (latent)"
+      evidence: "records/p3_regime_I032pc.txt"
+    - id: DISS-REVERSAL-PROBE
+      kind: design
+      status: rejected (exploratory)
+      statement: "P3 reversal behavioural contrast: large under the frozen gate (-.253) but
+        vanishes when NUF is halved; non-specific given inequity-slowed learning
+        (HamJenkins2025)"
+      evidence: "records/h1b_candidates_I032pc.txt, records/reversal_strength_I032pc.txt"
+  node_updates:
+    - id: DISS-H1b-SIc
+      added_limitation: "exploratory: not specific against slow integrating-utility rivals
+        with the P2-mean baseline (R3-int eta <= .01); protected only via H1a gatekeeping"
+    - id: DISS-PEER-SOURCE
+      added_limitation: "rich-rule source creates the unmodeled rival R5; same-rule replay
+        proposed"

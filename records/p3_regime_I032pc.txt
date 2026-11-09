@@ -1,0 +1,5 @@
+POST-HOC exploratory: reference held fixed across restoration (seed 132980; latent x100; MODERATE)
+model   HIGH arm, P3 HIGH  HIGH arm, P3 LOW  LOW arm, P3 LOW  fixed-design H-L
+gate                 -8.6               2.7              5.2             -13.8
+R3                   10.0              14.7              6.5               3.6
+R4                  -23.2             -23.8            -23.3               0.1

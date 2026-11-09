@@ -1,0 +1,7 @@
+POST-HOC exploratory reversal-contrast strength (seed 132970; n=20000/arm; MOD:FULL 2:1)
+model      NUF x H1a theta  corrH  corrL   diff      d  power
+gate       1.000     0.862  0.455  0.708 -0.253  -0.77  1.000
+gate       0.500     0.820  0.761  0.764 -0.003  -0.01  0.008
+gate       0.250     0.786  0.767  0.765 +0.001  +0.01  0.006
+gate       0.125     0.782  0.769  0.767 +0.002  +0.01  0.007
+R3         1.000     0.809  0.701  0.709 -0.008  -0.02  0.011

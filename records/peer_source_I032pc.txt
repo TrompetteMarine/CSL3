@@ -1,0 +1,31 @@
+POST-HOC exploratory peer-source sizing (seed 132950). Agents proxy pool streams.
+Displayed level = mean trailing-15 win rate over the participant's P2 window (rounds 151-300).
+
+--- pool agents softmax beta = 12 ---
+own-schedule P2 window rate (what a participant gets):   mean=0.263  p50=0.260  p75=0.293  p90=0.320  acc=0.751
+O1 same schedule, person-level quantile on block window: p90=0.320  p97=0.347
+O2 same schedule, rolling index over 40 streams:  p50-index=0.274  p90-index=0.435  max-index=0.563
+O3a replay of a standard stream's P1 segment:  p50=0.613  p75=0.647  p90=0.673  share>=.60: 0.661
+O3b order-shifted P2-P1-P3, rounds 151-300:     p50=0.640  p75=0.667  p90=0.693  share>=.60: 0.797
+O4 rich-rule pool, rounds 151-300:              p50=0.633  p75=0.667  p90=0.693  share>=.60: 0.780  acc=0.938
+
+--- pool agents softmax beta = 6 ---
+own-schedule P2 window rate (what a participant gets):   mean=0.251  p50=0.253  p75=0.280  p90=0.300  acc=0.676
+O1 same schedule, person-level quantile on block window: p90=0.300  p97=0.333
+O2 same schedule, rolling index over 40 streams:  p50-index=0.262  p90-index=0.418  max-index=0.547
+O3a replay of a standard stream's P1 segment:  p50=0.593  p75=0.627  p90=0.653  share>=.60: 0.466
+O3b order-shifted P2-P1-P3, rounds 151-300:     p50=0.607  p75=0.640  p90=0.673  share>=.60: 0.583
+O4 rich-rule pool, rounds 151-300:              p50=0.607  p75=0.640  p90=0.667  share>=.60: 0.568  acc=0.846
+
+gate asymptotic P2 threshold on the displayed reference (chi weight .6, own p = .27):
+  ref > 0.474  (chi weight .4: ref > 0.576)
+
+theta(mu_ref) and asymptotic H1a power (n=320/arm, one-sided .005), M2 at a=.0578, 60k/arm:
+mu_ref gate theta  power  R3 theta  power
+  0.35      0.540  0.204      0.519  0.040
+  0.40      0.548  0.319      0.519  0.042
+  0.45      0.559  0.506      0.522  0.052
+  0.50      0.565  0.600      0.526  0.073
+  0.55      0.579  0.817      0.529  0.093
+  0.60      0.588  0.903      0.529  0.098
+  0.65      0.593  0.935      0.539  0.196

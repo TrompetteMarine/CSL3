@@ -81,3 +81,26 @@ author as "Ham, Hackjin" (wrong given name) and lacked the article number.
 Corrected to "Ham, Huang", with pages={125}. Bibliography metadata only; no
 manuscript prose changed. The entry predates I032 and had no verification record
 in the repo.
+
+## Brainstorm addendum (post-close, 2026-11-09; records/99_brainstorm_I032pc.md)
+
+| Reference | Level | What was verified | Where |
+|---|---|---|---|
+| Bolton, G. E., Brandts, J. & Ockenfels, A. (2005) Fair procedures: evidence from games involving lotteries. *Econ. J.* 115(506):1054–1076 | V-claim | procedural fairness is distinct from, though linked to, allocation fairness (abstract) | RePEc/IDEAS record |
+| Cappelen, A. W., Konow, J., Sørensen, E. Ø. & Tungodden, B. (2013) Just luck. *AER* 103(4):1398–1413. doi:10.1257/aer.103.4.1398 | V-claim | many participants judge fairness by ex ante opportunities only; most still support some ex post redistribution; luck vs choice distinguished | EconPapers record |
+| Card, D., Mas, A., Moretti, E. & Saez, E. (2012) Inequality at work. *AER* 102(6):2981–3003 | V-claim | below-median earners report lower satisfaction after peer-salary disclosure; above-median unaffected; rank matters more than level (abstract) | EconPapers record |
+| Charness, G., Samek, A. & van de Ven, J. (2022) What is considered deception in experimental economics? *Exp. Econ.* 25(2):385–412. doi:10.1007/s10683-021-09726-7 | V-claim | views on gray-area practices (omission; misleading without lying) vary widely; costs and benefits seen as relevant (abstract) | UvA DARE record |
+| Judd, C. M., Westfall, J. & Kenny, D. A. (2012) Treating stimuli as a random factor in social psychology. *JPSP* 103(1):54–69. doi:10.1037/a0028347 | V-claim | stimuli are sampled; crossed random-effects models; ignoring stimulus variance biases inference (abstract) | PubMed record |
+| Fliessbach, K. et al. (2007) Social comparison affects reward-related brain activity in the human ventral striatum. *Science* (23 Nov 2007) | V-claim (vol/pages not re-checked) | partner's payment modulates ventral-striatum BOLD beyond absolute pay | IDEAS reprint record + ScienceDaily release |
+| Festinger, L. (1954) A theory of social comparison processes. *Hum. Relat.* 7(2):117–140. doi:10.1177/001872675400700202 | V-biblio | bibliographic record only; the similarity hypothesis is cited from the canonical text, quote not re-checked | UBC reading-list PDF header |
+| Bernal, J. L., Cummins, S. & Gasparrini, A. (2017) Interrupted time series regression … a tutorial. *Int. J. Epidemiol.* 46(1):348–355. doi:10.1093/ije/dyw098 | V-claim | segmented regression; impact model specified a priori; time-varying confounders a key issue (abstract) | LSHTM repository record |
+| Berger, R. L. (1982) Multiparameter hypothesis testing and acceptance sampling. *Technometrics* 24(4):295–300. doi:10.2307/1267823 | V-biblio | bibliographic record; IUT property cited from the canonical result | Scilit record |
+| U.S. FDA (2016) Non-Inferiority Clinical Trials to Establish Effectiveness. Guidance for Industry | V-claim (secondary) | M1 = conservative estimate of the control effect; M2 = how much of M1 is preserved; 50% preservation as the common choice | CMAJ methods review (doi:10.1503/cmaj.120142) |
+| Rigoux, L., Stephan, K. E., Friston, K. J. & Daunizeau, J. (2014) Bayesian model selection for group studies — revisited. *NeuroImage* 84:971–985. doi:10.1016/j.neuroimage.2013.08.065 | V-claim | random-effects BMS over model frequencies; protected exceedance probability accounts for chance differences | dissem.in record |
+| Wilson, R. C. & Collins, A. G. E. (2019) Ten simple rules for the computational modeling of behavioral data. *eLife* 8:e49547 | V-claim | parameter recovery and model recovery (confusion matrix) before fitting real data | PMC full text |
+| Ince, R. A. A., Paton, A. T., Kay, J. W. & Schyns, P. G. (2021) Bayesian inference of population prevalence. *eLife* 10:e62461 | V-claim | prevalence from within-participant tests; requires enough data per person | Glasgow eprints record |
+| Jonckheere, A. R. (1954) A distribution-free k-sample test against ordered alternatives. *Biometrika* 41:133–145 | V-biblio | bibliographic record | Wikipedia reference list |
+
+Not used (could not verify claims): Maier & Seligman (2016) *Psychol. Rev.*
+123(4):349–367 (no abstract retrievable); Behrens et al. (2007) (journal
+details not retrieved).
