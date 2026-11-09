@@ -1,0 +1,43 @@
+== Q1/Q2 latent anatomy, HIGH P2 arm, MODERATE only, n = 40000 ==
+gate      P1  97.5  P2 mean  54.2  late-P2  35.9  late-P3  21.6  | rec  -32.5 = unfinished-P2  -18.2 + P3-response  -14.3
+          trust at t=300,330,...,450:  21.7  21.4  21.3  21.4  21.7  22.1
+   all             n=40000  late-P3 A 0.506 vs A* 0.493  share A>A* 0.693  rec  -32.5  P3-response  -14.3
+   P3 regime HIGH  n=19852  late-P3 A 0.541 vs A* 0.493  share A>A* 0.985  rec  -38.3  P3-response  -20.1
+   P3 regime LOW   n=20148  late-P3 A 0.472 vs A* 0.494  share A>A* 0.405  rec  -26.8  P3-response   -8.6
+   rho=0.002          rec  -38.9  P3-response  -20.3  share A>A* 0.844
+   rho=0.02           rec  -26.1  P3-response   -8.4  share A>A* 0.542
+rival_au  P1  97.8  P2 mean  79.2  late-P2  79.2  late-P3  92.1  | rec  +12.9 = unfinished-P2   +0.0 + P3-response  +12.9
+          trust at t=300,330,...,450:  79.7  91.8  92.2  92.1  92.1  92.0
+rival_us  P1  98.2  P2 mean  95.5  late-P2  91.5  late-P3  60.8  | rec  -34.7 = unfinished-P2   -4.0 + P3-response  -30.7
+          trust at t=300,330,...,450:  81.7  71.8  66.5  62.8  60.3  58.4
+
+== Q5 the no-gate composite (R3 share .5595, a = 1, M2), HIGH x MODERATE ==
+R3 types  share 0.561  drop mean   13.4  rec mean   +9.6  rec median  +10.3  inside +/-5.0: 0.237
+R4 types  share 0.439  drop mean    1.9  rec mean  -28.1  rec median  -20.3  inside +/-5.0: 0.307
+pooled    share 1.000  drop mean    8.3  rec mean   -7.0  rec median   +2.3  inside +/-5.0: 0.268
+above-median-drop half: R3 share 0.912; its rec median  +11.2 (H1b-SIc conditions here)
+
+== Q3 frozen H1b across attenuation a (M2 noise; B = 200 per cell) ==
+a=0.05  gate median rec   -1.3 (share inside band 0.84) | delta_eq  5.0 | R3 mean rec   +0.5 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 0.860 R3 0.000
+a=0.1   gate median rec   -2.8 (share inside band 0.70) | delta_eq  5.0 | R3 mean rec   +1.1 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+a=0.2   gate median rec   -5.7 (share inside band 0.42) | delta_eq  5.0 | R3 mean rec   +2.2 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+a=0.3   gate median rec   -8.7 (share inside band 0.30) | delta_eq  5.0 | R3 mean rec   +3.2 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+a=0.45  gate median rec  -13.3 (share inside band 0.22) | delta_eq  5.0 | R3 mean rec   +4.9 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+a=0.6   gate median rec  -17.8 (share inside band 0.19) | delta_eq  5.0 | R3 mean rec   +6.5 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+a=0.8   gate median rec  -23.8 (share inside band 0.16) | delta_eq  5.0 | R3 mean rec   +8.4 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+a=1.0   gate median rec  -29.3 (share inside band 0.16) | delta_eq  5.0 | R3 mean rec   +9.6 | band between them: no  | frozen verdict gate 0.000 R3 0.000 | SIc gate 1.000 R3 0.000
+
+== Q4 routes to the design basis theta = .592 (B = 300 per cell) ==
+attenuation a    a=0.0578 sigma=10.0 chi=0.600 rho=mix  theta 0.595
+   gate median rec   -1.7 | delta_eq   5.0 | R3 rec   +0.7 | R3 rec/drop 0.72 | H1a gate 0.933 R3 0.160
+   verdict gate: frozen 0.000  SI 0.933  SIc 0.933   |  R3: frozen 0.000  SI 0.000  SIc 0.000
+noise sigma_eps  a=1.0000 sigma=151.0 chi=0.600 rho=mix  theta 0.593
+   gate median rec   -7.3 | delta_eq  22.3 | R3 rec   +2.6 | R3 rec/drop 0.66 | H1a gate 0.953 R3 0.180
+   verdict gate: frozen 0.000  SI 0.953  SIc 0.953   |  R3: frozen 0.000  SI 0.000  SIc 0.000
+anchoring chi    a=1.0000 sigma=10.0 chi=0.178 rho=mix  theta 0.595
+   gate median rec   +0.8 | delta_eq   5.0 | R3 rec   +7.5 | R3 rec/drop 0.81 | H1a gate 0.987 R3 0.703
+   verdict gate: frozen 0.327  SI 0.960  SIc 0.987   |  R3: frozen 0.000  SI 0.000  SIc 0.000
+rigidity rho     a=1.0000 sigma=10.0 chi=0.600 rho=0.00142  theta 0.592
+   gate median rec  -35.5 | delta_eq   5.0 | R3 rec   +8.9 | R3 rec/drop 0.66 | H1a gate 0.897 R3 0.890
+   verdict gate: frozen 0.000  SI 0.897  SIc 0.897   |  R3: frozen 0.000  SI 0.000  SIc 0.000
+
