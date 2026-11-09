@@ -86,6 +86,36 @@ LOW streams: yoked to the participant's own realized earnings band (± .05),
 re-matched each block. Instructions disclose exactly this provenance; no
 deception anywhere in the protocol.
 
+**Audit correction (post-I032, records/98_audit_I032.md).** The paragraph above
+is not realizable as written, and the I027–I032 code did not implement it.
+- *Infeasible HIGH source.* Every standard-schedule participant is deprived in
+  P2: their P2-window rate is about .28 and their 450-trial rate about .44–.50.
+  No pilot participant can supply a P2 window in [.60,.70]. The old code selected
+  on the 450-trial rate, found nothing, and fell back silently to the first
+  stream, a deprivation peer. With a real pilot pool, HIGH and LOW participants
+  would both have seen deprivation peers in P2, so there would have been no
+  manipulation at all.
+- *Rich-rule pool source.* Truthful HIGH streams require **pool-source sessions
+  under a rich rule** (.65/.35 in every phase, config `pool_rich`). This is
+  disclosed by the existing "one of several rules used across sessions" line.
+  A rich-rule participant reaches the .60 band only with accuracy ≳ .83, so pool
+  size must be planned from the pilot (the pool tool reports, per block, how many
+  streams qualify).
+- *Selection rules as now built.* HIGH is selected on the stream's rate in the
+  *current* block window. LOW draws a same-schedule stream (same restoration
+  level) whose previous-block rate is within ±.05 of the participant's own
+  previous-block rate. This is prospective yoking, and it is truthful.
+- *Displayed statistic.* The board showed the peer's *cumulative* rate since
+  round 1. For a LOW deprivation peer that averages about .50 during P2 (falling
+  from .60 to .44), against about .28 for their actual P2 play. That would have
+  kept only 31% of the HIGH−LOW reference gap the certified generator assumed
+  (.10 against .33). The board now shows the peer's win rate over their last 15
+  rounds, identically in both arms, matching the generator's references (own band
+  under LOW, ~μ_ref under HIGH).
+- **Author decisions** (§ Author decisions, audit report): the trader-board
+  wording, given that HIGH peers played under a different rule (this also bears on
+  how the global-rig Bayesian rival should read the peer); and pool-source size.
+
 ## 5. Measures
 
 1. Choices per trial (behavioural accuracy = optimal-arm rate).
@@ -244,6 +274,27 @@ next-round forecasts, sharpened WTP wording, and the ITI-jitter knob. The full
 list is in `freezes/00_freeze_I032.yaml`. Bots pass on every bot config and on
 the bandit-skin pilot arm. `pipeline.py` v2 implements the prereg tests; gate
 G2 (agreement with the power engine) passed (records/g2_consistency.csv).
+
+Audit additions (post-I032, records/98_audit_I032.md); all 17 session configs
+pass the bots, and 23 tests pass.
+- The forecast bonus promised in the instructions is now actually paid: one
+  forecast drawn at random, 10 points with probability 1 − (o − f)². Before the
+  audit it was announced but never paid, which is a truthfulness defect.
+- The live engine survives page reloads. Block state persists server-side, a
+  reload resumes with any owed rating, forecast or WTP screen, and duplicate or
+  unsolicited submissions are refused. Before the audit a reload restarted the
+  block counter and duplicated trials.
+- Production guards: the secret key comes from the environment, and a human
+  session without a real peer pool refuses to start rather than silently showing
+  the simulated placeholder.
+- Balanced permuted-block assignment (blocks of 6) in `main_confirmatory`.
+- Payment aligned to §2: participation £4.20, £0.0035/point (~£1.10 expected).
+  The I006 setting of £0.02/point would have paid ~£6.30 per participant.
+- Export: config name, schedule, peer stream, ticket, betting familiarity,
+  comprehension attempts, reloads, forecast bonus and payoff.
+- `pipeline.py`: the confirmatory set is restricted by config, so dose,
+  framing, pilot and pool sessions never enter H1a/H1b. H1b-SI, H1b-SIc and an
+  exploratory end-of-P2 variant are computed and labelled beside the frozen form.
 
 ## 11. Timeline (indicative)
 

@@ -116,6 +116,7 @@ lists the hashes).
 | Certification run 2 (H1a, frozen H1b, dose, framing) | `python experiment/analysis/pipeline_cert.py` | `records/pipeline_cert_I032{,_calib}.csv` |
 | Certification run 3 (H1b-SI/SIc, heterogeneity) | `python experiment/analysis/pipeline_cert_run3.py` | `records/pipeline_cert_I032_run3.csv` |
 | Post-hoc H1b anatomy and baseline test | `python experiment/analysis/explore_h1b_anatomy.py`; `... explore_h1b_baseline.py` | `records/h1b_*_I032pc.*` |
+| Post-hoc dose diagnostic | `python experiment/analysis/dose_posthoc_I032.py > records/dose_posthoc_I032.txt` | `records/dose_posthoc_I032.txt` |
 | oTree bots (all configs; reload/duplicate robustness) | `cd experiment && otree test bots_refresh 12` (and each `bots_*`, `pilot_*`, `pool_rich`) | pass/fail |
 | Hash check | `sha256sum -c records/manifest_I032.sha256` | OK lines |
 

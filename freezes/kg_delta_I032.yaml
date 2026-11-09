@@ -121,3 +121,32 @@ erratum_post_close:
   new_edges:
     - {from: DISS-H1b-TOST, to: DISS-GATE-P3-FLATLINE, type: refuted_by,
        note: "the baseline defect: the test reads the P2 ramp as P3 change"}
+
+# ----------------------------------------------------- post-close audit (2026-11-09)
+audit_post_close:
+  record: "records/98_audit_I032.md"
+  node_updates:
+    - id: OTREE-DISS-BANDIT
+      old_status: "market-skin build, bots green (I032)"
+      new_status: "AUDITED: 3 critical defects fixed in code (peer source/selection
+        infeasible -> no manipulation with a real pool; cumulative peer display kept 31%
+        of the certified reference gap; promised forecast bonus unpaid), 6 high (reload
+        reset, payment 5.7x DESIGN, pipeline module/confirmatory-set contamination,
+        missing SIc, placeholder pool reachable by humans, export gaps). 17 configs + 23
+        tests pass; production guards tested. Author decisions open: board wording given
+        rich-rule HIGH peers; pool-source size; payment confirmation"
+    - id: DISS-H1
+      added_limitation: "secondaries H2-H4 and the rho moderator not certified on
+        synthetic cohorts (I033)"
+  new_nodes:
+    - id: DISS-PEER-SOURCE
+      kind: implementation
+      status: designed-and-built (author decision on wording open)
+      statement: "truthful HIGH peers require rich-rule pool-source sessions; selection
+        on the current-block window; LOW = same-schedule stream yoked on previous-block
+        rate; board = peer's trailing-15 win rate in both arms (generator-consistent)"
+      evidence: "audit arithmetic; bots_refresh export check (HIGH P2 peers .62-.67,
+        LOW P2 peers .24-.29 vs own .16-.37; trailing-15 display exact)"
+  reproduction: "all seeded I032 records reproduced from committed code (see audit
+    record, Reproduction); closes the launched-before-commit provenance gap"
+  citation_fix: "HamJenkins2025 first author corrected to Huang Ham; verified"
