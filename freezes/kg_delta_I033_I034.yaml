@@ -1,0 +1,82 @@
+# KG delta — KGi-DISS-I033 and I034 (on top of kg_delta_I032.yaml; scoped; history kept)
+version: 1
+baseline_snapshot: "CSL3 main after AD-O1; kg_delta_I032.yaml incl. post-close blocks"
+edge_convention: "requires: dependent -> prerequisite"
+node_updates:
+  - id: OTREE-DISS-BANDIT
+    new_status: "SUPERSEDED AS DESIGN TARGET: 450 per-round trials rejected by the author
+      (2026-11-09/10). Target = ten rounds with per-round summaries (DISS-TASK-TEN)"
+  - id: DISS-H1b-SID
+    new_status: "superseded by simulation-derived scores (DISS-SCORE-SA/SB) for the
+      ten-round task; hand-built conjunction needs 128/cell at gain .5 vs 90"
+  - id: DISS-DESIGN-BASIS-THEORY-EDGE
+    new_status: "frozen as the approach (00_freeze_I033.yaml T1-T7); adoption author-gated"
+  - id: DISS-RIVAL-R3INT
+    new_status: "the binding rival: any score built from HIGH x MOD vs LOW x MOD means
+      that excludes it loses nearly all power (AD-O1 S-c); excluded only with
+      full-restoration cells (DISS-ID-SPAN)"
+new_nodes:
+  - id: DISS-LEMMA-COUNT-SUFFICIENCY
+    kind: model
+    status: analytic (algebra on the frozen kernel) + supported-synthetic
+    statement: "while A > tauF and L is unclipped, a round of k draws changes L by
+      -nuF(A - tauF)(#losses) + nuR(#wins): the gate depends on a round only through its
+      win count"
+    evidence: "records/batched_periods_I033.txt (summary task within 3.8% of the per-round
+      task at every theory point and for R3)"
+    limitations: "assumes people integrate a summary per outcome; human-necessary check
+      (vary k between participants)"
+  - id: DISS-TASK-TEN
+    kind: design
+    status: "proposed (author directive, ten repetitions; build pending)"
+    statement: "ten rounds (2 rich / 5 deprivation / 3 restoration), one ticket choice and
+      one summary of 25 settlements per round, three-item fairness scale + entitlement
+      item per round, board held at the arm, ~8-10 min"
+    evidence: "records/103_batched_periods_I033.md"
+  - id: DISS-LENGTH-FLOOR
+    kind: statistical
+    status: supported-synthetic
+    statement: "per-round designs need >= ~205-225 rounds; deprivation phase >= ~90
+      draws, restoration >= ~75; shortening below fails at any n <= 320"
+    evidence: "records/102_design_minimisation_I033.md"
+  - id: DISS-SCORE-SA
+    kind: statistical
+    status: supported-synthetic (weights frozen from simulation; uncertified shapes)
+    statement: "reference-effect score w_a = Sigma^-1 d on the ten ratings, WMW between
+      arms: n_min 80 / 70 / 58 per arm at gain .25 / .5 / 1"
+    evidence: "records/optimal_scores_I033.txt"
+  - id: DISS-SCORE-SB
+    kind: statistical
+    status: supported-synthetic, scoped
+    statement: "R3-orthogonal gate score: n_min 145 / 90 / 86; false positives <= .010 vs
+      R3, R4, composite; NOT specific vs slow-reporting rivals (.24-.92)"
+    evidence: "records/optimal_scores_I033.txt"
+  - id: DISS-ID-SPAN
+    kind: statistical
+    status: supported-synthetic under normal approximation (I034); certification = I035
+    statement: "with cells {HIGH, LOW} x {MOD, FULL}, the component of the gate's
+      between-cell mean pattern orthogonal to the span of R3, R4 and R3-int (five speeds,
+      two anchoring weights) supports power .9 at alpha .005 with 217 per cell at gain .5
+      at the worst inside point; held-out speeds leak <= .019. With MOD cells only: 714."
+    evidence: "records/span_identification_I034.txt"
+  - id: DISS-HUMAN-PARAMS
+    kind: design
+    status: open (pilot)
+    statement: "what only humans supply: scale gain and noise, starting entitlement,
+      rigidity distribution, per-outcome vs per-event integration of summaries"
+new_edges:
+  - {from: DISS-TASK-TEN, to: DISS-LEMMA-COUNT-SUFFICIENCY, type: requires}
+  - {from: DISS-SCORE-SB, to: DISS-RIVAL-R3INT, type: qualified_by, note: "not excluded"}
+  - {from: DISS-ID-SPAN, to: DISS-RIVAL-R3INT, type: tested_by}
+  - {from: DISS-ID-SPAN, to: DISS-TASK-TEN, type: requires}
+  - {from: DISS-TASK-TEN, to: DISS-HUMAN-PARAMS, type: requires}
+  - {from: OTREE-DISS-BANDIT, to: DISS-LENGTH-FLOOR, type: qualified_by}
+defeated_preserved:
+  - "ES3 (a <= 15 min per-round design adequate at gain .25): failed"
+  - "pre-stated stage-2 selection rule selected nothing; amended before stage 2"
+  - "AD-O1 first run: baseline sign reversed (corrected)"
+  - "I034 E1 (MOD-only n_min > 1000): observed 714"
+frontier: ["I035 certification of DISS-ID-SPAN (Monte Carlo, allocation, gains, shapes, A0)",
+           "pilot spec for DISS-HUMAN-PARAMS", "ten-round oTree build", "prereg rewrite",
+           "ABM speed edge not stated in manuscript (flag stands)"]
+persistence: "CSL3 freezes/kg_delta_I033_I034.yaml + Project mirror; no remote KG service"

@@ -1,0 +1,24 @@
+I034 span identification (seed 133800; gain .5; ten rounds; n per cell)
+
+(a) MOD cells only: HM-LM: contrast dim 10, rival span rank kept 6
+  per-participant noncentrality, span-orthogonal test: P0 0.180  P1 0.145  P2 0.167  P3 0.144  P4 0.148
+  (unconstrained best score, for reference: worst point 0.568 -> n 46)
+  n_min per cell (worst inside point): 714
+    held-out R3-int e=0.3 chi=0.4: false-positive probability at n=714: 0.025
+    held-out R3-int e=0.3 chi=0.6: false-positive probability at n=714: 0.002
+    held-out R3-int e=0.15 chi=0.4: false-positive probability at n=714: 0.002
+    held-out R3-int e=0.15 chi=0.6: false-positive probability at n=714: 0.006
+    held-out R3-int e=0.09 chi=0.4: false-positive probability at n=714: 0.005
+    held-out R3-int e=0.09 chi=0.6: false-positive probability at n=714: 0.008
+
+(b) MOD + FULL cells: HM-LM, HF-LF, HM-HF: contrast dim 30, rival span rank kept 12
+  per-participant noncentrality, span-orthogonal test: P0 0.323  P1 0.286  P2 0.311  P3 0.262  P4 0.280
+  (unconstrained best score, for reference: worst point 1.116 -> n 12)
+  n_min per cell (worst inside point): 217
+    held-out R3-int e=0.3 chi=0.4: false-positive probability at n=217: 0.019
+    held-out R3-int e=0.3 chi=0.6: false-positive probability at n=217: 0.010
+    held-out R3-int e=0.15 chi=0.4: false-positive probability at n=217: 0.011
+    held-out R3-int e=0.15 chi=0.6: false-positive probability at n=217: 0.009
+    held-out R3-int e=0.09 chi=0.4: false-positive probability at n=217: 0.005
+    held-out R3-int e=0.09 chi=0.6: false-positive probability at n=217: 0.006
+

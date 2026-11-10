@@ -28,3 +28,18 @@ expected: {E1: "(a) confirmed: n_min > 1000", E2: "(b) uncertain; if it holds n_
            E3: "held-out speeds leak <= .02"}
 agenda_after: "KG delta for I033 + I034; if (b) fails, record the identification limit
   and list non-mean measures as the frontier"
+
+closing_record:   # verbatim scorecard, 2026-11-10
+  record: "records/span_identification_I034.txt"
+  E1: "FAIL in magnitude. MOD cells only: the span-orthogonal test is weak but not null:
+    n_min 714 per cell (predicted > 1000). Claim (a) restated: weakly identified."
+  E2: "PASS. MOD + FULL cells: n_min 217 per cell at the worst inside point (P3 speed
+    edge), gain .5; four cells, 868 participants."
+  E3: "PASS, narrowly. Held-out speeds: false-positive probability .005-.019 at n = 217
+    (threshold .02); .025 in one MOD-only cell at n = 714."
+  status_DISS_ID_SPAN: "(b) supported-synthetic under a normal approximation; not
+    certified (no Monte Carlo rank test, one measurement shape, one gain, equal
+    allocation, span built from five speeds)"
+  next: "I035: Monte Carlo certification of the span-orthogonal test with frozen weights;
+    optimal unequal allocation across the four cells; gains .25 and 1; shapes M1-M6;
+    starting entitlement; then prereg text"
