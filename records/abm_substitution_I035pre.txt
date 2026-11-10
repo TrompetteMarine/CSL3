@@ -1,0 +1,8 @@
+ABM substitution, exploratory (seed 133900): share of score variance predictable without humans
+ gain   arm  R2 own win counts  R2 wins + board  R2 simulator oracle
+ 0.25  HIGH              0.127            0.158                0.267
+ 0.25   LOW              0.010            0.007                0.507
+ 0.50  HIGH              0.210            0.273                0.499
+ 0.50   LOW              0.026            0.024                0.732
+ 1.00  HIGH              0.260            0.327                0.573
+ 1.00   LOW              0.032            0.030                0.819
