@@ -1,0 +1,9 @@
+I035 information on gate speed s (edge point s .895, ratio .25, chi .4, gain .5; target SE .0635)
+
+design                                  n/cell, nuisances known   n/cell, nuisances unknown  total humans (unknown)  corr(s, gain)
+D1 2/5/3 k25 two cells                                       50                          91                     181  -0.00
+D2 2/5/3 k25 four cells                                      24                          40                     161  -0.00
+D3 1/6/3 k25 four cells                                      28                          46                     183  +0.12
+D4 2/6/2 k25 four cells                                      23                          42                     169  -0.02
+D5 2/5/3 k40 four cells                                      22                          27                     109  -0.04
+D6 2/5/3 k25 P2 .25/.10 four cells                           21                          32                     130  -0.01

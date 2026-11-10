@@ -32,3 +32,21 @@ claim_card:
 expected: {E1: "nuisances known: n_min <= 60 per cell for the best design",
            E2: "nuisances unknown: gain and speed partly confounded; n_min 3-10x larger",
            E3: "full-restoration cells and more deprivation rounds raise information on s"}
+
+closing_record:   # verbatim scorecard, 2026-11-10
+  record: "records/info_speed_I035.txt"
+  E1: "PASS. Nuisances known: 21-28 per cell for every four-cell design (50 with two cells)."
+  E2: "FAIL (prediction too pessimistic). Nuisances unknown: inflation only 1.2-1.8x
+    (27-46 per cell, four cells; 91 with two cells); corr(s-hat, gain-hat) about 0.
+    Reason found after the run: the rich-phase rating level identifies the gain ONLY
+    because starting legitimacy is fixed at its frozen value; with starting legitimacy
+    unknown, gain and baseline are confounded and the bound is optimistic."
+  E3: "PASS for full-restoration cells (two cells 181 total -> four cells 161 at smaller
+    cells); more deprivation rounds did not help (D3, D4); more draws per round (k = 40:
+    109 total) and harsher deprivation odds (130 total) did."
+  status_DISS_INFO_SPEED: "supported-synthetic as an information BOUND at one point;
+    not a certified procedure. Not profiled: starting legitimacy, starting entitlement,
+    rigidity mix, rating noise. Presumes the gate model (estimation, not discrimination)."
+  next: "I036: add starting legitimacy, starting entitlement and rigidity mix as
+    nuisances; k = 40 with harsh odds; build and certify the estimator (simulated
+    minimum distance) against the bound; unequal allocation; outcome adjustment"

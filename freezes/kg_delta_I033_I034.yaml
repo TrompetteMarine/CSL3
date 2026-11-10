@@ -80,3 +80,35 @@ frontier: ["I035 certification of DISS-ID-SPAN (Monte Carlo, allocation, gains, 
            "pilot spec for DISS-HUMAN-PARAMS", "ten-round oTree build", "prereg rewrite",
            "ABM speed edge not stated in manuscript (flag stands)"]
 persistence: "CSL3 freezes/kg_delta_I033_I034.yaml + Project mirror; no remote KG service"
+
+# ----------------------------------------------------- I035 block (2026-11-10)
+i035:
+  new_nodes:
+    - id: DISS-TARGET-SPEED
+      kind: design
+      status: "proposed (author directive 2026-11-10, target the sufficient criterion)"
+      statement: "the human quantity that decides whether the paper's headline describes
+        people is the gate speed s; criterion: reject s <= .65 against s = .895 at alpha
+        .005, power .90 (SE .0635)"
+      evidence: "records/invcal.csv"
+    - id: DISS-INFO-SPEED
+      kind: statistical
+      status: supported-synthetic (information bound; optimistic, see limitations)
+      statement: "ten-round task, edge point, gain .5: 27-46 participants per cell in four
+        cells (109-183 total) reach the criterion with ratio, anchoring weight and gain
+        unknown; best: 40 draws per round (109 total)"
+      limitations: "starting legitimacy fixed (identifies gain); starting entitlement,
+        rigidity mix, noise not profiled; presumes the gate model; Gaussian bound"
+      evidence: "records/info_speed_I035.txt"
+    - id: DISS-ABM-SUBSTITUTION
+      kind: statistical
+      status: exploratory
+      statement: "share of score variance predictable without humans: own win counts
+        13-26% (HIGH), 1-3% (LOW); simulator oracle 27-57% / 51-82%; simulated control
+        arm rejected for the confirmatory claim (measurement layer is human)"
+      evidence: "records/abm_substitution_I035pre.txt"
+  new_edges:
+    - {from: DISS-INFO-SPEED, to: DISS-TARGET-SPEED, type: requires}
+    - {from: DISS-INFO-SPEED, to: DISS-ID-SPAN, type: qualified_by,
+       note: "estimation presumes the gate; discrimination (I034) comes first"}
+  defeated_preserved: ["I035 E2 (gain-speed confounding inflates n 3-10x): observed 1.2-1.8x, for a reason that is itself an untested assumption"]
