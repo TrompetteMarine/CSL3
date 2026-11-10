@@ -1,0 +1,30 @@
+iteration_id: "KGi-DISS-I034"
+mode: "identification question, simulation-numerical; exploratory verifier (normal
+  approximation on simulated cell means), not a certification. Written before the run."
+freeze_time: "2026-11-10T21:50Z"
+freeze_relative_to_work: "I033 addenda AD-B1, AD-O1 (incl. post hoc S-c) already seen"
+baseline: {repo: "CSL3 main after AD-O1", freeze: "00_freeze_I033.yaml", kg: "kg_delta_I032.yaml + I033 records"}
+question: "In the ten-round task, is the gate identifiable against the slow-reporting
+  utility family (R3-int: fairness = moving average of R3 satisfaction, any speed) from
+  randomised between-cell contrasts of mean fairness, once full-restoration cells are
+  added? I033 showed it is not from HIGH x MOD vs LOW x MOD alone."
+claim_card:
+  id: DISS-ID-SPAN
+  kind: statistical
+  statement: "Let g be the gate's vector of between-cell mean differences over cell set
+    Z, and R the linear span of the same vectors for R3 (chi .4, .6), R4 and R3-int with
+    per-round smoothing e in {.5, .35, .22, .118, .06} (chi .4, .6). (a) For Z = {HIGH x
+    MOD, LOW x MOD}, g is within noise of R (no powered R-orthogonal test). (b) For Z =
+    {HIGH, LOW} x {MOD, FULL}, the R-orthogonal component of g supports a test with power
+    .9 at alpha .005 for n <= 250 per cell at gain .5, at every inside theory point."
+  falsification: "(b) fails if n_min > 250 at any inside point, or if held-out speeds
+    e in {.3, .15, .09} give false-positive probability > .02 at n_min."
+design: "ten rounds (2/5/3, 25 draws each), three-item scale sigma 5.8, M2, gain .5;
+  12k simulated participants per cell and model; contrasts: HM-LM, HF-LF, HM-HF; rival
+  span truncated to singular values > .5 rating points; weights from the mean gate
+  vector over inside points; noncentrality per participant-per-cell z1; n_min =
+  ((2.576+1.282)/z1)^2 at the worst inside point; seed 133800"
+expected: {E1: "(a) confirmed: n_min > 1000", E2: "(b) uncertain; if it holds n_min 150-250",
+           E3: "held-out speeds leak <= .02"}
+agenda_after: "KG delta for I033 + I034; if (b) fails, record the identification limit
+  and list non-mean measures as the frontier"
