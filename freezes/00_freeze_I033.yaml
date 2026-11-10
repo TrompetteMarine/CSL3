@@ -241,3 +241,42 @@ AD_S2_result:
   unexpected: "initial entitlement A0 = .4 collapses the conjunction at the ratio edge
     in every design incl. 450 rounds (.00-.01); A0 = .6 weakens H1a (worst .49-.88).
     Short designs leak against R3-int eta .01 at full gain (.195-.335; baseline 0)."
+
+# =================================================================== ADDENDUM AD-B1 (pre-run, 2026-11-10)
+# Author directive: "anything more than 10 rounds is absolutely mental from a human pov;
+# we need to be more clever than that."
+AD_B1_batched_periods:
+  idea: "Sufficiency lemma (algebra on the frozen kernel): while A stays above tauF and L
+    is not clipped, one period of k draws changes legitimacy by
+    dL = -nuF*(A - tauF)*(#losses) + nuR*(#wins) (wins always have D = .25(1-A) <= tauF),
+    i.e. the gate depends on a period's outcomes only through its win COUNT; the
+    aspiration update over k draws is, to first order in rho, a function of the period's
+    mean. So a task with <= 10 decision periods, each showing a summary ('your ticket paid
+    in x of k draws; the board trader's in y of k'), carries the evidence of 10k rounds."
+  generator: "design_generator.simulate_design(choice_every=k, cadence=k): one ticket
+    choice per period, held for k draws; one rating pair per period (default unchanged;
+    23 tests pass)"
+  checks:
+    B1_equivalence: "latent trust at period ends, per-round task (choice every draw,
+      ratings every 5) vs batched task (choice every 25, rating every 25), geometry
+      50/100/75 draws = 2/4/3 periods, HIGH x MOD and LOW x MOD, points P0-P4 and R3"
+    B2_power: "batched designs k in {20, 25}, periods (P1, P2, P3) in {(2,4,3), (2,5,3)};
+      rating noise sigma in {10 (one slider), 5.8 (three-item scale)}; gain a in
+      {.25, .5, 1}; n in {60, 100, 160, 250, 320}; H1a and the H1b conjunction at every
+      inside point; indices: P1 ratings 1 | 2 for selection | test, P2 first half =
+      selection window, last 2 P2 ratings = end, last 2 P3 ratings = late; kappa by the
+      frozen T5 rule per design; M2 shape; B = 200"
+    B3_specificity: "best batched design at its n_min: conjunction false positives vs R3
+      (chi .4, .6) and the composite at a in {.5, 1}"
+  seed: 133600
+  expected:
+    EB1: "batched latent trust at period ends within 10% (relative) of the per-round task
+      in every cell (sufficiency + choice batching is a small perturbation)"
+    EB2: "with one slider (sigma 10) and 9-10 ratings, n_min > 320 at a = .25 and
+      probably at a = .5 (noise averaging lost)"
+    EB3: "a three-item scale (sigma 5.8) brings n_min <= 320 at a = .5"
+    EB4: "at a = 1 n_min <= 160 for at least one batched design"
+  human_necessary_added: "whether people integrate a summary per outcome (count-linear,
+    as the lemma assumes) or per event (one update per period); testable in the pilot by
+    varying k between participants (per-outcome: drop scales with k; per-event: it does
+    not)"

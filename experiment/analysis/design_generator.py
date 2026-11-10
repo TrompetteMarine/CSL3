@@ -16,6 +16,10 @@ Rating indices returned in 'idx' (python slices over the rating axis):
   end               last 4 P2 ratings
   presel            the P2 ratings just before 'end' used for selection (up to 6)
   late              second half of P3
+
+choice_every > 1 gives the batched-period task: one ticket choice per period of
+choice_every draws (outcomes then shown as a period summary). With cadence =
+choice_every there is one rating pair per period. Default 1 = the per-round task.
 """
 import numpy as np
 
@@ -40,7 +44,7 @@ def _idx(phases, cadence):
 def simulate_design(kind, n, p2_regime, rng, phases=(150, 150, 150), cadence=5,
                     p1_odds=None, p2_odds=None, mu_ref=0.65, chi=CHI_FROZEN,
                     framing=False, resto_mix=(2, 1), rho_override=None, a0=None,
-                    reg3_fixed=None, trace=False):
+                    reg3_fixed=None, trace=False, choice_every=1):
     if kind == 'gate':
         kind = 'diss'
     if kind not in ('diss', 'rival', 'rival_us', 'rival_au'):
@@ -103,7 +107,10 @@ def simulate_design(kind, n, p2_regime, rng, phases=(150, 150, 150), cadence=5,
         else:
             dq = Q[:, 0] - Q[:, 1]
         p0 = _sigmoid(BETA * dq)
-        arm = (rng.random(n) >= p0).astype(np.int8)
+        if choice_every == 1 or t % choice_every == 0:
+            # batched periods (choice_every > 1): one ticket choice per period,
+            # held for the period's draws; default draws exactly as before
+            arm = (rng.random(n) >= p0).astype(np.int8)
         mu_arm = np.where(arm == 0, mu_good, mu_bad)
         R = (rng.random(n) < mu_arm).astype(np.float64)
 
