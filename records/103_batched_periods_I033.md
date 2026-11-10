@@ -1,5 +1,11 @@
 # Ten decisions instead of hundreds of rounds (I033 AD-B1, 2026-11-10)
 
+**Terminology (author, 2026-11-10).** A "period" in this record is one ROUND for
+the participant. The task is ten repetitions, and each repetition is: choose a
+ticket, see one summary screen, answer the items. The k draws exist only inside
+the summary. They are the binomial count that the summary reports ("paid in x
+of k"), and they need no action from the participant.
+
 The protocol was frozen before running (`freezes/00_freeze_I033.yaml`,
 AD_B1). The script is `experiment/analysis/batched_periods_I033.py` (seed
 133600) and the record is `records/batched_periods_I033.txt`. The generator
