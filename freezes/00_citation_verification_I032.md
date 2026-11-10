@@ -117,3 +117,12 @@ details not retrieved).
 | Reference | Level | What was verified | Where |
 |---|---|---|---|
 | Wittes, J. & Brittain, E. (1990) The role of internal pilot studies in increasing the efficiency of clinical trials. *Stat. Med.* doi:10.1002/sim.4780090113 | V-claim (abstract) | an internal pilot designates part of the main trial as a pilot phase; preselected parameters are recomputed and the sample size recalculated; the final analysis uses all data; in a two-normal-means example the α effect was negligible. Volume/pages not re-checked | Scilit record (abstract); DOI from the publisher link |
+
+## AD-O1 addendum (2026-11-10; records/104_optimal_scores_I033.md)
+
+| Reference | Level | Where |
+|---|---|---|
+| Myung, J. I. & Pitt, M. A. (2009) Optimal experimental design for model discrimination. *Psychol. Rev.* 116(3):499–518 | V-biblio (search record; PMC copy listed) | search results, PMC3755632 |
+| Cranmer, K., Brehmer, J. & Louppe, G. (2020) The frontier of simulation-based inference. *PNAS* 117(48):30055–30062 | V-biblio (arXiv 1911.01429; PMC7720103) | search results |
+| Neyman, J. (1959) Optimal asymptotic tests of composite statistical hypotheses (C(α)) | V-biblio only (title confirmed via secondary sources; venue/pages not re-checked) | search results |
+| Angelopoulos, A. N., Bates, S., Fannjiang, C., Jordan, M. I. & Zrnic, T. (2023) Prediction-powered inference. *Science* 382:669–674 | V-biblio (arXiv 2301.09633; volume/pages from memory, not re-checked) | search results |

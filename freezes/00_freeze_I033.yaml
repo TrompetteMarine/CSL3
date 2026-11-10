@@ -320,3 +320,18 @@ AD_O1_simulation_derived_scores:
     EO1: "S-a needs fewer participants than the P1-P2 mean drop (AD-B1: H1a part)"
     EO2: "S-b n_min at a = .5 below the conjunction's 128; at a = .25 below 278"
     EO3: "S-b false positives <= .01 vs R3 and composite; slow integrator (.118) may leak"
+
+# =================================================================== AD-O1 RESULT (verbatim scorecard)
+AD_O1_result:
+  record: "records/optimal_scores_I033.txt; memo records/104_optimal_scores_I033.md"
+  correction: "first run had the sign of the P1-P2 drop baseline reversed (power 0.00 in
+    that row only); fixed and re-run; every other number identical to the first run"
+  EO1: "PASS. n_min per arm, S-a vs P1-P2 drop: a=.25 80 vs 214; a=.5 70 vs 116; a=1 58 vs 76."
+  EO2: "PASS. S-b n_min: a=.5 90 (conjunction 128); a=.25 145 (278); a=1 86."
+  EO3: "PASS on R3/R4/composite (<= .010); integrators leak MORE than expected, and the
+    faster one more: R3-int .22 = .24/.39 at a=.5 (n 130/250), .57/.92 at a=1; R3-int .118
+    = .10/.14 and .37/.68."
+  post_hoc_S_c: "orthogonalising also against both integrators removes the leak (<= .013,
+    one cell .083) but leaves almost no power: n_min inf at a <= .5, 168 at a = 1. In ten
+    rounds the gate's mean trajectory is nearly a linear combination of R3 and
+    slow-integrator trajectories."

@@ -76,7 +76,7 @@ Si = np.linalg.inv(Sig)
 C = np.stack([tr[f'R3 {c}'][1].mean(0) - tr[f'R3 {c}'][0].mean(0) for c in (.4, .6)], axis=1)
 w_a = Si @ d
 w_b = Si @ (d - C @ np.linalg.solve(C.T @ Si @ C, C.T @ Si @ d))
-w_drop = np.r_[np.full(2, .5), np.full(5, -.2), np.zeros(3)]          # P1 mean - P2 mean
+w_drop = -np.r_[np.full(2, .5), np.full(5, -.2), np.zeros(3)]         # -(P1 mean - P2 mean): LOW larger, as the test expects (sign fixed after first run)
 norm = lambda w: w / np.abs(w).sum()
 print("AD-O1 simulation-derived scores, ten-round task (weights trained at a=.5, seed 133700; test seed 133701)\n")
 print("rounds:            " + " ".join(f"{j:6d}" for j in range(1, 11)) + "   (1-2 rich, 3-7 deprivation, 8-10 restoration)")
@@ -109,3 +109,16 @@ for a in (.25, .5, 1.0):
             r += sv.wmw_one_sided(xh, xl)[0]
         fp.append(r / B)
     print(f"    composite      {fp[0]:.3f} | {fp[1]:.3f}")
+
+# ---- POST HOC (written after the first run showed S-b leaks against slow integrators):
+# S-c adds the two integrator directions to the constraint set. Separate seed 133702.
+Ci = np.stack([tr[k][1].mean(0) - tr[k][0].mean(0) for k in ('R3 0.4', 'R3 0.6', 'R3-int 0.22', 'R3-int 0.118')], axis=1)
+w_c = Si @ (d - Ci @ np.linalg.solve(Ci.T @ Si @ Ci, Ci.T @ Si @ d))
+print("\nPOST HOC S-c (orthogonal to R3 and both integrators; test seed 133702)")
+print("w_c (normalised)   " + " ".join(f"{x:6.2f}" for x in norm(w_c)))
+rng = np.random.default_rng(133702)
+for a in (.25, .5, 1.0):
+    te = pools(rng, a, rivals=True)
+    cur = [min(power(rng, te[p[0]][0] @ w_c, te[p[0]][1] @ w_c, n) for p in PTS) for n in NGRID]
+    fps = "  ".join(f"{r} {power(rng, te[r][0] @ w_c, te[r][1] @ w_c, 250):.3f}" for r in ('R3 0.4', 'R3 0.6', 'R3-int 0.22', 'R3-int 0.118', 'R4'))
+    print(f"  a={a}: power " + " ".join(f"{n}:{c:.2f}" for n, c in zip(NGRID, cur)) + f"  n_min {nmin(cur):.0f}\n     false positives at n=250: {fps}")
