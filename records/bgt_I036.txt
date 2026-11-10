@@ -1,0 +1,56 @@
+KGi-DISS-I036 behavioural game theory analysis
+
+A. End states of community 2 (300 runs per cell; share of runs)
+cell                                     wrong+distrust  wrong+trust  correct+trust  correct+distrust  mixed
+c1 paper cell, gate on                            0.840        0.000          0.013             0.147  0.000
+c2 paper cell, gate off                           0.000        0.000          1.000             0.000  0.000
+c3 neutral entitlement A0=.5                      0.000        0.000          1.000             0.000  0.000
+c4 weak conformity lam=.3                         0.000        0.000          1.000             0.000  0.000
+c5 isolation Gamma=0, A0=.5, gate on              0.000        1.000          0.000             0.000  0.000
+c6 isolation Gamma=0, gate off                    0.000        1.000          0.000             0.000  0.000
+c7 open Gamma=.3                                  0.000        0.000          1.000             0.000  0.000
+c8 paper cell, T=2400                             0.000        0.000          1.000             0.000  0.000
+a1 gate on own learning only                      0.000        0.000          0.183             0.817  0.000
+a2 gate on social learning only                   0.000        0.000          0.787             0.213  0.000
+a3 legitimacy moves, gates nothing                0.000        0.000          0.800             0.200  0.000
+
+B. Mean-field logit-conformity equilibria of community 2 (other community on the better option)
+  lambda=0.7 Gamma=0.1: wrong-consensus equilibrium exists for dQ < 0.200
+      dQ=-0.24: 0.000 (stable), 0.855 (unstable), 0.995 (stable)
+      dQ=+0.00: 0.001 (stable), 0.245 (unstable), 1.000 (stable)
+      dQ=+0.20: 1.000 (stable)
+  lambda=0.3 Gamma=0.1: wrong-consensus equilibrium exists for dQ < -0.025
+      dQ=-0.24: 0.003 (stable)
+      dQ=+0.00: 0.954 (stable)
+      dQ=+0.20: 0.997 (stable)
+  lambda=0.7 Gamma=0.0: wrong-consensus equilibrium exists for dQ < 0.330
+      dQ=-0.24: 0.000 (stable), 0.881 (unstable), 0.995 (stable)
+      dQ=+0.00: 0.000 (stable), 0.379 (unstable), 0.500 (stable), 0.621 (unstable), 1.000 (stable)
+      dQ=+0.20: 0.003 (stable), 0.149 (unstable), 1.000 (stable)
+  lambda=0.7 Gamma=0.3: wrong-consensus equilibrium exists for dQ < -0.055
+      dQ=-0.24: 0.002 (stable), 0.748 (unstable), 0.996 (stable)
+      dQ=+0.00: 1.000 (stable)
+      dQ=+0.20: 1.000 (stable)
+
+C. Evidence-uptake probe after the deprivation rounds (forecast revision; noise sd 12 per report)
+  design k 25: legitimacy at end of round 7, HIGH / LOW mean: P0 0.42/0.75  P1 0.55/0.76  P2 0.62/0.79  P3 0.60/0.78  P4 0.60/0.76
+      m= 3 draws shown: one probe d=0.15 n/arm  1256 | three probes d=0.25 n/arm   462
+      m= 5 draws shown: one probe d=0.18 n/arm   881 | three probes d=0.30 n/arm   341
+      m= 7 draws shown: one probe d=0.19 n/arm   847 | three probes d=0.30 n/arm   333
+      m=10 draws shown: one probe d=0.17 n/arm  1016 | three probes d=0.27 n/arm   395
+      post hoc, leverage .8, m=7, 1 probe(s): d=0.33 n/arm   269
+      post hoc, leverage .8, m=7, 3 probe(s): d=0.46 n/arm   140
+  design k 40: legitimacy at end of round 7, HIGH / LOW mean: P0 0.17/0.67  P1 0.37/0.68  P2 0.47/0.73  P3 0.43/0.71  P4 0.47/0.68
+      m= 3 draws shown: one probe d=0.21 n/arm   673 | three probes d=0.33 n/arm   276
+      m= 5 draws shown: one probe d=0.26 n/arm   432 | three probes d=0.39 n/arm   198
+      m= 7 draws shown: one probe d=0.28 n/arm   368 | three probes d=0.41 n/arm   179
+      m=10 draws shown: one probe d=0.29 n/arm   348 | three probes d=0.41 n/arm   176
+      post hoc, leverage .8, m=7, 1 probe(s): d=0.44 n/arm   156
+      post hoc, leverage .8, m=7, 3 probe(s): d=0.52 n/arm   108
+  design k 40, P2 .25/.10: legitimacy at end of round 7, HIGH / LOW mean: P0 0.10/0.60  P1 0.31/0.61  P2 0.38/0.65  P3 0.36/0.65  P4 0.43/0.61
+      m= 3 draws shown: one probe d=0.19 n/arm   864 | three probes d=0.28 n/arm   381
+      m= 5 draws shown: one probe d=0.23 n/arm   545 | three probes d=0.33 n/arm   277
+      m= 7 draws shown: one probe d=0.26 n/arm   448 | three probes d=0.35 n/arm   245
+      m=10 draws shown: one probe d=0.28 n/arm   391 | three probes d=0.36 n/arm   226
+      post hoc, leverage .8, m=7, 1 probe(s): d=0.37 n/arm   220
+      post hoc, leverage .8, m=7, 3 probe(s): d=0.42 n/arm   170

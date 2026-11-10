@@ -13,7 +13,8 @@ sig = lambda x: 1 / (1 + np.exp(-x))
 print("KGi-DISS-I036 behavioural game theory analysis\n")
 
 # ---------------------------------------------------------------- census
-d = pd.read_csv('records/bgt.csv')
+rows = [ln.rstrip('\n').rsplit(',', 5) for ln in open('records/bgt.csv')][1:]   # cell names contain commas
+d = pd.DataFrame(rows, columns=['cell', 'run', 'm1', 'm2', 'l1', 'l2']).astype({'m1': float, 'm2': float, 'l1': float, 'l2': float})
 d['choice'] = np.where(d.m2 < .3, 'wrong', np.where(d.m2 > .7, 'correct', 'mixed'))
 d['trust'] = np.where(d.l2 >= .3, 'trusting', 'distrusting')
 print("A. End states of community 2 (300 runs per cell; share of runs)")
@@ -75,3 +76,11 @@ for dname, k, p2 in (('k 25', 25, (.30, .15)), ('k 40', 40, (.30, .15)), ('k 40,
                 worst = min(worst, diff / np.sqrt(var))
             res.append((worst, 2 * (3.858 / worst) ** 2))
         print(f"      m={m:2d} draws shown: one probe d={res[0][0]:.2f} n/arm {res[0][1]:5.0f} | three probes d={res[1][0]:.2f} n/arm {res[1][1]:5.0f}")
+    # POST HOC (added after the first run): evidence leverage .8 instead of .4, m = 7
+    for probes in (1, 3):
+        worst = np.inf
+        for name, *_ in PTS:
+            wh = 1 - (1 - .2 * Ls[(name, 'HIGH')]) ** 7
+            wl = 1 - (1 - .2 * Ls[(name, 'LOW')]) ** 7
+            worst = min(worst, 80 * (wl.mean() - wh.mean()) / np.sqrt(2 * SD ** 2 / probes + .5 * 80 ** 2 * (wh.var() + wl.var())))
+        print(f"      post hoc, leverage .8, m=7, {probes} probe(s): d={worst:.2f} n/arm {2 * (3.858 / worst) ** 2:5.0f}")

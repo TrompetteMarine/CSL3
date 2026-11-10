@@ -126,3 +126,12 @@ details not retrieved).
 | Cranmer, K., Brehmer, J. & Louppe, G. (2020) The frontier of simulation-based inference. *PNAS* 117(48):30055–30062 | V-biblio (arXiv 1911.01429; PMC7720103) | search results |
 | Neyman, J. (1959) Optimal asymptotic tests of composite statistical hypotheses (C(α)) | V-biblio only (title confirmed via secondary sources; venue/pages not re-checked) | search results |
 | Angelopoulos, A. N., Bates, S., Fannjiang, C., Jordan, M. I. & Zrnic, T. (2023) Prediction-powered inference. *Science* 382:669–674 | V-biblio (arXiv 2301.09633; volume/pages from memory, not re-checked) | search results |
+
+## I036 addendum (2026-11-10; records/105_behavioural_game_I036.md) — bibliographic records only
+
+| Reference | Level | Where |
+|---|---|---|
+| Brock, W. A. & Durlauf, S. N. (2001) Discrete choice with social interactions. *Rev. Econ. Stud.* 68(2):235–260 | V-biblio | RePEc record |
+| Fudenberg, D. & Levine, D. K. (1993) Self-confirming equilibrium. *Econometrica* 61(3):523–545 | V-biblio | Econometric Society page; RePEc |
+| Anderson, L. R. & Holt, C. A. (1997) Information cascades in the laboratory. *AER* 87(5):847–862 | V-biblio | RePEc record |
+| McKelvey, R. D. & Palfrey, T. R. (1995) Quantal response equilibria for normal form games. *Games Econ. Behav.* 10(1):6–38 | V-biblio | search records (Caltech repository) |

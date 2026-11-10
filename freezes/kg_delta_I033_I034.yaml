@@ -112,3 +112,41 @@ i035:
     - {from: DISS-INFO-SPEED, to: DISS-ID-SPAN, type: qualified_by,
        note: "estimation presumes the gate; discrimination (I034) comes first"}
   defeated_preserved: ["I035 E2 (gain-speed confounding inflates n 3-10x): observed 1.2-1.8x, for a reason that is itself an untested assumption"]
+
+# ----------------------------------------------------- I036 block (2026-11-10)
+i036:
+  new_nodes:
+    - id: DISS-BGT-TIP
+      kind: model
+      status: supported-numerical (mean-field fixed points) + supported-synthetic (census)
+      statement: "the ABM is a logit-conformity game (coupling lambda(1-Gamma), field dQ);
+        wrong consensus is an equilibrium iff the perceived payoff gap is below a tipping
+        gap dQ*: .200 at the paper cell (= the true gap), .330 under isolation, -.055 at
+        Gamma .3, -.025 at lambda .3"
+      evidence: "records/bgt_I036.txt section B"
+    - id: DISS-BGT-JOINT-GATE
+      kind: model
+      status: supported-synthetic (ablation, 300 runs per cell)
+      statement: "the defensive wrong consensus requires legitimacy to scale learning from
+        BOTH own and others' outcomes: both .840 trapped; own-only 0; social-only 0"
+      evidence: "records/bgt.csv, records/bgt_I036.txt section A"
+    - id: DISS-LAB-UPTAKE
+      kind: design
+      status: proposed (author decision; uncertified)
+      statement: "minimal lab mechanism: reference-dependent delegitimation lowers belief
+        revision from small evidence samples on both channels; behavioural, paid, opposite
+        or null sign under every rival; n per arm 108-176 with three probes, 40 draws per
+        round (leverage .8 post hoc / .4)"
+      evidence: "records/bgt_I036.txt section C"
+      limitations: "revision rule and forecast noise assumed; disengagement control needed"
+  refuted_preserved:
+    - "DISS-BGT-MF (wrong consensus survives correct beliefs at the paper cell): dQ* = .200"
+    - "DISS-BGT-NOISE (learning-noise account): a1 wrong 0/300"
+    - "DISS-BGT-MIN (own-outcome gating alone sustains the trap): a1 0/300, a2 0/300"
+    - "c7 expectation (Gamma .3 ends distrusting): correct+trusting 1.000"
+    - "probe expectation (three probes at k 40 under 150 per arm): 176"
+  new_edges:
+    - {from: DISS-LAB-UPTAKE, to: DISS-BGT-JOINT-GATE, type: requires}
+    - {from: DISS-LAB-UPTAKE, to: DISS-RIVAL-R3INT, type: tested_by, note: "rival has no arm difference on behaviour"}
+    - {from: DISS-BGT-TIP, to: DISS-TRAP-SPEED-EDGE, type: qualified_by, note: "trap also sits at the conformity tipping gap"}
+  flags_not_patched: "paper cell sits at the tipping gap (.200 vs true gap .2)"

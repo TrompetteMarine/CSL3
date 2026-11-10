@@ -79,3 +79,37 @@ lab_translation:   # computed after the census, protocol fixed here
     and three probes; n per arm = 2 (3.858 / d)^2 at the worst inside point; seed 134100"
   expected: "best m near 5-7; one probe needs > 200 per arm at k 25; three probes and
     k 40 bring it under 150 (uncertain)"
+
+closing_record:   # verbatim scorecard, 2026-11-10
+  records: "records/bgt.csv (engine census; re-run bit-identical), records/bgt_I036.txt
+    (frozen lines re-run identical; post hoc leverage lines marked), memo
+    records/105_behavioural_game_I036.md"
+  claims:
+    DISS-BGT-MF: "REFUTED as stated. At the paper cell the wrong-consensus logit equilibrium
+      exists only for perceived payoff gaps below dQ* = .200, which is exactly the true
+      gap: under correct beliefs it does not exist. (My hand calculation before the freeze
+      ignored how fast the confidence-weighted field weakens.) Restated as DISS-BGT-TIP."
+    DISS-BGT-NOISE: "REFUTED. a1 (legitimacy scales own-outcome learning only): wrong
+      consensus in 0 of 300 runs."
+    DISS-BGT-MIN: "REFUTED. Neither channel alone sustains the trap: a1 0/300 wrong, a2
+      0/300 wrong (paper cell 252/300). The trap needs BOTH channels shut."
+  census:
+    c1: "PASS: wrong+distrusting .840 (correct+distrusting .147, correct+trusting .013)"
+    c2: "PASS: correct 1.000"
+    c3: "PASS: correct+trusting 1.000"
+    c4: "PASS: correct 1.000"
+    c5: "PASS: wrong+trusting 1.000"
+    c6: "PASS: wrong 1.000"
+    c7: "FAIL: correct+trusting 1.000 (predicted a distrusting majority; legitimacy has
+      recovered by the horizon at the default repair rate)"
+    c8: "PASS: 0 trapped at T = 2400 (all correct+trusting)"
+    a1: "FAIL: wrong .000; correct+distrusting .817"
+    a2: "PASS in direction: wrong .000; correct+trusting .787"
+    a3: "PASS: correct 1.000 (distrusting .200)"
+  probe: "best m 7-10 (PASS); one probe at k 25: 847 per arm (PASS, > 200); three probes
+    at k 40: 176 per arm (FAIL, predicted < 150). Post hoc with leverage .8: 108 per arm
+    (three probes, k 40)."
+  next: "I037: map measured human revision weights on the two channels into trap
+    probability (engine variant with separate own/social gate strengths); probe design
+    (leverage, number of probes, own vs social channel) as an information problem;
+    reconcile with the fairness-score tests (S-a, span test)"
