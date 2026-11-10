@@ -42,13 +42,17 @@ struct P {
     field_unweighted: bool, // credibility weight C := 1 (unweighted action frequency)
     field_paybias: bool,    // credibility weight := agent's recent-earnings EWMA
     gamma_het: bool,        // per-agent permeability in {0, 2*gamma}, half-half
+    // I036 gate-scope ablation (defaults reproduce the frozen engine exactly)
+    gate_own: bool,         // legitimacy scales learning from own outcomes
+    gate_soc: bool,         // legitimacy scales learning from observed others' outcomes
 }
 impl Default for P {
     fn default() -> Self { P { mu: [0.6, 0.4], lam: 0.5, eta: 0.2, beta2: 12.0, alpha: 0.2,
         nu_f: 0.05, nu_r: 0.0125, tau_f: 0.3, phim: 1.0, phip: 0.25,
         l0: 1.0, a0: 0.5, n: 200, t: 600, gamma: 0.1, chi: 0.4, rho: 0.002,
         global_cmp: true, mu_rig: 0.4, pi0: 0.9,
-        n1: 0, field_unweighted: false, field_paybias: false, gamma_het: false } }
+        n1: 0, field_unweighted: false, field_paybias: false, gamma_het: false,
+        gate_own: true, gate_soc: true } }
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -156,9 +160,11 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
             } else { (expo[c], erew[c]) };
             let soc0 = xre[0] - xpo[0] * q[i][0];
             let soc1 = xre[1] - xpo[1] * q[i][1];
-            q[i][arm] += p.alpha * g * delta;
-            q[i][0] = clip01(q[i][0] + p.eta * g * soc0);
-            q[i][1] = clip01(q[i][1] + p.eta * g * soc1);
+            let g_own = if p.gate_own { g } else { 1.0 };
+            let g_soc = if p.gate_soc { g } else { 1.0 };
+            q[i][arm] += p.alpha * g_own * delta;
+            q[i][0] = clip01(q[i][0] + p.eta * g_soc * soc0);
+            q[i][1] = clip01(q[i][1] + p.eta * g_soc * soc1);
             match gate {
                 Gate::DissNL => {
                     // non-lexicographic variant (frozen I012): surprise erosion
@@ -1188,6 +1194,35 @@ fn main() {
             for s in [1.0, 0.75, 0.5, 0.35] { for ratio in [0.25, 0.27, 0.29] {
                 emit(&mut w, "joint", s, ratio, cell); cell += 1;
             } }
+        }
+        "bgt" => {
+            // KGi-DISS-I036 (freeze 00_freeze_I036.yaml, written before running):
+            // census of end states at the paper's configuration and gate-scope ablation.
+            // Per run: m2 (share of community 2 on the better arm, last 50 trials), l2.
+            let f = File::create("out/bgt.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "cell,run,m1,m2,l1,l2").unwrap();
+            let base = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            let cells: Vec<(&str, P, Gate)> = vec![
+                ("c1 paper cell, gate on", base, Gate::Diss),
+                ("c2 paper cell, gate off", base, Gate::Off),
+                ("c3 neutral entitlement A0=.5", P { a0: 0.5, ..base }, Gate::Diss),
+                ("c4 weak conformity lam=.3", P { lam: 0.3, ..base }, Gate::Diss),
+                ("c5 isolation Gamma=0, A0=.5, gate on", P { a0: 0.5, gamma: 0.0, ..base }, Gate::Diss),
+                ("c6 isolation Gamma=0, gate off", P { gamma: 0.0, ..base }, Gate::Off),
+                ("c7 open Gamma=.3", P { gamma: 0.3, ..base }, Gate::Diss),
+                ("c8 paper cell, T=2400", P { t: 2400, ..base }, Gate::Diss),
+                ("a1 gate on own learning only", P { gate_soc: false, ..base }, Gate::Diss),
+                ("a2 gate on social learning only", P { gate_own: false, ..base }, Gate::Diss),
+                ("a3 legitimacy moves, gates nothing", P { gate_own: false, gate_soc: false, ..base }, Gate::Diss),
+            ];
+            for (ci, (name, p, gate)) in cells.iter().enumerate() {
+                for r in 0..300u64 {
+                    let o = run(p, *gate, wrong.0, wrong.1, 63000 + (ci as u64) * 100000 + r * 7919, None);
+                    writeln!(w, "{name},{r},{:.4},{:.4},{:.4},{:.4}", o.m1, o.m2, o.l1, o.l2).unwrap();
+                }
+                eprintln!("bgt {name} done");
+            }
         }
         _ => eprintln!("unknown mode"),
     }

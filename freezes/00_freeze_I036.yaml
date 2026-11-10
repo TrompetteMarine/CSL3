@@ -1,0 +1,81 @@
+iteration_id: "KGi-DISS-I036"
+mode: "behavioural game theory reading of the paper's ABM; equilibrium census by
+  simulation at the paper's configuration; gate-scope ablation; lab translation of the
+  load-bearing link. Exploratory verifiers (simulation, numerical fixed points, normal
+  approximation for sample sizes). Written before the census, ablation and probe runs."
+freeze_time: "2026-11-10T23:35Z"
+freeze_relative_to_work: "seen before freezing: the engine's update rules (read), and the
+  validation gate (CV1 trap P_dw ~ .81; CV2 gate-off m2 = .9998), which already shows the
+  gate-off population corrects at the paper cell"
+baseline: {repo: "CSL3 main after I035", kg: "kg_delta_I033_I034.yaml incl. i035 block"}
+author_directive: "explore the task from a behavioural game theory perspective, simulate
+  with the ABMs at the paper configurations, identify where the behavioural equilibria
+  are, and isolate the minimal mechanism worth putting humans into a lab"
+
+game:   # read from engine/src/main.rs, not assumed
+  players: "two communities of 100; each trial every agent picks one of two options
+    paying with probability .6 / .4; no payoff externality"
+  choice_rule: "logit with conformity: P(better) = sigmoid(12 [dQ + lambda (S_better -
+    S_worse)]), S = confidence-weighted share of last trial's choosers, own community
+    weight 1 - Gamma, other community Gamma. Legitimacy does NOT enter the choice rule."
+  learning: "Q(chosen) += .2 L (R - Q) from own outcome; Q(arm) += .2 L (observed reward
+    mass - observed mass * Q) from others' outcomes. Legitimacy L scales BOTH."
+  legitimacy: "falls on a loss when entitlement A > .3 (by .05 (A - .3)); rises .0125 on a
+    win; A drifts slowly towards a mix of own and population earnings"
+  reading: "a mean-field discrete-choice game with social interactions (Brock-Durlauf
+    form): coupling J = lambda (1 - Gamma), field h = perceived payoff gap dQ; the gate
+    acts on how h is learned, not on the best response"
+
+claims:
+  - id: DISS-BGT-MF
+    statement: "at the paper cell (lambda .7, Gamma .1, beta 12) the mean-field map has two
+      stable logit equilibria (consensus on either option) for all perceived payoff gaps
+      |dQ| below a critical value dQ* > .2; so the wrong consensus is a logit-conformity
+      equilibrium even under CORRECT payoff beliefs (dQ = +.2)"
+    falsification: "numerical fixed points: dQ* <= .2"
+  - id: DISS-BGT-NOISE
+    statement: "with the gate off the wrong consensus is only metastable: individual
+      learning noise in dQ lets agents escape it within the horizon; the gate makes it
+      (near) absorbing by freezing both the belief and its noise"
+    falsification: "ablation a1 (legitimacy scales own-outcome learning only; social
+      evidence fully learned): if the population still corrects (wrong-consensus share <
+      .2) the noise account is wrong and social-evidence discounting is the load-bearing
+      link"
+  - id: DISS-BGT-MIN
+    statement: "the minimal mechanism sustaining the wrong equilibrium is the scaling of
+      learning from OWN outcomes by legitimacy (a1 traps), not the discounting of others'
+      outcomes (a2 escapes more often than the paper cell)"
+    falsification: "a1 wrong-consensus share < .5, or a2 share >= the paper cell's"
+
+census:   # engine mode bgt, 300 runs per cell, seeds 63000 + 100000*cell + 7919*run
+  cells: "c1 paper cell gate on; c2 gate off; c3 entitlement A0 .5; c4 conformity .3;
+    c5 isolation Gamma 0 with A0 .5; c6 isolation gate off; c7 open Gamma .3; c8 paper
+    cell T = 2400; a1 gate on own learning only; a2 gate on social learning only; a3
+    legitimacy moves but gates nothing"
+  classification: "community 2 at the end (last 50 trials): wrong = share on the better
+    option < .3, correct = > .7, mixed otherwise; trusting = mean legitimacy >= .3"
+  expected:
+    c1: "defensive wrong (wrong, distrusting) about .8"
+    c2: "correct, ~1.0 (regression check, known from validation)"
+    c3: "correct and trusting >= .9"
+    c4: "correct >= .9"
+    c5: "credulous wrong (wrong, trusting) >= .9: unchosen option never observed"
+    c6: "wrong >= .9"
+    c7: "correct but distrusting in the majority (uncertain)"
+    c8: "defensive wrong <= .1 (trap is horizon-indexed)"
+    a1: "wrong >= .5 (uncertain; decides DISS-BGT-NOISE)"
+    a2: "wrong less often than c1 (uncertain)"
+    a3: "correct ~1.0"
+
+lab_translation:   # computed after the census, protocol fixed here
+  probe: "after the deprivation rounds of the ten-round task, a small evidence sample
+    about an unfamiliar ticket (m draws shown), with a paid forecast before and after;
+    outcome = forecast revision. Gate: revision weight w = 1 - (1 - .2 L)^m, so HIGH
+    (lower L) revises less than LOW. R3 and its slow-reporting variants: no arm difference
+    (legitimacy is not in their learning rule). R4: no arm difference. R1: opposite sign."
+  computation: "L at the end of round 7 from design_generator (12k per arm, theory points
+    P0-P4), designs {k 25, k 40, k 40 with P2 .25/.10}; m in {3, 5, 7, 10}; evidence
+    leverage .4; forecast noise sd 12 per report (assumption; pilot quantity); one probe
+    and three probes; n per arm = 2 (3.858 / d)^2 at the worst inside point; seed 134100"
+  expected: "best m near 5-7; one probe needs > 200 per arm at k 25; three probes and
+    k 40 bring it under 150 (uncertain)"
