@@ -1,0 +1,34 @@
+iteration_id: "KGi-DISS-I035"
+mode: "design for one target parameter (information analysis by simulation); exploratory
+  verifier = Gaussian information from simulated cell means with common random numbers;
+  not a certification. Written before the run."
+freeze_time: "2026-11-10T22:10Z"
+baseline: {repo: "CSL3 main after I034 + abm_substitution_I035pre", kg: "kg_delta_I033_I034.yaml"}
+author_directive: "use the original paper's configuration and the current simulation to
+  target the sufficient criterion for what matters, and maximise precision on that alone;
+  find the minimum number of humans good enough for solid inference"
+target:
+  what_matters: "the paper's headline (defensive wrong consensus at the confirmatory ABM
+    cell) holds iff the gate is fast enough: P_dw .82 at speed s = 1, .21 at .8, .005 at
+    .65 (records/invcal.csv). The human quantity that decides whether the paper describes
+    people is therefore the gate speed s (nuF = .05 s, nuR = ratio * nuF)."
+  criterion: "one-sided test H0: s <= .65 (trap absent) against s = .895 (theory edge),
+    alpha .005, power .90  =>  required standard error of s-hat = (.895 - .65)/3.858 = .0635"
+  nuisances: "ratio nuR/nuF, anchoring weight chi, scale gain a (all unknown, profiled)"
+claim_card:
+  id: DISS-INFO-SPEED
+  kind: statistical
+  statement: "For the ten-round task, Gaussian information on s per participant per cell,
+    J = sum_cells D_c' Sigma_c^-1 D_c with D_c the derivative of the cell's mean rating
+    vector in (s, ratio, chi, a), evaluated at the speed edge (s .895, ratio .25, chi .4,
+    a .5). n_min per cell = [J^-1]_ss / .0635^2 (nuisances unknown) and 1/(J_ss .0635^2)
+    (nuisances known)."
+  designs: "rounds (rich/deprivation/restoration), draws per round k, P2 odds, cells:
+    D1 2/5/3 k25 .30/.15 {HM, LM};  D2 same, {HM, LM, HF, LF};  D3 1/6/3;  D4 2/6/2;
+    D5 2/5/3 k40;  D6 2/5/3 P2 .25/.10   (D3-D6 with four cells)"
+  method: "20k simulated participants per cell; central differences with common random
+    numbers, steps s .1, ratio .03, chi .08, a .05; three-item scale sigma 5.8; M2
+    without screens; seed 134000"
+expected: {E1: "nuisances known: n_min <= 60 per cell for the best design",
+           E2: "nuisances unknown: gain and speed partly confounded; n_min 3-10x larger",
+           E3: "full-restoration cells and more deprivation rounds raise information on s"}
