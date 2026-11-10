@@ -1,0 +1,45 @@
+AD-B1 batched periods (seed 133600)
+
+B1  latent trust x100 at period ends: per-round task (choice every draw, ratings every 5)
+    vs batched task (choice + rating every 25 draws); geometry 50/100/75 = 2/4/3 periods
+  P0 
+      HM per-round   98   98   84   72   61   51   50   48   46 | batched   96   96   85   72   61   51   50   48   46 | max rel diff 0.021
+      LM per-round   98   98   85   79   77   76   80   81   82 | batched   96   96   86   78   77   76   79   80   81 | max rel diff 0.022
+  P1 
+      HM per-round   98   98   85   75   67   60   62   62   62 | batched   96   97   86   75   67   61   62   63   62 | max rel diff 0.021
+      LM per-round   98   98   86   80   78   78   80   82   83 | batched   96   97   87   80   78   77   80   81   82 | max rel diff 0.020
+  P2 
+      HM per-round   99   98   86   78   71   66   69   72   73 | batched   97   97   87   78   71   66   69   72   73 | max rel diff 0.018
+      LM per-round   99   98   87   82   82   82   85   87   88 | batched   97   97   88   82   82   81   84   86   88 | max rel diff 0.017
+  P3 
+      HM per-round   98   98   87   78   70   64   66   66   66 | batched   97   97   87   78   71   65   66   66   66 | max rel diff 0.018
+      LM per-round   98   98   87   82   80   80   82   84   84 | batched   97   97   88   82   80   80   82   83   84 | max rel diff 0.019
+  P4 
+      HM per-round   98   98   85   76   69   64   66   67   68 | batched   96   97   86   76   70   65   67   68   69 | max rel diff 0.021
+      LM per-round   98   98   86   80   78   78   81   82   83 | batched   96   97   87   80   79   78   80   81   82 | max rel diff 0.020
+  R3 
+      HM per-round   98   98   81   81   83   83   93   93   93 | batched   94   96   82   80   82   83   93   93   93 | max rel diff 0.038
+      LM per-round   98   98   83   85   88   89   96   96   96 | batched   94   96   84   84   87   89   96   97   96 | max rel diff 0.038
+  worst relative difference over all cells and periods: 0.038  (EB1: <= .10)
+
+B2  batched designs: n_min per cell (H1a AND conjunction >= .90 at every inside point), M2
+  k=20 periods=(2, 4, 3) (9 periods, 180 draws) sigma=10.0 kappa=0.420: n_min a=.25 inf  a=.5 inf  a=1 199
+      worst-point power by n: a=.25 {60: np.float64(0.02), 100: np.float64(0.03), 160: np.float64(0.05), 250: np.float64(0.04), 320: np.float64(0.05)}  a=.5 {60: np.float64(0.05), 100: np.float64(0.1), 160: np.float64(0.21), 250: np.float64(0.39), 320: np.float64(0.5)}  a=1 {60: np.float64(0.36), 100: np.float64(0.55), 160: np.float64(0.84), 250: np.float64(0.98), 320: np.float64(1.0)}
+  k=20 periods=(2, 4, 3) (9 periods, 180 draws) sigma=5.8 kappa=0.420: n_min a=.25 inf  a=.5 320  a=1 130
+      worst-point power by n: a=.25 {60: np.float64(0.06), 100: np.float64(0.1), 160: np.float64(0.2), 250: np.float64(0.34), 320: np.float64(0.43)}  a=.5 {60: np.float64(0.2), 100: np.float64(0.35), 160: np.float64(0.56), 250: np.float64(0.8), 320: np.float64(0.9)}  a=1 {60: np.float64(0.54), 100: np.float64(0.83), 160: np.float64(0.97), 250: np.float64(1.0), 320: np.float64(1.0)}
+  k=20 periods=(2, 5, 3) (10 periods, 200 draws) sigma=10.0 kappa=0.432: n_min a=.25 inf  a=.5 309  a=1 124
+      worst-point power by n: a=.25 {60: np.float64(0.02), 100: np.float64(0.06), 160: np.float64(0.14), 250: np.float64(0.22), 320: np.float64(0.32)}  a=.5 {60: np.float64(0.18), 100: np.float64(0.33), 160: np.float64(0.52), 250: np.float64(0.77), 320: np.float64(0.92)}  a=1 {60: np.float64(0.59), 100: np.float64(0.84), 160: np.float64(0.98), 250: np.float64(1.0), 320: np.float64(1.0)}
+  k=20 periods=(2, 5, 3) (10 periods, 200 draws) sigma=5.8 kappa=0.432: n_min a=.25 inf  a=.5 137  a=1 97
+      worst-point power by n: a=.25 {60: np.float64(0.1), 100: np.float64(0.22), 160: np.float64(0.42), 250: np.float64(0.66), 320: np.float64(0.78)}  a=.5 {60: np.float64(0.43), 100: np.float64(0.79), 160: np.float64(0.97), 250: np.float64(1.0), 320: np.float64(1.0)}  a=1 {60: np.float64(0.7), 100: np.float64(0.92), 160: np.float64(1.0), 250: np.float64(1.0), 320: np.float64(1.0)}
+  k=25 periods=(2, 4, 3) (9 periods, 225 draws) sigma=10.0 kappa=0.427: n_min a=.25 inf  a=.5 265  a=1 97
+      worst-point power by n: a=.25 {60: np.float64(0.01), 100: np.float64(0.06), 160: np.float64(0.12), 250: np.float64(0.26), 320: np.float64(0.4)}  a=.5 {60: np.float64(0.23), 100: np.float64(0.44), 160: np.float64(0.71), 250: np.float64(0.88), 320: np.float64(0.98)}  a=1 {60: np.float64(0.64), 100: np.float64(0.92), 160: np.float64(1.0), 250: np.float64(1.0), 320: np.float64(1.0)}
+  k=25 periods=(2, 4, 3) (9 periods, 225 draws) sigma=5.8 kappa=0.427: n_min a=.25 inf  a=.5 138  a=1 83
+      worst-point power by n: a=.25 {60: np.float64(0.09), 100: np.float64(0.24), 160: np.float64(0.58), 250: np.float64(0.66), 320: np.float64(0.85)}  a=.5 {60: np.float64(0.51), 100: np.float64(0.78), 160: np.float64(0.98), 250: np.float64(1.0), 320: np.float64(1.0)}  a=1 {60: np.float64(0.8), 100: np.float64(0.97), 160: np.float64(1.0), 250: np.float64(1.0), 320: np.float64(1.0)}
+  k=25 periods=(2, 5, 3) (10 periods, 250 draws) sigma=10.0 kappa=0.435: n_min a=.25 inf  a=.5 224  a=1 124
+      worst-point power by n: a=.25 {60: np.float64(0.04), 100: np.float64(0.04), 160: np.float64(0.14), 250: np.float64(0.28), 320: np.float64(0.4)}  a=.5 {60: np.float64(0.23), 100: np.float64(0.53), 160: np.float64(0.8), 250: np.float64(0.94), 320: np.float64(0.98)}  a=1 {60: np.float64(0.54), 100: np.float64(0.84), 160: np.float64(0.98), 250: np.float64(1.0), 320: np.float64(1.0)}
+  k=25 periods=(2, 5, 3) (10 periods, 250 draws) sigma=5.8 kappa=0.435: n_min a=.25 278  a=.5 128  a=1 88
+      worst-point power by n: a=.25 {60: np.float64(0.18), 100: np.float64(0.32), 160: np.float64(0.56), 250: np.float64(0.86), 320: np.float64(0.96)}  a=.5 {60: np.float64(0.64), 100: np.float64(0.82), 160: np.float64(0.98), 250: np.float64(1.0), 320: np.float64(1.0)}  a=1 {60: np.float64(0.73), 100: np.float64(0.97), 160: np.float64(1.0), 250: np.float64(1.0), 320: np.float64(1.0)}
+
+B3  specificity of the best design at a=.5 (k=25, periods=(2, 5, 3), sigma=5.8, n=129)
+  a=0.5: R3 chi0.4 0.000  R3 chi0.6 0.000  composite 0.000
+  a=1.0: R3 chi0.4 0.000  R3 chi0.6 0.000  composite 0.000

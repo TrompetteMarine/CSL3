@@ -280,3 +280,18 @@ AD_B1_batched_periods:
     as the lemma assumes) or per event (one update per period); testable in the pilot by
     varying k between participants (per-outcome: drop scales with k; per-event: it does
     not)"
+
+# =================================================================== AD-B1 RESULT (verbatim scorecard)
+AD_B1_result:
+  record: "records/batched_periods_I033.txt; memo records/103_batched_periods_I033.md"
+  EB1: "PASS. Batched (choice + summary every 25 draws) vs per-round task, latent trust at
+    period ends: worst relative difference .038 over all cells, periods, P0-P4 and R3."
+  EB2: "PASS in part. One slider (sigma 10): n_min > 320 at a = .25 in every batched
+    design; at a = .5, 224-309, and > 320 only for k = 20 with 9 periods."
+  EB3: "PASS. Three-item scale (sigma 5.8): n_min at a = .5 = 128 (k 25, 10 periods),
+    137-138, 320 (k 20, 9 periods)."
+  EB4: "PASS. a = 1: n_min 83-199; <= 160 in 7 of 8 configurations."
+  B3: "best design (k 25, 2/5/3 periods, sigma 5.8, n 129): conjunction false positives
+    .000 vs R3 (chi .4, .6) and the composite at a = .5 and 1."
+  not_checked: "slow-integrator rivals, the FULL control size, A0 sensitivity, worst
+    shape M5 in the batched task; per-outcome vs per-event integration (human)."
