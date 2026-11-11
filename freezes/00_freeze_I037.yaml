@@ -1,0 +1,118 @@
+iteration_id: "KGi-DISS-I037"
+mode: "simulation and Monte Carlo certification on synthetic cohorts; no human data; no
+  recruitment, OSF filing or ethics claim; manuscript not edited. This file is written
+  before any I037 run (engine mode couple, probe design, certification, fairness score)."
+freeze_time: "2026-11-11T11:25Z"
+freeze_relative_to_work: "done before freezing: engine fields c_own / c_soc added (defaults
+  reproduce the frozen engine: validation gate and the I036 census re-run bit-identical);
+  probe_generator.py written and its 7 invariants pass. Nothing else run."
+baseline:
+  repo: "CSL3 main 175d317 (I036 close) + this freeze"
+  kg: "freezes/kg_delta_I032.yaml, freezes/kg_delta_I033_I034.yaml (incl. i035, i036 blocks)"
+  tests: "46 passing at rehydration"
+author_directive: "2026-11-11: full power on the next iteration (I037), update the KG, use KGi"
+objective: "Turn the minimal mechanism of I036 (after reference-dependent delegitimation
+  people revise beliefs less on evidence) into a certified lab design: (A) how weak may
+  the discounting be before the paper's trap disappears; (B) the cheapest probe that
+  detects discounting at that edge and is safe against the rivals; (C) what the fairness
+  measure still has to do; (D) KG update."
+
+defect_found_before_running:
+  id: BATCHED-ACCURACY-SCREEN
+  statement: "In the round-summary task the preregistered rich-phase accuracy screen
+    (accuracy >= chance + 2 s.e.) is ill-defined: with one ticket choice per round and two
+    rich rounds, accuracy is 0, .5 or 1, and the first choice is a coin flip, so the screen
+    removes about half of the simulated participants (those whose first pick was the worse
+    ticket). I033 AD-B1, AD-O1 and I034 applied it, so their per-cell sample sizes are
+    post-exclusion numbers for a selected half."
+  action: "I037 drops the accuracy screen in the round task (zero-variance screen kept;
+    attention checks take its place in the probe). Part C recomputes the fairness scores
+    without it and states the old exclusion share. Earlier records are not rewritten."
+
+# =================================================================== PART A
+part_A_coupling_edge:
+  claim_id: DISS-COUPLE-EDGE
+  definition: "learning multiplier = 1 - c (1 - L) on each channel (own outcomes: c_own;
+    others' outcomes: c_soc); c = 1 is the paper, c = 0 no discounting"
+  run: "engine mode couple at the paper cell (A0 .8, lambda .7, rho .002, Gamma .1, n 200,
+    T 600), 400 runs per cell, seeds 64000 + 1000*cell: 6 x 6 grid over {0, .25, .5, .75,
+    .9, 1}; diagonal; social edge (c_own = 1); own edge (c_soc = 1); diagonal at speeds
+    .895 and 1.25"
+  edge_rule: "edge = linear interpolation of the first crossing of P_dw = .5 along a line
+    (diag, soc, own); 'none' if P_dw stays >= .5 down to the smallest value run"
+  expected:
+    EA1: "diagonal edge in [.80, .95]"
+    EA2: "social edge (own fully coupled) in [.75, .92]"
+    EA3: "own edge (social fully coupled) <= .7: the trap survives a half-open own channel,
+      because own outcomes say nothing about the unchosen option"
+    EA4: "P_dw < .05 whenever c_soc <= .5"
+  channel_rule: "the lab probe targets the channel with the higher edge; if the two edges
+    differ by less than .15 (or the own edge is 'none' and the social edge is 'none'), both
+    channels are probed and the diagonal edge is used. c_edge := edge of the probed
+    channel."
+
+# =================================================================== PART B
+part_B_probe:
+  claim_id: DISS-LAB-UPTAKE (v2)
+  simulator: "experiment/analysis/probe_generator.py (assumptions listed in its header:
+    multiplier g = 1 - c(1 - M); per-outcome weight 1 - (1 - .2 g)^m or per-event weight
+    .5 g; prior N(50, 10); reports rounded to 5 with noise sigma_f; 10% inattentive)"
+  theory_points: "P0-P4 of freeze I033 T2 with c = 1, plus P6 coupling edge (s 1, ratio .25,
+    chi .4, c = c_edge). Legitimacy at probe time from design_generator (12k per arm, c = 1
+    in the task dynamics; approximation noted)."
+  stage_1_screen:
+    script: "experiment/analysis/probe_design_I037.py (seed 134200)"
+    designs: "(rich rounds, deprivation rounds, draws per round, deprivation odds):
+      (2,5,25,std) (2,5,40,std) (2,4,40,std) (1,5,40,std) (1,6,40,std) (2,5,40,harsh)
+      (2,4,40,harsh) (1,5,40,harsh); std = .30/.15, harsh = .25/.10"
+    probe_options: "m in {5, 7, 10}; scheme in {single, pair, pair2, did}; sigma_f in {8, 12,
+      16}; integration in {outcome, event}"
+    statistic: "theta = P(T_LOW > T_HIGH) from 12k per arm; n per arm = 2.48/(theta - .5)^2
+      (one-sided WMW .005, power .90); worst theory point"
+    repetitions: "rounds + probe tickets (single 1, pair 2, pair2 4, did 4); budget <= 10"
+    selection_rule: "S1 = among {single, pair, pair2} within budget, the row minimising
+      max over the two integration rules of n at sigma_f = 12; S2 = the same among {did}.
+      Ties -> fewer repetitions."
+  stage_2_certification:
+    script: "experiment/analysis/probe_cert_I037.py (seed 134300)"
+    n: "ceil of the selection-rule n for S1 and for S2"
+    monte_carlo: "B = 1000 replicates of n per arm drawn from fresh 20k pools; actual
+      one-sided WMW at .005"
+    power: "every theory point x integration x sigma_f in {8, 12, 16}"
+    false_positives: "R3 (chi .4, .6), R4, R1, no-gate composite (R3 share .5595 + R4), and
+      a disengagement rival (R3 population with an extra 10% / 20% of HIGH participants not
+      revising at all), at sigma_f = 12, both integrations"
+    attention_check_variant: "exclude participants failing an attention check on the
+      evidence (inattentive fail with prob .8, attentive with prob .05): power and
+      disengagement false positives for S1"
+    lab_to_abm: "expected HIGH/LOW ratio of mean revision weights per theory point for S1
+      (the number a pilot can be compared with)"
+  expected:
+    EB1: "a pair needs fewer participants than a single ticket"
+    EB2: "S1 n <= 150 per arm at sigma_f 12 (uncertain; the coupling edge may bind)"
+    EB3: "per-event integration needs fewer participants than per-outcome"
+    EB4: "Monte Carlo power at the selected n is within .03 of .90 at the binding point"
+    EB5: "false positives <= .01 vs R3, R4 and the composite; 0 vs R1"
+    EB6: "disengagement (20%): raw S1 false positives >= .5; S2 (did) <= .02; the
+      attention-check variant in between"
+
+# =================================================================== PART C
+part_C_fairness:
+  script: "experiment/analysis/fairness_score_I037.py (training seed 134400, test 134401)"
+  what: "reference-effect score S-a (weights Sigma^-1 d, WMW between arms) on the fairness
+    ratings of (i) the ten-round design 2/5/3 at k 25 and (ii) the S1 design's rounds before
+    the probe, both WITHOUT the accuracy screen; gains .25, .5, 1; three-item scale; M2;
+    share excluded by the old screen reported; S-b (R3-orthogonal) for (i) as an erratum
+    row"
+  expected:
+    EC1: "without the screen S-a needs more participants than AD-O1 reported (70 at gain
+      .5); by how much is unknown"
+    EC2: "in the S1 design the probe, not S-a, sets the sample at gain >= .5"
+
+# =================================================================== PART D
+part_D_kg: "freezes/kg_delta_I037.yaml (scoped delta) and freezes/kg_active_I037.yaml (the
+  active claim ledger for the experiment: accepted-synthetic / open / refuted), mirrored
+  to the Project. No remote KG service exists; persistence = repo + Project."
+
+completion: "A, B, C run once under this freeze; scorecard verbatim including failures;
+  all seeded records re-run for bit-identity; KG delta validated (ids, references)."

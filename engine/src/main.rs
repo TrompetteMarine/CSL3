@@ -45,6 +45,8 @@ struct P {
     // I036 gate-scope ablation (defaults reproduce the frozen engine exactly)
     gate_own: bool,         // legitimacy scales learning from own outcomes
     gate_soc: bool,         // legitimacy scales learning from observed others' outcomes
+    // I037 coupling strengths: learning multiplier = 1 - c (1 - L); c = 1 is the paper
+    c_own: f64, c_soc: f64,
 }
 impl Default for P {
     fn default() -> Self { P { mu: [0.6, 0.4], lam: 0.5, eta: 0.2, beta2: 12.0, alpha: 0.2,
@@ -52,7 +54,7 @@ impl Default for P {
         l0: 1.0, a0: 0.5, n: 200, t: 600, gamma: 0.1, chi: 0.4, rho: 0.002,
         global_cmp: true, mu_rig: 0.4, pi0: 0.9,
         n1: 0, field_unweighted: false, field_paybias: false, gamma_het: false,
-        gate_own: true, gate_soc: true } }
+        gate_own: true, gate_soc: true, c_own: 1.0, c_soc: 1.0 } }
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -160,8 +162,11 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
             } else { (expo[c], erew[c]) };
             let soc0 = xre[0] - xpo[0] * q[i][0];
             let soc1 = xre[1] - xpo[1] * q[i][1];
-            let g_own = if p.gate_own { g } else { 1.0 };
-            let g_soc = if p.gate_soc { g } else { 1.0 };
+            // c == 1 uses g itself so the frozen engine is reproduced bit for bit
+            let g_own = if !p.gate_own { 1.0 } else if p.c_own == 1.0 { g }
+                        else { 1.0 - p.c_own * (1.0 - g) };
+            let g_soc = if !p.gate_soc { 1.0 } else if p.c_soc == 1.0 { g }
+                        else { 1.0 - p.c_soc * (1.0 - g) };
             q[i][arm] += p.alpha * g_own * delta;
             q[i][0] = clip01(q[i][0] + p.eta * g_soc * soc0);
             q[i][1] = clip01(q[i][1] + p.eta * g_soc * soc1);
@@ -1223,6 +1228,30 @@ fn main() {
                 }
                 eprintln!("bgt {name} done");
             }
+        }
+        "couple" => {
+            // KGi-DISS-I037 part A (freeze 00_freeze_I037.yaml, written before running):
+            // trap probability at the paper cell as a function of how strongly legitimacy
+            // scales learning from own outcomes (c_own) and from others' outcomes (c_soc).
+            // 400 runs per cell; seeds 64000 + 1000*cell.
+            let f = File::create("out/couple.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "part,c_own,c_soc,s,m2,l2,p_dw,reps").unwrap();
+            let mut cell = 0u64;
+            let mut emit = |w: &mut BufWriter<File>, part: &str, co: f64, cs: f64, s: f64, cell: u64| {
+                let p = P { a0: 0.8, lam: 0.7, rho: 0.002, nu_f: 0.05 * s, nu_r: 0.0125 * s,
+                            c_own: co, c_soc: cs, ..P::default() };
+                let (m2, _v, l2, _vl, pdw, _pp, _, _) = cell_stats(&p, Gate::Diss, wrong.0, wrong.1,
+                                                                 400, 64000 + cell * 1000);
+                writeln!(w, "{part},{co},{cs},{s},{m2:.5},{l2:.5},{pdw:.4},400").unwrap();
+            };
+            let g6 = [0.0, 0.25, 0.5, 0.75, 0.9, 1.0];
+            for co in g6 { for cs in g6 { emit(&mut w, "grid", co, cs, 1.0, cell); cell += 1; } }
+            for c in [0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1.0] { emit(&mut w, "diag", c, c, 1.0, cell); cell += 1; }
+            for cs in [0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0] { emit(&mut w, "soc", 1.0, cs, 1.0, cell); cell += 1; }
+            for co in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] { emit(&mut w, "own", co, 1.0, 1.0, cell); cell += 1; }
+            for s in [0.895, 1.25] { for c in [0.7, 0.8, 0.9, 1.0] { emit(&mut w, "speed", c, c, s, cell); cell += 1; } }
+            eprintln!("couple done: {cell} cells");
         }
         _ => eprintln!("unknown mode"),
     }
