@@ -249,3 +249,85 @@ AD_A2:
   rule_amendment:
     R1b: "if DISS-SUFF-MEAN-v2 passes: the estimand is the mean-type functional psi. The trap
       threshold is a BAND (mean coupling .90 to .95), not a point. R3 stands if v2 fails."
+
+# =================================================================== AD-A2 SCORECARD
+AD_A2_scorecard:   # verbatim, 2026-11-11; record records/hetc2.csv (30 cells x 400 runs, fresh seeds)
+  DISS-SUFF-MEAN-v2: "PASS. Edge in mean coupling: homogeneous .943; two-type (0; 1) .915;
+    two-type (.5; 1) .936; three-type .939; skewed .927. All inside [.90, .95]."
+  expected_detail: "FAILED in detail: I expected edges between .92 and .95 with the skewed
+    family lowest. The lowest is the two-type (0; 1) family at .915."
+  seen_after_the_run: "the mean locates the edge; the shape sets how sharp it is. At mean
+    coupling .88 the trap probability is .008 (homogeneous) and .31 (two-type (0; 1)); at
+    .98 it is .82 and .755. Dispersed populations cross the edge gradually."
+  rule_outcome: "R1b: the estimand is the mean-type functional psi; the trap threshold is the
+    band of mean coupling .90-.95."
+
+# =================================================================== ADDENDUM AD-B1
+AD_B1:
+  frozen: "2026-11-11, after the AD-A2 scorecard and before the map and certification runs.
+    Done before freezing: both scripts written; a smoke run at tiny sizes with all output
+    discarded (exit codes only); probe_generator.py given two knobs (prior, noise shape)
+    whose defaults reproduce the I037 generator (53 tests pass)."
+  estimand:
+    name: "psi, residual evidence uptake under reference-dependent deprivation"
+    definition: "psi = E[T | HIGH] / E[T | LOW]"
+    unit_level_target: "r_i, person i's revision weight after deprivation with a winning
+      peer in view, over the same person's weight after the same deprivation without one;
+      psi is the mean of r_i weighted by the control-condition weight"
+    attributes:   # ICH E9(R1) headings
+      population: "everyone randomised who reaches the probe stage (recruitment population:
+        author decision)"
+      conditions: "HIGH (board shows a peer winning at .72) against LOW (peer at the
+        participant's own level); same own-outcome odds; 1 rich + 5 deprivation rounds of 120
+        settlements (design S1x)"
+      variable: "T = mean over two ticket pairs of [revision after a favourable record minus
+        revision after an unfavourable record], in forecast points"
+      intercurrent_events: "(a) not revising on the probe: kept as observed (it is the
+        outcome). (b) failing the attention check: PRIMARY keeps everyone (total effect on
+        learning, whatever its cause, which is what the collective model needs);
+        SUPPLEMENTARY estimand = participants who would pass the check in either arm, bounded
+        by trimming. (c) dropout before the probe: same trimming bounds."
+      summary: "ratio of arm means, with a 99% Fieller interval (one-sided .005 at each end)"
+    identification: "randomisation; no interference between participants (the board is a
+      replay); the pair statistic is linear in the revision weight (the prior cancels).
+      Link to the model: under a revision weight linear in the learning multiplier and
+      coupling independent of legitimacy, psi = [1 - cbar (1 - L_HIGH)] / [1 - cbar (1 - L_LOW)],
+      so psi identifies the PRODUCT of mean coupling and achieved delegitimation, not the
+      coupling alone."
+  correction_to_part_C: "the freeze said the trimming bounds act 'on the numerator'. The arm
+    that is trimmed is the one with the higher retention, which is LOW (the denominator)."
+  decisions:   # all read off one 99% interval, so they hold jointly
+    D1: "upper limit below 1: learning from evidence is reduced (rivals predict psi >= 1)"
+    D2: "lower limit above psi_hi: the paper's trap region is excluded"
+    D3: "upper limit below psi_cert: mean coupling >= .90 whatever the gate dynamics"
+    D4: "upper limit below psi_hi: weaker discounting than the trap region allows is excluded"
+    thresholds: "psi_hi = largest model value of psi at mean coupling .90 over the gate points
+      P0-P4, both revision rules and four shapes; psi_cert = smallest value of psi at mean
+      coupling .90 when HIGH legitimacy is 0 and LOW legitimacy is 1 (over shapes and rules);
+      psi_lo = smallest model value at full coupling"
+  map_run:
+    script: "experiment/analysis/estimand_map_I038.py, seed 135000, 40,000 simulated
+      participants per pool"
+    expected:
+      EM1: "event rule: at a given mean coupling psi is the same for every shape (range <=
+        .01). Outcome rule: shapes differ by .08-.15 at mean .90 and .04-.08 at .95
+        (homogeneous highest, two-type (0; 1) lowest)."
+      EM2: "psi_hi in [.55, .70], reached at the anchoring edge P4 under the outcome rule"
+      EM3: "psi_cert = .10 (+/- .005); the model value at full coupling is below it only at P0"
+  certification_run:
+    script: "experiment/analysis/estimand_cert_I038.py, seed 135100; pools of 300,000
+      probe statistics; 4,000 replicates (2,000 for D2, 1,500 for trimming, 1,000 for rank
+      tests)"
+    claims: "as frozen in part C (DISS-PSI-INVARIANT, -REGULAR, -ALLOC, -DECISIONS,
+      -ATTRITION), with these readings: 'stay below 1' means in >= 90% of replicates; the
+      truth for the trimming interval is psi among the attentive"
+    expected_updates:   # the part C expectations stay on the record and are scored as written
+      D3: "the part C expectation (100-300 at the central point) was written for a per-point
+        threshold that part A removed. Under AD-B1 I expect D3 to be out of reach at n <= 300
+        at every point: the model's own value at the central point (.13-.15) is above psi_cert."
+      D2: "for homogeneous coupling .5 I now expect D2 to fail under the event rule (psi about
+        .59, below psi_hi) and to need about 140 per arm under the outcome rule"
+      D4: "n for .90 <= 72 at P0-P3; several hundred at P4"
+      Q5: "ratio of means has the smaller s.e. under normal noise; with two types the ratio of
+        medians is off the mean-type value by more than .05"
+  not_run: "DISS-PREV-LB (rule R2 was not selected)"

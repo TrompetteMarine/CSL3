@@ -28,6 +28,9 @@ import numpy as np
 
 ALPHA = 0.2
 OMEGA = 0.5
+# I038 robustness knobs (defaults reproduce the I037 generator draw for draw)
+PRIOR_MU, PRIOR_SD = 50.0, 10.0
+NOISE = 'normal'          # 't3': Student t with 3 df scaled to the same s.d.
 REPS = {'single': 1, 'pair': 2, 'pair2': 4, 'did': 4}
 
 
@@ -43,11 +46,19 @@ def _round5(x):
     return np.clip(np.round(x / 5) * 5, 0, 100)
 
 
+def _eps(sigma_f, n, rng):
+    if NOISE == 'normal':
+        return rng.normal(0, sigma_f, n)
+    if NOISE == 't3':
+        return rng.standard_t(3, n) * sigma_f / np.sqrt(3.0)
+    raise ValueError(NOISE)
+
+
 def _revision(w, e, sigma_f, rng):
     n = len(w)
-    b0 = np.clip(rng.normal(50, 10, n), 5, 95)
-    pre = _round5(b0 + rng.normal(0, sigma_f, n))
-    post = _round5(b0 + w * (100 * e - b0) + rng.normal(0, sigma_f, n))
+    b0 = np.clip(rng.normal(PRIOR_MU, PRIOR_SD, n), 5, 95)
+    pre = _round5(b0 + _eps(sigma_f, n, rng))
+    post = _round5(b0 + w * (100 * e - b0) + _eps(sigma_f, n, rng))
     return post - pre
 
 
