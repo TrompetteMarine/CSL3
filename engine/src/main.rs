@@ -1253,6 +1253,28 @@ fn main() {
             for s in [0.895, 1.25] { for c in [0.7, 0.8, 0.9, 1.0] { emit(&mut w, "speed", c, c, s, cell); cell += 1; } }
             eprintln!("couple done: {cell} cells");
         }
+        "ctime" => {
+            // KGi-DISS-I037 addendum AD-A2 (frozen before running): how long the wrong
+            // consensus lasts as a function of coupling strength (diagonal), T = 2400.
+            let f = File::create("out/ctime.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "c,run,t_correct").unwrap();
+            for (ci, c) in [0.0, 0.25, 0.5, 0.75, 0.85, 0.9, 0.95, 1.0].iter().enumerate() {
+                let p = P { a0: 0.8, lam: 0.7, rho: 0.002, t: 2400, c_own: *c, c_soc: *c, ..P::default() };
+                for r in 0..200u64 {
+                    let mut tr: Vec<(Vec<f32>, f64, f64, f64, f64)> = Vec::new();
+                    let _ = run(&p, Gate::Diss, wrong.0, wrong.1, 65000 + (ci as u64) * 1000 + r * 7919, Some(&mut tr));
+                    // samples every 2 trials; need 10 consecutive samples above .7
+                    let mut tc: i64 = -1; let mut streak = 0;
+                    for (k, s) in tr.iter().enumerate() {
+                        if s.1 > 0.7 { streak += 1; if streak == 10 { tc = ((k + 1 - 10) * 2) as i64; break; } }
+                        else { streak = 0; }
+                    }
+                    writeln!(w, "{c},{r},{tc}").unwrap();
+                }
+                eprintln!("ctime c={c} done");
+            }
+        }
         _ => eprintln!("unknown mode"),
     }
 }

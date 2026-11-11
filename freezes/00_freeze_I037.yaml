@@ -116,3 +116,30 @@ part_D_kg: "freezes/kg_delta_I037.yaml (scoped delta) and freezes/kg_active_I037
 
 completion: "A, B, C run once under this freeze; scorecard verbatim including failures;
   all seeded records re-run for bit-identity; KG delta validated (ids, references)."
+
+# =================================================================== PART A RESULT (verbatim) + ADDENDUM AD-A2 (pre-run)
+part_A_result:
+  record: "records/couple.csv (400 runs per cell)"
+  edges: "diagonal .945 (P_dw .03 at .90, .56 at .95); social edge with own fully coupled
+    .893 (.12 at .85, .56 at .90); own edge with social fully coupled .881 (.04 at .80, .61
+    at .90). At the speed edge (s .895) the trap needs c = 1 (.49) and is 0 at c = .9; at
+    s 1.25 it is 1.00 at c = 1 and .06 at c = .9."
+  EA1: "PASS (.945, at the top of the predicted range)"
+  EA2: "PASS (.893)"
+  EA3: "FAIL. Own edge .881, not <= .7: a 20%-open own channel already dissolves the trap
+    (P_dw .04 at c_own .8). My account of the own channel was wrong a second time."
+  EA4: "PASS (0 everywhere with c_soc <= .75)"
+  channel_rule_outcome: "edges differ by .012 < .15 -> probe BOTH channels; c_edge = .945"
+  consequence: "the trap at the paper cell needs near-total shutdown of learning on both
+    channels (>= ~90%); with partial discounting the population corrects within the
+    horizon. P_dw at T = 600 is therefore a knife-edge in the coupling too."
+AD_A2_correction_time:   # written after part A's result, before running
+  question: "is the consequence of PARTIAL discounting graded? How long does the wrong
+    consensus last as a function of coupling strength?"
+  run: "engine mode ctime: paper cell, T = 2400, diagonal c in {0, .25, .5, .75, .85, .9,
+    .95, 1}, 200 runs each, seeds 65000 + 1000*cell; correction time = first trial from
+    which community 2's share on the better option stays above .7 for 20 trials"
+  expected: "median correction time roughly flat up to c = .75, then rising steeply; at
+    c = 1 about 1200-1400 (the gate reopens as entitlement decays); uncertain"
+  use: "a graded lab-to-ABM map: measured discounting -> predicted lengthening of the
+    wrong consensus (reported alongside P_dw, not instead of it)"
