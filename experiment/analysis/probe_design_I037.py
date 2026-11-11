@@ -51,17 +51,20 @@ def edges():
     return c, e
 
 
+P1TAG = {'p65': ((.65, .35), .65), 'p75': ((.75, .35), .72)}     # rich-phase odds, board level
+
+
 def chi_min(p2, mu_ref=.65):
     p = .77 * p2[0] + .23 * p2[1]
     return (.3 + .25 * p / (1 - p) - p) / (mu_ref - p)
 
 
-def points(p2, c_edge):
+def points(p2, c_edge, mu_ref=.65):
     return [('P0', 1.0, .25, .6, 1.0), ('P1', 1.0, .25, .4, 1.0), ('P2', 1.0, .2918, .4, 1.0),
-            ('P3', .895, .25, .4, 1.0), ('P4', 1.0, .25, chi_min(p2), 1.0), ('P6', 1.0, .25, .4, c_edge)]
+            ('P3', .895, .25, .4, 1.0), ('P4', 1.0, .25, chi_min(p2, mu_ref), 1.0), ('P6', 1.0, .25, .4, c_edge)]
 
 
-def multipliers(kind, design, s, ratio, chi, n=NP, gen=None):
+def multipliers(kind, design, s, ratio, chi, n=NP, gen=None, p1tag='p65'):
     """model's learning multiplier at the end of the last deprivation round, HIGH and LOW"""
     r1, r2, k, odds = design
     out = {}
@@ -69,7 +72,8 @@ def multipliers(kind, design, s, ratio, chi, n=NP, gen=None):
     try:
         for arm in ('HIGH', 'LOW'):
             lat = dg.simulate_design(kind, n, arm, gen if gen is not None else rng, phases=(r1 * k, r2 * k, k),
-                                     cadence=k, p2_odds=ODDS[odds], chi=chi, resto_mix=(1, 0), choice_every=k)
+                                     cadence=k, p1_odds=P1TAG[p1tag][0], p2_odds=ODDS[odds],
+                                     mu_ref=P1TAG[p1tag][1], chi=chi, resto_mix=(1, 0), choice_every=k)
             out[arm] = np.ones(n) if kind == 'rival_au' else lat['ratings'][:, r1 + r2 - 1].astype(float)
     finally:
         mg.NUF, mg.NUR = NUF0, NUR0

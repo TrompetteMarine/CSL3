@@ -143,3 +143,32 @@ AD_A2_correction_time:   # written after part A's result, before running
     c = 1 about 1200-1400 (the gate reopens as entitlement decays); uncertain"
   use: "a graded lab-to-ABM map: measured discounting -> predicted lengthening of the
     wrong consensus (reported alongside P_dw, not instead of it)"
+
+# =================================================================== PART B STAGE 1 RESULT (verbatim) + ADDENDUM AD-B2 (pre-run)
+part_B_stage1_result:
+  record: "records/probe_design_I037.{txt,csv}, records/probe_design_I037_selected.json"
+  S1: "2 rich + 4 deprivation rounds, 40 draws per round, harsh deprivation odds; two pairs
+    (4 probe tickets), m = 7; 10 repetitions; n per arm 213 (per-outcome) / 274 (per-event)
+    -> 274; binding point P4 (anchoring edge), not the coupling edge"
+  S2: "same task, one market pair + one control pair (did), m = 5: 845 per arm"
+  EB1: "PASS: pair 298 vs single 468 per arm (sigma 12, per-outcome, S1 task)"
+  EB2: "FAIL: S1 needs 274 per arm, not <= 150"
+  EB3: "FAIL: per-event integration needs MORE (274 vs 213), not fewer"
+  note: "forecast noise matters a lot: pair2 180-187 at sigma 8, 310-406 at sigma 16"
+AD_B2_extended_exposure:   # written after stage 1, before running
+  reason: "the legitimacy gap at probe time is only about .36-.43 (HIGH) against .62-.65
+    (LOW) at the edge points; the levers that cost the participant nothing were not in the
+    frozen grid: more draws inside each round summary, a richer rich phase with a higher
+    board, and the deprivation odds"
+  grid: "rounds (2,4) and (1,5); draws per round k in {40, 60, 80, 120}; deprivation odds
+    std / harsh; rich phase + board: p65 = (.65/.35, board .65) or p75 = (.75/.35, board
+    .72); probe pair2 with m in {7, 10}; sigma_f 12; both integration rules; theory points
+    recomputed per design (P4's anchoring weight uses the design's board level)"
+  script: "experiment/analysis/probe_design2_I037.py (seed 134250)"
+  selection: "S1x = row minimising max over integration rules of n; certified in stage 2 in
+    place of S1 if its n is lower (S1 kept in the record)"
+  expected: "an interior optimum in k (HIGH legitimacy hits the floor, LOW starts to fall);
+    n for S1x between 120 and 220 per arm; the richer rich phase helps (uncertain)"
+  dependence_flag: "every gain from larger k rests on per-outcome integration of round
+    summaries (count lemma). If people update once per round, k is irrelevant. This is a
+    human quantity (pilot: vary k between participants)."

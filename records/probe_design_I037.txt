@@ -1,0 +1,50 @@
+KGi-DISS-I037 part B stage 1 (seed 134200)
+
+Coupling edges from records/couple.csv: {"diag": 0.944392523364486, "soc": 0.8929775280898876, "own": 0.881140350877193, "channel": "both", "c_edge": 0.944392523364486}
+design rounds 2+5, 25 draws, std: legitimacy at probe time HIGH/LOW: P0 0.42/0.75  P1 0.55/0.76  P2 0.62/0.79  P3 0.60/0.78  P4 0.61/0.76  P6 0.55/0.76
+design rounds 2+5, 40 draws, std: legitimacy at probe time HIGH/LOW: P0 0.17/0.67  P1 0.38/0.67  P2 0.47/0.73  P3 0.43/0.71  P4 0.47/0.68  P6 0.37/0.67
+design rounds 2+4, 40 draws, std: legitimacy at probe time HIGH/LOW: P0 0.26/0.70  P1 0.44/0.71  P2 0.53/0.75  P3 0.50/0.73  P4 0.51/0.71  P6 0.44/0.70
+design rounds 1+5, 40 draws, std: legitimacy at probe time HIGH/LOW: P0 0.19/0.68  P1 0.41/0.69  P2 0.51/0.74  P3 0.47/0.72  P4 0.50/0.69  P6 0.41/0.69
+design rounds 1+6, 40 draws, std: legitimacy at probe time HIGH/LOW: P0 0.13/0.66  P1 0.36/0.67  P2 0.47/0.74  P3 0.41/0.71  P4 0.47/0.67  P6 0.36/0.67
+design rounds 2+5, 40 draws, harsh: legitimacy at probe time HIGH/LOW: P0 0.10/0.60  P1 0.31/0.61  P2 0.38/0.65  P3 0.36/0.65  P4 0.38/0.61  P6 0.31/0.61
+design rounds 2+4, 40 draws, harsh: legitimacy at probe time HIGH/LOW: P0 0.17/0.64  P1 0.36/0.65  P2 0.43/0.68  P3 0.43/0.68  P4 0.42/0.65  P6 0.36/0.64
+design rounds 1+5, 40 draws, harsh: legitimacy at probe time HIGH/LOW: P0 0.12/0.62  P1 0.34/0.62  P2 0.42/0.67  P3 0.40/0.66  P4 0.41/0.62  P6 0.35/0.62
+
+S1: best rows within 10 repetitions (sigma 12; n per arm; worst theory point)
+ r1  r2  k  odds  m scheme  reps     n worst_point  n_event wp_event  n_max
+  2   4 40 harsh  7  pair2    10 213.0          P4    274.0       P4  274.0
+  2   4 40 harsh 10  pair2    10 211.0          P4    274.0       P4  274.0
+  2   4 40 harsh  5  pair2    10 302.0          P4    274.0       P4  302.0
+  2   4 40   std 10  pair2    10 317.0          P4    335.0       P4  335.0
+  1   5 40 harsh  5  pair2    10 295.0          P4    352.0       P4  352.0
+  1   5 40 harsh  7  pair2    10 246.0          P4    352.0       P4  352.0
+  1   5 40 harsh 10  pair2    10 201.0          P4    352.0       P4  352.0
+  2   4 40   std  7  pair2    10 354.0          P4    335.0       P4  354.0
+
+S2: best rows within 10 repetitions (sigma 12; n per arm; worst theory point)
+ r1  r2  k  odds  m scheme  reps     n worst_point  n_event wp_event  n_max
+  2   4 40 harsh  5    did    10 782.0          P2    844.0       P4  844.0
+  2   4 40 harsh  7    did    10 573.0          P4    844.0       P4  844.0
+  2   4 40 harsh 10    did    10 462.0          P4    844.0       P4  844.0
+  1   5 40 harsh  5    did    10 791.0          P4    852.0       P4  852.0
+  1   5 40 harsh  7    did    10 690.0          P4    852.0       P4  852.0
+  1   5 40 harsh 10    did    10 419.0          P4    852.0       P4  852.0
+  2   4 40   std  7    did    10 957.0          P4    978.0       P3  978.0
+  2   4 40   std 10    did    10 741.0          P4    978.0       P3  978.0
+
+selected: {"S1": {"r1": 2, "r2": 4, "k": 40, "odds": "harsh", "m": 7, "scheme": "pair2", "reps": 10, "n": 274, "n_outcome": 212.66620379696357, "n_event": 273.61517535875447}, "S2": {"r1": 2, "r2": 4, "k": 40, "odds": "harsh", "m": 5, "scheme": "did", "reps": 10, "n": 845, "n_outcome": 782.3010835095712, "n_event": 844.3517146335174}}
+
+S1 design, all schemes, n per arm by forecast noise and integration rule:
+integration  event                outcome               
+sigma         8.0    12.0    16.0    8.0    12.0    16.0
+scheme                                                  
+did          431.0  844.0  1405.0   343.0  573.0   794.0
+pair         307.0  436.0   712.0   247.0  298.0   443.0
+pair2        187.0  274.0   406.0   180.0  213.0   310.0
+single       361.0  897.0  1430.0   333.0  468.0  1067.0
+
+S1 design and scheme, n per arm by evidence size m (sigma 12, per-outcome):
+ m     n worst_point
+ 5 302.0          P4
+ 7 213.0          P4
+10 211.0          P4
