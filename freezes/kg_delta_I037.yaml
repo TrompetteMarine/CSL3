@@ -1,0 +1,112 @@
+# KG delta — KGi-DISS-I037 (on top of kg_delta_I032.yaml and kg_delta_I033_I034.yaml incl.
+# its i035 and i036 blocks; scoped transaction; history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 175d317 (I036 close)"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-LAB-UPTAKE
+    old_status: "proposed (I036; normal approximation; 108-176 per arm)"
+    new_status: "v2, certified-synthetic CONDITIONAL on DISS-EFFECTIVE-DRAWS: design S1x (1
+      rich + 5 deprivation rounds, 120 settlements per round, harsh deprivation odds, two
+      probe pairs with 10 settlements shown); n = 72 per arm; Monte Carlo power >= .95 at
+      forecast noise 12 under both revision rules (.862 under the one-update rule at noise
+      16); false positives <= .006 vs R3, R4, composite; 0 vs R1"
+    evidence: "records/probe_cert_I037.txt"
+    limitations: "disengagement differing by arm inflates the error rate (.24-.27 at 20%;
+      .02 with an attention check); revision rule, forecast noise, rigidity are human
+      quantities; task dynamics simulated at full coupling"
+  - id: DISS-BGT-JOINT-GATE
+    added_evidence: "quantified by DISS-COUPLE-EDGE: both channels must be shut by >= ~90%"
+  - id: DISS-SCORE-SA
+    old_status: "n 80 / 70 / 58 per arm at gain .25 / .5 / 1 (AD-O1)"
+    new_status: "ERRATUM: AD-O1 used the batched accuracy screen (kept .37 of simulated
+      participants). Without it: 155 / 111 / 96 (ten-round 2/5/3, 25 draws). In the
+      certified probe design (6 ratings): 43 / 30 / 27."
+    evidence: "records/fairness_score_I037.txt"
+  - id: DISS-SCORE-SB
+    new_status: "ERRATUM: 652 / 243 / 163 without the screen (was 145 / 90 / 86);
+      superseded as the gate-specific test by DISS-LAB-UPTAKE v2 if adopted"
+  - id: DISS-ID-SPAN
+    added_limitation: "computed with the batched accuracy screen; not recomputed; treat the
+      217 per cell as optimistic"
+  - id: DISS-TASK-TEN
+    new_status: "candidate geometry updated: 1 rich + 5 deprivation rounds + 4 probe tickets
+      = 10 repetitions; no restoration phase; 120 settlements per round summary"
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: effective draws per round summary (first), revision
+      rule and forecast noise, discounting on each channel, differential disengagement,
+      plus the earlier items (scale gain/noise, starting entitlement, rigidity)"
+  - id: DISS-TRAP-SPEED-EDGE
+    added_evidence: "at the speed edge the trap also needs full coupling (P_dw .49 at c = 1,
+      0 at c = .9); at speed 1.25: 1.00 at c = 1, .06 at c = .9"
+
+new_nodes:
+  - id: DISS-COUPLE-EDGE
+    kind: model
+    status: supported-synthetic (400 runs per cell)
+    statement: "with learning multiplier 1 - c(1 - L) per channel, the paper-cell trap has
+      probability >= .5 only for c >= .945 on both channels jointly; .893 for others'
+      outcomes with own fully coupled; .881 for own outcomes with others' fully coupled; 0
+      whenever either c <= .75"
+    evidence: "records/couple.csv"
+  - id: DISS-CORRECTION-TIME
+    kind: model
+    status: supported-synthetic (200 runs per value)
+    statement: "median trials to correction at the paper cell rise convexly with coupling:
+      54, 60, 74, 96, 210, 382, 633, 979 at c = 0, .25, .5, .75, .85, .9, .95, 1"
+    evidence: "records/ctime.csv"
+  - id: DISS-EXPOSURE-THRESHOLD
+    kind: statistical
+    status: supported-synthetic
+    statement: "the HIGH-LOW legitimacy gap at probe time is non-monotone in deprivation
+      exposure: LOW legitimacy falls to .53-.67 over 240-480 draws and recovers to about .87
+      by 600 draws (entitlement of slow adapters has decayed below A*), while HIGH stays
+      collapsed; sample size drops from about 300 to 72 per arm across that threshold"
+    evidence: "records/probe_design2_I037.{txt,csv}"
+  - id: DISS-EFFECTIVE-DRAWS
+    kind: assumption
+    status: open (human; first pilot quantity)
+    statement: "a round summary of k settlements acts on entitlement and legitimacy like k
+      separate outcomes (count-sufficiency lemma applied to people)"
+    consequence_if_false: "the certified n = 72 does not hold; at an effective 40 draws the
+      screen gives about 300 per arm"
+  - id: BATCHED-ACCURACY-SCREEN
+    kind: implementation
+    status: defect, fixed for I037 onwards (earlier records not rewritten)
+    statement: "the rich-phase accuracy screen is ill-defined with one choice per round; it
+      removed about half of simulated participants in I033 AD-B1, AD-O1 and I034"
+  - id: DISS-H1-STRUCTURE-V3
+    kind: design
+    status: proposed (author decision)
+    statement: "H1a = fairness reference effect (S-a); H1b = evidence-uptake probe, tested
+      only if H1a rejects; 72 per arm, 144 participants, ten repetitions; no restoration
+      phase, no dose or framing module"
+
+new_edges:
+  - {from: DISS-LAB-UPTAKE, to: DISS-COUPLE-EDGE, type: requires, note: "theory point P6 = coupling edge"}
+  - {from: DISS-LAB-UPTAKE, to: DISS-EFFECTIVE-DRAWS, type: requires, note: "load-bearing human assumption"}
+  - {from: DISS-LAB-UPTAKE, to: DISS-EXPOSURE-THRESHOLD, type: requires}
+  - {from: DISS-EFFECTIVE-DRAWS, to: DISS-LEMMA-COUNT-SUFFICIENCY, type: requires}
+  - {from: DISS-CORRECTION-TIME, to: DISS-COUPLE-EDGE, type: qualified_by, note: "graded consequence below the edge"}
+  - {from: DISS-H1-STRUCTURE-V3, to: DISS-LAB-UPTAKE, type: requires}
+  - {from: DISS-H1-STRUCTURE-V3, to: DISS-SCORE-SA, type: requires}
+  - {from: DISS-SCORE-SA, to: BATCHED-ACCURACY-SCREEN, type: qualified_by}
+  - {from: DISS-ID-SPAN, to: BATCHED-ACCURACY-SCREEN, type: qualified_by}
+
+refuted_preserved:
+  - "EA3 (trap survives a half-open own channel): own edge .881"
+  - "AD-A2 level (correction time 1200-1400 at c = 1): 979"
+  - "EB2 (S1 <= 150 per arm): 274"
+  - "EB3 (one-update rule needs fewer participants): needs more"
+  - "AD-B2 (interior optimum in draws per round; n 120-220): threshold, n 72"
+  - "EB4 (asymptotic n within .03 of .90): .950"
+  - "EB6 (raw false positives >= .5 under 20% disengagement): .24-.27"
+  - "AD-B3 (starting entitlement .4 lowers power materially): .93-.94"
+  - "S2 (control-source design) adequately powered at its asymptotic n: .797 at the binding point"
+
+flags_not_patched: "the headline trap requires, together: gate speed >= ~.9, repair/erosion
+  ratio <= .29, conformity at the tipping gap, and >= ~90% discounting on both channels"
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "synthetic only; every human reading open until the pilot"}
+persistence: "CSL3 freezes/kg_delta_I037.yaml + Project mirror; no remote KG service"

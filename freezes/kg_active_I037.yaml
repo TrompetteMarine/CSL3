@@ -1,0 +1,48 @@
+# Active claim ledger for the experiment after KGi-DISS-I037 (a retrieval aid, not a
+# second source of truth: every line points to its node in the KG deltas and its record).
+as_of: "2026-11-11, CSL3 main after the I037 close"
+
+theory_region:   # where the paper's headline trap holds at its own cell
+  - {node: DISS-TRAP-SPEED-EDGE, value: "gate speed >= .895", record: "records/invcal.csv"}
+  - {node: DISS-DESIGN-BASIS-THEORY-EDGE, value: "repair/erosion ratio <= .292; anchoring weight >= .32-.36", record: "records/100_inverse_calibration_I032pc.md"}
+  - {node: DISS-BGT-TIP, value: "conformity at the tipping gap (.200 = true payoff gap)", record: "records/bgt_I036.txt"}
+  - {node: DISS-COUPLE-EDGE, value: "discounting >= .945 on both learning channels", record: "records/couple.csv"}
+  - {node: DISS-CORRECTION-TIME, value: "below the edge: graded lengthening of the wrong consensus", record: "records/ctime.csv"}
+
+design_current_candidate:   # author-gated
+  task: {node: DISS-TASK-TEN, value: "1 rich + 5 deprivation rounds (120 settlements each, summary screen) + 4 probe tickets = 10 repetitions"}
+  board: {node: DISS-PEER-REPLAY, value: "same-rule replay; HIGH level in a fixed band"}
+  hypotheses: {node: DISS-H1-STRUCTURE-V3, value: "H1a fairness score S-a; H1b evidence-uptake probe, gatekept"}
+  sample: "72 per arm (probe binds; S-a needs 27-43)"
+
+tests_supported_synthetic:
+  - {node: DISS-SCORE-SA, n_per_arm: "43 / 30 / 27 at gain .25 / .5 / 1 in the candidate design", record: "records/fairness_score_I037.txt"}
+  - {node: DISS-LAB-UPTAKE, n_per_arm: 72, power: ">= .95 at forecast noise 12", false_positives: "<= .006 (R3, R4, composite); 0 (R1)", record: "records/probe_cert_I037.txt"}
+
+rivals:
+  excluded_by_design: ["R1-global (opposite sign)", "R3 aspiration-in-utility", "R3 slow-reporting variants (no effect on forecasts)", "R4 group-contingent", "R3+R4 composite", "R5 rule inference (removed by the same-rule board)"]
+  not_excluded: ["disengagement that differs by arm (attention check reduces, does not remove)", "inequity slowing learning for reasons other than legitimacy (HamJenkins2025 class): same sign as the gate on the probe; separated only by mediation through the fairness score, not yet designed"]
+
+open_human:   # node DISS-HUMAN-PARAMS; what only a pilot can supply, in order
+  - "effective draws per round summary (DISS-EFFECTIVE-DRAWS) - decides whether n = 72 or about 300"
+  - "revision rule and forecast noise on the probe"
+  - "fairness scale gain and noise; never-movers"
+  - "starting entitlement; rigidity distribution"
+  - "differential disengagement; board believability"
+
+open_simulation:
+  - "measurement shapes M1-M6 and the anchoring variant for S-a in the candidate design"
+  - "joint error control of H1a then H1b in one Monte Carlo"
+  - "mediation test (fairness score -> revision weight) against the inequity-slows-learning rival"
+  - "pilot specification and its frozen lookup (settlements per round as the free knob)"
+  - "task dynamics at partial coupling"
+
+superseded_or_refuted: "see refuted_preserved / defeated_preserved in kg_delta_I032.yaml,
+  kg_delta_I033_I034.yaml (incl. i035, i036) and kg_delta_I037.yaml; notably the 450-round
+  per-round task, the frozen H1b TOST, H1b-SIc, the dose module, the reversal probe, the
+  hand-built conjunction, and the screen-affected sample sizes of AD-O1 / I034"
+
+manuscript_flags_not_patched:
+  - "speed edge (.895) not stated"
+  - "paper cell sits at the conformity tipping gap"
+  - "trap needs >= ~90% discounting on both channels"

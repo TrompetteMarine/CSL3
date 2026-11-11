@@ -1,0 +1,12 @@
+KGi-DISS-I037 part C: fairness scores without the accuracy screen (train 134400, test 134401)
+
+=== ten-round design 2/5/3, 25 draws (AD-O1 erratum): 10 fairness ratings; the old accuracy screen would keep 0.37 of participants
+  gain 0.25: n per arm  S-a 155   S-b 652
+  gain 0.5: n per arm  S-a 111   S-b 243   (Monte Carlo power of S-a at n = 112: 0.950)
+  gain 1.0: n per arm  S-a 96   S-b 163
+
+=== certified probe design 1+5 rounds, 120 draws, harsh, p75: 6 fairness ratings; the old accuracy screen would keep 0.50 of participants
+  gain 0.25: n per arm  S-a 43   S-b 196
+  gain 0.5: n per arm  S-a 30   S-b 211   (Monte Carlo power of S-a at n = 31: 0.948)
+  gain 1.0: n per arm  S-a 27   S-b 755
+

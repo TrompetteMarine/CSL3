@@ -200,3 +200,51 @@ AD_B3_certification_scope:   # fixed before the certification runs
       (frozen value .5), sigma_f 12, both integrations"
   expected: "power >= .9 for c >= .9; about .5 at c = .5; ~alpha at c = 0. Starting
     entitlement .4 lowers power materially (as in I033 stage 2)."
+
+# =================================================================== CLOSING RECORD (verbatim scorecard, 2026-11-11)
+closing_record:
+  records: "records/couple.csv, ctime.csv, probe_design_I037.{txt,csv}, probe_design2_I037.{txt,csv},
+    probe_design_I037_selected.json, probe_cert_I037.txt, fairness_score_I037.txt; memo
+    records/106_uptake_probe_I037.md; KG freezes/kg_delta_I037.yaml, freezes/kg_active_I037.yaml"
+  part_A: "see part_A_result. AD-A2: median correction time 54 / 60 / 74 / 96 / 210 / 382 /
+    633 / 979 trials at c = 0 / .25 / .5 / .75 / .85 / .9 / .95 / 1 (200 runs each, all
+    corrected by 2400). Shape as expected (x1.8 by c = .75, then steep); level at c = 1
+    predicted 1200-1400: FAIL (979)."
+  part_B_stage2:   # S1x: 1 rich + 5 deprivation rounds, 120 draws, harsh, rich .75/.35 board .72; pair2, m 10; n 72 per arm
+    power_S1x: "per-outcome >= .987 at every point and noise level; per-event .950 at sigma
+      12 and .862 at sigma 16 (binding point P4)"
+    EB4: "FAIL in letter: Monte Carlo power at the binding point is .950, not within .03 of
+      .90 (the asymptotic n is conservative here)"
+    EB5: "S1x PASS (R3 .002-.006, R4 .003, R1 .000, composite .004-.005). S2: two cells at
+      .012 (B = 1000, s.e. about .003): marginal FAIL"
+    EB6: "raw S1x under 20% extra disengagement in HIGH: .241-.272 (predicted >= .5: FAIL,
+      smaller); 10%: .051-.061; with the attention check .020-.022 and .011-.015 (still 2-4
+      times nominal); S2 (did): .003-.008 PASS"
+    S2: "at n = 845 power at the binding point is .917 (per-outcome) and .797 (per-event) at
+      sigma 12: the asymptotic n is NOT sufficient for S2; not pursued"
+    AD_B3: "partial discounting at n = 72: power .004 at c = 0; .062 / .301 at .25; .788 /
+      .948 at .5; 1.000 from .75 (per-outcome / per-event). Expected 'about .5 at c = .5':
+      higher. Starting entitlement .4 / .6: worst-point power .93-.94 / .90-.98; expected
+      'materially lower at .4': FAIL (robust)."
+    lab_to_abm: "HIGH/LOW revision-weight ratio (per-outcome | per-event) at P1's gate
+      parameters: 1.00 | 1.00 (c 0), .92 | .80 (.25), .79 | .59 (.5), .55 | .37 (.75), .41 |
+      .27 (.85), .33 | .23 (.9), .26 | .18 (.944), .15 | .13 (1). The trap (P_dw >= .5) needs
+      c >= .945."
+  part_C:
+    EC1: "PASS. Ten-round 2/5/3 at 25 draws without the accuracy screen: S-a 155 / 111 / 96
+      per arm at gain .25 / .5 / 1 (AD-O1 reported 80 / 70 / 58); S-b 652 / 243 / 163 (AD-O1:
+      145 / 90 / 86). The old screen kept .37 of simulated participants."
+    EC2: "PASS. In the certified probe design (6 fairness ratings) S-a needs 43 / 30 / 27 per
+      arm: the probe (72) sets the sample."
+  reproducibility: "see below (filled after the re-runs)"
+  reproducibility_result: "every seeded I037 record re-run bit-identical: couple.csv,
+    ctime.csv (engine), probe_design_I037.txt, probe_design2_I037.txt,
+    probe_cert_I037.txt, fairness_score_I037.txt. Engine validation gate and the I036
+    census unchanged by the new fields. Test suite: 53 passed."
+  kg: "freezes/kg_delta_I037.yaml validated (no id collisions with earlier deltas; all edge
+    endpoints and updated ids resolve); freezes/kg_active_I037.yaml references resolve.
+    Persisted to CSL3 and mirrored to the Project; no remote KG service."
+  next: "I038 candidates: pilot specification with settlements-per-round as the free knob
+    and its frozen lookup; mediation test (fairness score -> revision weight); joint H1a/H1b
+    error control and measurement shapes in the candidate design; then the ten-repetition
+    oTree build and the preregistration rewrite (author-gated)"

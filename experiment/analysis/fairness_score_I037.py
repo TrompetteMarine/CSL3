@@ -13,24 +13,25 @@ import market_generator as mg
 import design_generator as dg
 import probe_generator as pg
 import stats_v2 as sv
-from probe_design_I037 import ODDS, chi_min
+from probe_design_I037 import ODDS, P1TAG, chi_min
 
 NP, SIG, B = 12000, 5.8, 400
 NUF0, NUR0, SIG0 = mg.NUF, mg.NUR, dg.SIG_EPS
 sel = json.load(open('records/probe_design_I037_selected.json'))
 
 
-def pts_for(p2):
+def pts_for(p2, mu_ref=.65):
     return [('P0', 1.0, .25, .6), ('P1', 1.0, .25, .4), ('P2', 1.0, .2918, .4), ('P3', .895, .25, .4),
-            ('P4', 1.0, .25, chi_min(p2))]
+            ('P4', 1.0, .25, chi_min(p2, mu_ref))]
 
 
-def cell(rng, kind, arm, phases, k, p2, chi, a, nrate, s=1.0, ratio=.25, old_screen=False):
+def cell(rng, kind, arm, phases, k, p2, chi, a, nrate, s=1.0, ratio=.25, old_screen=False, p1='p65'):
     mg.NUF, mg.NUR = NUF0 * s, NUF0 * s * ratio
     dg.SIG_EPS = SIG
     try:
-        lat = dg.simulate_design(kind, NP, arm, rng, phases=phases, cadence=k, p2_odds=p2, chi=chi,
-                                 resto_mix=(1, 0), reg3_fixed=(arm == 'HIGH'), choice_every=k)
+        lat = dg.simulate_design(kind, NP, arm, rng, phases=phases, cadence=k, p1_odds=P1TAG[p1][0], p2_odds=p2,
+                                 mu_ref=P1TAG[p1][1], chi=chi, resto_mix=(1, 0), reg3_fixed=(arm == 'HIGH'),
+                                 choice_every=k)
         f, e, keep = dg.measure_design(lat, 'M2', a, rng)
     finally:
         mg.NUF, mg.NUR, dg.SIG_EPS = NUF0, NUR0, SIG0
@@ -46,12 +47,14 @@ def power(rng, sh, sl, n):
 
 
 print("KGi-DISS-I037 part C: fairness scores without the accuracy screen (train 134400, test 134401)\n")
-d = sel['S1']
-CASES = [('ten-round design 2/5/3, 25 draws (AD-O1 erratum)', (50, 125, 75), 25, ODDS['std'], 10),
-         (f"S1 design {d['r1']}+{d['r2']} rounds, {d['k']} draws, {d['odds']}",
-          (d['r1'] * d['k'], d['r2'] * d['k'], d['k']), d['k'], ODDS[d['odds']], d['r1'] + d['r2'])]
-for name, phases, k, p2, nrate in CASES:
-    pts = pts_for(p2)
+d = sel['S1x'] if ('S1x' in sel and sel['S1x']['n'] < sel['S1']['n']) else sel['S1']   # the certified design (AD-B3)
+CASES = [('ten-round design 2/5/3, 25 draws (AD-O1 erratum)', (50, 125, 75), 25, ODDS['std'], 10, 'p65'),
+         (f"certified probe design {d['r1']}+{d['r2']} rounds, {d['k']} draws, {d['odds']}, {d.get('p1', 'p65')}",
+          (d['r1'] * d['k'], d['r2'] * d['k'], d['k']), d['k'], ODDS[d['odds']], d['r1'] + d['r2'], d.get('p1', 'p65'))]
+for name, phases, k, p2, nrate, p1 in CASES:
+    pts = pts_for(p2, P1TAG[p1][1])
+    _cell = cell
+    cell = lambda *a, _c=_cell, _p=p1, **kw: _c(*a, p1=_p, **kw)
     tr = np.random.default_rng(134400)
     kept = np.mean([cell(tr, 'gate', arm, phases, k, p2, .4, .5, nrate, old_screen=True) for arm in ('HIGH', 'LOW')])
     H = {p[0]: cell(tr, 'gate', 'HIGH', phases, k, p2, p[3], .5, nrate, p[1], p[2]) for p in pts}
@@ -79,4 +82,5 @@ for name, phases, k, p2, nrate in CASES:
                            cell(te, 'gate', 'LOW', phases, k, p2, p[3], a, nrate, p[1], p[2]) @ w_a, n) for p in pts)
             line += f"   (Monte Carlo power of S-a at n = {n}: {pw:.3f})"
         print(line, flush=True)
+    cell = _cell
     print()

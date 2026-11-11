@@ -1,0 +1,46 @@
+KGi-DISS-I037 part B stage 2: Monte Carlo certification (seed 134300; B = 1000)
+
+=== S1x: rounds 1+5, 120 draws per round, deprivation odds harsh; probe pair2 with m = 10; 10 repetitions; n = 72 per arm
+  power (rows: forecast noise; columns: theory points)
+    outcome  sigma    8: P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.995  P6 1.000
+    outcome  sigma   12: P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.993  P6 1.000
+    outcome  sigma   16: P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.987  P6 1.000
+    event    sigma    8: P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.992  P6 1.000
+    event    sigma   12: P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.950  P6 1.000
+    event    sigma   16: P0 1.000  P1 1.000  P2 1.000  P3 0.999  P4 0.862  P6 0.997
+  expected HIGH/LOW ratio of mean revision weights (attentive, noise-free):
+    outcome : P0 0.013  P1 0.148  P2 0.185  P3 0.157  P4 0.507  P6 0.258
+    event   : P0 0.006  P1 0.126  P2 0.153  P3 0.137  P4 0.470  P6 0.184
+  with attention-check exclusion (sigma 12):
+    outcome : P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 1.000  P6 1.000
+    event   : P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.984  P6 1.000
+  false positives (sigma 12)
+    outcome : R3 chi .4 0.006  R3 chi .6 0.002  R4 0.003  R1 0.000  composite 0.004  disengaged +10% 0.061  (with attention check 0.015)  disengaged +20% 0.272  (with attention check 0.022)
+    event   : R3 chi .4 0.005  R3 chi .6 0.003  R4 0.003  R1 0.000  composite 0.005  disengaged +10% 0.051  (with attention check 0.011)  disengaged +20% 0.241  (with attention check 0.020)
+  partial discounting at P1's gate parameters (sigma 12): c, HIGH/LOW weight ratio, power, [ABM: P_dw, median correction time]
+    c=0.000  outcome: ratio 1.000 power 0.004  event: ratio 1.000 power 0.004  [P_dw nan, correction 54]
+    c=0.250  outcome: ratio 0.922 power 0.062  event: ratio 0.804 power 0.301  [P_dw nan, correction 60]
+    c=0.500  outcome: ratio 0.785 power 0.788  event: ratio 0.594 power 0.948  [P_dw 0.00, correction 74]
+    c=0.750  outcome: ratio 0.549 power 1.000  event: ratio 0.368 power 1.000  [P_dw nan, correction 96]
+    c=0.850  outcome: ratio 0.413 power 1.000  event: ratio 0.273 power 1.000  [P_dw 0.00, correction 210]
+    c=0.900  outcome: ratio 0.334 power 1.000  event: ratio 0.225 power 1.000  [P_dw 0.03, correction 382]
+    c=0.944  outcome: ratio 0.256 power 1.000  event: ratio 0.181 power 1.000  [P_dw nan, correction nan]
+    c=1.000  outcome: ratio 0.148 power 1.000  event: ratio 0.126 power 1.000  [P_dw 0.82, correction 979]
+  starting entitlement (sigma 12; power at the worst inside point | which point)
+    A0=0.4  outcome: P0 1.00 P1 1.00 P2 1.00 P3 1.00 P4 0.93 P6 1.00  event: P0 1.00 P1 1.00 P2 1.00 P3 1.00 P4 0.94 P6 1.00
+    A0=0.6  outcome: P0 1.00 P1 1.00 P2 1.00 P3 1.00 P4 0.98 P6 1.00  event: P0 1.00 P1 1.00 P2 1.00 P3 1.00 P4 0.90 P6 1.00
+  R4 / R1 multiplier at probe time HIGH/LOW: 0.38/0.37  1.00/0.23
+
+=== S2: rounds 2+4, 40 draws per round, deprivation odds harsh; probe did with m = 5; 10 repetitions; n = 845 per arm
+  power (rows: forecast noise; columns: theory points)
+    outcome  sigma    8: P0 1.000  P1 1.000  P2 1.000  P3 1.000  P4 0.996  P6 1.000
+    outcome  sigma   12: P0 1.000  P1 0.987  P2 0.953  P3 0.939  P4 0.917  P6 0.975
+    outcome  sigma   16: P0 1.000  P1 0.874  P2 0.701  P3 0.821  P4 0.789  P6 0.780
+    event    sigma    8: P0 1.000  P1 1.000  P2 0.997  P3 0.998  P4 0.987  P6 0.999
+    event    sigma   12: P0 1.000  P1 0.961  P2 0.889  P3 0.906  P4 0.797  P6 0.888
+    event    sigma   16: P0 0.997  P1 0.778  P2 0.627  P3 0.533  P4 0.380  P6 0.626
+  false positives (sigma 12)
+    outcome : R3 chi .4 0.003  R3 chi .6 0.012  R4 0.002  R1 0.000  composite 0.003  disengaged +10% 0.001  disengaged +20% 0.003
+    event   : R3 chi .4 0.012  R3 chi .6 0.000  R4 0.001  R1 0.000  composite 0.007  disengaged +10% 0.008  disengaged +20% 0.006
+  R4 / R1 multiplier at probe time HIGH/LOW: 0.82/0.82  1.00/0.29
+
