@@ -47,6 +47,11 @@ struct P {
     gate_soc: bool,         // legitimacy scales learning from observed others' outcomes
     // I037 coupling strengths: learning multiplier = 1 - c (1 - L); c = 1 is the paper
     c_own: f64, c_soc: f64,
+    // I038 per-agent coupling heterogeneity (default off: the code path above is untouched).
+    // het = 1: a share het_pi of each community has coupling het_hi, the rest het_lo;
+    // het = 2: couplings evenly spaced on [het_lo, het_hi]. Assignment is deterministic
+    // (no random draws), so the random stream is the frozen one. Both channels share c_i.
+    het: u8, het_pi: f64, het_lo: f64, het_hi: f64,
 }
 impl Default for P {
     fn default() -> Self { P { mu: [0.6, 0.4], lam: 0.5, eta: 0.2, beta2: 12.0, alpha: 0.2,
@@ -54,13 +59,18 @@ impl Default for P {
         l0: 1.0, a0: 0.5, n: 200, t: 600, gamma: 0.1, chi: 0.4, rho: 0.002,
         global_cmp: true, mu_rig: 0.4, pi0: 0.9,
         n1: 0, field_unweighted: false, field_paybias: false, gamma_het: false,
-        gate_own: true, gate_soc: true, c_own: 1.0, c_soc: 1.0 } }
+        gate_own: true, gate_soc: true, c_own: 1.0, c_soc: 1.0,
+        het: 0, het_pi: 1.0, het_lo: 1.0, het_hi: 1.0 } }
 }
 
 #[derive(Clone, Copy, PartialEq)]
 enum Gate { Diss, Off, Bayes, RigUs, DissNL }
 
-struct Out { m2: f64, m1: f64, l2: f64, l1: f64, dwell2: f64 }
+struct Out { m2: f64, m1: f64, l2: f64, l1: f64, dwell2: f64,
+             // I038 (het != 0 only, else NaN): community 2, last 50 trials, by type
+             // (shut: c_i >= .95; open: c_i < .95): share on the better arm, and the
+             // end-of-run mean belief gap Q0 - Q1
+             m2_open: f64, m2_shut: f64, dq2_open: f64, dq2_shut: f64 }
 
 fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
        traj: Option<&mut Vec<(Vec<f32>, f64, f64, f64, f64)>>) -> Out {
@@ -75,6 +85,15 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
             if k % 2 == 0 { 0.0 } else { 2.0 * p.gamma }
         }
     }).collect();
+    // I038: per-agent coupling (empty when het == 0)
+    let ci: Vec<f64> = if p.het == 0 { Vec::new() } else { (0..n).map(|i| {
+        let (k, m) = if i < half { (i, half) } else { (i - half, n - half) };
+        let u = (k as f64 + 0.5) / (m as f64);
+        if p.het == 1 { if u < p.het_pi { p.het_hi } else { p.het_lo } }
+        else { p.het_lo + (p.het_hi - p.het_lo) * u }
+    }).collect() };
+    let mut het_tail = [0.0f64; 2]; let mut het_cnt = [0.0f64; 2];
+    if p.het != 0 { for i in half..n { het_cnt[if ci[i] >= 0.95 { 1 } else { 0 }] += 1.0; } }
     let mut rng = Rng::new(seed);
     let mut q = vec![[0.0f64; 2]; n];
     for i in 0..n { q[i] = if i < half { q0c1 } else { q0c2 }; }
@@ -167,6 +186,10 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
                         else { 1.0 - p.c_own * (1.0 - g) };
             let g_soc = if !p.gate_soc { 1.0 } else if p.c_soc == 1.0 { g }
                         else { 1.0 - p.c_soc * (1.0 - g) };
+            // I038: per-agent coupling replaces both multipliers when het != 0
+            let (g_own, g_soc) = if p.het == 0 { (g_own, g_soc) } else {
+                let gc = if ci[i] == 1.0 { g } else { 1.0 - ci[i] * (1.0 - g) };
+                (gc, gc) };
             q[i][arm] += p.alpha * g_own * delta;
             q[i][0] = clip01(q[i][0] + p.eta * g_soc * soc0);
             q[i][1] = clip01(q[i][1] + p.eta * g_soc * soc1);
@@ -234,6 +257,8 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
         if t >= tail_from {
             opt_tail[0] += mopt[0]; opt_tail[1] += mopt[1];
             l_tail[0] += lbar[0]; l_tail[1] += lbar[1];
+            if p.het != 0 { for i in half..n { if act[i] == 0 {
+                het_tail[if ci[i] >= 0.95 { 1 } else { 0 }] += 1.0; } } }
         }
         if let Some(buf) = traj_buf.as_deref_mut() {
             if t % 2 == 0 {
@@ -243,8 +268,13 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
         }
         prev_act = Some(act.clone()); prev_c = Some(cdec.clone());
     }
+    let mut dq_t = [0.0f64; 2];
+    if p.het != 0 { for i in half..n { dq_t[if ci[i] >= 0.95 { 1 } else { 0 }] += q[i][0] - q[i][1]; } }
+    let hv = |x: f64, cnt: f64, per: f64| if p.het == 0 || cnt == 0.0 { f64::NAN } else { x / (cnt * per) };
     Out { m2: opt_tail[1] / 50.0, m1: opt_tail[0] / 50.0,
-          l2: l_tail[1] / 50.0, l1: l_tail[0] / 50.0, dwell2 }
+          l2: l_tail[1] / 50.0, l1: l_tail[0] / 50.0, dwell2,
+          m2_open: hv(het_tail[0], het_cnt[0], 50.0), m2_shut: hv(het_tail[1], het_cnt[1], 50.0),
+          dq2_open: hv(dq_t[0], het_cnt[0], 1.0), dq2_shut: hv(dq_t[1], het_cnt[1], 1.0) }
 }
 
 fn cell_stats(p: &P, gate: Gate, q1: [f64; 2], q2: [f64; 2], reps: usize, seed0: u64)
@@ -1274,6 +1304,57 @@ fn main() {
                 }
                 eprintln!("ctime c={c} done");
             }
+        }
+        "hetc" => {
+            // KGi-DISS-I038 part A (freeze 00_freeze_I038.yaml, written before running):
+            // which property of the distribution of coupling across agents the paper-cell
+            // trap depends on. 400 runs per cell; seeds 66000 + 1000*cell.
+            let f = File::create("out/hetc.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "part,het,pi,c_lo,c_hi,mean_c,m2,l2,p_dw,m2_open,m2_shut,dq2_open,dq2_shut,reps").unwrap();
+            let base = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            // bit-identity checks: the heterogeneous path must reproduce the homogeneous one
+            for (cv, seed) in [(1.0f64, 66001u64), (0.9, 66002), (0.5, 66003)] {
+                let hom = run(&P { c_own: cv, c_soc: cv, ..base }, Gate::Diss, wrong.0, wrong.1, seed, None);
+                let h1 = run(&P { het: 1, het_pi: 1.0, het_lo: 0.0, het_hi: cv, ..base }, Gate::Diss, wrong.0, wrong.1, seed, None);
+                let h2 = run(&P { het: 2, het_lo: cv, het_hi: cv, ..base }, Gate::Diss, wrong.0, wrong.1, seed, None);
+                assert!(hom.m2 == h1.m2 && hom.l2 == h1.l2 && hom.m2 == h2.m2 && hom.l2 == h2.l2,
+                        "heterogeneous path does not reproduce the homogeneous engine at c = {cv}");
+            }
+            eprintln!("hetc bit-identity checks passed");
+            let mut cell = 0u64;
+            let mut emit = |w: &mut BufWriter<File>, part: &str, het: u8, pi: f64, lo: f64, hi: f64, cell: u64| {
+                let p = P { het, het_pi: pi, het_lo: lo, het_hi: hi, ..base };
+                let reps = 400usize; let seed0 = 66000 + cell * 1000;
+                let mut hs = vec![];
+                for th in 0..2usize {
+                    let p = p; let (a, b) = (th * reps / 2, (th + 1) * reps / 2);
+                    hs.push(thread::spawn(move || (a..b).map(|r|
+                        run(&p, Gate::Diss, wrong.0, wrong.1, seed0 + r as u64 * 7919, None)).collect::<Vec<Out>>()));
+                }
+                let all: Vec<Out> = hs.into_iter().flat_map(|h| h.join().unwrap()).collect();
+                let nr = all.len() as f64;
+                let mean = |f: &dyn Fn(&Out) -> f64| all.iter().map(|o| f(o)).sum::<f64>() / nr;
+                let pdw = all.iter().filter(|o| o.m2 < 0.3 && o.l2 < 0.3).count() as f64 / nr;
+                let mc = if het == 1 { pi * hi + (1.0 - pi) * lo } else { 0.5 * (lo + hi) };
+                writeln!(w, "{part},{het},{pi},{lo},{hi},{mc:.4},{:.5},{:.5},{pdw:.4},{:.4},{:.4},{:.4},{:.4},400",
+                         mean(&|o| o.m2), mean(&|o| o.l2), mean(&|o| o.m2_open), mean(&|o| o.m2_shut),
+                         mean(&|o| o.dq2_open), mean(&|o| o.dq2_shut)).unwrap();
+            };
+            // A1: two types, the shut type at c = 1
+            for lo in [0.0, 0.5, 0.75, 0.9] {
+                for pi in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] {
+                    emit(&mut w, "two", 1, pi, lo, 1.0, cell); cell += 1; } }
+            // A2: how shut the shut type must be (open type at c = 0)
+            for hi in [0.9, 0.95, 0.97] {
+                for pi in [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] {
+                    emit(&mut w, "hi", 1, pi, 0.0, hi, cell); cell += 1; } }
+            // A3: continuous spread, couplings evenly spaced on [lo, 1]
+            for lo in [0.0, 0.5, 0.8, 0.9] { emit(&mut w, "unif", 2, 1.0, lo, 1.0, cell); cell += 1; }
+            // A4: homogeneous references on the same seeds scheme (through the het path)
+            for c in [0.5, 0.7, 0.8, 0.85, 0.9, 0.925, 0.95, 0.975, 1.0] {
+                emit(&mut w, "hom", 2, 1.0, c, c, cell); cell += 1; }
+            eprintln!("hetc done: {cell} cells");
         }
         _ => eprintln!("unknown mode"),
     }

@@ -1,0 +1,199 @@
+iteration_id: "KGi-DISS-I038"
+mode: "simulation and Monte Carlo certification on synthetic cohorts; no human data; no
+  recruitment, OSF filing or ethics claim; manuscript not edited. This file is written
+  before any I038 run (engine mode hetc, estimand map, estimator certification)."
+freeze_time: "2026-11-11T12:32Z"
+freeze_relative_to_work: "done before freezing: engine fields het / het_pi / het_lo / het_hi
+  and mode hetc added (defaults untouched: validation gate CV1-CV5 reproduced, records/bgt.csv
+  re-run bit-identical); six bibliographic searches (titles and venues only, nothing read);
+  records/couple.csv (I037) re-read. Nothing else run."
+baseline:
+  repo: "CSL3 main 321d736 (I037 close) + this freeze"
+  kg: "freezes/kg_delta_I032.yaml, kg_delta_I033_I034.yaml (incl. i035, i036), kg_delta_I037.yaml,
+    kg_active_I037.yaml"
+  tests: "53 passing at rehydration"
+author_directive: "2026-11-11: consider the human experiment as an empirical process of the
+  model-generated distribution the task is a set-up for; define the clear estimand of interest
+  to validate model predictions; tunnel focus on it; check the literature; same rigor and
+  methods as before."
+
+# =================================================================== FRAMING
+framing:
+  objects:
+    design: "d = the certified ten-repetition design S1x (I037)"
+    model: "theta = (gate dynamics: speed s, repair/erosion ratio, anchoring chi; coupling of
+      learning to legitimacy, possibly different across people: distribution G of c_i);
+      eta = human nuisances (baseline revision weight and rule, forecast noise, prior,
+      inattention, rating gain)"
+    model_generated_distribution: "P(theta, eta; d) on what one participant produces: arm,
+      six fairness ratings, probe statistic T (mean of two pair differences). The simulators
+      draw from it without limit, so its functionals are known up to simulation error, which
+      is driven to zero (Pakes-Pollard setting: simulation replaces an intractable
+      expectation; the human sample is the only source of sampling error)."
+    human_sample: "X_1..X_n i.i.d. from an unknown P; empirical measure P_n; empirical
+      process sqrt(n)(P_n - P)"
+  estimand_requirements:   # a functional psi: P -> real number(s)
+    Q1_sufficiency: "the paper's collective prediction (the trap at its own cell) depends on
+      theta only through psi(P(theta)), to a stated tolerance"
+    Q2_invariance: "psi(P(theta, eta)) does not move with eta, or moves by a stated amount"
+    Q3_separation: "the rivals' values of psi lie outside the model's trap set"
+    Q4_regularity: "psi is a smooth (Hadamard-differentiable) functional, so
+      sqrt(n)(psi(P_n) - psi(P)) is asymptotically normal with variance = variance of its
+      influence function, and a confidence interval has its nominal coverage"
+    Q5_cost: "smallest influence-function variance among functionals meeting Q1-Q4"
+  validation_statement: "the model is validated on the estimand if the confidence interval
+    for psi(P_human) lies inside Psi_trap = {psi(P(theta)): theta in the trap region}; it is
+    rejected on the estimand if the interval lies outside"
+
+known_before_running:   # from records/couple.csv (I037); not a new prediction
+  channel_sum: "within a person the two learning channels enter the trap through their sum:
+    P_dw = .545-.5625 at (own 1, others' .9), .555-.6075 at (.9, 1), .56 at (.95, .95);
+    .0275 / .0375 / .015-.025 at sum 1.8. So the mean of the two probe pairs is the right
+    within-person aggregate."
+
+# =================================================================== PART A
+part_A_sufficiency:
+  question: "which property of the distribution of coupling ACROSS agents does the paper-cell
+    trap depend on: its mean, or the share of agents whose learning is (nearly) shut?"
+  run: "engine mode hetc at the paper cell (A0 .8, lambda .7, rho .002, Gamma .1, n 200,
+    T 600), 400 runs per cell, seeds 66000 + 1000*cell. Types are assigned by position
+    within each community (no random draws). Both channels share an agent's coupling.
+    two:  share pi in {.1,...,1} at c = 1, the rest at c_lo in {0, .5, .75, .9}      (40 cells)
+    hi:   share pi in {.4,...,1} at c_hi in {.9, .95, .97}, the rest at 0            (21 cells)
+    unif: couplings evenly spaced on [lo, 1], lo in {0, .5, .8, .9}                   (4 cells)
+    hom:  homogeneous c in {.5, .7, .8, .85, .9, .925, .95, .975, 1} (same seed scheme) (9 cells)"
+  outputs: "P_dw; and for community 2 in the last 50 trials, by type (shut: c_i >= .95; open:
+    c_i < .95): share on the better option and the end-of-run belief gap Q0 - Q1"
+  claims:
+    DISS-SUFF-MEAN:
+      statement: "P_dw depends on the coupling distribution only through its mean"
+      test: "for every two-type cell, compare with the homogeneous P_dw at the same mean
+        coupling (linear interpolation on the hom line); holds if every |difference| <= .10"
+      expected: "FALSE. Homogeneous c = .8 gives 0, but a population with 80% at c = 1 and
+        20% at c = 0 (mean .8) gives P_dw >= .40."
+    DISS-SUFF-SHARE:
+      statement: "with the shut type at c = 1, P_dw depends on (pi, c_lo) only through pi"
+      test: "at each pi, the range of P_dw over c_lo in {0, .5, .75} is <= .10 (c_lo = .9 is
+        excluded: .9 is itself nearly shut)"
+      expected: "TRUE"
+    DISS-PREV-EDGE:
+      statement: "prevalence edge pi* = first crossing of P_dw = .5 along pi (c_lo = 0, linear
+        interpolation)"
+      expected: "pi* in [.45, .75]"
+      reasoning: "mean field at the cell: an agent with the true gap .2 picks the better
+        option only if the credibility mass on the worse option in its community is below
+        (.2 + .7*.1)/(.7*.9) = .43. A shut share above that keeps the others conforming.
+        The dynamic part pushes the edge up: before legitimacy collapses (about 100 trials)
+        everyone still learns, and open agents can pull the rest along."
+    EA4_mechanism: "in two-type cells with pi >= pi* and c_lo = 0, open agents end with a
+      positive belief gap (mean Q0 - Q1 >= .10) and still choose the worse option
+      (share on the better option <= .35): they know and conform"
+    EA5_hi: "with the shut type at c_hi = .9, P_dw <= .10 at every pi; at .95 and .97 the edge
+      pi* is higher than at c_hi = 1 or absent"
+    EA6_unif: "evenly spaced couplings on [.9, 1] give P_dw within .15 of the homogeneous .95
+      value; on [.8, 1] P_dw <= .20; on [.5, 1] and [0, 1] P_dw <= .02"
+  edge_rule: "linear interpolation of the first crossing of .5; 'none' if never crossed"
+
+# =================================================================== PART B
+part_B_estimand:
+  unit_level_target: "r_i = evidence-revision weight of person i after reference-dependent
+    deprivation, divided by the same person's weight without it (a counterfactual ratio;
+    the 'theoretical estimand' in the sense of Lundberg et al.). In the model r_i =
+    w(1 - c_i (1 - L_i,HIGH)) / w(1 - c_i (1 - L_i,LOW))."
+  candidate_summaries:
+    mean: "psi = E[T | HIGH] / E[T | LOW] (relative evidence uptake; a baseline-weighted
+      mean of r_i)"
+    share: "pi_t = P(r_i <= t) (prevalence of shutdown)"
+  selection_rule:   # frozen before part A is run
+    R1: "if DISS-SUFF-MEAN holds: the estimand is psi, with one trap threshold taken from the
+      homogeneous map"
+    R2: "if DISS-SUFF-MEAN fails and DISS-SUFF-SHARE holds: the trap-relevant quantity is the
+      prevalence of shutdown. The estimand reported is what the design identifies about it:
+      psi (point-identified without a type model) with the sharp bounds it implies for the
+      prevalence, plus a distribution-based lower bound on the prevalence from the
+      between-arm P-P process. Trap thresholds are stated on both."
+    R3: "if both fail: psi is kept as the reduced-form estimand, the failure of Q1 is stated,
+      and no trap threshold is claimed"
+  map_run: "after part A: lab value of psi (design S1x, both revision rules, theory points)
+    for every population run in part A, against its P_dw. Details and thresholds are frozen
+    in addendum AD-B1 before the certification run."
+  estimand_attributes:   # ICH E9(R1) headings, filled in at AD-B1
+    - population
+    - treatment conditions compared
+    - variable
+    - handling of intercurrent events (inattention, attention-check failure, dropout)
+    - population-level summary
+
+# =================================================================== PART C
+part_C_certification:
+  simulator: "probe_generator.py at design S1x (unchanged), 2,000 Monte Carlo replicates per
+    cell unless stated; seeds 135000 onward"
+  estimator: "psi-hat = mean(T_HIGH) / mean(T_LOW); Fieller interval; influence function
+    IF = [1{H}(T - mu_H)/p_H - psi 1{L}(T - mu_L)/p_L] / mu_L"
+  claims:
+    DISS-PSI-INVARIANT:
+      statement: "the model value of psi does not move by more than .02 with forecast noise
+        (8, 12, 16), the share of inattentive participants when equal across arms (0, .1,
+        .2), or the prior; it DOES move with the revision rule"
+      added_check: "rule sensitivity conditional on the control arm's absolute revision weight
+        (identified from the pair, w = E[T]/80): generalised rule w = 1 - (1 - a g)^k with
+        k in {1, 3, 10} and a matched to a control weight of .3, .5, .85"
+      expected: "invariance holds; with the control weight at or below .5 the map from
+        coupling to psi differs across k by at most .05; at .85 by more than .10"
+    DISS-PSI-REGULAR:
+      statement: "at n = 72 per arm the estimator's bias is below .01, its standard error is
+        within 10% of the influence-function value, and the Fieller interval covers at
+        .98-.995 for a nominal .99, for psi in {.15, .26, .5, .8, 1}"
+      added_check: "heavy-tailed forecast noise (t with 3 df, same s.d.)"
+      expected: "holds; coverage may fall below .98 under t3 noise"
+    DISS-PSI-ALLOC:
+      statement: "for a decision at small psi the efficient split is unequal: n_H / n_L =
+        sd_H / (psi sd_L). At psi = .26 a 3:1 split in favour of HIGH needs at least 20%
+        fewer participants than 1:1 for the same interval width; for the test of psi < 1
+        the equal split is best."
+      expected: "holds"
+    DISS-PSI-DECISIONS:
+      statement: "n per arm for power .90 at one-sided .005 for each decision: D1 psi < 1
+        (discounting exists); D2 trap excluded (lower limit above the upper trap threshold);
+        D3 trap-sufficient (upper limit below the lower trap threshold), each at its binding
+        truth"
+      expected: "D1 <= 72 at every theory point; D3 between 100 and 300 at the central point
+        and not achievable at the anchoring edge; D2 <= 150 for a homogeneous coupling of .5"
+    DISS-PSI-ATTRITION:
+      statement: "with attention-check exclusion that differs by arm, Lee trimming bounds on
+        the numerator contain the true psi of always-attentive participants in >= 99% of
+        replicates, and the bounds stay below 1 at n = 72 when the true psi <= .26 and the
+        exclusion gap is 20 points"
+      expected: "holds"
+    DISS-PREV-LB:   # run only under R2
+      statement: "the P-P lower bound pi-hat(u) = 1 - P_n,H(T > Q_n,L(u)) / (1 - u) at u = .5
+        is conservative (mean at most the true shut share) and has s.e. <= .15 at n = 72"
+      expected: "holds; the bound recovers 70-90% of the true share"
+  note: "thresholds and binding truths depend on parts A and B and are fixed in AD-B1
+    before any certification run"
+
+# =================================================================== PART D
+part_D_literature:
+  to_verify:   # nothing enters a deliverable unverified
+    - "ICH E9(R1) addendum (estimand attributes)"
+    - "Lundberg, Johnson and Stewart 2021 (theoretical and empirical estimand)"
+    - "Pakes and Pollard 1989 (simulation estimators and empirical-process asymptotics)"
+    - "Lee 2009 (trimming bounds under differential selection)"
+    - "Hsieh and Turnbull 1996 (asymptotics of the empirical ROC / P-P process)"
+    - "Storey 2002 (conservative estimator of the unaffected share)"
+    - "if part A finds a prevalence edge: the committed-minority / inflexible-agent
+      literature (candidates: Centola et al. 2018; Xie et al. 2011; Galam and Jacobs 2007)"
+    - "Palminteri, Wyart and Koechlin 2017 (model falsification by generated behaviour)"
+  bibliographic_only_unless_fetched: ["Fieller 1954", "van der Vaart 1998", "Manski 2003"]
+
+gates:
+  G1: "validation gate CV1-CV5 reproduced and records/bgt.csv, couple.csv bit-identical with
+    the new engine fields at defaults"
+  G2: "hetc run-time assertion: the heterogeneous path reproduces the homogeneous engine
+    bit for bit at c = 1, .9, .5"
+  G3: "all tests pass; every seeded I038 record re-run bit-identical before the close"
+  G4: "KG delta validated (ids unique, edges resolve); active ledger updated"
+  G5: "no human recruitment, OSF filing, ethics claim, or manuscript edit; honesty anchors
+    untouched; no credentials anywhere; referee documents stay out of the repo"
+budget: {engine_cells: 74, monte_carlo_cells: "<= 400", addenda: "frozen before their runs"}
+stopping: "close after parts A-D and the KG update; no further design search this iteration"
