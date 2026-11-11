@@ -1,0 +1,17 @@
+KGi-DISS-I040 AD-T2: tests of the assumptions behind T13 (20,000 simulated participants per arm; 2,000 replicates; seed 137200)
+
+A. aspiration rises with the reference (K3): entitlement rating after the last deprivation round, HIGH above LOW
+B. legitimacy falls with aspiration (K2): within-arm rank association of entitlement and fairness, pooled over arms, negative
+   point   mean entitlement rating HIGH / LOW   A: power at 36 | 72 per arm   B: power at 72 per arm   mean Spearman HIGH / LOW
+   P0      49.7 / 37.5                       1.000 | 1.000                 0.071                    -0.003 / -0.191
+   P1      45.8 / 37.7                       0.992 | 1.000                 0.111                    -0.045 / -0.188
+   P2      45.9 / 37.6                       0.992 | 1.000                 0.095                    -0.061 / -0.161
+   P3      46.0 / 37.7                       0.994 | 1.000                 0.140                    -0.061 / -0.195
+   P4      43.9 / 37.6                       0.891 | 1.000                 0.251                    -0.146 / -0.190
+
+C. a win never erodes fairness (phi_plus <= tolerance), P1: fairness rating after the rich round, and in LOW the slope of the
+   round-to-round change in the fairness rating on the round's win share (rounds 4-6, 72 participants, participant-clustered)
+   phi_plus   mean fairness rating after the rich round   mean slope (rating points per unit win share)   rate of 'slope below 0' at one-sided .005
+   0.25       69.9                                        -1.4                                            0.010
+   0.5        68.8                                        -33.7                                            0.593
+   1.0        31.5                                        -58.8                                            0.971

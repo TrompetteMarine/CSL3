@@ -127,3 +127,60 @@ AD_T2:
       power >= .70 at 72 per arm at every point"
     C_phi: "slope of the change in the LOW fairness rating on the round's win share: rate of
       'below 0' <= .02 at the frozen phi_plus and >= .90 at phi_plus = .5 and 1.0"
+
+# =================================================================== PART 3 AND AD-T2 SCORECARDS
+part_3_scorecard:   # verbatim, 2026-11-11; record records/theorem_tests_I040.txt (seed 137100)
+  E3_1_freeze: "FAIL on both bands, in the favourable direction. Decision at delta = .25, 72
+    per arm, full coupling: .327 / .333 / .276 at P1 / P2 / P4 under the one-update rule
+    (predicted <= .30); .841 / .805 / .654 under the count rule (predicted .30-.80 at P1).
+    At 150 and 300 per arm, one-update rule: .60-.69 and .92-.96. At delta = .5: .90-.93
+    (one-update) and 1.000 (count) at 72. False decisions at coupling .75: <= .003 (PASS).
+    Uptake ratio in the stratum at full coupling: .012-.054."
+  E3_2_contrast: "FAIL as stated: top third against bottom third gives .180 / .254 / .170 at
+    P1-P3 (one-update), below the rank correlation (.286 / .399 / .290). The top quarter
+    against the rest gives .407 / .532 / .418 (count rule .618 / .803 / .643). Size .004-.007."
+  E3_3_two_types: "PASS at P0-P3 (returned coupling .995 / .968 / .957 / .969 at truth 1;
+    .746 / .726 / .718 / .727 at truth .75). FAIL at P4 for truth .75 (.673, off by .077).
+    The returned value is the truth times E[(1-l)^2] / E[1-l]."
+  E3_4_two_step: "one-update rule: 3,368 per arm at P1 (PASS: above 1,000), 618 at P4. Count
+    rule: 204 at P1, 97 at P4 (the 97 is below my 200-1,000). Monte Carlo power at the
+    asymptotic n: .849, .813, .987 where .90 was targeted."
+  E3_5_bound: "PASS. Smallest margin psi - (1 - c) is 0 (at c = 0) at every point, both rules."
+AD_T2_scorecard:   # verbatim; record records/assumption_tests_I040.txt (seed 137200)
+  A_K3: "PASS. Entitlement rating HIGH above LOW: .891-1.000 at 36 per arm, 1.000 at 72."
+  B_K2: "FAIL. Pooled within-arm association of entitlement and fairness: power .071 / .111 /
+    .095 / .140 / .251 at P0-P4 (predicted >= .70). Mean Spearman about -.19 in LOW and -.00
+    to -.15 in HIGH."
+  C_phi: "false alarm .010 at the frozen value (PASS). Power .593 at phi_plus = .5 (predicted
+    >= .90: FAIL) and .971 at 1.0 (PASS). Mean fairness rating after the rich round 69.9 /
+    68.8 / 31.5."
+
+closing_record:   # 2026-11-11
+  outcome:
+    survives: "T13 as a statement about the kernel (no exception in 30,656 qualifying pairs);
+      its conclusion as a human test (last fairness rating, power >= .99 at 36 per arm);
+      the entitlement test of K3; the freeze decision at delta = .5; the phi_plus checks as
+      detectors of a strong violation; the two-type inversion as a lower bound"
+    corrected: "the design does not satisfy T13's hypotheses in about half the pairs (it does
+      not need to for round-end ratings); the best within-HIGH contrast is the top quarter
+      against the rest, not thirds"
+    refuted: "ten of my bands (listed in kg_delta_I040.yaml); K2 is not testable at this
+      scale; a moderate phi_plus violation is caught only 59% of the time; the two-record
+      probe is out of reach under the one-update rule"
+    unresolved: "nothing has been tested on people. Open for the pilot: the revision rule,
+      phi_plus, how people choose tickets, rigidity. Open in simulation: certification of a
+      yoked design and of the stratified analyses on measurement shapes; Lean proof of the
+      two-type bound and of a general monotone-kernel T13."
+  gates:
+    G1: "PASS. GT gaps .002 and .004; theorem check without exception."
+    G2: "PASS. 78 tests pass (73 + 5 new). Re-run bit-identical: records/twins_I040.txt,
+      assumption_tests_I040.txt, theorem_tests_I040.txt."
+    G3: "PASS. freezes/kg_delta_I040.yaml: 10 new nodes, no id collision, edges and updates
+      resolve, no cycle. freezes/kg_active_I040.yaml: 33 node references resolve;
+      kg_active_I039.yaml marked superseded."
+    G4: "PASS. No recruitment, OSF filing, ethics claim or manuscript edit; no credentials;
+      no referee documents in the repositories."
+  next: "I041 candidates: (1) certify a yoked S1x with the stratified analyses and the
+    phi_plus checks as a reporting set; (2) pilot specification built on the ledger (what
+    each pilot quantity decides); (3) Lean: the two-type lower bound and a monotone-kernel
+    version of T13 that does not depend on the kernel's functional form"

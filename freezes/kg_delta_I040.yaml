@@ -1,0 +1,129 @@
+# KG delta — KGi-DISS-I040 (on top of kg_delta_I032 ... kg_delta_I039; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 88bf656 (I039 close); CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-REF-MONOTONE
+    added_evidence: "numerical check: among 30,656 simulated yoked pairs that satisfy both
+      design hypotheses the conclusion holds at every settlement without exception
+      (records/twins_I040.txt). In the design as it stands the hypotheses hold in about half
+      the pairs; legitimacy is nevertheless ordered at the round ends in 99.6-99.7%."
+  - id: DISS-STATE-DEP
+    added_evidence: "within HIGH, the top quarter by rating against the rest gives .41-.53
+      (one-update) and .62-.80 (count rule) at P1-P3 at 72 per arm, above the rank
+      correlation (.29-.40); top third against bottom third is worse (.17-.25). Exploratory
+      (three cuts tried). Pooled Spearman (I039) remains the strongest."
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: whether a win can erode fairness (phi_plus against
+      the tolerance); whether people pick tickets as the model does (it sets the LOW level)"
+  - id: DISS-H1-STRUCTURE-V3
+    added_proposal: "report next to psi: the freeze decision at delta = .5, the pooled T-F
+      association, the entitlement contrast and the phi_plus slope test; yoke settlement
+      draws across arms in pairs (author decisions)"
+
+new_nodes:
+  - id: DISS-THEOREM-LEDGER
+    kind: definition
+    status: adopted (I040)
+    statement: "every hypothesis of T6-T15 is classed as guaranteed by the design (D), fixable
+      by design (Dx), an assumption about people testable with recorded data (H) or only
+      after a design change (Hx); ledger in records/109_theorem_tests_I040.md"
+  - id: DISS-T13-DESIGN-AUDIT
+    kind: implementation
+    status: supported-synthetic
+    statement: "in S1x as simulated: outcomes are never shared across arms unless draws are
+      yoked (then in 41-73% of pairs, those picking the same tickets); the references are
+      ordered at every deprivation settlement in 56% of pairs, because the LOW reference is
+      the own trailing record and still holds rich-round outcomes at the phase change"
+    evidence: "records/twins_I040.txt section A"
+  - id: DISS-PHI-PLUS
+    kind: assumption
+    status: open (human); consequences supported-synthetic
+    statement: "a win never erodes fairness (phi_plus <= tau). If phi_plus = .5 | 1.0: LOW
+      legitimacy at probe time .71 | .52 (from .87), T13's conclusion holds in 29% | 97% of
+      pairs meeting the other hypotheses, and LOW is no longer a clean control."
+    tests: "fairness rating after the rich round (70 / 69 / 32); slope of the change in the
+      LOW rating on the round's win share: false alarm .010, power .59 at .5 and .97 at 1.0
+      with 72 participants"
+    evidence: "records/twins_I040.txt section C; records/assumption_tests_I040.txt"
+  - id: DISS-CHOICE-EFFECT
+    kind: model
+    status: supported-synthetic
+    statement: "ticket choice sets the levels: without it LOW legitimacy at probe time is
+      .73 instead of .87 and HIGH at the anchoring edge .24 instead of .41 (rounds on the
+      worse ticket lower the aspiration and bring repair forward)"
+    evidence: "records/twins_I040.txt section B"
+  - id: DISS-TEST-K3
+    kind: statistical
+    status: supported-synthetic
+    statement: "aspiration rises with the reference: entitlement rating HIGH above LOW after
+      the last round, power .89-1.00 at 36 per arm, 1.00 at 72"
+    evidence: "records/assumption_tests_I040.txt"
+  - id: DISS-TEST-K2
+    kind: statistical
+    status: not testable at this scale
+    statement: "legitimacy falls with aspiration: the within-arm association of entitlement
+      and fairness has power .07-.25 at 72 per arm"
+    evidence: "records/assumption_tests_I040.txt"
+  - id: DISS-TEST-FREEZE
+    kind: statistical
+    status: supported-synthetic
+    statement: "T6 in observable form: uptake ratio of the third of HIGH with the lowest
+      rating is .01-.05 under full coupling. Decision 'below .5 of normal': .90-1.00 at 72
+      per arm. 'Below .25': .28-.33 at 72, .92-.96 at 300 (one-update); .65-.84 at 72 (count
+      rule). False decisions at coupling .75: <= .003."
+    evidence: "records/theorem_tests_I040.txt section A"
+  - id: DISS-TWO-STEP
+    kind: design
+    status: evaluated; not recommended before the pilot
+    statement: "a two-record probe (T10) needs about 3,400 per arm at the paper's values and
+      620 at the anchoring edge under the one-update rule, about 100-200 under the count
+      rule, to detect the excess dispersion of weights in HIGH; its dispersion estimate is
+      biased upward by rounding and clipping"
+    evidence: "records/theorem_tests_I040.txt section D"
+  - id: DISS-TWO-TYPE-BOUND
+    kind: theorem
+    status: analytic (not machine-checked); checked numerically on the model's distributions
+    statement: "for any legitimacy distribution on [0,1], the two-type inversion of T12
+      returns c E[(1-l)^2] / E[1-l], which lies between 1 - psi and c: a lower bound on the
+      coupling, tighter than T14's. Factor .96-.995 at P0-P3, .90 at P4."
+    evidence: "records/theorem_tests_I040.txt section C"
+  - id: DISS-YOKE
+    kind: design
+    status: proposed (author decision)
+    statement: "yoke settlement and board draws across arms in pairs: costs nothing, makes
+      the same-outcome hypothesis hold whenever a pair picks the same tickets, power .76
+      against .71 at 18 per arm at the anchoring edge; both 1.00 elsewhere"
+    evidence: "records/twins_I040.txt section D"
+
+new_edges:
+  - {from: DISS-THEOREM-LEDGER, to: DISS-FORMAL-AGG, type: requires}
+  - {from: DISS-T13-DESIGN-AUDIT, to: DISS-REF-MONOTONE, type: requires}
+  - {from: DISS-REF-MONOTONE, to: DISS-PHI-PLUS, type: qualified_by, note: "the hypothesis found by the proof matters in practice"}
+  - {from: DISS-REF-MONOTONE, to: DISS-TEST-K3, type: tested_by}
+  - {from: DISS-REF-MONOTONE, to: DISS-TEST-K2, type: qualified_by, note: "this assumption cannot be tested at 72 per arm"}
+  - {from: DISS-T13-DESIGN-AUDIT, to: DISS-CHOICE-EFFECT, type: qualified_by}
+  - {from: DISS-YOKE, to: DISS-T13-DESIGN-AUDIT, type: requires}
+  - {from: DISS-TEST-FREEZE, to: DISS-LIK-ABM, type: requires}
+  - {from: DISS-TEST-FREEZE, to: DISS-FORMAL-AGG, type: requires, note: "T6"}
+  - {from: DISS-TWO-STEP, to: DISS-AGG-IDENTITY, type: requires, note: "T10"}
+  - {from: DISS-TWO-TYPE-BOUND, to: DISS-FORMAL-AGG, type: requires, note: "T12; the bound itself is a Lean target"}
+  - {from: DISS-TWO-TYPE-BOUND, to: DISS-PSI-PRODUCT, type: qualified_by}
+
+refuted_preserved:
+  - "E2_1 (references ordered in >= 95% of pairs): 56%"
+  - "E2_3 (conclusion in >= 90% of all pairs at every settlement): 62-63%"
+  - "E2_5 (a win eroding fairness raises the HIGH/LOW ratio; conclusion holds in 70-99%):
+    the ratio falls; 23% and 56% of pairs"
+  - "E2_6 (choice-free deprivation changes levels by <= .05): up to .18"
+  - "E3_1 bands for the freeze decision; E3_2 (top third against bottom third beats the rank
+    correlation); E3_3 at P4; E3_4 at P4 under the count rule"
+  - "AD-T2 B (K2 testable, power >= .70): .07-.25; AD-T2 C at phi_plus = .5 (>= .90): .59"
+flags_not_patched: "none new for the manuscript. For the experiment: the LOW reference spans
+  the phase change; the model's LOW level depends on ticket choice."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "no assumption has been tested on people; all power figures
+            take the model as the truth"}
+persistence: "CSL3 freezes/kg_delta_I040.yaml + Project mirror; no remote KG service"

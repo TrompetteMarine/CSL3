@@ -1,0 +1,90 @@
+# Active claim ledger for the experiment after KGi-DISS-I040 (a retrieval aid, not a second
+# source of truth: every line points to its node in the KG deltas and its record).
+# Supersedes kg_active_I039.yaml.
+as_of: "2026-11-11, CSL3 main after the I040 close; CSL lean-diss-core 11f09cb"
+
+formal_core:   # machine-checked (Lean 4.28.0 core, over Rat)
+  - {node: DISS-FORMAL-AGG, value: "T6-T15: freeze, gain ratio, aggregation identity, dispersion, horizon inequality, two-type identification, reference monotonicity, product bound, association", record: "CSL formal_diss/DissAggregation.lean"}
+  - {node: DISS-REF-MONOTONE, value: "a higher reference gives higher aspiration and lower legitimacy path by path, provided phi_plus <= tau"}
+  - {node: DISS-AGG-IDENTITY, value: "the aggregate response is NOT a function of the mean gain beyond one evidence step"}
+
+theory_region:   # where the paper's headline trap holds at its own cell
+  - {node: DISS-TRAP-SPEED-EDGE, value: "gate speed >= .895", record: "records/invcal.csv"}
+  - {node: DISS-DESIGN-BASIS-THEORY-EDGE, value: "repair/erosion ratio <= .292; anchoring weight >= .32-.36", record: "records/100_inverse_calibration_I032pc.md"}
+  - {node: DISS-BGT-TIP, value: "conformity at the tipping gap (.200 = true payoff gap)", record: "records/bgt_I036.txt"}
+  - {node: DISS-SUFF-MEAN-v2, value: "edge-location regularity only: the trap edge sits at a mean coupling of .90-.95 on five shapes; NOT mean sufficiency (trap probability differs by up to .38 at equal means)", record: "records/hetc.csv, hetc2.csv"}
+  - {node: DISS-PREV-EDGE, value: "a shut-down majority is not enough: 80% fully shut with 20% open gives .04", record: "records/hetc.csv"}
+  - {node: DISS-AGG-PATHS, value: "after 20 evidence events the model's HIGH population holds .79 of its error where a mean-gain agent holds .32 (P1); limit = share with legitimacy 0", record: "records/likelihood_I039.txt"}
+  - {node: DISS-CORRECTION-TIME, value: "below the edge: graded lengthening of the wrong consensus", record: "records/ctime.csv"}
+
+minimal_scenario:
+  node: DISS-MIN-SCENARIO
+  observables: "arm, last fairness rating F, probe statistic T (all already in design S1x)"
+  implications: "O1 psi < 1; O2 T-F association within arm (the negative of mean sufficiency); O3 no revision at the bottom of the fairness scale at full coupling"
+
+estimands:
+  first_moment:
+    node: DISS-ESTIMAND-PSI
+    definition: "psi = E[T | HIGH] / E[T | LOW]; ratio of arm means with a 99% Fieller interval"
+    model_values: {node: DISS-PSI-TRAPSET, value: "full coupling: .01 (P0), .13-.19 (P1-P3), .47-.51 (anchoring edge); trap set [.006, .613]; rivals 1.00 (R3, R4), 3.7-4.2 (R1)"}
+    efficiency: {node: DISS-FRONTIER-EST, value: "at the information bound from T alone when the depth of delegitimation is not assumed known (RE .95-1.00); 22-49% below the bound once F is used as a covariate"}
+    limit: {node: DISS-PSI-PRODUCT, value: "psi identifies coupling x achieved delegitimation; T alone keeps 1-27% of the information for c when HIGH legitimacy may be uniformly higher; (F, T) keeps 91-96% (one-update rule), 38-61% (count rule)"}
+  state_dependence:
+    node: DISS-STATE-DEP
+    definition: "pooled within-arm rank association of T and F, reported with psi < 1"
+    value: "power at 72 per arm .64-.87 at P1-P3, 1.00 at the anchoring edge, .2 at P0; false positives of the conjunction .0000 (R3), .0035 (HS), .0018 (SH)"
+  complementarity: {node: DISS-COMPLEMENT, value: "psi is strongest where state dependence is invisible (P0) and weakest where it is strongest (anchoring edge)"}
+
+human_validation:   # I040: how each theorem is to be tested with people (synthetic power; nothing tested on people yet)
+  ledger: {node: DISS-THEOREM-LEDGER, record: "records/109_theorem_tests_I040.md"}
+  design_audit: {node: DISS-T13-DESIGN-AUDIT, value: "same outcomes: never unless draws are yoked (then 41-73% of pairs); references ordered at every settlement: 56% of pairs; legitimacy ordered at round ends: 99.6-99.7%"}
+  conclusion_T13: "last fairness rating LOW above HIGH: power 1.00 from 18 per arm at P0-P3; .99 at 36 at the anchoring edge"
+  assumptions:
+    - {node: DISS-TEST-K3, value: "aspiration rises with the reference: entitlement rating, power .89-1.00 at 36 per arm"}
+    - {node: DISS-TEST-K2, value: "legitimacy falls with aspiration: NOT testable at 72 per arm (.07-.25)"}
+    - {node: DISS-PHI-PLUS, value: "a win never erodes fairness: slope test false alarm .01, power .59 (phi_plus .5) / .97 (1.0); if violated LOW is not a clean control"}
+  kernel_tests:
+    - {node: DISS-TEST-FREEZE, value: "lowest-rating third of HIGH: uptake below .5 of normal with power .90-1.00 at 72 per arm; below .25 needs 300 (one-update rule)"}
+    - {node: DISS-TWO-TYPE-BOUND, value: "two-type inversion = lower bound on the coupling, factor .90-.995 (analytic; Lean target)"}
+  not_at_this_scale: {node: DISS-TWO-STEP, value: "two-record probe for the horizon theorems: 3,400 per arm at the paper's values under the one-update rule"}
+  design_options: [{node: DISS-YOKE, value: "yoke draws across arms in pairs"}, {node: DISS-CHOICE-EFFECT, value: "keep the ticket choice; a choice-free variant changes the levels and would need certification"}]
+
+frontier:   # inside the model family; bounds, not designs
+  - {node: DISS-LIK-ABM, value: "likelihood = mixture over the ABM-generated legitimacy distribution of an exact probe kernel and a rating kernel", record: "experiment/analysis/likelihood_core_I039.py"}
+  - {node: DISS-FRONTIER-TEST, value: "n per arm for .90, psi < 1: most powerful test 8 / 16 (P1 / P4), likelihood ratio with unknown baseline weight 16 / 36, model-free interval 24 / 60-72", record: "records/frontier_I039.txt, frontier_ad_I039.txt"}
+  - {node: DISS-LR-SIZE, value: "the profiled likelihood-ratio test loses its size (up to .50) unless calibrated over the nuisance; the interval holds .004-.006"}
+
+design_current_candidate:   # author-gated
+  task: {node: DISS-TASK-TEN, value: "1 rich + 5 deprivation rounds (120 settlements each, summary screen) + 4 probe tickets = 10 repetitions"}
+  board: {node: DISS-PEER-REPLAY, value: "same-rule replay; HIGH level in a fixed band"}
+  hypotheses: {node: DISS-H1-STRUCTURE-V3, value: "H1a fairness score S-a; H1b = psi with its interval and decisions; proposed addition: pooled T-F association reported with psi < 1"}
+  sample: "72 per arm, equal split; 96 per arm if the trimming interval is primary and exclusion may differ by 10 points"
+
+rivals:
+  excluded_by_design: ["R1-global (opposite sign)", "R3 aspiration-in-utility", "R3 slow-reporting variants", "R4 group-contingent", "R3+R4 composite", "R5 rule inference", "disengagement that differs by arm, in the supplementary analysis (trimming interval)", "homogeneous slowdown (HamJenkins2025 class), by the conjunction of psi < 1 and the pooled association (false positives .0035)", "static heterogeneity linking rating and weight, by the same conjunction (.0018)"]
+  not_excluded: ["a uniform slowdown combined with a trait that links rating and weight (DISS-RIVAL-HS-SH)", "disengagement that differs by arm, in the primary analysis"]
+
+open_human:   # node DISS-HUMAN-PARAMS; what only a pilot can supply, in order
+  - "effective draws per round summary (DISS-EFFECTIVE-DRAWS) - decides whether n = 72 or about 300"
+  - "control arm's absolute revision weight W0 and the revision rule - the frontier differs by a factor of 5-15 in information between the two rules"
+  - "forecast noise and its shape; fairness scale gain, noise and link"
+  - "starting entitlement; rigidity distribution"
+  - "differential disengagement; board believability"
+
+open_simulation:
+  - "a state-dependence statistic near its frontier (collapsed stratum against the rest) and the slope-equality test against DISS-RIVAL-HS-SH"
+  - "a covariate-adjusted estimator of psi using F, with robustness to the rating link"
+  - "machine-check the two-type lower bound (T16) and a general monotone-kernel version of T13"
+  - "certify a yoked design and, separately, the stratified analyses on measurement shapes M1-M6"
+  - "measurement shapes M1-M6 for S-a and for the T-F association"
+  - "pilot specification and its frozen lookup"
+
+superseded_or_refuted: "see refuted_preserved in kg_delta_I032 / I033_I034 (incl. i035, i036) /
+  I037 / I038 / I039; notably the mean-sufficiency reading of I038, the shut-share reading of
+  the trap, the asymptotic sample sizes for psi, and the fixed-critical-value likelihood-ratio test"
+
+manuscript_flags_not_patched:
+  - "speed edge (.895) not stated"
+  - "paper cell sits at the conformity tipping gap"
+  - "trap needs nearly everyone to have nearly stopped learning; an 80% shut-down majority is not enough"
+  - "the supplement lists reference monotonicity as open; it is now proved pathwise under phi_plus <= tau (Lean T13)"

@@ -1,0 +1,64 @@
+KGi-DISS-I040 part 3: tests of the kernel and aggregation theorems on the model's own distributions (seed 137100)
+
+A. T6 (freeze). Stratum = the third of HIGH with the lowest fairness rating. Decision 'residual uptake below
+   delta' = upper limit of E[T | stratum] / E[T | LOW] below delta (one-sided .005). 4,000 replicates.
+   point rule     coupling   uptake ratio in the stratum   decision rate, delta .25: n = 72 | 150 | 300      delta .5: n = 72 | 150 | 300
+   P1    outcome  1.0        0.022                         0.841 | 0.997 | 1.000                    1.000 | 1.000 | 1.000
+   P1    outcome  0.9        0.240                         0.009 | 0.013 | 0.015                    0.871 | 0.997 | 1.000
+   P1    outcome  0.75       0.489                         0.000 | 0.000 | 0.000                    0.009 | 0.008 | 0.009
+   P1    outcome  0.5        0.763                         0.000 | 0.000 | 0.000                    0.000 | 0.000 | 0.000
+   P2    outcome  1.0        0.035                         0.805 | 0.993 | 1.000                    1.000 | 1.000 | 1.000
+   P2    outcome  0.9        0.244                         0.009 | 0.008 | 0.009                    0.878 | 0.998 | 1.000
+   P2    outcome  0.75       0.488                         0.000 | 0.000 | 0.000                    0.011 | 0.009 | 0.014
+   P2    outcome  0.5        0.760                         0.000 | 0.000 | 0.000                    0.000 | 0.000 | 0.000
+   P4    outcome  1.0        0.054                         0.654 | 0.959 | 1.000                    1.000 | 1.000 | 1.000
+   P4    outcome  0.9        0.263                         0.004 | 0.003 | 0.002                    0.765 | 0.988 | 1.000
+   P4    outcome  0.75       0.505                         0.000 | 0.000 | 0.000                    0.004 | 0.003 | 0.002
+   P4    outcome  0.5        0.770                         0.000 | 0.000 | 0.000                    0.000 | 0.000 | 0.000
+   P1    event    1.0        0.012                         0.327 | 0.685 | 0.955                    0.926 | 0.999 | 1.000
+   P1    event    0.9        0.121                         0.084 | 0.177 | 0.410                    0.719 | 0.978 | 1.000
+   P1    event    0.75       0.286                         0.003 | 0.002 | 0.001                    0.230 | 0.541 | 0.880
+   P1    event    0.5        0.539                         0.000 | 0.000 | 0.000                    0.003 | 0.001 | 0.001
+   P2    event    1.0        0.016                         0.333 | 0.688 | 0.962                    0.932 | 0.999 | 1.000
+   P2    event    0.9        0.125                         0.081 | 0.182 | 0.409                    0.748 | 0.982 | 1.000
+   P2    event    0.75       0.282                         0.002 | 0.002 | 0.001                    0.263 | 0.578 | 0.906
+   P2    event    0.5        0.534                         0.000 | 0.000 | 0.000                    0.004 | 0.001 | 0.001
+   P4    event    1.0        0.027                         0.276 | 0.602 | 0.918                    0.896 | 0.999 | 1.000
+   P4    event    0.9        0.139                         0.071 | 0.134 | 0.288                    0.674 | 0.963 | 1.000
+   P4    event    0.75       0.296                         0.002 | 0.001 | 0.001                    0.211 | 0.479 | 0.833
+   P4    event    0.5        0.547                         0.000 | 0.000 | 0.000                    0.002 | 0.001 | 0.000
+
+B. T8 / T15 (state dependence) within HIGH, 72 per arm, full coupling: one-sided rank tests at .005 that revision is larger
+   where the rating is higher. 2,000 replicates. (I039 Spearman, HIGH only, one-update rule: P1 .294, P2 .410, P3 .313, P4 .999)
+   point rule      top third vs bottom third   top half vs bottom half   top quarter vs the rest   Spearman
+   P0    outcome   0.006                       0.008                     0.005                     0.008
+   P1    outcome   0.315                       0.198                     0.618                     0.494
+   P2    outcome   0.520                       0.377                     0.803                     0.686
+   P3    outcome   0.331                       0.203                     0.643                     0.510
+   P4    outcome   1.000                       1.000                     0.983                     1.000
+   P0    event     0.004                       0.002                     0.003                     0.004
+   P1    event     0.180                       0.102                     0.407                     0.286
+   P2    event     0.254                       0.168                     0.532                     0.399
+   P3    event     0.170                       0.105                     0.418                     0.290
+   P4    event     0.998                       0.992                     0.947                     0.999
+   size when revision does not depend on the rating (P1 marginals): 0.0050, 0.0040, 0.0060, 0.0070
+
+C. T12 (two-type inversion) applied to the model's own HIGH gain distribution, gain = 1 - c (1 - legitimacy):
+   returned coupling (and shut share) at each true coupling
+   point   c = 1.0            c = 0.9            c = 0.75           c = 0.5         
+   P0      0.995 (1.000)    0.895 (1.000)    0.746 (1.000)    0.497 (1.000)
+   P1      0.968 (0.919)    0.871 (0.919)    0.726 (0.919)    0.484 (0.919)
+   P2      0.957 (0.899)    0.862 (0.899)    0.718 (0.899)    0.479 (0.899)
+   P3      0.969 (0.915)    0.872 (0.915)    0.727 (0.915)    0.484 (0.915)
+   P4      0.897 (0.658)    0.807 (0.658)    0.673 (0.658)    0.448 (0.658)
+
+D. T10 (two records per ticket): excess of the normalised dispersion of revision weights in HIGH over LOW,
+   D = V_H / m_H^2 - V_L / m_L^2 with V = m (1 - m) - (second-step response); 400,000 simulated participants per arm
+   P1 event  : HIGH: mean weight 0.050 (true 0.049), dispersion 0.0168 (true variance 0.0159); LOW: mean weight 0.391 (true 0.391), dispersion 0.0334 (true variance 0.0302); D = 6.566; asymptotic n per arm for .90: 3,368
+   P4 event  : HIGH: mean weight 0.184 (true 0.184), dispersion 0.0458 (true variance 0.0445); LOW: mean weight 0.392 (true 0.393), dispersion 0.0339 (true variance 0.0301); D = 1.134; asymptotic n per arm for .90: 618; Monte Carlo power at that n: 0.849
+   P1 outcome: HIGH: mean weight 0.110 (true 0.111), dispersion 0.0657 (true variance 0.0648); LOW: mean weight 0.727 (true 0.740), dispersion 0.0965 (true variance 0.0794); D = 5.266; asymptotic n per arm for .90: 204; Monte Carlo power at that n: 0.813
+   P4 outcome: HIGH: mean weight 0.370 (true 0.375), dispersion 0.1559 (true variance 0.1511); LOW: mean weight 0.729 (true 0.742), dispersion 0.0968 (true variance 0.0791); D = 0.959; asymptotic n per arm for .90: 97; Monte Carlo power at that n: 0.987
+
+E. T14 (psi >= 1 - c), from the likelihood tables: smallest margin psi - (1 - c) over couplings 0, .25, .5, .75, .85, .9, .95, 1
+   outcome: P0 -0.000   P1 +0.000   P2 -0.000   P3 -0.000   P4 -0.000
+   event  : P0 +0.000   P1 +0.000   P2 +0.000   P3 +0.000   P4 +0.000
