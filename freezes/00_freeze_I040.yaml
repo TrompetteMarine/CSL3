@@ -86,3 +86,29 @@ gates:
   G4: "no recruitment, OSF filing, ethics claim or manuscript edit; no credentials; referee
     documents stay out of the repositories"
 stopping: "close after parts 1-3 and the KG update; design changes are proposed, not made"
+
+# =================================================================== PART 2 SCORECARD
+part_2_scorecard:   # verbatim, 2026-11-11; record records/twins_I040.txt (seed 137000)
+  GT: "PASS. Largest gap to the I039 pools .002 (P1), .004 (P4)."
+  E2_1: "FAIL. The references are ordered at every deprivation settlement in only .555-.559
+    of pairs (predicted >= .95). The order is broken at .44% of settlements: at the start of
+    deprivation the LOW reference is the participant's own trailing record, which still
+    holds rich-round outcomes and can sit above the HIGH board."
+  E2_2: "PASS. Same ticket in every round in .564 of pairs at P1 (.405 at P0 to .729 at P4)."
+  E2_3: "theorem check PASS: among 30,656 pairs that satisfy both hypotheses the conclusion
+    holds at every settlement without exception. 'All pairs >= .90' FAILS as stated: .62-.63
+    at every settlement (aspiration and legitimacy both). Read at the six round ends, the
+    legitimacy order holds in .996-.997 of pairs."
+  E2_4: "PASS. Last fairness rating, pairs of different people: both tests 1.000 at P0-P3
+    from 18 pairs; at P4 .758 | .714 (18 pairs), .997 | .990 (36), 1.000 | 1.000 (72), yoked
+    | unpaired. P(LOW > HIGH within a pair): .991 / .970 / .962 / .965 / .795."
+  E2_5: "FAIL in every detail. With phi_plus = .5 | 1.0: LOW legitimacy at probe time .706 |
+    .522 (from .868; the drop at 1.0 is .35, beyond my .30); the HIGH/LOW ratio FALLS to
+    .046 | .003 (I predicted a rise); the conclusion holds in .23 | .56 of pairs, and in
+    only .29 | .97 of the pairs that satisfy the other two hypotheses. Legitimacy after the
+    rich round: .895 (frozen), .876, .136. Slope of the round's change in LOW legitimacy on
+    its win share: -.03 (frozen), -.69, -1.18."
+  E2_6: "FAIL. Choice-free deprivation gives the same outcomes in every pair, but it changes
+    the levels: LOW legitimacy at probe time .729 (with choice .870) at P1 and .742 (.874)
+    at P4; HIGH .102 (.109) and .238 (.413). With a ticket choice some rounds are played on
+    the worse ticket, the aspiration falls further, and legitimacy repairs sooner."
