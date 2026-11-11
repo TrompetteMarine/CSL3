@@ -331,3 +331,69 @@ AD_B1:
       Q5: "ratio of means has the smaller s.e. under normal noise; with two types the ratio of
         medians is off the mean-type value by more than .05"
   not_run: "DISS-PREV-LB (rule R2 was not selected)"
+
+# =================================================================== AD-B1 / PART C SCORECARD
+AD_B1_scorecard:   # verbatim, 2026-11-11; records/estimand_map_I038.txt, estimand_cert_I038.txt
+  EM1: "Event rule PASS (largest range across shapes .005). Outcome rule: direction as
+    expected (homogeneous highest, two-type (0; 1) lowest) but my bands missed: range
+    .053-.113 at mean coupling .90 (expected .08-.15) and .029-.062 at .95 (expected .04-.08)."
+  EM2: "PASS. psi_hi = .613 (anchoring edge P4, outcome rule, homogeneous)."
+  EM3: "PASS. psi_cert = .100; the model value at full coupling is below it only at P0
+    (.013 / .006)."
+  model_values: "full coupling: P0 .013 | .006, P1 .153 | .130, P2 .186 | .154, P3 .154 | .134,
+    P4 .507 | .471 (outcome | event). Upper edge by point: .23 / .34 / .36 / .34 / .61
+    (outcome), .12 / .23 / .25 / .24 / .53 (event). Rivals: R3 1.000, R4 1.002, R1 3.7-4.2."
+  DISS-PSI-INVARIANT: "PASS for noise (8-16), equal inattention (0-.2), prior (35, 65, s.d.
+    20) and t3 noise: largest move .008. Rule sensitivity given the control weight W0:
+    PARTIAL FAIL. W0 = .3: at most .037. W0 = .5: .071 / .064 at coupling .5 / .75 (above my
+    .05) and <= .039 at coupling >= .9. W0 = .85: up to .18 (as expected, above .10)."
+  DISS-PSI-REGULAR: "PASS. Bias at most .005; s.e. within 3% of the influence-function value;
+    coverage of the 99% interval .9835-.991 (ten cells). Under t3 noise .987-.988 (it did
+    not fall below .98)."
+  DISS-PSI-ALLOC: "PASS. At psi = .26 the efficient split is 3.4 : 1; a 108/36 split gives
+    the 72/72 precision with 111 participants instead of 144 (23% fewer). For psi < 1 at the
+    weakest point the equal split is best (rank test .945, .929, .869 at 72/72, 96/48, 108/36)."
+  DISS-PSI-DECISIONS:
+    D1: "PASS as frozen (power at 72 per arm: 1.000 at P0-P3; .994 / .939 at P4, outcome /
+      event). False positives under the rivals .004-.007 (R3, R4, composite), 0 (R1)."
+    D2: "frozen expectation (<= 150 at coupling .5): PASS under the outcome rule (.975 at
+      150), FAIL under the event rule (psi .597 is inside the trap set; power .003). The
+      AD-B1 update predicted this. Coupling .25: 1.000 at 72 (outcome); .42 / .83 / .99 at
+      72 / 150 / 300 (event). Coupling .75: never."
+    D3: "frozen expectation (100-300 at the central point): FAIL (truth .13-.15 is above the
+      threshold .10; power .001). The AD-B1 update (out of reach everywhere at n <= 300) is
+      ALSO WRONG at P0 under the outcome rule: power .44 at 72 per arm."
+    D4: "PASS as updated: power at 72 per arm >= .987 at P0-P3; .10-.11 at P4."
+    error_rates_at_the_edge: "D2 .0045, D4 .0055 (nominal .005)"
+    defect: "the asymptotic sample-size formula failed its Monte Carlo check: at its n the
+      power was .696 (D1, P4, event), .871 (D4, P4, outcome), .713 (D4, P1, event) instead of
+      .90. It uses the variance at the truth where the interval uses it at the limit. The
+      'n for .90' columns of estimand_cert_I038.txt are therefore too small and are replaced
+      by AD-C2."
+  DISS-PSI-ATTRITION: "Trimming interval: covers psi among the attentive in .991-.999 of
+    replicates when exclusion differs by arm; .987-.993 when it does not (there it is the
+    plain interval). Upper limit below 1 in .988-1.000 of replicates when psi <= .26, up to a
+    20-point gap: PASS. Under R3 with 20% extra disengagement in HIGH the plain ratio is .78
+    for everyone randomised and .94 after exclusion; the trimming interval's upper limit is
+    below 1 in .003 of replicates."
+  Q5: "PASS. Ratio of means: s.e. .077 (normal noise), .069 (t3). Ratio of medians: s.e. .089,
+    .075, and off the mean-type value by .03-.04 with one type and .075 with two types."
+
+# =================================================================== ADDENDUM AD-C2
+AD_C2:
+  frozen: "2026-11-11, after the scorecard above and before its run; smoke run with output
+    discarded"
+  reason: "the asymptotic sample sizes failed their Monte Carlo check"
+  run: "experiment/analysis/estimand_n_I038.py, seed 135200: smallest n per arm on the grid
+    12-1000 with Monte Carlo power >= .90 (4,000 replicates; 2,000 above 800 in total) for
+    D1, D4 and D3 at full coupling, D4 at the anchoring edge with a 2:1 split, D2 at coupling
+    0, .25, .5; and the power of D1 read from the trimming interval at the anchoring edge
+    with 0 and 10 points of extra disengagement (n = 72, 96, 120, 150)"
+  expected:
+    D1: "P0-P3: 12-24 per arm; P4: 36-48 (outcome), 60-72 (event)"
+    D4: "P0-P3: 24-48; P4: 600-800; with a 2:1 split the total is 5-15% lower"
+    D3: "P0: 150-250 (outcome), 600-1000 or more (event)"
+    D2: "coupling 0: 48-72 (outcome), 72-96 (event); coupling .25: 60-96 (outcome), 200-250
+      (event); coupling .5: 120-150 (outcome)"
+    trimming: "at 72 per arm the trimming interval gives D1 power .80-.90 at the anchoring
+      edge with equal exclusion and .65-.85 with 10 points extra; 96-120 per arm restore .90"

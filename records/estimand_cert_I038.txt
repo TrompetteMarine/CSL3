@@ -1,0 +1,99 @@
+KGi-DISS-I038 part C: certification of psi-hat = mean(T_HIGH) / mean(T_LOW) (seed 135100)
+thresholds from the map: upper edge of the trap set 0.613; coupling-certified 0.100
+
+I. DISS-PSI-INVARIANT: model value of psi from pooled reports (rounded, clipped, noisy)
+  P1 c=1.0 outcome : base 0.154  noise 8 0.154  noise 16 0.154  inattentive 0 0.153  inattentive .2 0.154  prior 35 0.153  prior 65 0.153  prior sd 20 0.152  t3 noise 0.154   largest move 0.002
+  P1 c=1.0 event   : base 0.129  noise 8 0.129  noise 16 0.132  inattentive 0 0.130  inattentive .2 0.132  prior 35 0.129  prior 65 0.131  prior sd 20 0.130  t3 noise 0.132   largest move 0.003
+  P1 c=0.75 outcome : base 0.559  noise 8 0.554  noise 16 0.566  inattentive 0 0.558  inattentive .2 0.558  prior 35 0.557  prior 65 0.557  prior sd 20 0.555  t3 noise 0.557   largest move 0.008
+  P1 c=0.75 event   : base 0.372  noise 8 0.371  noise 16 0.373  inattentive 0 0.372  inattentive .2 0.369  prior 35 0.370  prior 65 0.371  prior sd 20 0.369  t3 noise 0.373   largest move 0.003
+  P4 c=1.0 outcome : base 0.509  noise 8 0.509  noise 16 0.512  inattentive 0 0.509  inattentive .2 0.511  prior 35 0.509  prior 65 0.509  prior sd 20 0.507  t3 noise 0.508   largest move 0.003
+  P4 c=1.0 event   : base 0.469  noise 8 0.471  noise 16 0.474  inattentive 0 0.473  inattentive .2 0.470  prior 35 0.471  prior 65 0.468  prior sd 20 0.471  t3 noise 0.470   largest move 0.005
+  rule sensitivity given the control arm's absolute revision weight W0 (P1; w = 1 - (1 - a g)^k, a matched to W0)
+    W0 = 0.3:  c=0.5  c=0.75  c=0.9  c=0.95  c=1.0    (rows: k = 1, 3, 10; then range)
+      k=1      0.596  0.372  0.229  0.180  0.131
+      k=3      0.623  0.395  0.243  0.189  0.134
+      k=10     0.632  0.404  0.248  0.193  0.135
+      range    0.037  0.033  0.019  0.013  0.005
+    W0 = 0.5:  c=0.5  c=0.75  c=0.9  c=0.95  c=1.0    (rows: k = 1, 3, 10; then range)
+      k=1      0.596  0.372  0.229  0.180  0.131
+      k=3      0.648  0.418  0.257  0.198  0.137
+      k=10     0.666  0.436  0.268  0.205  0.140
+      range    0.071  0.064  0.039  0.025  0.009
+    W0 = 0.85:  c=0.5  c=0.75  c=0.9  c=0.95  c=1.0    (rows: k = 1, 3, 10; then range)
+      k=1      0.596  0.372  0.229  0.180  0.131
+      k=3      0.733  0.501  0.309  0.233  0.149
+      k=10     0.776  0.552  0.345  0.257  0.156
+      range    0.180  0.181  0.116  0.077  0.025
+
+II. DISS-PSI-REGULAR (P1, noise 12; 99% Fieller interval; B = 4000)
+    target  rule     noise   n/arm  truth   bias    s.e.   s.e.(IF)  coverage  median width
+    0.15    event    normal  72     0.153  +0.0003  0.0775  0.0758    0.9882    0.405
+    0.26    event    normal  36     0.260  +0.0040  0.1064  0.1063    0.9895    0.593
+    0.26    event    normal  72     0.260  +0.0028  0.0769  0.0752    0.9888    0.402
+    0.26    event    normal  150    0.260  +0.0008  0.0534  0.0521    0.9860    0.274
+    0.5     event    normal  72     0.499  +0.0027  0.0801  0.0783    0.9875    0.418
+    0.8     event    normal  72     0.801  +0.0035  0.0897  0.0888    0.9910    0.476
+    1.0     event    normal  72     0.998  +0.0039  0.1016  0.0988    0.9898    0.526
+    c = 1   outcome  normal  72     0.153  -0.0004  0.0543  0.0547    0.9835    0.287
+    0.26    event    t3      72     0.259  +0.0016  0.0704  0.0694    0.9880    0.371
+    1.0     event    t3      72     1.001  +0.0047  0.0943  0.0927    0.9870    0.492
+
+III. DISS-PSI-ALLOC (P1, event rule, noise 12, total N = 144)
+    psi = 0.260: s.d. of T HIGH 19.5, LOW 22.0; efficient n_H / n_L = 3.40
+    split 72/72: s.e. 0.0761 (IF 0.0752); median width 0.402; coverage 0.9900; N for the s.e. of 72/72: 144
+    split 96/48: s.e. 0.0685 (IF 0.0677); median width 0.368; coverage 0.9905; N for the s.e. of 72/72: 117
+    split 108/36: s.e. 0.0682 (IF 0.0661); median width 0.365; coverage 0.9900; N for the s.e. of 72/72: 111
+    split 115/29: s.e. 0.0683 (IF 0.0661); median width 0.370; coverage 0.9890; N for the s.e. of 72/72: 111
+    test of psi < 1 at the weakest point (P4, c = 1, event rule): rejection rate of the rank test | of the interval
+    split 72/72: 0.945 | 0.938
+    split 96/48: 0.929 | 0.931
+    split 108/36: 0.869 | 0.872
+
+IV. DISS-PSI-DECISIONS (noise 12; one-sided .005 each; n = 72 per arm unless stated)
+  D1 (psi < 1) and D4 (psi below the upper edge of the trap set), at full coupling:
+    point rule      psi    D1 power  n for .90   D4 power  n for .90   D3 power (psi < certified threshold)
+    P0    outcome   0.013  1.000         1       1.000         4       0.441
+    P0    event     0.004  1.000         5       1.000        12       0.136
+    P1    outcome   0.155  1.000         5       1.000        15       0.001
+    P1    event     0.130  1.000         8       0.994        27       0.001
+    P2    outcome   0.187  1.000         5       1.000        18       0.000
+    P2    event     0.153  1.000         8       0.994        28       0.001
+    P3    outcome   0.157  1.000         5       1.000        16       0.000
+    P3    event     0.136  1.000         9       0.987        29       0.002
+    P4    outcome   0.508  0.994        26       0.104       578       0.000
+    P4    event     0.473  0.939        37       0.110       533       0.000
+  Monte Carlo check of the asymptotic n (power at that n):
+    D1 at P4 event: n = 38, power 0.696
+    D4 at P4 outcome: n = 579, power 0.871
+    D4 at P1 event: n = 27, power 0.713
+  false positives of D1 under the rivals (n = 72):
+    outcome : R3 0.0057 (psi 1.000)  R4 0.0037 (psi 1.005)  R1 0.0000 (psi 3.757)  composite 0.0060 (psi 0.999)
+    event   : R3 0.0043 (psi 0.999)  R4 0.0067 (psi 1.001)  R1 0.0000 (psi 4.286)  composite 0.0055 (psi 1.002)
+  D2 (trap excluded: lower limit above the upper edge), homogeneous coupling at P1's gate parameters:
+    c     rule      psi    power at 72 / 150 / 300    n for .90
+    0.0   outcome   1.002  1.000 / 1.000 / 1.000          39
+    0.0   event     1.005  0.976 / 1.000 / 1.000          69
+    0.25  outcome   0.930  0.993 / 1.000 / 1.000          53
+    0.25  event     0.807  0.420 / 0.825 / 0.989          226
+    0.5   outcome   0.795  0.710 / 0.975 / 1.000          131
+    0.5   event     0.597  0.003 / 0.004 / 0.002          inf
+    0.75  outcome   0.559  0.001 / 0.000 / 0.000          inf
+    0.75  event     0.372  0.000 / 0.000 / 0.000          inf
+  error rates exactly at the upper edge (P1, event, c = 0.480, psi 0.611, n = 150): D2 0.0045   D4 0.0055
+
+V. DISS-PSI-ATTRITION (P1, event rule, noise 12, n = 72 randomised per arm; check: inattentive fail .8, attentive .05)
+    truth   extra disengaged   psi all randomised   psi after exclusion   trimming interval: covers truth | upper < 1 | median [lo, hi]
+    c = 1   +0%               0.131                0.131                 0.987 | 1.000 | [-0.06, 0.35]   (truth among the attentive 0.131)
+    c = 1   +10%               0.116                0.127                 0.993 | 1.000 | [-0.07, 0.38]   (truth among the attentive 0.131)
+    c = 1   +20%               0.101                0.123                 0.991 | 0.999 | [-0.08, 0.42]   (truth among the attentive 0.131)
+    .26     +0%               0.262                0.262                 0.989 | 1.000 | [0.07, 0.48]   (truth among the attentive 0.260)
+    .26     +10%               0.231                0.253                 0.994 | 0.998 | [0.06, 0.52]   (truth among the attentive 0.260)
+    .26     +20%               0.202                0.243                 0.997 | 0.988 | [0.03, 0.56]   (truth among the attentive 0.260)
+    R3      +0%               1.001                1.000                 0.993 | 0.005 | [0.79, 1.28]   (truth among the attentive 1.000)
+    R3      +10%               0.889                0.972                 0.999 | 0.001 | [0.72, 1.35]   (truth among the attentive 1.000)
+    R3      +20%               0.779                0.939                 0.997 | 0.003 | [0.64, 1.41]   (truth among the attentive 1.000)
+
+VI. Q5: ratio of means against ratio of medians (P1, event rule, n = 72, B = 4000)
+    homogeneous, psi .26, normal noise: mean-type truth 0.260; ratio of means 0.264 (s.e. 0.077); ratio of medians 0.230 (s.e. 0.089)
+    homogeneous, psi .26, t3 noise: mean-type truth 0.259; ratio of means 0.262 (s.e. 0.069); ratio of medians 0.216 (s.e. 0.075)
+    two types (0; 1) at the same mean coupling, normal noise: mean-type truth 0.260; ratio of means 0.263 (s.e. 0.088); ratio of medians 0.185 (s.e. 0.099)

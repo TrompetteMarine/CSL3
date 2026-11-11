@@ -1,0 +1,68 @@
+KGi-DISS-I038 part B: model-generated value of psi = E[T|HIGH] / E[T|LOW] in design S1x (seed 135000)
+
+legitimacy at probe time, HIGH / LOW (mean; share below .05 in HIGH):
+  P0 (speed 1.0, ratio 0.25, anchoring 0.600): 0.005 / 0.864   (0.99)
+  P1 (speed 1.0, ratio 0.25, anchoring 0.400): 0.113 / 0.870   (0.82)
+  P2 (speed 1.0, ratio 0.2918, anchoring 0.400): 0.140 / 0.908   (0.72)
+  P3 (speed 0.895, ratio 0.25, anchoring 0.400): 0.113 / 0.846   (0.83)
+  P4 (speed 1.0, ratio 0.25, anchoring 0.304): 0.412 / 0.874   (0.40)
+
+psi by homogeneous coupling (columns) at each gate point (rows)
+  rule: outcome      c=0.0   c=0.25  c=0.5   c=0.75  c=0.85  c=0.9   c=0.95  c=1.0 
+    P0             1.000   0.912   0.754   0.480   0.322   0.230   0.127   0.013
+    P1             1.000   0.923   0.786   0.551   0.416   0.337   0.250   0.153
+    P2             1.000   0.922   0.787   0.560   0.432   0.358   0.276   0.186
+    P3             1.000   0.925   0.790   0.556   0.421   0.341   0.253   0.154
+    P4             1.000   0.953   0.873   0.736   0.658   0.613   0.563   0.507
+  rule: event      c=0.0   c=0.25  c=0.5   c=0.75  c=0.85  c=0.9   c=0.95  c=1.0 
+    P0             1.000   0.778   0.539   0.283   0.175   0.120   0.063   0.006
+    P1             1.000   0.804   0.595   0.371   0.277   0.228   0.180   0.130
+    P2             1.000   0.803   0.597   0.381   0.292   0.246   0.200   0.154
+    P3             1.000   0.809   0.603   0.379   0.283   0.234   0.184   0.134
+    P4             1.000   0.881   0.753   0.617   0.560   0.530   0.501   0.471
+
+does psi depend on the SHAPE of the coupling distribution at a given mean? (columns: shapes)
+  rule outcome, mean coupling 0.9:      hom   two01   two51    skew   range
+    P0                       0.230   0.117   0.170   0.171   0.113
+    P1                       0.337   0.245   0.287   0.285   0.093
+    P2                       0.358   0.270   0.311   0.311   0.088
+    P3                       0.341   0.243   0.286   0.291   0.098
+    P4                       0.613   0.559   0.583   0.583   0.053
+  rule outcome, mean coupling 0.95:      hom   two01   two51    skew   range
+    P0                       0.127   0.065   0.092   0.091   0.062
+    P1                       0.250   0.198   0.220   0.218   0.051
+    P2                       0.276   0.229   0.250   0.249   0.047
+    P3                       0.253   0.201   0.221   0.224   0.052
+    P4                       0.563   0.534   0.545   0.547   0.029
+  rule event, mean coupling 0.9:      hom   two01   two51    skew   range
+    P0                       0.120   0.117   0.119   0.122   0.005
+    P1                       0.228   0.228   0.228   0.228   0.000
+    P2                       0.246   0.248   0.247   0.245   0.003
+    P3                       0.234   0.233   0.233   0.235   0.002
+    P4                       0.530   0.533   0.530   0.530   0.003
+  rule event, mean coupling 0.95:      hom   two01   two51    skew   range
+    P0                       0.063   0.065   0.063   0.064   0.003
+    P1                       0.180   0.179   0.180   0.179   0.001
+    P2                       0.200   0.199   0.199   0.199   0.001
+    P3                       0.184   0.184   0.184   0.186   0.002
+    P4                       0.501   0.501   0.501   0.501   0.000
+  largest range across shapes: outcome at 0.9: 0.113  outcome at 0.95: 0.062  event at 0.9: 0.005  event at 0.95: 0.003
+
+thresholds
+  model value at full coupling (c = 1), by point | rule: P0|outcome 0.013  P1|outcome 0.153  P2|outcome 0.186  P3|outcome 0.154  P4|outcome 0.507  P0|event 0.006  P1|event 0.130  P2|event 0.154  P3|event 0.134  P4|event 0.471
+  upper edge of the trap set by point | rule (largest psi at mean coupling .90): P0|outcome 0.230  P1|outcome 0.337  P2|outcome 0.358  P3|outcome 0.341  P4|outcome 0.613  P0|event 0.122  P1|event 0.228  P2|event 0.248  P3|event 0.235  P4|event 0.533
+  tight edge by point | rule (smallest psi at mean coupling .95): P0|outcome 0.065  P1|outcome 0.198  P2|outcome 0.229  P3|outcome 0.201  P4|outcome 0.534  P0|event 0.063  P1|event 0.179  P2|event 0.199  P3|event 0.184  P4|event 0.501
+  trap set over all points and both rules: psi in [0.006, 0.613]
+  coupling-certified threshold (HIGH legitimacy 0, LOW legitimacy 1, mean coupling .90; smallest over shapes and rules): 0.100
+
+rivals (their own multiplier, coupling 1):
+  R3 (multiplier 1): outcome 1.000  event 1.000
+  R4: outcome 1.002  event 1.002
+  R1: outcome 3.734  event 4.228
+
+ABM trap probability at the paper cell for populations with mean coupling near .90 and .95 (records/hetc2.csv):
+  Se homogeneous                                P_dw at .90: 0.025   at .95: 0.620   edge in mean coupling: 0.943
+  Sc two-type (0;1)                             P_dw at .90: 0.398   at .95: 0.679   edge in mean coupling: 0.915
+  Sd two-type (.5;1)                            P_dw at .90: 0.290   at .95: 0.587   edge in mean coupling: 0.936
+  Sb three-type (5% at .5; x at 1; rest .9)     P_dw at .90: 0.050   at .95: 0.581   edge in mean coupling: 0.939
+  Sa skewed (1 - u^k)                           P_dw at .90: 0.278   at .95: 0.668   edge in mean coupling: 0.927
