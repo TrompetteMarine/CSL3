@@ -74,3 +74,75 @@ gates:
     documents stay out of the repositories"
 stopping: "close after the certification, the two artefacts and the KG update. The oTree
   build and the pilot specification are separate steps."
+
+# =================================================================== SCORECARD
+scorecard:   # verbatim, 2026-11-11; record records/yoked_cert_I041.txt (seed 138000)
+  G1: "PASS. records/twins_I040.txt re-ran bit-identically after twins() was extended."
+  C1_H1a: "PASS. 1.000 at every point for plain ratings at every gain; >= .947 in every shape
+    and gain cell (lowest: P4, non-responsive shape, gain .25)."
+  C2_K3: "PASS for plain ratings at gain .5 (.999-1.000). FAIL for the other shapes at gain
+    .5: parked .999 / .949 / .950 / .965 / .808 (P0-P4); non-responsive .998 / .881 / .890 /
+    .862 / .625; lognormal gain 1.000 / .977 / .984 / .981 / .775. At gain .25: .65-.91
+    plain, .17-.46 parked or non-responsive (P1-P4)."
+  C3_D1: "PASS. .939 at P4 (one-update), .996 (count), 1.000 elsewhere; paired interval .936
+    against .939."
+  C4_FREEZE: "PASS. .900-.924 (one-update), 1.000 (count rule)."
+  C5_ASSOC: "PASS. P1-P3: .667 / .639 / .780 (one-update), .800 / .764 / .869 (count); P4
+    1.000; P0 .204 / .205."
+  C6_PHI: "PASS. Flag rate at most .013."
+  C7_pairs: "PASS. Confirmatory pair .939 at P4 (one-update), >= .996 elsewhere."
+  C8_full: "PASS on the levels (one-update: .198 / .632 / .601 / .728 / .855 at P0-P4). The
+    count-rule gain at P1-P3 is 14-16 points, one point above my 5-15 at P1 and P2."
+  C9_n: "PASS. 36 pairs: .992-1.000 at P0-P3, .665 at P4. 54: .849 at P4. 96: .986 at P4."
+  C10_size: "PASS except one claim. Null pairs: H1a .0035, K3 .0065, D1 .0055. Ratings move
+    but the gain does not: D1 .0050 / .0055, FREEZE .0000, ASSOC .0040. Homogeneous
+    slowdown: ASSOC .0045; FREEZE .893 at P1 and .051 at P4 (I predicted <= .05): under a
+    homogeneous slowdown the stratum's uptake IS below half of normal, so FREEZE is a true
+    statement there and does not discriminate. Full set: .0045 / .0020."
+  C11_yoking: "PASS as stated, and the substance is that yoking buys nothing: H1a yoked |
+    re-matched .726 | .724 (18 pairs) and .990 | .990 (36) at P4; at gain .25 .570 | .593
+    and .958 | .957."
+  seen_after_the_run: "with independent ticket-choice noise the members of a pair pick the
+    same ticket in every deprivation round in only 10-16% of pairs (41-73% in I040, where
+    the choice noise was shared). In null pairs ASSOC rejects in .815: the association is a
+    property of the gate under either board, not an error."
+
+# =================================================================== ADDENDUM AD-Y2
+# Written 2026-11-11 after the scorecard above and before any AD-Y2 run.
+addendum_AD_Y2:
+  why: "the homogeneous-slowdown world scored in C10 has an ungated LOW arm (every LOW
+    participant at full gain). The null pairs show that a gated LOW arm carries a T-F
+    association of its own (ASSOC .815 with two LOW arms). ASSOC is pooled over both arms, so
+    it may reject when the gate works in LOW only and the HIGH board acts by a uniform
+    slowdown. The C10 figure (.0045) would then say nothing about that world."
+  seen_before_freezing: "records/yoked_cert_I041.txt in full; I040 section B (within HIGH,
+    72 per arm, one-update rule: rank correlation .29-.41 at P1-P3, top quarter against the
+    rest .41-.53; count rule .62-.80). The predictions below are back-of-envelope from those
+    figures under a normal approximation; nothing new simulated."
+  world_hs_g: "LOW exactly as the model (gate at full coupling). HIGH: ratings as the model,
+    every participant revising at the HIGH mean gain."
+  statistics:   # added to yoked_analysis.py; decisions() keeps its frozen outputs
+    ASSOC_H: "rank association of T and the last fairness rating within HIGH only, one-sided .005"
+    ASSOC_L: "the same within LOW only"
+    TOPQ: "within HIGH, the top quarter by rating against the rest: rank-sum test that the
+      top quarter revises more, one-sided .005 (the best of three cuts in I040; fixed here
+      before the run)"
+    FULL_H: "the full set with ASSOC replaced by ASSOC_H"
+    FULL_T: "the full set with ASSOC replaced by TOPQ"
+  run: "experiment/analysis/yoked_ad_I041.py, seed 138100, 20,000 pairs per cell, 2,000
+    samples; P0-P4; both revision rules; 72, 144, 216, 288 pairs"
+  claims:
+    Y1_by_arm: "model, 72 pairs, one-update rule, P1-P3: ASSOC_L .30-.55; ASSOC_H .25-.45.
+      At P4: ASSOC_H >= .95."
+    Y2_hs_g_pooled: "hs_g at 72 pairs (one-update): ASSOC rejects in .10-.30 at P1 and at P4;
+      FULL .08-.27 at P1 and <= .03 at P4. At 216 pairs ASSOC rejects in .50-.80 at P1."
+    Y3_hs_g_high_only: "hs_g: ASSOC_H, TOPQ and FULL_H, FULL_T each <= .008 at 72 and at 216
+      pairs. Ratings move but the gain does not (P1): ASSOC_H and TOPQ <= .008."
+    Y4_full_high_only: "model, 72 pairs, one-update rule: FULL_H .20-.42 and FULL_T .33-.52
+      at P1-P3; both >= .85 at P4. Count rule: FULL_T .55-.80 at P1-P3."
+    Y5_n: "model, one-update rule, P1-P3: ASSOC_H .50-.75 at 144 pairs, .72-.92 at 216,
+      >= .85 at 288; TOPQ >= .72 at 144 and >= .90 at 216."
+  consequence_if_Y2_holds: "the pooled association is not a test of the gate against a
+    homogeneous slowdown of the HIGH arm; the reporting set states the association by arm,
+    with the HIGH-arm statistic as the one that bears on that rival. The I039 conjunction
+    figure for HS (.0035) is then scoped to a world with no state dependence in LOW."
