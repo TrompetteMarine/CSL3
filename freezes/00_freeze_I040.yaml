@@ -112,3 +112,18 @@ part_2_scorecard:   # verbatim, 2026-11-11; record records/twins_I040.txt (seed 
     the levels: LOW legitimacy at probe time .729 (with choice .870) at P1 and .742 (.874)
     at P4; HIGH .102 (.109) and .238 (.413). With a ticket choice some rounds are played on
     the worse ticket, the aspiration falls further, and legitimacy repairs sooner."
+
+# =================================================================== ADDENDUM AD-T2
+AD_T2:
+  frozen: "2026-11-11, after the part 2 scorecard and before its run; smoke run with output
+    discarded. Part 3 is running and has not been read."
+  purpose: "the behavioural assumptions behind T13 can be tested with ratings the design
+    already records after every round"
+  run: "experiment/analysis/assumption_tests_I040.py, seed 137200; pairs of different people"
+  expected:
+    A_K3: "entitlement rating HIGH above LOW after the last round (one-sided rank test,
+      .005): power >= .80 at 36 per arm and >= .95 at 72 at every point"
+    B_K2: "within-arm association of entitlement and fairness, pooled over arms, negative:
+      power >= .70 at 72 per arm at every point"
+    C_phi: "slope of the change in the LOW fairness rating on the round's win share: rate of
+      'below 0' <= .02 at the frozen phi_plus and >= .90 at phi_plus = .5 and 1.0"
