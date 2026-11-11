@@ -23,7 +23,10 @@ ARMS = ('HIGH', 'LOW')
 sig = lambda x: 1 / (1 + np.exp(-x))
 
 
-def twins(pt, n, rng, phip=None, same_person=True, choice_free=False):
+def twins(pt, n, rng, phip=None, same_person=True, choice_free=False, indep_choice=False, regime=None):
+    # I041 options (defaults reproduce the I040 records): indep_choice gives each member its own
+    # ticket-choice noise; regime sets the deprivation board of each member, e.g. both 'LOW'
+    regime = {'HIGH': 'HIGH', 'LOW': 'LOW'} if regime is None else regime
     nuf, nur, chi = mg.NUF * pt[1], mg.NUF * pt[1] * pt[2], pt[3]
     phip = mg.PHIP if phip is None else phip
     base_rho = np.where(np.arange(n) % 2 == 0, .002, .02)
@@ -41,9 +44,10 @@ def twins(pt, n, rng, phip=None, same_person=True, choice_free=False):
         ph = 0 if t < T1 else 1
         if t % K == 0:
             uc = rng.random(n)
+            uc_of = {'HIGH': uc, 'LOW': rng.random(n) if indep_choice else uc}
             for a in ARMS:
                 s = S[a]
-                s['arm'] = (uc >= sig(mg.BETA * (s['Q'][:, 0] - s['Q'][:, 1]))).astype(int)
+                s['arm'] = (uc_of[a] >= sig(mg.BETA * (s['Q'][:, 0] - s['Q'][:, 1]))).astype(int)
                 if choice_free and ph == 1:
                     s['arm'] = np.zeros(n, int)
             if ph == 1:
@@ -56,7 +60,7 @@ def twins(pt, n, rng, phip=None, same_person=True, choice_free=False):
             mu = np.where(s['arm'] == 0, (PH1 if ph == 0 else PH2)[0], (PH1 if ph == 0 else PH2)[1])
             R = (uo < mu).astype(float)
             trail = np.full(n, 0.5) if t == 0 else s['ring'][:, :cnt].mean(1)
-            high = reg1 if ph == 0 else np.full(n, a == 'HIGH')
+            high = reg1 if ph == 0 else np.full(n, regime[a] == 'HIGH')
             s['hits'] += up < np.where(high, MU_REF, np.clip(trail, .05, .95))
             s['ring'][:, t % 15] = R
             trail_after = s['ring'][:, :min(t + 1, 15)].mean(1)
