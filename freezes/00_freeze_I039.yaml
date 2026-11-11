@@ -278,3 +278,59 @@ AD_L2:
   remaining_rival: "a uniform slowdown in HIGH combined with a trait that links rating and
     weight passes the conjunction. Separating it needs the equality of the between-arm and
     within-arm slopes with a correction for rating noise. Not designed here."
+
+# =================================================================== PART F AND AD-L2 SCORECARDS
+part_F_scorecard:   # verbatim, 2026-11-11; record records/frontier_I039.txt (seed 136100)
+  claim_NP: "FAIL: the frontier is further away than I predicted. n per arm for power .90,
+    Neyman-Pearson | interval: event rule P1 8 | 24 (33%), P4 16 | 72 (22%); count rule P1
+    4 | 16, P4 12 | 48 (25%). With (F, T): 6 and 10 (event), 4 and 6 (count). Size of the
+    interval decision under c = 0: .0044, .0043, .0057."
+  claim_GLR: "FAIL twice. (1) n for .90 with the baseline weight profiled: 10 at P1 (1.25 x
+    NP) but 24 at P4 (1.5 x, above my 1.3). (2) The test as run does not hold its size: with
+    the critical value set at weight .5, the rejection rate under c = 0 is .027 / .063 /
+    .504 at n = 12 / 24 / 72 when the true weight is .35 (P1), and .005 / .013 / .088 at P4.
+    The profiled statistic is not pivotal. Section B's power figures are therefore not
+    those of a valid test (AD-F2 replaces them)."
+  claim_cov: "PASS for interior truths: coverage .991 / .9945 / .991 at c = .5 / .75 / .9,
+    median width .84 / .82 / .66 of the Fieller interval. At c = 1: coverage .996, width
+    ratio .36 (below my 55-85%), c-hat at the boundary in 58% of replicates. The profile
+    interval takes the gate point as known."
+  claim_E2a: "FAIL at the central points. Power at 72 per arm, event rule: P0 .004, P1 .294,
+    P2 .410, P3 .313, P4 .999 (predicted .50-.80 at P1 and P3, .75-.95 at P2). Count rule:
+    P1 .528 (predicted >= .90). Mean Spearman in HIGH is .24-.31 at P1-P3, not the .4 the
+    Pearson figure suggested: the association sits in a minority of recovered agents."
+  claim_E2a_rivals: "R3 .0053 and HS .0040 (PASS); SH .413 (predicted >= .50)."
+  claim_E2b: "size PASS (.0037, .0035, .0067). Power FAIL: .001-.018 at P1-P3 under the event
+    rule (.006-.095 count rule); .315 / .762 at P4. The contrast is useless at the central
+    points because the association is as strong in LOW (Spearman .22-.33)."
+  claim_NP_dependence: "FAIL. n per arm for .90, frontier | E2a: P1 event 72 | 300 (24%), P2
+    event 60 | 200 (30%), P4 event 36 | 48 (75%), P1 count rule 36 | 200 (18%). The rank
+    test is far from the frontier except at the anchoring edge."
+AD_L2_scorecard:   # verbatim; records/likelihood_ad_I039.txt and section F of records/frontier_I039.txt
+  T_only: "PASS. With the uniform shift unknown, T alone keeps 1% / 7% of the information
+    for c at P1 (count / event rule) and 2% / 27% at P4."
+  FT_gain_known: "PASS under the event rule (95%, 97%); FAIL under the count rule (55%, 66%;
+    predicted >= 70%)."
+  FT_gain_unknown: "91% and 96% (event), 38% and 61% (count rule; the 38% is below my 40%)."
+  efficiency: "T alone, RE of the ratio of means for psi: depth = mixture .974 / .999 / .870
+    / .938 (P1 count, P1 event, P4 count, P4 event); depth = shift .615 / .989 / .688 / .967;
+    both .988 / 1.000 / .949 / .999. So my '>= .85 in every case' FAILS for the shift alone
+    under the count rule and holds otherwise. With F: .14-.78 (both directions: .682 / .778 /
+    .587 / .506), below my .55 in several cells."
+  pooled_association: "FAIL at the central points: E2c at 72 per arm is .726 / .639 / .812
+    (event) and .811 / .766 / .874 (count rule) at P1-P3 (predicted >= .90); .999 / 1.000 at
+    P4; .224 / .203 at P0 (inside .15-.45). Conjunction with psi < 1: the same figures at
+    P1-P3, .948 / .996 at P4."
+  rivals: "PASS. E2c: R3 .0040, HS .0035, SH .712. Conjunction: R3 .0000, HS .0035, SH .0018."
+
+# =================================================================== ADDENDUM AD-F2
+AD_F2:
+  frozen: "2026-11-11, after the scorecards above and before its run; smoke run with output
+    discarded"
+  reason: "the profiled likelihood-ratio test of section B does not hold its size"
+  run: "experiment/analysis/frontier_ad_I039.py, seed 136200: same statistic; critical value
+    = the largest .995 null quantile over baseline weights .30-.70 (17 values); power at
+    true weights .35, .5, .65; P1 and P4, event rule"
+  expected: "size is controlled by construction. n per arm for .90 at weight .5: 12-16 at P1,
+    30-48 at P4 (between Neyman-Pearson and the interval). Power is lower at weight .35
+    than at .65."

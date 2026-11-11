@@ -1,0 +1,15 @@
+KGi-DISS-I039 AD-L2: depth of delegitimation as a uniform shift of HIGH legitimacy (eps), full coupling
+
+information for c per participant pair, share kept when the depth is unknown
+  point rule      T: only c | + eps        (F, T), rating gain known: only c | + eps       (F, T), rating gain unknown: + eps, a, sr
+  P1    outcome    50.229 |   0.334 (1%)         56.944 |  31.118 (55%)                  21.735 (38%)
+  P1    event       3.200 |   0.226 (7%)          4.072 |   3.868 (95%)                   3.693 (91%)
+  P4    outcome    19.198 |   0.383 (2%)         27.842 |  18.337 (66%)                  17.117 (61%)
+  P4    event       1.477 |   0.402 (27%)          2.517 |   2.445 (97%)                   2.427 (96%)
+
+relative efficiency of the ratio of means for psi (bound / plug-in variance) when the depth is unknown
+  point rule      psi    plug-in s.e. at 72 | depth = mixture: T only  with F | depth = shift: T only  with F | both: T only  with F
+  P1    outcome   0.150  0.0542             |        0.974    0.669        |       0.615    0.366      |    0.988    0.682
+  P1    event     0.127  0.0757             |        0.999    0.773        |       0.989    0.611      |    1.000    0.778
+  P4    outcome   0.507  0.0771             |        0.870    0.568        |       0.688    0.138      |    0.949    0.587
+  P4    event     0.468  0.0987             |        0.938    0.498        |       0.967    0.236      |    0.999    0.506
