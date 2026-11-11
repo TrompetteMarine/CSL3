@@ -197,3 +197,55 @@ gates:
     untouched; no credentials anywhere; referee documents stay out of the repo"
 budget: {engine_cells: 74, monte_carlo_cells: "<= 400", addenda: "frozen before their runs"}
 stopping: "close after parts A-D and the KG update; no further design search this iteration"
+
+# =================================================================== PART A SCORECARD
+part_A_scorecard:   # verbatim, 2026-11-11; record records/hetc.csv (74 cells x 400 runs)
+  G2: "PASS. The heterogeneous path reproduced the homogeneous engine bit for bit at c = 1,
+    .9, .5; records/hetc.csv re-run bit-identical after two more shapes were added."
+  DISS-SUFF-MEAN: "FAIL by the frozen test (largest difference .38: 90% at c = 1 with 10% at
+    c = 0, mean .9, gives P_dw .398; homogeneous .9 gives .018). My stated reason was WRONG:
+    80% at c = 1 with 20% at c = 0 gives .037, not >= .40."
+  DISS-SUFF-SHARE: "FAIL. At a shut share of .8, P_dw is .037 / .255 / .565 when the others
+    are at c = 0 / .5 / .75 (range .53); at .9 it is .398 / .605 / .768; at .7 it is
+    0 / .028 / .288."
+  DISS-PREV-EDGE: "FAIL. pi* = .926 (predicted .45-.75). Up to a shut share of .7 the trap
+    probability is exactly 0; at .8 it is .037."
+  EA4_mechanism: "NOT TESTABLE as frozen (no mixed cell lies at or above the edge). What the
+    record shows: behaviour is collective. Open and shut agents choose alike in every cell
+    (shut share .9: .625 and .608 on the better option; .8: .961 and .959) and end with
+    similar positive belief gaps (.216 and .192)."
+  EA5_hi: "PASS. Shut type at .9: P_dw <= .028 at every share. At .95 the edge is a share of
+    .980; at .97 it is .931 (against .926 at c = 1)."
+  EA6_unif: "PASS. Even spread on [.9, 1]: .583 (homogeneous .95: .638). On [.8, 1]: .035.
+    On [.5, 1] and [0, 1]: 0."
+  rule_outcome: "R3 as frozen: both sufficiency claims fail their tests."
+  seen_after_the_run:   # an observation on these data, not a prediction
+    edges_in_mean_coupling: "homogeneous .942; two-type with the others at .9 / .75 / .5 / 0:
+      .948 / .944 / .935 / .926; shut type at .95 or .97 with the others at 0: .931 / .903.
+      The trap probability rises from 0 to .8 between mean coupling .90 and .975, so a shift
+      of .02 in the edge produces the large differences that failed the frozen test."
+    reading: "a shut-down majority does not carry the trap. The trap needs nearly everyone
+      to have nearly stopped learning; in terms of the mean coupling, the edge sits between
+      .90 and .95 for every shape run."
+
+# =================================================================== ADDENDUM AD-A2
+AD_A2:
+  frozen: "2026-11-11, after the part A scorecard above and before the run it describes"
+  status_of_the_amendment: "DISS-SUFF-MEAN is re-stated after seeing part A. The amended
+    claim is therefore tested only on shapes and seeds NOT run in part A."
+  claim:
+    id: DISS-SUFF-MEAN-v2
+    supersedes: DISS-SUFF-MEAN
+    statement: "the edge of the trap (first crossing of P_dw = .5), expressed in the mean
+      coupling of the population, lies in [.90, .95] whatever the shape of the distribution
+      of coupling across agents"
+    test: "five families, six cells each, fresh seeds 67000 + 1000*cell, 400 runs per cell
+      (engine mode hetc2): Se homogeneous c in {.88,...,.98}; Sc two-type (0; 1) at shares
+      {.88,...,.98}; Sd two-type (.5; 1) at shares {.76,...,.96}; Sb three-type (5% at .5,
+      share x at 1, rest at .9), x in {0, .2, .4, .6, .8, .95}; Sa skewed, c_i = 1 - u^k with
+      k giving means {.88, .90, .92, .94, .96, .98}. Edge by linear interpolation in the mean."
+    passes_if: "every family's edge lies in [.90, .95]"
+    expected: "PASS; edges between .92 and .95; the skewed family lowest"
+  rule_amendment:
+    R1b: "if DISS-SUFF-MEAN-v2 passes: the estimand is the mean-type functional psi. The trap
+      threshold is a BAND (mean coupling .90 to .95), not a point. R3 stands if v2 fails."

@@ -52,6 +52,9 @@ struct P {
     // het = 2: couplings evenly spaced on [het_lo, het_hi]. Assignment is deterministic
     // (no random draws), so the random stream is the frozen one. Both channels share c_i.
     het: u8, het_pi: f64, het_lo: f64, het_hi: f64,
+    // I038 AD-A2 shapes: het = 3: the first 5% at het_lo, the next het_pi at het_hi, the
+    // rest at het_mid; het = 4: skewed, c_i = het_hi - (het_hi - het_lo) u^het_k
+    het_mid: f64, het_k: f64,
 }
 impl Default for P {
     fn default() -> Self { P { mu: [0.6, 0.4], lam: 0.5, eta: 0.2, beta2: 12.0, alpha: 0.2,
@@ -60,7 +63,7 @@ impl Default for P {
         global_cmp: true, mu_rig: 0.4, pi0: 0.9,
         n1: 0, field_unweighted: false, field_paybias: false, gamma_het: false,
         gate_own: true, gate_soc: true, c_own: 1.0, c_soc: 1.0,
-        het: 0, het_pi: 1.0, het_lo: 1.0, het_hi: 1.0 } }
+        het: 0, het_pi: 1.0, het_lo: 1.0, het_hi: 1.0, het_mid: 1.0, het_k: 1.0 } }
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -90,7 +93,10 @@ fn run(p: &P, gate: Gate, q0c1: [f64; 2], q0c2: [f64; 2], seed: u64,
         let (k, m) = if i < half { (i, half) } else { (i - half, n - half) };
         let u = (k as f64 + 0.5) / (m as f64);
         if p.het == 1 { if u < p.het_pi { p.het_hi } else { p.het_lo } }
-        else { p.het_lo + (p.het_hi - p.het_lo) * u }
+        else if p.het == 2 { p.het_lo + (p.het_hi - p.het_lo) * u }
+        else if p.het == 3 { if u < 0.05 { p.het_lo } else if u < 0.05 + p.het_pi { p.het_hi }
+                             else { p.het_mid } }
+        else { p.het_hi - (p.het_hi - p.het_lo) * u.powf(p.het_k) }
     }).collect() };
     let mut het_tail = [0.0f64; 2]; let mut het_cnt = [0.0f64; 2];
     if p.het != 0 { for i in half..n { het_cnt[if ci[i] >= 0.95 { 1 } else { 0 }] += 1.0; } }
@@ -1355,6 +1361,40 @@ fn main() {
             for c in [0.5, 0.7, 0.8, 0.85, 0.9, 0.925, 0.95, 0.975, 1.0] {
                 emit(&mut w, "hom", 2, 1.0, c, c, cell); cell += 1; }
             eprintln!("hetc done: {cell} cells");
+        }
+        "hetc2" => {
+            // KGi-DISS-I038 addendum AD-A2 (frozen before running): does the edge of the trap,
+            // expressed in MEAN coupling, stay in one band for shapes not run in part A?
+            // 400 runs per cell; fresh seeds 67000 + 1000*cell.
+            let f = File::create("out/hetc2.csv").unwrap();
+            let mut w = BufWriter::new(f);
+            writeln!(w, "family,x,mean_c,m2,l2,p_dw,reps").unwrap();
+            let base = P { a0: 0.8, lam: 0.7, rho: 0.002, ..P::default() };
+            let mut cell = 0u64;
+            let mut emit = |w: &mut BufWriter<File>, fam: &str, x: f64, p: P, cell: u64| {
+                // realised mean coupling of community 2 (deterministic assignment)
+                let n = p.n; let half = n / 2; let m = (n - half) as f64;
+                let mc: f64 = (0..(n - half)).map(|k| { let u = (k as f64 + 0.5) / m;
+                    if p.het == 1 { if u < p.het_pi { p.het_hi } else { p.het_lo } }
+                    else if p.het == 2 { p.het_lo + (p.het_hi - p.het_lo) * u }
+                    else if p.het == 3 { if u < 0.05 { p.het_lo } else if u < 0.05 + p.het_pi { p.het_hi } else { p.het_mid } }
+                    else { p.het_hi - (p.het_hi - p.het_lo) * u.powf(p.het_k) } }).sum::<f64>() / m;
+                let (m2, _v, l2, _vl, pdw, _pp, _, _) = cell_stats(&p, Gate::Diss, wrong.0, wrong.1,
+                                                                 400, 67000 + cell * 1000);
+                writeln!(w, "{fam},{x},{mc:.4},{m2:.5},{l2:.5},{pdw:.4},400").unwrap();
+            };
+            for c in [0.88, 0.90, 0.92, 0.94, 0.96, 0.98] {
+                emit(&mut w, "Se homogeneous", c, P { het: 2, het_lo: c, het_hi: c, ..base }, cell); cell += 1; }
+            for pi in [0.88, 0.90, 0.92, 0.94, 0.96, 0.98] {
+                emit(&mut w, "Sc two-type (0;1)", pi, P { het: 1, het_pi: pi, het_lo: 0.0, het_hi: 1.0, ..base }, cell); cell += 1; }
+            for pi in [0.76, 0.80, 0.84, 0.88, 0.92, 0.96] {
+                emit(&mut w, "Sd two-type (.5;1)", pi, P { het: 1, het_pi: pi, het_lo: 0.5, het_hi: 1.0, ..base }, cell); cell += 1; }
+            for x in [0.0, 0.2, 0.4, 0.6, 0.8, 0.95] {
+                emit(&mut w, "Sb three-type (5% at .5; x at 1; rest .9)", x,
+                     P { het: 3, het_pi: x, het_lo: 0.5, het_hi: 1.0, het_mid: 0.9, ..base }, cell); cell += 1; }
+            for k in [7.3333, 9.0, 11.5, 15.6667, 24.0, 49.0] {
+                emit(&mut w, "Sa skewed (1 - u^k)", k, P { het: 4, het_lo: 0.0, het_hi: 1.0, het_k: k, ..base }, cell); cell += 1; }
+            eprintln!("hetc2 done: {cell} cells");
         }
         _ => eprintln!("unknown mode"),
     }
