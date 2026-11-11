@@ -1,0 +1,88 @@
+iteration_id: "KGi-DISS-I040"
+mode: "exploration on synthetic cohorts; no human data; no recruitment, OSF filing or ethics
+  claim; manuscript not edited. Written before any I040 run."
+freeze_time: "2026-11-11T15:55Z"
+freeze_relative_to_work: "done before freezing: memory re-read; design_generator.py re-read
+  (rich-round board is HIGH or LOW at random in both arms; HIGH reference = cumulative peer
+  rate, LOW reference = own trailing-15 rate; one ticket choice per round; the first choice
+  is a coin flip); hand arithmetic for the expected values below. Nothing simulated."
+baseline: {repo: "CSL3 main 88bf656 (I039 close)", lean: "CSL lean-diss-core 11f09cb",
+           kg: "kg_delta_I032 ... I039; kg_active_I039.yaml", tests: "73 passing"}
+author_directive: "2026-11-11: we want a human validation of the model to some extent, so
+  explore how to test the theorems, and see if their assumptions hold with the human setting
+  in the market experiments."
+
+question: "for each machine-checked theorem (T6-T15): which hypotheses does the market
+  experiment (design S1x as simulated; the ten-repetition oTree build does not exist yet)
+  satisfy by construction, which are assumptions about people, how each can be tested with
+  about 72 participants per arm, and what happens to the conclusion when an assumption fails."
+
+classes:   # every hypothesis gets one
+  D: "guaranteed by the design as it stands"
+  Dx: "NOT guaranteed by the design as it stands; can be made so by a design change"
+  H: "an assumption about people; testable with the data the design records"
+  Hx: "an assumption about people; not testable without a design change"
+  U: "not testable in this experiment"
+
+part_1_ledger:   # filled in the memo; the classification below is the frozen prior
+  T13_reference_monotone:
+    outcomes_binary: D
+    same_outcome_sequence_in_both_arms: "Dx (outcomes depend on ticket choice and on independent draws)"
+    reference_ordered_at_every_settlement: "Dx (LOW reference = own trailing rate, which can exceed the board)"
+    equal_initial_state: "Dx (rich-round board differs at random; people differ)"
+    phi_plus_le_tau: "H (a win never erodes fairness)"
+    aspiration_monotone_in_reference: "H (entitlement slider)"
+  T6_T7_gain: {linear_update_gain_depends_on_legitimacy_only: H, legitimacy_zero_identifiable: "H (bottom of the rating scale)", full_coupling: "the claim under test"}
+  T8_T15_aggregation: {T_and_F_independent_given_legitimacy: "H / Hx (a trait can link them)", both_increasing_in_legitimacy: H}
+  T10_T11_horizon: {same_weight_at_successive_steps: Hx, common_initial_error_constant_evidence: "Hx (needs a multi-step probe)"}
+  T12_two_types: {two_types: "checked against the model's own distribution (part 3)"}
+  T14_product_bound: {linear_rule: "H (revision rule); the conclusion is checked under the count rule"}
+
+part_2_twins:
+  simulator: "experiment/analysis/twins_I040.py: the gate kernel of design_generator.py for
+    the rich round and the five deprivation rounds of S1x, run on PAIRS (one HIGH, one LOW)
+    that share the random numbers for ticket choice, settlements, board draws and the
+    rich-round board. 20,000 pairs per cell; seed 137000."
+  gate_GT: "legitimacy at probe time (mean and share below .05) within .015 of the I039 pools
+    at P1 and P4, both arms"
+  claims:
+    E2_1: "reference ordered at every deprivation settlement in >= 95% of pairs (P1)"
+    E2_2: "identical ticket choices in all rounds in 30-70% of pairs (P1)"
+    E2_3: "T13's conclusion at every settlement: 100% of identical-person pairs that satisfy
+      both hypotheses (any exception is an error); >= 90% of all identical-person pairs"
+    E2_4: "pairs of different people (rigidity drawn independently), ratings with noise 5.8
+      and gain .5: the within-pair signed-rank test on the last fairness rating and the
+      unpaired rank test on the same number of participants differ by at most .05 in power
+      at P4 (36 and 72 pairs); both >= .99 at P0-P3"
+    E2_5: "if a win can erode fairness (phi_plus = .5, 1.0 instead of .25) at P1: LOW
+      legitimacy at probe time is lower by .05-.30 at phi_plus = 1; the HIGH/LOW ratio of
+      mean legitimacy rises by at most .15; T13's conclusion holds in 70-99% of pairs"
+    E2_6: "choice-free deprivation (one ticket at .25) makes the same-outcome hypothesis hold
+      in 100% of pairs and changes mean legitimacy at probe time by at most .05 in either arm"
+
+part_3_tests:
+  machinery: "exact likelihood tables of I039 (records/likelihood_pools_I039.npz); Monte
+    Carlo sampling from them; seed 137100"
+  claims:
+    E3_1_freeze: "stratum = the third of HIGH with the lowest rating; decision 'residual
+      uptake below one quarter' = upper 99.5% Fieller limit of E[T | stratum] / E[T | LOW]
+      below .25. Power at 72 per arm, full coupling: <= .30 under the one-update rule at
+      every point; .30-.80 under the count rule at P1. False positives at coupling .75: <= .01."
+    E3_2_contrast: "revision in the top third of HIGH by rating against the bottom third
+      (one-sided rank test, .005): power at 72 per arm exceeds the HIGH-only Spearman test of
+      I039 by at least .10 at P1-P3 (one-update rule) and stays below .80"
+    E3_3_two_types: "applying the two-type inversion (T12) to the model's own HIGH gain
+      distribution returns a coupling >= .95 at P0-P3 and >= .85 at P4 when the truth is 1,
+      and within .05 of the truth when it is .75"
+    E3_4_two_step: "a two-record probe (T10): participants per arm needed to detect the
+      excess dispersion of gains in HIGH (asymptotic, checked by Monte Carlo when below
+      2,000): more than 1,000 under the one-update rule at P1; 200-1,000 under the count rule"
+    E3_5_bound: "T14's conclusion psi >= 1 - c holds at every point and coupling under the
+      count rule in records/estimand_map_I038.txt (no run)"
+gates:
+  G1: "GT passes; the theorem check in E2_3 shows no exception"
+  G2: "all tests pass; seeded records re-run bit-identical"
+  G3: "KG delta validated; active ledger updated"
+  G4: "no recruitment, OSF filing, ethics claim or manuscript edit; no credentials; referee
+    documents stay out of the repositories"
+stopping: "close after parts 1-3 and the KG update; design changes are proposed, not made"
