@@ -172,3 +172,31 @@ AD_B2_extended_exposure:   # written after stage 1, before running
   dependence_flag: "every gain from larger k rests on per-outcome integration of round
     summaries (count lemma). If people update once per round, k is irrelevant. This is a
     human quantity (pilot: vary k between participants)."
+
+# =================================================================== AD-B2 RESULT (verbatim) + ADDENDUM AD-B3 (pre-run, certification scope)
+AD_B2_result:
+  record: "records/probe_design2_I037.{txt,csv}"
+  S1x: "1 rich + 5 deprivation rounds, 120 draws per round, harsh deprivation odds, rich
+    phase .75/.35 with board .72; two pairs, m = 10; 10 repetitions; n per arm 48
+    (per-outcome) / 72 (per-event) -> 72. The standard rich phase (.65/.35, board .65) gives
+    47 / 73: indistinguishable."
+  expectation: "FAIL on shape and range: no interior optimum in k within the grid, and n is
+    72, below the predicted 120-220. The gain is a threshold in exposure: with 600
+    deprivation draws LOW participants' entitlement has adapted and their legitimacy
+    recovers (.87) while HIGH stays collapsed (.11-.41); at 240-480 draws LOW is still
+    falling (.53-.67). Non-monotone in k between (40 -> 80 can be worse)."
+  binding_point: "P4 (anchoring edge) in every row"
+  dependence_flag_restated: "the 600-draw exposure only counts if people integrate a round
+    summary per outcome, for entitlement as well as legitimacy. If not, S1 (274 per arm at
+    40 draws) is the relevant number, or worse."
+AD_B3_certification_scope:   # fixed before the certification runs
+  certify: "S1x (in place of S1, lower n) and S2 as frozen"
+  added_for_S1x:
+    partial_discounting: "at theory point P1's gate parameters, coupling c in {0, .25, .5,
+      .75, .85, .9, .945, 1}: expected HIGH/LOW revision-weight ratio and Monte Carlo power
+      at the certified n, tabulated against P_dw(c) (records/couple.csv, diagonal) and the
+      median correction time (records/ctime.csv)"
+    starting_entitlement: "power at the certified n with starting entitlement .4 and .6
+      (frozen value .5), sigma_f 12, both integrations"
+  expected: "power >= .9 for c >= .9; about .5 at c = .5; ~alpha at c = 0. Starting
+    entitlement .4 lowers power materially (as in I033 stage 2)."
