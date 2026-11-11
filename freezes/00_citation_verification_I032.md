@@ -154,3 +154,13 @@ details not retrieved).
 
 Not cited (not verified): van der Vaart (1998), Manski (2003), Xie et al.
 (2011), Galam & Jacobs (2007).
+
+## I039 addendum (2026-11-11; records/108_symbolic_likelihood_I039.md)
+
+No new reference enters a deliverable. Standard results are named without a
+citation (Jensen's inequality, the Neyman–Pearson lemma, Fisher information and
+the information bound). Considered and NOT cited because not verified this
+iteration: the Hausdorff moment theorem (the claim that the residual sequence
+determines the gain distribution is therefore not made), Granger (1980) on
+aggregating heterogeneous dynamics. Pesaran & Smith (1995) is used only through
+the FLOW log, where it was verified.

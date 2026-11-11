@@ -1,3 +1,4 @@
+# SUPERSEDED by kg_active_I039.yaml (kept for history).
 # Active claim ledger for the experiment after KGi-DISS-I038 (a retrieval aid, not a second
 # source of truth: every line points to its node in the KG deltas and its record).
 # Supersedes kg_active_I037.yaml.

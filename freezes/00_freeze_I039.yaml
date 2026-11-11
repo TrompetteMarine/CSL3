@@ -334,3 +334,50 @@ AD_F2:
   expected: "size is controlled by construction. n per arm for .90 at weight .5: 12-16 at P1,
     30-48 at P4 (between Neyman-Pearson and the interval). Power is lower at weight .35
     than at .65."
+
+# =================================================================== AD-F2 SCORECARD AND CLOSE
+AD_F2_scorecard:   # verbatim, 2026-11-11; record records/frontier_ad_I039.txt (seed 136200)
+  result: "PASS. With the critical value taken as the largest null quantile over baseline
+    weights .30-.70, n per arm for power .90 at weight .5 is 16 at P1 and 36 at P4 (inside
+    my 12-16 and 30-48). Power is lower at weight .35 (16 / 48) than at .65 (10 / 24)."
+  note: "the largest null quantile always sits at the lowest weight in the range (.30), so
+    the critical value depends on the assumed lower limit of the baseline weight."
+
+closing_record:   # 2026-11-11
+  outcome:
+    survives: "the symbolic kernel and its implications, machine-checked where algebraic
+      (T6-T15); the minimal scenario (arm, F, T); psi as the first-moment estimand, at the
+      information bound from T alone when the depth of delegitimation is not assumed known;
+      state dependence as the observable form of the failure of mean sufficiency; the
+      conjunction test against R3, HS and SH; the model-free interval's size"
+    corrected: "the I038 sufficiency reading and rule R1b (withdrawn); the scope of reference
+      monotonicity (phi_plus <= tau); the depth direction (mixture replaced by the uniform
+      shift as the hard case); the likelihood-ratio calibration (worst case over the nuisance)"
+    refuted: "most frontier bands as frozen (listed in kg_delta_I039.yaml), including the
+      power of the rank tests at the central points and the HIGH-minus-LOW contrast"
+    unresolved: "the composite rival (uniform slowdown plus trait); a state-dependence
+      statistic near its frontier; a covariate-adjusted estimator of psi; every human
+      quantity, in particular the revision rule (it moves the information by a factor of
+      5-15)"
+  gates:
+    G1: "PASS. Lean 4.28.0 core, `lean DissAggregation.lean` exit 0, re-run after the commit:
+      output identical to formal_diss/expected_output_aggregation.txt; file hashes verified;
+      audit file compiles; pushed to CSL lean-diss-core 11f09cb (never main)."
+    G2: "GK PASS. GR is an identity; the projection identity holds (.6980 = .6980)."
+    G3: "PASS. 73 tests pass (67 + 6 new). Re-run bit-identical: records/likelihood_I039.txt,
+      likelihood_curves_I039.json, likelihood_pools_I039.npz, likelihood_ad_I039.txt,
+      frontier_I039.txt, frontier_ad_I039.txt."
+    G4: "PASS. freezes/kg_delta_I039.yaml: 12 new nodes, no id collision, every edge endpoint
+      and updated id resolves, no cycle among requires edges; I038 nodes re-scoped, not
+      deleted. freezes/kg_active_I039.yaml: 23 node references resolve; kg_active_I038.yaml
+      marked superseded."
+    G5: "PASS. No recruitment, OSF filing, ethics claim or manuscript edit; no credentials;
+      no referee documents in the repositories."
+  not_done: "the Lean files were pushed to CSL only; the CSL2 mirror of lean-diss-core was
+    not updated (that repository is not attached to this session)."
+  network_note: "release.lean-lang.org is refused by the session's network policy; the
+    official Lean binary was taken from the GitHub release asset of leanprover/lean4."
+  figure: "records/fig_likelihood_I039.png (drawn from the records; computes nothing)"
+  next: "I040: (1) a state-dependence statistic near its frontier and the slope-equality
+    test against the composite rival; (2) a covariate-adjusted estimator of psi; (3) the
+    two-step probe as a rating-free measure of the dispersion of gains"
