@@ -1,0 +1,133 @@
+# KG delta — KGi-DISS-I041 (on top of kg_delta_I032 ... kg_delta_I040; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main d689e3a (I040 close); CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-YOKE
+    new_status: "certified-synthetic as harmless; the power claim is withdrawn"
+    added_evidence: "pairs of different people with independent ticket-choice noise: H1a with
+      yoked pairs against re-matched pairs .726 | .724 (18 pairs) and .990 | .990 (36) at the
+      anchoring edge; paired and unpaired intervals for psi .936 | .939. The I040 gain (.76
+      against .71) rested on choice noise shared within a pair."
+  - id: DISS-T13-DESIGN-AUDIT
+    added_evidence: "with independent ticket-choice noise the members of a yoked pair pick
+      the same ticket in all five deprivation rounds in 10-16% of pairs (41-73% in I040 with
+      shared choice noise). The same-outcome hypothesis of T13 holds only in those."
+  - id: DISS-STATE-DEP
+    new_status: "re-scoped (I041): reported by arm"
+    added_evidence: "the pooled within-arm association is carried by the LOW arm as much as by
+      HIGH (alone: LOW .44 / .18 / .57, HIGH .27 / .40 / .37 at P1-P3, 72 pairs, one-update
+      rule) and rejects in .82 of samples when both members are on the LOW board. The I039
+      false-positive figure for a homogeneous slowdown (.0035) holds only if LOW is ungated."
+  - id: DISS-RIVAL-HS-SH
+    added_evidence: "a member of this family was scored (DISS-RIVAL-HS-G). The composite with
+      a trait inside HIGH remains not excluded by any statistic in the reporting set."
+  - id: DISS-TEST-K3
+    new_status: "supported-synthetic for plain ratings only"
+    added_evidence: "72 pairs, gain .5: parked sliders .81-.97, 20% non-responsive .63-.89,
+      lognormal gains .78-.98 (P1-P4); gain .25: .65-.91 plain, .17-.46 parked or
+      non-responsive"
+  - id: DISS-TEST-FREEZE
+    added_evidence: "the decision is also true under a homogeneous slowdown (.67-.89 at P1):
+      it does not discriminate that rival. Power in the yoked design .89-.95 (one-update
+      rule), 1.00 (count rule)."
+  - id: DISS-COMPLEMENT
+    added_evidence: "at P0 the HIGH-arm association sits at its size (.004-.006): with everyone
+      shut the gate and a homogeneous shutdown are the same distribution (identification
+      limit, not a power limit)"
+  - id: DISS-H1-STRUCTURE-V3
+    added_proposal: "reporting set of the yoked design: confirmatory pair H1a then D1;
+      supporting K3, FREEZE, the association by arm (ASSOC_H, ASSOC_L); PHI as a warning flag
+      (author decision; node DISS-REPORTING-SET)"
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: share of pairs choosing the same tickets; the
+      revision rule now also sets the sample for the HIGH-arm association (216-288 pairs
+      under the one-update rule, 144-216 under the count rule)"
+
+new_nodes:
+  - id: DISS-DESIGN-Y
+    kind: design
+    status: certified-synthetic (author-gated; not built)
+    statement: "S1x with yoked pairs: one HIGH and one LOW participant share a pre-drawn
+      schedule (rich-round board, one draw per settlement that settles both tickets, board
+      draws, probe tickets); own ticket choices; each schedule once per arm"
+    evidence: "experiment/YOKED_DESIGN.md; records/yoked_cert_I041.txt"
+  - id: DISS-YOKED-SCHEDULES
+    kind: implementation
+    status: tested
+    statement: "experiment/tools/yoked_schedules.py writes the schedules and the allocation
+      from a seed and verifies a file; tests check the yoking rule, the odds, the allocation
+      and that a seed fixes the file"
+    evidence: "experiment/analysis/tests/test_yoked_I041.py"
+  - id: DISS-REPORTING-SET
+    kind: statistical
+    status: certified-synthetic
+    statement: "one-sided .005. At 72 pairs, full coupling, plain ratings at gain .5:
+      confirmatory pair (H1a then D1) .94-1.00 (one-update rule; .67 at 36 pairs at the
+      anchoring edge); K3 1.00; FREEZE .89-.95 | 1.00; ASSOC_H .27 / .40 / .37 at P1-P3 and
+      1.00 at P4; sizes .004-.007"
+    evidence: "records/yoked_cert_I041.txt; records/yoked_ad_I041.txt;
+      experiment/analysis/yoked_analysis.py"
+  - id: DISS-ASSOC-BY-ARM
+    kind: statistical
+    status: adopted (I041); supported-synthetic
+    statement: "ASSOC_H (rank association of T and the last fairness rating within HIGH) holds
+      its size under a homogeneous slowdown of HIGH with LOW gated (.003-.008) and under
+      ratings-without-gate (.003-.005). Power at P1 / P2 / P3, one-update rule: .27 / .38 /
+      .35 at 72 pairs, .58 / .76 / .69 at 144, .76 / .91 / .88 at 216, .89 / .98 / .96 at
+      288; count rule .49 / .68 / .53, .83 / .96 / .87, .95 / 1.00 / .97. The top-quarter
+      cut does better at P1-P3 (.37-.50 at 72, .89-.96 at 216) and worse at P4 (.94)."
+    evidence: "records/yoked_ad_I041.txt"
+  - id: DISS-RIVAL-HS-G
+    kind: model
+    status: supported-synthetic
+    statement: "LOW gated as in the model, HIGH uniformly slowed at its mean gain. The pooled
+      association rejects in .19-.20 at 72 pairs and .66 at 216; the whole set built on it
+      comes out as predicted in .16 (P1, 72 pairs) and .65 (216). Built on ASSOC_H: .002-.008."
+    evidence: "records/yoked_ad_I041.txt section B"
+  - id: DISS-MEDIATION-LIMIT
+    kind: limitation
+    status: identification limit
+    statement: "no statistic in the reporting set shows that the reduction in learning runs
+      through fairness: a trait linking rating and revision inside HIGH, combined with a
+      uniform slowdown, passes every test; ASSOC_H conditions on a post-treatment rating"
+    evidence: "analytic; not simulated"
+
+new_edges:
+  - {from: DISS-DESIGN-Y, to: DISS-TASK-TEN, type: requires}
+  - {from: DISS-DESIGN-Y, to: DISS-YOKE, type: requires}
+  - {from: DISS-DESIGN-Y, to: DISS-YOKED-SCHEDULES, type: implemented_by}
+  - {from: DISS-REPORTING-SET, to: DISS-DESIGN-Y, type: requires}
+  - {from: DISS-REPORTING-SET, to: DISS-ESTIMAND-PSI, type: requires}
+  - {from: DISS-REPORTING-SET, to: DISS-TEST-K3, type: requires}
+  - {from: DISS-REPORTING-SET, to: DISS-TEST-FREEZE, type: requires}
+  - {from: DISS-REPORTING-SET, to: DISS-ASSOC-BY-ARM, type: requires}
+  - {from: DISS-REPORTING-SET, to: DISS-PHI-PLUS, type: qualified_by}
+  - {from: DISS-REPORTING-SET, to: DISS-MEDIATION-LIMIT, type: qualified_by}
+  - {from: DISS-ASSOC-BY-ARM, to: DISS-STATE-DEP, type: requires}
+  - {from: DISS-STATE-DEP, to: DISS-RIVAL-HS-G, type: qualified_by, note: "the pooled statistic does not reject this rival"}
+  - {from: DISS-RIVAL-HS-G, to: DISS-RIVAL-HS-SH, type: requires, note: "a member of the family"}
+  - {from: DISS-MEDIATION-LIMIT, to: DISS-RIVAL-HS-SH, type: requires}
+  - {from: DISS-TEST-FREEZE, to: DISS-RIVAL-HS-G, type: qualified_by, note: "true under the rival"}
+
+refuted_preserved:
+  - "C2 (K3 >= .90 under rating shapes M2, M3, M5): .63-.98 at gain .5"
+  - "C10, FREEZE <= .05 under a homogeneous slowdown: .893 at P1"
+  - "C8, count-rule gain of 5-15 points in the whole set: 14-16"
+  - "I040 recommendation 2 (yoking gives a small power gain, .76 against .71): none with
+    independent ticket-choice noise"
+  - "I039 / I040 ledger line 'homogeneous slowdown excluded by the conjunction of psi < 1 and
+    the pooled association (.0035)': true only with an ungated LOW arm; with LOW gated the
+    conjunction passes the rival in .16 (72 pairs) to .65 (216 pairs)"
+  - "Y1 (LOW-arm association .30-.55 at P1-P3): .18 at P2, .57 at P3"
+  - "Y4 (whole set with the top-quarter cut >= .85 at P4): .82"
+  - "Y5 (top-quarter cut >= .72 at 144 pairs and >= .90 at 216 at P1): .71 and .89"
+  - "Y3 in one row: .0085 against <= .008"
+flags_not_patched: "none new for the manuscript. For the experiment: 72 pairs do not separate
+  the gate from a homogeneous slowdown of the HIGH arm at the central gate points."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "no assumption has been tested on people; all power figures
+            take the model as the truth; the oTree build does not exist"}
+persistence: "CSL3 freezes/kg_delta_I041.yaml + Project mirror; no remote KG service"

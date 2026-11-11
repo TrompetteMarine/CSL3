@@ -64,3 +64,16 @@ def test_decisions_on_a_clear_case_and_on_a_null():
                 el=rng.normal(40, 6, (b, n)), th=rng.normal(30, 20, (b, n)), tl=rng.normal(30, 20, (b, n)))
     out = ya.decisions(null)
     assert max(out[k].mean() for k in ('H1a', 'K3', 'D1', 'FREEZE', 'ASSOC', 'PAIR', 'FULL')) < .05
+
+
+def test_by_arm_statistics_match_scipy_and_hold_their_size():
+    rng = np.random.default_rng(3)
+    t, f = np.round(rng.normal(10, 20, (400, 72)) / 2.5) * 2.5, rng.normal(40, 10, (400, 72))
+    p = ya.topq_p(t, f)
+    for i in (0, 7, 399):
+        o = np.argsort(f[i])
+        ref = st.mannwhitneyu(t[i][o[54:]], t[i][o[:54]], alternative='greater', method='asymptotic').pvalue
+        assert abs(p[i] - ref) < 1e-12
+    assert (p < .05).mean() < .09 and (ya.arm_z(t, f) > st.norm.ppf(.95)).mean() < .09     # independent T and F
+    tt = t + 1.5 * (f - 40)                                                                  # T rises with F
+    assert (ya.topq_p(tt, f) < .005).mean() > .8 and (ya.arm_z(tt, f) > ya.ZC).mean() > .9

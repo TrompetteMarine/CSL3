@@ -146,3 +146,68 @@ addendum_AD_Y2:
     homogeneous slowdown of the HIGH arm; the reporting set states the association by arm,
     with the HIGH-arm statistic as the one that bears on that rival. The I039 conjunction
     figure for HS (.0035) is then scoped to a world with no state dependence in LOW."
+
+scorecard_AD_Y2:   # verbatim, 2026-11-11; record records/yoked_ad_I041.txt (seed 138100)
+  Y1_by_arm: "ASSOC_H PASS: .275 / .399 / .366 at P1-P3 and .998 at P4. ASSOC_L FAIL at two
+    points: .443 / .185 / .571 against my .30-.55 (at the repair-ratio edge the LOW arm sits
+    nearer the ceiling and carries less)."
+  Y2_hs_g_pooled: "PASS, and this is the finding. With LOW gated and HIGH uniformly slowed,
+    the pooled association rejects in .192 (P1) and .203 (P4) at 72 pairs and in .659 (P1)
+    at 216; the full set comes out 'as predicted' in .161 at P1 (72 pairs), .653 at 216,
+    and .009 at P4. Count rule: .158 / .158 at 72, .581 at 216."
+  Y3_hs_g_high_only: "PASS except one cell by .0005: ASSOC_H .0025-.0080, TOPQ .0030-.0085,
+    FULL_H <= .0080, FULL_T <= .0085 (the .0085 is P1, 216 pairs, one-update rule; Monte
+    Carlo standard error of a rate of .005 on 2,000 samples is .0016). Ratings move but the
+    gain does not: <= .0070."
+  Y4_full_high_only: "PASS at P1-P3: FULL_H .269 / .392 / .360, FULL_T .379 / .506 / .431;
+    count rule FULL_T .573 / .781 / .672. FAIL at P4 for FULL_T: .822 against >= .85
+    (FULL_H .863); the top-quarter cut is worse than the rank correlation at the anchoring
+    edge (.945 against .998)."
+  Y5_n: "ASSOC_H: 144 pairs .581 / .757 / .692 (P2 is .007 above my band), 216 pairs .759 /
+    .907 / .876, 288 pairs .892 / .981 / .960: PASS but for that. TOPQ FAIL at P1: .707 at
+    144 pairs (I said >= .72) and .886 at 216 (>= .90); .856 / .801 and .961 / .943 at P2, P3."
+  seen_after_the_run: "at P0 the HIGH-arm statistics sit at their size (.004-.009): when
+    everyone in HIGH has stopped, the gate and a homogeneous shutdown are the same
+    distribution. Two independent pools give the pooled association at 72 pairs as .667 and
+    .696 (P1), .639 and .608 (P2), .780 and .825 (P3): association rates carry about +-.03
+    from the pool."
+  consequence: "adopted. The reporting set states the association by arm. The HIGH-arm
+    statistic is the one that bears on a homogeneous slowdown. The 'full set' is redefined
+    with it (FULL_H); the frozen FULL is kept in the code and the records."
+
+closing_record:   # 2026-11-11
+  outcome:
+    survives: "the yoked design as an instrument (sizes hold; nothing breaks); the
+      confirmatory pair H1a then D1 (.94-1.00 at 72 pairs across the trap region); K3 with
+      plain ratings; FREEZE as a description of the lowest-rated third; the PHI flag at its
+      size; the schedule generator"
+    corrected: "the association is reported by arm, not pooled; the HIGH-arm statistic is the
+      one that bears on a homogeneous slowdown; the whole set is redefined with it"
+    refuted: "yoking gives a power gain (none); the pooled association with psi < 1 rejects a
+      homogeneous slowdown (only if LOW is ungated; with LOW gated the rival passes in .16 at
+      72 pairs and .65 at 216); FREEZE discriminates that rival (it is true under it); K3 is
+      robust to the rating shape (.63-.98 at gain .5, .17-.46 at gain .25 with parked or
+      non-responsive sliders); five of my bands in AD-Y2 at single points"
+    unresolved: "nothing has been tested on people; the design is not built. At 72 pairs the
+      gate is not separated from a homogeneous slowdown of HIGH at the central gate points
+      (ASSOC_H .27-.40; .90 needs 216-288 pairs under the one-update rule, 144-216 under the
+      count rule; at P0 the two coincide). Mediation by fairness is not identified by any
+      statistic. The association by arm was scored with plain ratings only."
+  gates:
+    G1: "PASS. records/twins_I040.txt re-runs bit-identically with the extended twins()."
+    G2: "PASS. 84 tests pass (78 + 6 new). Re-run bit-identical: records/yoked_cert_I041.txt
+      (also after decisions() gained the by-arm outputs), records/yoked_ad_I041.txt, the
+      example schedule file."
+    G3: "PASS. freezes/kg_delta_I041.yaml: 6 new nodes, 9 updates, no id collision, edges and
+      updates resolve, requires-graph acyclic over the seven deltas. freezes/
+      kg_active_I041.yaml: 38 node references resolve; kg_active_I040.yaml marked superseded."
+    G4: "PASS. No recruitment, OSF filing, ethics claim or manuscript edit; no credentials;
+      no referee documents in the repositories."
+  author_decisions: "sample (72 pairs for the confirmatory pair, or 216-288 to separate the
+    gate from a homogeneous slowdown); which HIGH-arm statistic to fix in advance (rank
+    association or top-quarter cut); whether K3 stays supporting only"
+  next: "I042 candidates: (1) the ten-repetition oTree build of the yoked design; (2) the pilot
+    specification built on this ledger (what each pilot quantity decides, including the
+    revision rule that sets the sample for ASSOC_H); (3) the association by arm under rating
+    shapes M2-M6 and under other slowdowns; (4) Lean: the two-type lower bound and a
+    monotone-kernel T13."

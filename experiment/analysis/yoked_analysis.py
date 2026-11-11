@@ -8,6 +8,10 @@ pilot data set (one replicate) and a Monte Carlo certification (many).
     FREEZE  uptake ratio of the lowest-rated third of HIGH below a bound
     ASSOC   within-arm rank association of T and the last fairness rating, pooled
     PHI     in LOW, slope of the change in the fairness rating on the round's win share < 0
+
+Addendum AD-Y2 (the association by arm; decisions() keeps its frozen outputs and adds these):
+    ASSOC_H, ASSOC_L   the rank association within HIGH only and within LOW only
+    TOPQ               within HIGH, the top quarter by rating revises more than the rest (rank sum)
 """
 import numpy as np
 from scipy import stats as st
@@ -63,6 +67,21 @@ def spearman(x, y):
     return np.where(den > 0, (rx * ry).sum(1) / np.maximum(den, 1e-12), 0.0)
 
 
+def arm_z(t, f):
+    """z of the rank association of T and the rating within one arm"""
+    n = t.shape[1]
+    return np.arctanh(np.clip(spearman(t, f), -.999, .999)) * np.sqrt((n - 3) / 1.06)
+
+
+def topq_p(t, f, share=0.25):
+    """one-sided rank-sum p-value that the top share by rating has larger T than the rest;
+    ties in the rating must be broken by the caller"""
+    n = t.shape[1]
+    k = int(n * share)
+    ts = np.take_along_axis(t, np.argsort(f, axis=1), axis=1)
+    return st.mannwhitneyu(ts[:, n - k:], ts[:, :n - k], alternative='greater', axis=1, method='asymptotic').pvalue
+
+
 def assoc_z(th, fh, tl, fl):
     n = th.shape[1]
     z = lambda r: np.arctanh(np.clip(r, -.999, .999)) * np.sqrt((n - 3) / 1.06)
@@ -94,4 +113,9 @@ def decisions(d):
                PHI=zphi < -ZC, psi=psi, psi_lo=lo, psi_hi=hi, phi_slope=slope)
     out['PAIR'] = out['H1a'] & out['D1']
     out['FULL'] = out['H1a'] & out['K3'] & out['D1'] & out['FREEZE'] & out['ASSOC'] & ~out['PHI']
+    rest = out['H1a'] & out['K3'] & out['D1'] & out['FREEZE'] & ~out['PHI']          # AD-Y2
+    out['ASSOC_H'] = arm_z(d['th'], d['fh'] + d['jit']) > ZC
+    out['ASSOC_L'] = arm_z(d['tl'], d['fl'] + d['jit']) > ZC
+    out['TOPQ'] = topq_p(d['th'], d['fh'] + d['jit']) < ALPHA1
+    out['FULL_H'], out['FULL_T'] = rest & out['ASSOC_H'], rest & out['TOPQ']
     return out
