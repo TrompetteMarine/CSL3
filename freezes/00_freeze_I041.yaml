@@ -1,0 +1,76 @@
+iteration_id: "KGi-DISS-I041"
+mode: "certification on synthetic cohorts; no human data; no recruitment, OSF filing or ethics
+  claim; manuscript not edited. Written before any I041 run."
+freeze_time: "2026-11-11T21:35Z"
+freeze_relative_to_work: "done before freezing: design_generator.measure_design re-read (rating
+  shapes M1-M6). Nothing simulated."
+baseline: {repo: "CSL3 main d689e3a (I040 close)", lean: "CSL lean-diss-core 11f09cb",
+           kg: "kg_delta_I032 ... I040; kg_active_I040.yaml", tests: "78 passing"}
+author_directive: "2026-11-11: go for the yoked design first; it will be pilot tested."
+
+design_Y:   # the object certified
+  base: "S1x: 1 rich round + 5 deprivation rounds of 120 settlements with a summary screen,
+    a ticket choice before each round, fairness and entitlement ratings after each round,
+    then 4 probe tickets (two pairs, 10 settlements shown each); ten repetitions"
+  yoking: "participants come in pairs: one HIGH, one LOW, same schedule. A schedule fixes,
+    before the session: the rich-round board (HIGH or LOW, the same for both), for every
+    settlement one uniform draw that settles BOTH tickets (so the same ticket gives the same
+    outcome to both, and the better ticket wins whenever the worse one does), the board
+    draws, and the probe tickets' records. People choose their own tickets and give their
+    own ratings and forecasts."
+  allocation: "each schedule is used once in each arm; arm order within a schedule at random"
+  not_changed: "odds, board level, round length, ratings, probe, payment rules"
+
+simulation:
+  pairs: "twins_I040.twins extended (defaults unchanged, so the I040 records still re-run):
+    independent ticket-choice noise and independent rigidity within a pair; an option to give
+    both members the LOW board (null pairs). Probe statistic from probe_generator at
+    forecast noise 12. Ratings with shapes M1 (plain), M2 (15% parked), M3 (20%
+    non-responsive), M5 (lognormal gain), gain .25 / .5 / 1, noise 5.8."
+  pool: "20,000 pairs per cell; decisions on 2,000 samples of n pairs; seed 138000"
+reporting_set:   # computed by experiment/analysis/yoked_analysis.py, the code the pilot will use
+  H1a: "last fairness rating, LOW above HIGH within pairs: signed-rank, one-sided .005"
+  K3: "last entitlement rating, HIGH above LOW within pairs: signed-rank, one-sided .005"
+  D1: "psi < 1: upper limit of the 99% Fieller interval below 1 (unpaired formula; a paired
+    version with the within-pair covariance is computed alongside)"
+  FREEZE: "third of HIGH with the lowest last fairness rating: upper limit of its uptake
+    ratio below .5"
+  ASSOC: "pooled within-arm rank association of T and the last fairness rating, one-sided .005"
+  PHI: "warning flag: slope of the change in the LOW fairness rating on the round's win
+    share (rounds 4-6) below 0 at one-sided .005"
+  confirmatory_pair: "H1a, then D1 only if H1a rejects"
+  full_set: "H1a and K3 and D1 and FREEZE and ASSOC and no PHI flag"
+claims:   # at 72 pairs unless stated; full coupling; shape M1, gain .5 unless stated
+  C1_H1a: "power >= .99 at every gate point; >= .95 at gain .25 at P0-P3 and >= .80 at P4;
+    >= .95 at P0-P3 under M2, M3 and M5"
+  C2_K3: "power >= .99 at every gate point under M1; >= .90 under M2, M3, M5"
+  C3_D1: "unpaired: >= .93 at P4 under the one-update rule, >= .99 elsewhere; the paired
+    interval changes power by at most .01"
+  C4_FREEZE: ".88-1.00 at P1-P4 under both rules"
+  C5_ASSOC: ".60-.90 at P1-P3, >= .99 at P4, .10-.35 at P0"
+  C6_PHI: "flag rate <= .02 at every gate point"
+  C7_pairs: "confirmatory pair (H1a and D1): >= .93 at every point"
+  C8_full: "full set as predicted: .50-.85 at P1-P3, >= .85 at P4, <= .30 at P0 (one-update
+    rule); 5-15 points higher under the count rule at P1-P3"
+  C9_n: "at 36 pairs the confirmatory pair is >= .90 at P0-P3 and .55-.80 at P4 (one-update);
+    at 96 pairs >= .98 everywhere"
+  C10_size: "null pairs (both members on the LOW board): H1a, K3, D1 each <= .008. Ratings
+    move but the gain does not (coupling 0): D1 <= .008, FREEZE <= .008, ASSOC <= .008.
+    Homogeneous slowdown (every HIGH participant at the HIGH mean gain): ASSOC <= .008,
+    FREEZE <= .05."
+  C11_yoking: "against unyoked pairs (LOW members re-matched at random), yoking changes the
+    power of H1a by 0 to +.05 at 18 and 36 pairs at P4 and by less than .01 elsewhere"
+artefacts:
+  schedules: "experiment/tools/yoked_schedules.py: writes the pre-drawn schedules and the
+    allocation for a given number of pairs from a seed; verified by tests (same uniform
+    settles both tickets; each schedule once per arm; realised win rates match the odds)"
+  spec: "experiment/YOKED_DESIGN.md: the design, the yoking protocol, what is recorded, the
+    reporting set with its decision rules, and what stays author-gated"
+gates:
+  G1: "extended twins() reproduces records/twins_I040.txt bit for bit at its defaults"
+  G2: "all tests pass; seeded I041 records re-run bit-identical"
+  G3: "KG delta validated; active ledger updated"
+  G4: "no recruitment, OSF filing, ethics claim or manuscript edit; no credentials; referee
+    documents stay out of the repositories"
+stopping: "close after the certification, the two artefacts and the KG update. The oTree
+  build and the pilot specification are separate steps."
