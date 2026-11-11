@@ -397,3 +397,54 @@ AD_C2:
       (event); coupling .5: 120-150 (outcome)"
     trimming: "at 72 per arm the trimming interval gives D1 power .80-.90 at the anchoring
       edge with equal exclusion and .65-.85 with 10 points extra; 96-120 per arm restore .90"
+
+# =================================================================== AD-C2 SCORECARD AND CLOSE
+AD_C2_scorecard:   # verbatim, 2026-11-11; record records/estimand_n_I038.txt
+  D1: "PASS. P0-P3: 12-24 per arm. Anchoring edge P4: 48 (outcome rule), 60 (event rule)."
+  D4: "P0-P3: 12-48 (P0 under the outcome rule needs 12, below my band of 24-48). P4: 800
+    (outcome), 600 (event): PASS. The 2:1 split: total 1200 against 1600 (outcome, 25% lower)
+    and 1200 against 1200 (event, no saving on this grid). My '5-15% lower' was WRONG both
+    ways; the grid is too coarse to say more."
+  D3: "PASS. P0 only: 200 (outcome), 600 (event)."
+  D2: "coupling 0: 36 (outcome), 60 (event); coupling .25: 48 (outcome), 200 (event);
+    coupling .5: 120 (outcome). Three of the five cells need FEWER than my bands (48-72,
+    72-96, 60-96)."
+  trimming: "anchoring edge, D1 from the trimming interval. Outcome rule: .997 at 72 per arm
+    with equal exclusion, .989 with 10 points extra. Event rule: .944 and .831 at 72; .981
+    and .928 at 96; .998 and .979 at 120. With equal exclusion the power is higher than my
+    band (.80-.90); with 10 points extra under the event rule it is inside it, and 96 per
+    arm restore .90 as predicted."
+
+closing_record:   # 2026-11-11
+  outcome:
+    survives: "DISS-SUFF-MEAN-v2 (edge in mean coupling .90-.95 on fresh shapes); the estimand
+      psi with its attributes; invariance; regularity; the decisions D1-D4 with Monte Carlo
+      sample sizes; the trimming interval against differential disengagement; 72 per arm"
+    corrected: "mean sufficiency (from equal probabilities to edge location); the Lee
+      trimming arm (LOW, not 'the numerator'); the asymptotic sample sizes (replaced)"
+    refuted: "the shut-share reading of the trap; the prevalence edge at .45-.75; D3 at the
+      central point; rule insensitivity at control weight .5; several bands (listed in
+      kg_delta_I038.yaml)"
+    unresolved: "psi identifies coupling x achieved delegitimation, not coupling
+      (DISS-PSI-PRODUCT); the mediation analysis is still to be designed; every human
+      quantity is open until the pilot"
+  gates:
+    G1: "PASS. Validation gate CV1-CV5 reproduced; records/bgt.csv, couple.csv, ctime.csv,
+      invcal.csv re-run bit-identical with the new engine fields."
+    G2: "PASS (run-time assertion in mode hetc)."
+    G3: "PASS. 67 tests pass (53 + 14 new). Re-run bit-identical: records/hetc.csv, hetc2.csv,
+      estimand_map_I038.txt and .json, estimand_cert_I038.txt, estimand_n_I038.txt."
+    G4: "PASS. freezes/kg_delta_I038.yaml: 13 new nodes, no id collision, every edge endpoint
+      and updated id resolves, no cycle among requires edges. freezes/kg_active_I038.yaml:
+      18 node references resolve; kg_active_I037.yaml marked superseded."
+    G5: "PASS. No recruitment, OSF filing, ethics claim or manuscript edit; no credentials;
+      no referee documents in the repository."
+  literature: "freezes/00_citation_verification_I032.md, I038 addendum (11 entries with their
+    levels; four named as not verified and not cited)"
+  manuscript_flag_not_patched: "the trap needs nearly everyone in the disadvantaged
+    community to have nearly stopped learning (mean coupling >= .90-.95); an 80% shut-down
+    majority is not enough"
+  next: "I039: use the fairness ratings as the legitimacy level to separate coupling from
+    achieved delegitimation; pilot specification (effective draws per summary, control
+    weight W0, forecast noise); author decision on primary analysis (everyone, or the
+    trimming interval at 96 per arm)"

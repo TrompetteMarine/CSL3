@@ -1,0 +1,177 @@
+# KG delta — KGi-DISS-I038 (on top of kg_delta_I032.yaml, kg_delta_I033_I034.yaml incl. its
+# i035 and i036 blocks, and kg_delta_I037.yaml; scoped transaction; history kept; nothing
+# overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 321d736 (I037 close)"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-COUPLE-EDGE
+    added_evidence: "re-expressed across agents (records/hetc.csv, hetc2.csv): the edge sits at
+      a MEAN coupling of .915-.943 for five shapes of the coupling distribution; the earlier
+      figure (.945 on both channels) is the homogeneous case"
+  - id: DISS-LAB-UPTAKE
+    old_status: "v2, certified-synthetic conditional on DISS-EFFECTIVE-DRAWS; rank test, n = 72"
+    new_status: "v3: the probe's estimand is psi (DISS-ESTIMAND-PSI). The rank test is kept
+      as decision D1 and agrees with the interval (.945 and .938 at the weakest point). n per
+      arm for D1 by Monte Carlo: 12-24 at P0-P3, 48 / 60 at the anchoring edge (outcome /
+      event rule); 72 is kept."
+    evidence: "records/estimand_cert_I038.txt, records/estimand_n_I038.txt"
+    limitations: "as v2; plus DISS-PSI-PRODUCT"
+  - id: DISS-H1-STRUCTURE-V3
+    added_proposal: "H1b is reported as psi with a 99% Fieller interval and the decisions
+      D1-D4 read from it; the trimming interval is the supplementary analysis (author
+      decision)"
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: the control arm's absolute revision weight W0
+      (identified from the pair, E[T]/80) — it decides how far the map from psi to coupling
+      depends on the revision rule"
+
+new_nodes:
+  - id: DISS-FRAME-MODEL-DISTRIBUTION
+    kind: definition
+    status: adopted (I038)
+    statement: "the human experiment is a sample from an unknown distribution on what one
+      participant produces in design S1x; the model generates a distribution on the same
+      space for every parameter value, known up to simulation error. An estimand is a
+      functional psi of that distribution; it must be (Q1) sufficient for the collective
+      prediction, (Q2) invariant to human nuisances, (Q3) separated from the rivals, (Q4)
+      regular, (Q5) cheapest among those. The model is validated on the estimand when the
+      interval for psi(P_human) lies inside the model's trap set."
+  - id: DISS-CHANNEL-SUM
+    kind: model
+    status: supported-synthetic (read from records/couple.csv; not a new run)
+    statement: "within an agent the two learning channels enter the trap through their sum:
+      P_dw = .55-.61 at (1, .9), (.9, 1) and (.95, .95); .02-.04 at sum 1.8"
+  - id: DISS-SUFF-MEAN-v2
+    kind: model
+    status: supported-synthetic (five fresh shapes, fresh seeds, 400 runs per cell)
+    statement: "the edge of the paper-cell trap, expressed in the mean coupling of the
+      population, lies in [.90, .95] whatever the shape of the coupling distribution: .943
+      homogeneous, .915 two-type (0; 1), .936 two-type (.5; 1), .939 three-type, .927 skewed"
+    qualification: "the mean locates the edge; the shape sets its sharpness (at mean .88:
+      P_dw .008 homogeneous, .31 two-type (0; 1))"
+    evidence: "records/hetc2.csv"
+  - id: DISS-PREV-EDGE
+    kind: model
+    status: supported-synthetic (the prediction attached to it was refuted)
+    statement: "a shut-down majority does not carry the trap. With the rest fully open, the
+      share of fully shut agents must reach .926; at .8 the trap probability is .037, at .7
+      and below it is 0. Behaviour is collective: open and shut agents choose alike in every
+      cell."
+    evidence: "records/hetc.csv"
+  - id: DISS-ESTIMAND-PSI
+    kind: definition
+    status: defined; certified-synthetic (I038)
+    statement: "psi = E[T | HIGH] / E[T | LOW], residual evidence uptake under
+      reference-dependent deprivation. Population: everyone randomised who reaches the probe.
+      Conditions: HIGH against LOW board in design S1x. Variable: mean of two pair
+      differences of paid forecast revisions. Intercurrent events: not revising is the
+      outcome; attention-check failure and dropout are kept in the primary and bounded by
+      trimming in the supplementary analysis. Summary: ratio of arm means, 99% Fieller
+      interval."
+  - id: DISS-PSI-TRAPSET
+    kind: model
+    status: supported-synthetic
+    statement: "model-generated psi at full coupling: P0 .013 | .006, P1 .153 | .130, P2 .186 |
+      .154, P3 .154 | .134, P4 .507 | .471 (outcome | event rule). Upper edge of the trap set
+      (mean coupling .90): .23-.36 | .12-.25 at P0-P3, .61 | .53 at the anchoring edge P4.
+      Over all points and both rules: [.006, .613]. Rivals: R3 1.000, R4 1.002, R1 3.7-4.2."
+    evidence: "records/estimand_map_I038.txt"
+  - id: DISS-PSI-PRODUCT
+    kind: identification-limit
+    status: established (algebra, checked by simulation)
+    statement: "psi identifies the product of mean coupling and achieved delegitimation, not
+      the coupling: psi = [1 - cbar(1 - L_HIGH)] / [1 - cbar(1 - L_LOW)] under a linear rule.
+      Without the legitimacy levels only cbar >= 1 - psi holds, so mean coupling >= .90 is
+      certified only when psi <= .10; the model itself predicts that only at P0."
+    consequence: "a psi inside the trap set is necessary for the trap, not sufficient"
+  - id: DISS-PSI-INVARIANT
+    kind: statistical
+    status: supported-synthetic
+    statement: "the model value of psi moves by at most .008 with forecast noise (8-16), equal
+      inattention (0-.2), the prior, and t3 noise. It moves with the revision rule; given the
+      control arm's absolute revision weight W0 the spread across rules is <= .04 at W0 = .3,
+      up to .07 at W0 = .5 (coupling <= .75), up to .18 at W0 = .85."
+    evidence: "records/estimand_cert_I038.txt section I"
+  - id: DISS-PSI-REGULAR
+    kind: statistical
+    status: supported-synthetic
+    statement: "at 72 per arm: bias <= .005, s.e. within 3% of the influence-function value,
+      coverage of the 99% Fieller interval .984-.991, also under t3 noise"
+    evidence: "records/estimand_cert_I038.txt section II"
+  - id: DISS-PSI-ALLOC
+    kind: design
+    status: supported-synthetic
+    statement: "for precision at small psi the efficient split favours HIGH (3.4 : 1 at psi =
+      .26; 108/36 matches 72/72 with 111 instead of 144 participants); for the test of psi <
+      1 the equal split is best"
+    evidence: "records/estimand_cert_I038.txt section III"
+  - id: DISS-PSI-DECISIONS
+    kind: statistical
+    status: supported-synthetic (Monte Carlo sample sizes)
+    statement: "one 99% interval gives four decisions. n per arm for power .90: D1 (psi < 1)
+      12-24 at P0-P3, 48 / 60 at P4; D4 (psi below the upper edge .613) 12-48 at P0-P3, 800 /
+      600 at P4; D3 (psi below .10) 200 / 600 at P0 only; D2 (trap excluded) 36 / 60 at
+      coupling 0, 48 / 200 at .25, 120 at .5 under the outcome rule and never under the
+      event rule. Error rates at the edge .0045 / .0055; false positives of D1 under the
+      rivals .004-.007."
+    evidence: "records/estimand_n_I038.txt; records/estimand_cert_I038.txt section IV"
+  - id: DISS-PSI-ATTRITION
+    kind: statistical
+    status: supported-synthetic
+    statement: "when attention-check exclusion differs by arm, trimming the LOW arm (Lee
+      bounds) gives an interval that covers psi among the attentive in .991-.999 of
+      replicates; under R3 with 20 points of extra disengagement in HIGH its upper limit is
+      below 1 in .003 of replicates (plain ratio: .78 unexcluded, .94 after exclusion).
+      Cost at the anchoring edge, event rule: D1 power .944 at 72 per arm with equal
+      exclusion, .831 with 10 points extra, .928 at 96."
+    evidence: "records/estimand_cert_I038.txt section V; records/estimand_n_I038.txt"
+  - id: ASYMPTOTIC-N-PSI
+    kind: implementation
+    status: defect, replaced within I038
+    statement: "the asymptotic sample-size formula for decisions on psi used the variance at
+      the truth; at its n the Monte Carlo power was .70-.87 instead of .90. Replaced by a
+      Monte Carlo search (AD-C2). The 'n for .90' columns of estimand_cert_I038.txt are not
+      to be used."
+
+new_edges:
+  - {from: DISS-ESTIMAND-PSI, to: DISS-FRAME-MODEL-DISTRIBUTION, type: requires}
+  - {from: DISS-ESTIMAND-PSI, to: DISS-SUFF-MEAN-v2, type: requires, note: "Q1: a mean-type functional is the right one"}
+  - {from: DISS-ESTIMAND-PSI, to: DISS-CHANNEL-SUM, type: requires, note: "the two probe pairs are averaged"}
+  - {from: DISS-ESTIMAND-PSI, to: DISS-LAB-UPTAKE, type: requires, note: "the probe supplies T"}
+  - {from: DISS-ESTIMAND-PSI, to: DISS-PSI-PRODUCT, type: qualified_by}
+  - {from: DISS-ESTIMAND-PSI, to: DISS-PSI-INVARIANT, type: supported_by}
+  - {from: DISS-ESTIMAND-PSI, to: DISS-PSI-REGULAR, type: supported_by}
+  - {from: DISS-PSI-TRAPSET, to: DISS-ESTIMAND-PSI, type: requires}
+  - {from: DISS-PSI-TRAPSET, to: DISS-COUPLE-EDGE, type: requires}
+  - {from: DISS-PSI-TRAPSET, to: DISS-DESIGN-BASIS-THEORY-EDGE, type: requires, note: "gate points P0-P4"}
+  - {from: DISS-PSI-DECISIONS, to: DISS-PSI-TRAPSET, type: requires}
+  - {from: DISS-PSI-DECISIONS, to: DISS-PSI-REGULAR, type: requires}
+  - {from: DISS-PSI-DECISIONS, to: DISS-EFFECTIVE-DRAWS, type: requires, note: "inherited from the design"}
+  - {from: DISS-PSI-DECISIONS, to: ASYMPTOTIC-N-PSI, type: qualified_by}
+  - {from: DISS-LAB-UPTAKE, to: DISS-PSI-ATTRITION, type: qualified_by, note: "control for disengagement that differs by arm"}
+  - {from: DISS-SUFF-MEAN-v2, to: DISS-PREV-EDGE, type: qualified_by}
+  - {from: DISS-H1-STRUCTURE-V3, to: DISS-ESTIMAND-PSI, type: requires}
+
+refuted_preserved:
+  - "DISS-SUFF-MEAN as first tested (P_dw equal at equal mean coupling within .10): largest
+    difference .38; superseded by DISS-SUFF-MEAN-v2 (edge location)"
+  - "DISS-SUFF-SHARE (P_dw depends on the shut share alone): range .53 at a share of .8"
+  - "prevalence edge predicted at .45-.75: it is .926"
+  - "80% fully shut with 20% open predicted to give P_dw >= .40: .037"
+  - "AD-A2 detail (skewed family lowest; edges .92-.95): two-type (0; 1) lowest at .915"
+  - "EM1 bands for the outcome rule (.08-.15, .04-.08): observed .053-.113, .029-.062"
+  - "rule sensitivity <= .05 at control weight .5: .064-.071 at coupling <= .75"
+  - "D3 at the central point (100-300 per arm): unreachable, the model's own value is above
+    the threshold; and the update 'out of reach everywhere' is wrong at P0 (200 / 600)"
+  - "D2 at coupling .5 within 150 per arm: holds under the outcome rule only"
+  - "AD-C2 bands: D2 needs fewer than predicted at coupling 0 and .25 (outcome); the 2:1
+    split saves 25% (outcome) or nothing on the grid (event), not 5-15%"
+not_run: "DISS-PREV-LB (P-P lower bound on a shut-down share): rule R2 was not selected"
+
+flags_not_patched: "the headline trap needs nearly everyone to have nearly stopped learning
+  (mean coupling >= .90-.95); a shut-down majority of 80% is not enough"
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "synthetic only; every human reading open until the pilot"}
+persistence: "CSL3 freezes/kg_delta_I038.yaml + Project mirror; no remote KG service"

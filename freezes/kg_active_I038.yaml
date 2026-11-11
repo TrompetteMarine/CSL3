@@ -1,0 +1,62 @@
+# Active claim ledger for the experiment after KGi-DISS-I038 (a retrieval aid, not a second
+# source of truth: every line points to its node in the KG deltas and its record).
+# Supersedes kg_active_I037.yaml.
+as_of: "2026-11-11, CSL3 main after the I038 close"
+
+theory_region:   # where the paper's headline trap holds at its own cell
+  - {node: DISS-TRAP-SPEED-EDGE, value: "gate speed >= .895", record: "records/invcal.csv"}
+  - {node: DISS-DESIGN-BASIS-THEORY-EDGE, value: "repair/erosion ratio <= .292; anchoring weight >= .32-.36", record: "records/100_inverse_calibration_I032pc.md"}
+  - {node: DISS-BGT-TIP, value: "conformity at the tipping gap (.200 = true payoff gap)", record: "records/bgt_I036.txt"}
+  - {node: DISS-SUFF-MEAN-v2, value: "MEAN coupling across agents >= .90-.95, whatever the shape (homogeneous edge .943)", record: "records/hetc2.csv"}
+  - {node: DISS-CHANNEL-SUM, value: "within an agent the two channels enter through their sum", record: "records/couple.csv"}
+  - {node: DISS-PREV-EDGE, value: "a shut-down majority is not enough: 80% fully shut with 20% open gives .04", record: "records/hetc.csv"}
+  - {node: DISS-CORRECTION-TIME, value: "below the edge: graded lengthening of the wrong consensus", record: "records/ctime.csv"}
+
+estimand:   # the single quantity the lab estimates
+  node: DISS-ESTIMAND-PSI
+  definition: "psi = E[T | HIGH] / E[T | LOW], residual evidence uptake; ratio of arm means with a 99% Fieller interval"
+  model_values: {node: DISS-PSI-TRAPSET, value: "full coupling: .01 (P0), .13-.19 (P1-P3), .47-.51 (anchoring edge); trap set [.006, .613]; rivals 1.00 (R3, R4), 3.7-4.2 (R1)", record: "records/estimand_map_I038.txt"}
+  decisions: {node: DISS-PSI-DECISIONS, value: "D1 psi < 1; D4 psi < .613; D2 psi > .613; D3 psi < .10", record: "records/estimand_n_I038.txt"}
+  limit: {node: DISS-PSI-PRODUCT, value: "psi identifies coupling x achieved delegitimation; coupling >= .90 certified only if psi <= .10"}
+
+design_current_candidate:   # author-gated
+  task: {node: DISS-TASK-TEN, value: "1 rich + 5 deprivation rounds (120 settlements each, summary screen) + 4 probe tickets = 10 repetitions"}
+  board: {node: DISS-PEER-REPLAY, value: "same-rule replay; HIGH level in a fixed band"}
+  hypotheses: {node: DISS-H1-STRUCTURE-V3, value: "H1a fairness score S-a; H1b = psi with its interval and decisions D1-D4, gatekept"}
+  sample: "72 per arm, equal split (D1 binds at the anchoring edge: 48-60 by Monte Carlo); 96 per arm if the trimming interval is primary and exclusion may differ by 10 points"
+
+tests_supported_synthetic:
+  - {node: DISS-SCORE-SA, n_per_arm: "43 / 30 / 27 at gain .25 / .5 / 1 in the candidate design", record: "records/fairness_score_I037.txt"}
+  - {node: DISS-LAB-UPTAKE, n_per_arm: 72, power: "D1 >= .94 at every point; rank test and interval agree", false_positives: ".004-.007 (R3, R4, composite); 0 (R1)", record: "records/estimand_cert_I038.txt"}
+  - {node: DISS-PSI-REGULAR, value: "bias <= .005; coverage .984-.991", record: "records/estimand_cert_I038.txt"}
+  - {node: DISS-PSI-ATTRITION, value: "trimming interval: false positives .001-.005 under 20 points of differential disengagement", record: "records/estimand_cert_I038.txt"}
+
+rivals:
+  excluded_by_design: ["R1-global (opposite sign)", "R3 aspiration-in-utility", "R3 slow-reporting variants (no effect on forecasts)", "R4 group-contingent", "R3+R4 composite", "R5 rule inference (removed by the same-rule board)", "disengagement that differs by arm, in the supplementary analysis (trimming interval)"]
+  not_excluded: ["inequity slowing learning for reasons other than legitimacy (HamJenkins2025 class): same sign as the gate; separated only by mediation through the fairness score, not yet designed", "disengagement that differs by arm, in the primary analysis (it keeps everyone and estimates the total effect on learning)"]
+
+open_human:   # node DISS-HUMAN-PARAMS; what only a pilot can supply, in order
+  - "effective draws per round summary (DISS-EFFECTIVE-DRAWS) - decides whether n = 72 or about 300"
+  - "control arm's absolute revision weight W0 (free from the pair) - bounds the rule dependence of the map from psi to coupling"
+  - "revision rule and forecast noise on the probe"
+  - "fairness scale gain and noise; never-movers"
+  - "starting entitlement; rigidity distribution"
+  - "differential disengagement; board believability"
+
+open_simulation:
+  - "mediation: use the fairness ratings as the legitimacy level to separate coupling from achieved delegitimation (turns a small psi into a statement about coupling)"
+  - "measurement shapes M1-M6 and the anchoring variant for S-a in the candidate design"
+  - "joint error control of H1a then H1b in one Monte Carlo"
+  - "pilot specification and its frozen lookup (settlements per round as the free knob)"
+  - "task dynamics at partial coupling"
+
+superseded_or_refuted: "see refuted_preserved / defeated_preserved in kg_delta_I032.yaml,
+  kg_delta_I033_I034.yaml (incl. i035, i036), kg_delta_I037.yaml and kg_delta_I038.yaml;
+  notably the 450-round per-round task, the frozen H1b TOST, H1b-SIc, the dose module, the
+  reversal probe, the hand-built conjunction, the screen-affected sample sizes of AD-O1 /
+  I034, the shut-share reading of the trap, and the asymptotic sample sizes for psi"
+
+manuscript_flags_not_patched:
+  - "speed edge (.895) not stated"
+  - "paper cell sits at the conformity tipping gap"
+  - "trap needs nearly everyone to have nearly stopped learning: mean coupling >= .90-.95 on both channels; an 80% shut-down majority is not enough"

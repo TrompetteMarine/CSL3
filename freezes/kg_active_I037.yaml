@@ -1,3 +1,4 @@
+# SUPERSEDED by kg_active_I038.yaml (kept for history).
 # Active claim ledger for the experiment after KGi-DISS-I037 (a retrieval aid, not a
 # second source of truth: every line points to its node in the KG deltas and its record).
 as_of: "2026-11-11, CSL3 main after the I037 close"

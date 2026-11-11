@@ -1,0 +1,31 @@
+KGi-DISS-I038 AD-C2: smallest n per arm with Monte Carlo power >= .90 (seed 135200; noise 12; equal split unless stated)
+thresholds: upper edge of the trap set 0.613; coupling-certified 0.100
+
+at full coupling: D1 (psi < 1) | D4 (psi below the upper edge) | D3 (psi below the certified threshold)
+  P0 outcome  psi 0.014:  D1 12 (power 0.989)   D4 12 (power 0.957)   D3 200 (power 0.927)
+  P0 event    psi 0.006:  D1 18 (power 0.962)   D4 24 (power 0.917)   D3 600 (power 0.938)
+  P1 outcome  psi 0.152:  D1 18 (power 0.980)   D4 36 (power 0.978)   D3 truth above the threshold
+  P1 event    psi 0.127:  D1 24 (power 0.945)   D4 48 (power 0.946)   D3 truth above the threshold
+  P2 outcome  psi 0.188:  D1 18 (power 0.979)   D4 36 (power 0.961)   D3 truth above the threshold
+  P2 event    psi 0.154:  D1 24 (power 0.954)   D4 48 (power 0.936)   D3 truth above the threshold
+  P3 outcome  psi 0.157:  D1 18 (power 0.969)   D4 36 (power 0.974)   D3 truth above the threshold
+  P3 event    psi 0.134:  D1 24 (power 0.931)   D4 48 (power 0.922)   D3 truth above the threshold
+  P4 outcome  psi 0.506:  D1 48 (power 0.951)   D4 800 (power 0.967)   D3 truth above the threshold
+  P4 event    psi 0.469:  D1 60 (power 0.903)   D4 600 (power 0.918)   D3 truth above the threshold
+
+D4 at the anchoring edge with a 2:1 split in favour of HIGH (n = size of the LOW arm):
+  P4 outcome : LOW arm 400 (power 0.930); total 1200
+  P4 event   : LOW arm 400 (power 0.931); total 1200
+
+D2 (trap excluded), homogeneous coupling at P1's gate parameters:
+  c = 0.0 outcome  psi 0.998: 36 (power 0.943)
+  c = 0.0 event    psi 1.001: 60 (power 0.947)
+  c = 0.25 outcome  psi 0.927: 48 (power 0.936)
+  c = 0.25 event    psi 0.804: 200 (power 0.907)
+  c = 0.5 outcome  psi 0.793: 120 (power 0.915)
+
+D1 with the trimming interval (attention check: inattentive fail .8, attentive .05), anchoring edge P4, 1,500 replicates:
+  outcome  extra disengaged in HIGH +0%:  n 72: 0.997   n 96: 1.000   n 120: 1.000   n 150: 1.000
+  outcome  extra disengaged in HIGH +10%:  n 72: 0.989   n 96: 0.998   n 120: 1.000   n 150: 1.000
+  event    extra disengaged in HIGH +0%:  n 72: 0.944   n 96: 0.981   n 120: 0.998   n 150: 0.999
+  event    extra disengaged in HIGH +10%:  n 72: 0.831   n 96: 0.928   n 120: 0.979   n 150: 0.991
