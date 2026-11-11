@@ -190,3 +190,91 @@ gates:
     documents stay out of the repositories"
 budget: {lean_theorems: "T6-T14", monte_carlo_cells: "<= 300", addenda: "frozen before their runs"}
 stopping: "close after parts S, M, L, F and the KG update"
+
+# =================================================================== PART S SCORECARD
+part_S_scorecard:   # verbatim, 2026-11-11
+  formal_gate: "PASS. CSL branch lean-diss-core 11f09cb: formal_diss/DissAggregation.lean
+    (sha256 in DissAggregation.sha256), official Lean 4.28.0 binary (commit 7e01a1bf5c70),
+    core only, `lean DissAggregation.lean` exit 0. Twelve targets, each with axioms exactly
+    [propext, Classical.choice, Quot.sound]; no sorry, no custom axiom, no native_decide."
+  targets: "T6 freeze; T7 gain ratio; T8 aggregation identity; T9 dispersion identity, T9b
+    weak and T9c strict inequality; T10 two-step response; T11 horizon inequality (every t);
+    T12 two-type identification; T13 reference monotonicity (any number of trials); T14
+    product bound; T15 two-type association."
+  audit: "DissAggregationAudit.lean, appended and compiled (exit 0): T6, T8, T11 restated with
+    definitions written out; T13 hypotheses instantiated at the frozen parameter values on a
+    six-trial history; the Lean kernel evaluated on that history under both boards equals a
+    Python transcription of the generator's three update lines as exact rationals; explicit
+    counterexample showing that T13 fails when phi_plus > tau."
+  deviations: "T9 split in three; T15 added (not in the freeze); T13 proved for ordered rather
+    than equal initial states (weaker hypothesis)."
+  not_formal: "P6 for general distributions (Jensen), P7 (limit), the conditional-independence
+    step in O2: analytic only. The statement that the residual sequence determines the gain
+    distribution is not sourced and is not used."
+  failed_attempts_preserved: "first compile: T6, T7, two base cases and leg_win_eq left goals
+    open after `simp` (closed with `grind`); in the audit `decide` could not evaluate
+    rational comparisons (replaced by `grind`). No statement was changed."
+
+# =================================================================== PART L SCORECARD
+part_L_scorecard:   # verbatim, 2026-11-11; record records/likelihood_I039.txt (seeds 136000, 136010)
+  GK: "PASS. Total variation .0024-.0026 at w = 0, .2, .435, .85; means within .016 points."
+  GR: "holds, but it is an identity (both sides are the same finite difference of the arm
+    means), not an independent check. The independent check is the projection identity
+    Cov(phi_np, phi_eff) = Var(phi_eff): .6980 = .6980 (P1, event rule)."
+  cross_check: "psi from the tables equals the I038 simulation values within .003 at all five
+    points and both rules."
+  pools: "HIGH legitimacy at probe time: share exactly at 0 is .645 / .393 / .302 / .374 / .170
+    at P0-P4 (share below .05: .988 / .827 / .724 / .826 / .403). LOW also varies (variance
+    .035-.070)."
+  claim_RE: "FAIL as frozen (gate point known). RE at full coupling: P1 event .845 (inside
+    my .60-.95), P1 count rule .422, P4 event .497, P4 count rule .197. But when the depth of
+    delegitimation is not assumed known the bound equals the plug-in almost exactly (s.e. at
+    72 per arm, bound | plug-in: .0535 | .0542, .0757 | .0757, .0719 | .0771, .0956 | .0987)."
+  claim_FT: "FAIL. Adding F multiplies the oracle information for c by 1.13-1.32 at P1 and
+    1.45-1.95 at P4, not by 2 or more."
+  claim_depth: "FAIL for T (61-95% of the information is kept at P1, 43-81% at P4, not <=
+    10%); PASS for (F, T) (96-100% kept). My depth direction (mixing in another gate
+    point's distribution) is not the hard one: the tails of the T distribution separate it
+    from coupling. The hard direction is a uniform shift of HIGH legitimacy (AD-L2)."
+  claim_cert: "PASS under the event rule (bound on s.e.(c) at 72 per arm .059 at P1, .076 at
+    P4; 370 and 611 per arm to certify c >= .90). FAIL under the count rule, in the
+    favourable direction (.016 and .024; 27 and 60 per arm)."
+  claim_paths: "PASS. Residual at t = 20, population | representative agent: P1 .786 | .322,
+    P2 .703 | .236, P3 .783 | .309 (P4 .409 | .010; P0 .953 | .947). Limit = share at 0."
+  seen_after_the_run: "(a) under the model the T-F association is present in BOTH arms
+    (Pearson .31-.38 in LOW, .44-.74 in HIGH at P1-P4, about 0 in HIGH at P0), so the frozen
+    contrast E2b (HIGH minus LOW) is expected to be weak; (b) the efficient influence
+    function for psi is linear in the bulk of T and flattens above about 40 points."
+
+# =================================================================== ADDENDUM AD-L2
+AD_L2:
+  frozen: "2026-11-11, after the part L scorecard and before the Monte Carlo of part F and
+    the computations below. Smoke runs with all output discarded (exit codes only)."
+  least_favourable_depth:
+    definition: "eps: every HIGH legitimacy is eps higher (min(1, l + eps)); one-sided
+      derivative at eps = 0. For a collapsed agent this moves the gain exactly as a lower
+      coupling does."
+    run: "experiment/analysis/likelihood_ad_I039.py (deterministic given the pools), P1 and
+      P4, both rules, full coupling"
+    expected:
+      T_only: "share of the information for c kept when eps is unknown: <= 30% at P1, <= 50% at P4"
+      FT_gain_known: ">= 70% kept at P1 and P4"
+      FT_gain_unknown: ">= 40% kept (eps, a and sigma_r unknown)"
+  efficiency_with_depth_unknown:
+    expected: "the ratio of means reaches RE >= .85 for psi from T alone under either depth
+      direction and under both together; with F added the bound is lower: RE with F between
+      .55 and .95"
+  pooled_association:
+    statistic: "E2c = (z_HIGH + z_LOW) / sqrt(2), z = Fisher z of the within-arm Spearman
+      correlation times sqrt((n - 3) / 1.06); one-sided .005. Conjunction: E2c and the
+      interval decision psi < 1 on the same participants."
+    run: "section F appended to experiment/analysis/frontier_I039.py (after the frozen
+      sections A-E, same random stream)"
+    expected:
+      gate: "E2c >= .90 at P1-P4 under both rules; .15-.45 at P0. Conjunction >= .85 at P1-P4."
+      rivals: "R3: E2c <= .01. HS: E2c <= .01 in HIGH-driven terms is not expected any more:
+        LOW is unaffected by HS and R3 has no association, so both stay <= .01. SH: E2c >=
+        .50 but the conjunction <= .01 because psi = 1."
+  remaining_rival: "a uniform slowdown in HIGH combined with a trait that links rating and
+    weight passes the conjunction. Separating it needs the equality of the between-arm and
+    within-arm slopes with a correction for rating noise. Not designed here."

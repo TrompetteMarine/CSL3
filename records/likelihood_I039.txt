@@ -1,0 +1,151 @@
+KGi-DISS-I039 parts L and F (estimation): likelihood from the ABM-generated legitimacy distribution
+
+0. legitimacy at probe time, 100,000 ABM agents per arm and gate point (seed 136000)
+   point   HIGH: mean  share at 0  share < .05  variance     LOW: mean  variance
+   P0            0.005    0.645       0.988      0.0002          0.861    0.0639
+   P1            0.110    0.393       0.827      0.0697          0.869    0.0588
+   P2            0.139    0.302       0.724      0.0832          0.907    0.0351
+   P3            0.114    0.374       0.826      0.0733          0.844    0.0701
+   P4            0.409    0.170       0.403      0.1809          0.874    0.0565
+
+1. gate GK: exact kernel k(t | w) against the simulator (1,000,000 simulated participants, seed 136010)
+   w = 0.0: total variation 0.0026; mean exact -0.000, simulated -0.016; s.d. exact 17.073, simulated 17.068; sum of probabilities 1.000000
+   w = 0.2: total variation 0.0024; mean exact 15.986, simulated 15.988; s.d. exact 17.187, simulated 17.167; sum of probabilities 1.000000
+   w = 0.435: total variation 0.0024; mean exact 34.742, simulated 34.753; s.d. exact 17.586, simulated 17.555; sum of probabilities 1.000000
+   w = 0.85: total variation 0.0024; mean exact 66.980, simulated 66.968; s.d. exact 18.564, simulated 18.570; sum of probabilities 1.000000
+   GK PASS
+
+2. model value of psi from the likelihood tables at full coupling (I038 value from its own simulation in brackets)
+   P0: outcome 0.013 [0.013]   event 0.006 [0.006]
+   P1: outcome 0.150 [0.153]   event 0.127 [0.130]
+   P2: outcome 0.187 [0.186]   event 0.154 [0.154]
+   P3: outcome 0.157 [0.154]   event 0.135 [0.134]
+   P4: outcome 0.507 [0.507]   event 0.468 [0.471]
+
+3. Fisher information per participant (I_HIGH + I_LOW over one participant in each arm)
+   P1 outcome c = 1.0: psi 0.150
+      information for c | only c unknown:        T   50.229   (F, T)   56.944   ratio 1.13
+                        | depth unknown as well:  T   47.506 (95% kept)   (F, T)   56.484 (99% kept)
+                        | all but depth unknown:  T   48.972   (F, T)   55.645
+                        | everything unknown:     T   46.040   (F, T)   55.202   -> bound on s.e.(c) at 72 per arm: T 0.017   (F, T) 0.016
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0542 | bound, T only 0.0352 (RE 0.422) | bound, T only, depth unknown 0.0535 | bound with F 0.0327 (RE 0.364)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 27 per arm   [condition numbers: T 4.2e+03, (F, T) 6.1e+03]
+   P1 outcome c = 0.9: psi 0.338
+      information for c | only c unknown:        T   30.930   (F, T)   38.233   ratio 1.24
+                        | depth unknown as well:  T   27.872 (90% kept)   (F, T)   38.003 (99% kept)
+                        | all but depth unknown:  T   21.268   (F, T)   24.244
+                        | everything unknown:     T   20.663   (F, T)   24.173   -> bound on s.e.(c) at 72 per arm: T 0.026   (F, T) 0.024
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0520 | bound, T only 0.0384 (RE 0.544) | bound, T only, depth unknown 0.0505 | bound with F 0.0346 (RE 0.442)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 62 per arm   [condition numbers: T 5.2e+03, (F, T) 6.9e+03]
+   P1 outcome c = 0.75: psi 0.556
+      information for c | only c unknown:        T   15.893   (F, T)   21.036   ratio 1.32
+                        | depth unknown as well:  T   11.518 (72% kept)   (F, T)   20.975 (100% kept)
+                        | all but depth unknown:  T    6.616   (F, T)    7.769
+                        | everything unknown:     T    6.165   (F, T)    7.763   -> bound on s.e.(c) at 72 per arm: T 0.047   (F, T) 0.042
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0550 | bound, T only 0.0419 (RE 0.581) | bound, T only, depth unknown 0.0474 | bound with F 0.0373 (RE 0.460)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 192 per arm   [condition numbers: T 1.1e+04, (F, T) 9.0e+03]
+   P1 event   c = 1.0: psi 0.127
+      information for c | only c unknown:        T    3.200   (F, T)    4.072   ratio 1.27
+                        | depth unknown as well:  T    2.475 (77% kept)   (F, T)    4.066 (100% kept)
+                        | all but depth unknown:  T    2.896   (F, T)    4.030
+                        | everything unknown:     T    1.921   (F, T)    4.025   -> bound on s.e.(c) at 72 per arm: T 0.085   (F, T) 0.059
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0757 | bound, T only 0.0696 (RE 0.845) | bound, T only, depth unknown 0.0757 | bound with F 0.0590 (RE 0.607)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 370 per arm   [condition numbers: T 1.7e+03, (F, T) 6.1e+03]
+   P1 event   c = 0.9: psi 0.226
+      information for c | only c unknown:        T    3.152   (F, T)    4.056   ratio 1.29
+                        | depth unknown as well:  T    2.259 (72% kept)   (F, T)    4.052 (100% kept)
+                        | all but depth unknown:  T    2.706   (F, T)    3.853
+                        | everything unknown:     T    1.661   (F, T)    3.850   -> bound on s.e.(c) at 72 per arm: T 0.091   (F, T) 0.060
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0748 | bound, T only 0.0699 (RE 0.874) | bound, T only, depth unknown 0.0747 | bound with F 0.0586 (RE 0.613)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 387 per arm   [condition numbers: T 1.9e+03, (F, T) 6.3e+03]
+   P1 event   c = 0.75: psi 0.369
+      information for c | only c unknown:        T    3.074   (F, T)    3.984   ratio 1.30
+                        | depth unknown as well:  T    1.867 (61% kept)   (F, T)    3.981 (100% kept)
+                        | all but depth unknown:  T    2.341   (F, T)    3.388
+                        | everything unknown:     T    1.219   (F, T)    3.386   -> bound on s.e.(c) at 72 per arm: T 0.107   (F, T) 0.064
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0755 | bound, T only 0.0720 (RE 0.908) | bound, T only, depth unknown 0.0749 | bound with F 0.0598 (RE 0.627)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 439 per arm   [condition numbers: T 2.7e+03, (F, T) 7.1e+03]
+   P4 outcome c = 1.0: psi 0.507
+      information for c | only c unknown:        T   19.198   (F, T)   27.842   ratio 1.45
+                        | depth unknown as well:  T   15.461 (81% kept)   (F, T)   26.638 (96% kept)
+                        | all but depth unknown:  T   17.305   (F, T)   26.232
+                        | everything unknown:     T   14.014   (F, T)   24.995   -> bound on s.e.(c) at 72 per arm: T 0.031   (F, T) 0.024
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0771 | bound, T only 0.0342 (RE 0.197) | bound, T only, depth unknown 0.0719 | bound with F 0.0269 (RE 0.121)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 60 per arm   [condition numbers: T 3.5e+03, (F, T) 6.6e+03]
+   P4 outcome c = 0.9: psi 0.614
+      information for c | only c unknown:        T   11.034   (F, T)   19.174   ratio 1.74
+                        | depth unknown as well:  T    8.322 (75% kept)   (F, T)   18.607 (97% kept)
+                        | all but depth unknown:  T    8.320   (F, T)   13.900
+                        | everything unknown:     T    7.075   (F, T)   13.559   -> bound on s.e.(c) at 72 per arm: T 0.044   (F, T) 0.032
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0714 | bound, T only 0.0389 (RE 0.296) | bound, T only, depth unknown 0.0637 | bound with F 0.0274 (RE 0.147)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 110 per arm   [condition numbers: T 5.1e+03, (F, T) 6.8e+03]
+   P4 outcome c = 0.75: psi 0.740
+      information for c | only c unknown:        T    5.761   (F, T)   11.212   ratio 1.95
+                        | depth unknown as well:  T    3.106 (54% kept)   (F, T)   11.055 (99% kept)
+                        | all but depth unknown:  T    3.352   (F, T)    5.742
+                        | everything unknown:     T    2.351   (F, T)    5.691   -> bound on s.e.(c) at 72 per arm: T 0.077   (F, T) 0.049
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0682 | bound, T only 0.0401 (RE 0.347) | bound, T only, depth unknown 0.0531 | bound with F 0.0277 (RE 0.165)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 261 per arm   [condition numbers: T 8.7e+03, (F, T) 7.4e+03]
+   P4 event   c = 1.0: psi 0.468
+      information for c | only c unknown:        T    1.477   (F, T)    2.517   ratio 1.70
+                        | depth unknown as well:  T    0.847 (57% kept)   (F, T)    2.503 (99% kept)
+                        | all but depth unknown:  T    1.062   (F, T)    2.453
+                        | everything unknown:     T    0.562   (F, T)    2.436   -> bound on s.e.(c) at 72 per arm: T 0.157   (F, T) 0.076
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0987 | bound, T only 0.0696 (RE 0.497) | bound, T only, depth unknown 0.0956 | bound with F 0.0458 (RE 0.215)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 611 per arm   [condition numbers: T 3.1e+03, (F, T) 6.2e+03]
+   P4 event   c = 0.9: psi 0.528
+      information for c | only c unknown:        T    1.412   (F, T)    2.509   ratio 1.78
+                        | depth unknown as well:  T    0.739 (52% kept)   (F, T)    2.497 (100% kept)
+                        | all but depth unknown:  T    0.934   (F, T)    2.363
+                        | everything unknown:     T    0.455   (F, T)    2.350   -> bound on s.e.(c) at 72 per arm: T 0.175   (F, T) 0.077
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0962 | bound, T only 0.0722 (RE 0.562) | bound, T only, depth unknown 0.0929 | bound with F 0.0453 (RE 0.222)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 633 per arm   [condition numbers: T 3.6e+03, (F, T) 6.4e+03]
+   P4 event   c = 0.75: psi 0.615
+      information for c | only c unknown:        T    1.324   (F, T)    2.473   ratio 1.87
+                        | depth unknown as well:  T    0.572 (43% kept)   (F, T)    2.464 (100% kept)
+                        | all but depth unknown:  T    0.774   (F, T)    2.160
+                        | everything unknown:     T    0.310   (F, T)    2.153   -> bound on s.e.(c) at 72 per arm: T 0.212   (F, T) 0.080
+      psi: s.e. at 72 per arm | plug-in ratio of means 0.0937 | bound, T only 0.0760 (RE 0.658) | bound, T only, depth unknown 0.0896 | bound with F 0.0455 (RE 0.235)
+      certifying c >= .90 against the truth (asymptotic bound, (F, T), everything unknown): 691 per arm   [condition numbers: T 4.8e+03, (F, T) 7.0e+03]
+
+   gate GR at P1, event rule: E[phi_np s_j] against d psi / d theta_j: -1.00528 / -1.00528  +0.00055 / +0.00055  +0.00003 / +0.00003  -0.00000 / +0.00000
+   (the two sides are the same finite difference of the arm means, so this is an identity, not an independent check)
+   projection check: Cov(phi_np, phi_eff) 0.6980 = Var(phi_eff) 0.6980; Var(phi_np) 0.8262; correlation 0.919
+
+4. P1, event rule, full coupling: the model-generated distribution of T and the functions built on it
+      t     p(t|HIGH)  p(t|LOW)  p(t|HIGH, c=0)   score for c (HIGH)   plug-in IF (HIGH)   efficient IF (HIGH)
+      -60   0.00010   0.00001   0.00001            +7.181            -4.095              -2.649
+      -40   0.00315   0.00045   0.00038            +4.818            -2.815              -2.399
+      -20   0.02546   0.00440   0.00311            +2.443            -1.534              -1.585
+      -10   0.04344   0.00924   0.00589            +1.256            -0.894              -0.971
+        0   0.05314   0.01604   0.00988            +0.082            -0.253              -0.228
+       10   0.04732   0.02478   0.01715            -1.032            +0.387              +0.603
+       20   0.03188   0.03510   0.02987            -1.944            +1.027              +1.388
+       30   0.01768   0.04376   0.04447            -2.350            +1.668              +1.808
+       40   0.00907   0.04474   0.05094            -2.028            +2.308              +1.578
+       60   0.00199   0.02114   0.02673            -0.964            +3.588              +0.758
+       80   0.00019   0.00299   0.00392            -0.788            +4.869              +1.145
+      100   0.00001   0.00012   0.00016            -0.823            +6.150              +2.177
+
+5. the model's joint distribution of (F, T): within-arm Pearson correlation and mutual information (nats per participant)
+   point  rule      corr HIGH   corr LOW    MI HIGH    MI LOW
+   P0     outcome   +0.012      +0.326      0.0003     0.1034
+   P0     event     +0.003      +0.365      0.0000     0.0905
+   P1     outcome   +0.643      +0.307      0.2515     0.0933
+   P1     event     +0.435      +0.349      0.1185     0.0829
+   P2     outcome   +0.661      +0.198      0.2627     0.0453
+   P2     event     +0.470      +0.259      0.1349     0.0483
+   P3     outcome   +0.650      +0.345      0.2560     0.1150
+   P3     event     +0.445      +0.383      0.1237     0.0993
+   P4     outcome   +0.737      +0.300      0.4192     0.0894
+   P4     event     +0.610      +0.341      0.2468     0.0792
+
+6. aggregate residual error after t evidence events (event rule, weight .5 x gain, gate states held at probe time,
+   attentive agents): the population against a representative agent with the mean gain
+   point   share at 0 |   t = 1          2          5         10         20         50      limit
+   P0      0.645     | 0.997/0.997  0.995/0.995  0.987/0.986  0.975/0.973  0.953/0.947  0.902/0.872   0.645/0.000
+   P1      0.393     | 0.945/0.945  0.910/0.893  0.861/0.753  0.827/0.568  0.786/0.322  0.702/0.059   0.393/0.000
+   P2      0.302     | 0.930/0.930  0.886/0.866  0.820/0.697  0.768/0.486  0.703/0.236  0.591/0.027   0.302/0.000
+   P3      0.374     | 0.943/0.943  0.908/0.889  0.857/0.746  0.824/0.556  0.783/0.309  0.698/0.053   0.374/0.000
+   P4      0.170     | 0.795/0.795  0.678/0.632  0.534/0.318  0.465/0.101  0.409/0.010  0.336/0.000   0.170/0.000
+   (each cell: population / representative agent)

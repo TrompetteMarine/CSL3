@@ -188,3 +188,27 @@ for k, r in (('P1', 'event'), ('P2', 'event'), ('P4', 'event'), ('P1', 'outcome'
     ea = [e2(J, model(k, r).pFT('LOW', lc.BASE), n=n, b=2000)[0] for n in NG2]
     print(f"   {k} {r:7s} NP        " + "  ".join(f"{x:.3f}" for x in pw) + f"   {first90(NG2, pw)}")
     print(f"   {k} {r:7s} E2a       " + "  ".join(f"{x:.3f}" for x in ea) + f"   {first90(NG2, ea)}", flush=True)
+
+# ------------------------------------------------------------------ F. addendum AD-L2: pooled association and the conjunction
+print("\nF. AD-L2: association pooled over the two arms (E2c) and its conjunction with the interval decision psi < 1; 72 per arm, 4,000 replicates")
+
+
+def e2c(JH, JL, n=72, b=4000):
+    ih, il = lc.sample_idx(JH.ravel(), n, b, rng), lc.sample_idx(JL.ravel(), n, b, rng)
+    zh = np.arctanh(np.clip(spearman(ih), -.999, .999)) * np.sqrt((n - 3) / 1.06)
+    zl = np.arctanh(np.clip(spearman(il), -.999, .999)) * np.sqrt((n - 3) / 1.06)
+    assoc = (zh + zl) / np.sqrt(2) > ZC
+    xh, xl = lc.TGRID[ih % 161], lc.TGRID[il % 161]
+    _, hi = ec.fieller(xh.mean(1), xh.var(1, ddof=1) / n, xl.mean(1), xl.var(1, ddof=1) / n, 2 * n - 2)
+    return np.mean(assoc), np.mean(hi < 1), np.mean(assoc & (hi < 1))
+
+
+print("   gate, full coupling:   E2c     psi < 1    both")
+for r in ec.RULES:
+    for k in G:
+        a, d, both = e2c(model(k, r).pFT('HIGH', lc.BASE), model(k, r).pFT('LOW', lc.BASE))
+        print(f"   {k} {r:7s}           {a:.3f}   {d:.3f}      {both:.3f}", flush=True)
+print("   rivals at P1 (event rule):                             E2c      psi < 1   both")
+for nm, J in riv.items():
+    a, d, both = e2c(J['HIGH'], J['LOW'])
+    print(f"   {nm:52s} {a:.4f}   {d:.4f}    {both:.4f}", flush=True)

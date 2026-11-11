@@ -24,8 +24,8 @@ TGRID = np.arange(-80, 81) * 2.5                # support of T (161 values)
 DW = 0.001
 WGRID = -0.05 + DW * np.arange(1051)            # revision weights -0.05 .. 1.00
 LGRID = np.linspace(0, 1, 1001)                 # legitimacy grid
-BASE = dict(c=1.0, kap=pg.OMEGA, alpha=pg.ALPHA, sig=12.0, q=0.10, a=0.5, sr=5.8, lam=0.0)
-STEP = dict(c=0.01, kap=0.005, alpha=0.002, sig=0.25, q=0.01, a=0.01, sr=0.1, lam=None)
+BASE = dict(c=1.0, kap=pg.OMEGA, alpha=pg.ALPHA, sig=12.0, q=0.10, a=0.5, sr=5.8, lam=0.0, eps=0.0)
+STEP = dict(c=0.01, kap=0.005, alpha=0.002, sig=0.25, q=0.01, a=0.01, sr=0.1, lam=None, eps=0.005)
 
 
 def report_pmf(mu, sigma):
@@ -84,6 +84,18 @@ def bin_pool(l):
     return (np.bincount(i, 1 - f, len(LGRID)) + np.bincount(i + 1, f, len(LGRID))) / len(x)
 
 
+def shift_pool(G, eps):
+    """the distribution of min(1, l + eps) when l has distribution G on LGRID (AD-L2)"""
+    return bin_pool_weighted(np.minimum(1.0, LGRID + eps), G)
+
+
+def bin_pool_weighted(l, wts):
+    x = np.clip(l, 0, 1) * (len(LGRID) - 1)
+    i = np.minimum(x.astype(int), len(LGRID) - 2)
+    f = x - i
+    return np.bincount(i, wts * (1 - f), len(LGRID)) + np.bincount(i + 1, wts * f, len(LGRID))
+
+
 def weight_of(l, th, rule):
     g = 1 - th['c'] * (1 - l)
     return th['kap'] * g if rule == 'event' else 1 - (1 - th['alpha'] * g) ** ec.M
@@ -107,7 +119,10 @@ class Model:
         return (1 - f) * K[i] + f * K[i + 1], K[i0]
 
     def g(self, arm, th):
-        return (1 - th['lam']) * self.G[arm] + th['lam'] * self.Go[arm]
+        g = (1 - th['lam']) * self.G[arm] + th['lam'] * self.Go[arm]
+        if arm == 'HIGH' and th.get('eps', 0.0) != 0.0:      # AD-L2: every HIGH legitimacy eps higher
+            g = shift_pool(g, th['eps'])
+        return g
 
     def pT(self, arm, th):
         kt, k0 = self._kt(th)
@@ -128,6 +143,8 @@ class Model:
         for nm in names:
             if nm == 'lam':
                 d = self.table(arm, {**th, 'lam': 1.0}, joint) - self.table(arm, {**th, 'lam': 0.0}, joint)
+            elif nm == 'eps':                                # one-sided: legitimacy cannot go below 0
+                d = (self.table(arm, {**th, 'eps': STEP['eps']}, joint) - p) / STEP['eps']
             else:
                 h = STEP[nm]
                 d = (self.table(arm, {**th, nm: th[nm] + h}, joint) -
@@ -151,6 +168,8 @@ class Model:
         for nm in names:
             if nm == 'lam':
                 g.append(self.psi({**th, 'lam': 1e-3}) / 1e-3 - self.psi(th) / 1e-3)
+            elif nm == 'eps':
+                g.append((self.psi({**th, 'eps': STEP['eps']}) - self.psi(th)) / STEP['eps'])
             else:
                 h = STEP[nm]
                 g.append((self.psi({**th, nm: th[nm] + h}) - self.psi({**th, nm: th[nm] - h})) / (2 * h))
