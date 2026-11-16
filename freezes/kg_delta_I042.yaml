@@ -1,0 +1,102 @@
+# KG delta — KGi-DISS-I042 (on top of kg_delta_I032 ... kg_delta_I041; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 7bbbd7a (I041 close); CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-DESIGN-Y
+    new_status: "certified-synthetic; built in oTree (I042); not run on people; author-gated"
+    added_evidence: "experiment/diss_market; ratings are three fairness items and one
+      entitlement item (the certified rating noise 5.8 is that of a three-item scale)"
+  - id: DISS-YOKED-SCHEDULES
+    added_evidence: "format 2 keeps format 1 bit for bit for the same seed and adds the board
+      draw (so the LOW board of the simulation can be rebuilt), the ticket and side mapping,
+      slider start positions, and each probe ticket's symbol, payout chance and scoring draw"
+  - id: DISS-PEER-REPLAY
+    new_status: "implemented for the ten-repetition design (I042); author decision"
+    added_evidence: "pool of real earlier records: HIGH = a rich-round record with a rate in
+      [.65, .80]; LOW = a record of the same round nearest to the participant's own count
+      (median distance 0, maximum 2 of 120 with a 32-participant seed wave of bots); needs a
+      seed wave without a board; bot records are refused unless marked as a placeholder"
+  - id: DISS-TEST-K3
+    added_evidence: "its certification (I041) put noise 5.8 on the entitlement rating, the
+      precision of three items; the design and the app have one entitlement item"
+  - id: DISS-REPORTING-SET
+    added_evidence: "experiment/analysis/yoked_from_export.py scores the app's export with
+      yoked_analysis.decisions; T from the export equals the stored T (144 of 144 bots)"
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: the display is now concrete (120 settlements
+      revealed over 9 s, then regrouped); reveal speed and device bear on the effective
+      draws per summary and can be pilot factors"
+
+new_nodes:
+  - id: DISS-OTREE-MARKET
+    kind: implementation
+    status: verified with bots and in a browser; not run on people
+    statement: "experiment/diss_market: one oTree round per repetition (Choose, Settle, Rate;
+      ProbePre, ProbePost, ProbeRecall), slots of the schedule file taken in order of
+      arrival, all outcomes from engine.py, tidy export. Stored data equal the schedule for
+      every bot; a reload, the back button and a repeated submission change nothing stored."
+    evidence: "experiment/analysis/tests/test_market_app_I042.py, test_market_browser_I042.py;
+      experiment/MARKET_APP.md"
+  - id: DISS-ENGINE-FIDELITY
+    kind: implementation
+    status: tested
+    statement: "the app's engine equals the simulation's rule settlement by settlement (own
+      record, HIGH board, LOW board; 200 schedules), and the gate kernel played on it gives
+      legitimacy at probe time .110 / .869 (certification .109 / .869) and the same tickets
+      in all five deprivation rounds in .126 of pairs (.13)"
+    evidence: "experiment/analysis/tests/test_market_engine_I042.py, test_market_app_I042.py"
+  - id: DISS-FRONTEND
+    kind: implementation
+    status: verified in Chromium (desktop, phone, reduced motion)
+    statement: "TypeScript (strict) and CSS bundled into _static/diss_market; the browser
+      only displays; own ticket and board revealed in step over reveal_ms (9,008 ms measured
+      for 9,000), paused while the tab is hidden, then regrouped; identical pages in both
+      arms apart from the board's numbers; no page carries a later outcome or a probe record
+      before its first forecast; no request to another host"
+    defect_fixed: "the points total showed a round's wins before its reveal (found on a
+      screen recording, not by a test; now checked)"
+    evidence: "experiment/tools/browser_run.py; experiment/frontend/tests"
+  - id: DISS-DOCKER
+    kind: implementation
+    status: partially verified
+    statement: "Dockerfile (Node stage tests and bundles; Python stage runs oTree as a non-root
+      user), docker-compose with Postgres. Built and run on stand-in base images only: the
+      official images could not be pulled where it was built."
+    evidence: "freezes/00_freeze_I042.yaml, G8"
+  - id: DISS-BUILD-DRAFTS
+    kind: assumption
+    status: open (author decisions)
+    statement: "drafts shipped with the build: consent text; the three fairness items and the
+      entitlement item; the board's description and source; probe tickets (payout chance .9 /
+      .1, ten real settlements chosen to show nine or one wins, the 'other' record described
+      as not the participant's); payment of one forecast by a binarized scoring rule; recall
+      check; reveal speed; devices admitted; payment rates; no page time-outs"
+    evidence: "experiment/diss_market/copy_en.py; experiment/settings.py"
+
+new_edges:
+  - {from: DISS-OTREE-MARKET, to: DISS-DESIGN-Y, type: requires}
+  - {from: DISS-OTREE-MARKET, to: DISS-YOKED-SCHEDULES, type: requires}
+  - {from: DISS-DESIGN-Y, to: DISS-OTREE-MARKET, type: implemented_by}
+  - {from: DISS-OTREE-MARKET, to: DISS-ENGINE-FIDELITY, type: tested_by}
+  - {from: DISS-OTREE-MARKET, to: DISS-FRONTEND, type: implemented_by}
+  - {from: DISS-OTREE-MARKET, to: DISS-BUILD-DRAFTS, type: qualified_by}
+  - {from: DISS-OTREE-MARKET, to: DISS-PEER-REPLAY, type: qualified_by, note: "a human session needs the pool or another truthful board"}
+  - {from: DISS-DOCKER, to: DISS-OTREE-MARKET, type: requires}
+  - {from: DISS-REPORTING-SET, to: DISS-OTREE-MARKET, type: implemented_by, note: "export to decisions"}
+  - {from: DISS-ENGINE-FIDELITY, to: DISS-T13-DESIGN-AUDIT, type: requires, note: "the rule of twins()"}
+  - {from: DISS-FRONTEND, to: DISS-HUMAN-PARAMS, type: qualified_by, note: "the display sets how a summary is integrated"}
+
+refuted_preserved:
+  - "E1 (psi-hat from 72 pairs of gate bots within .05 of .123): .025; the band ignored a
+    standard error of about .09"
+  - "recap of 2026-11-16 ('two sliders'): the certified noise is that of three fairness items"
+flags_not_patched: "none for the manuscript. For the experiment: the entitlement test's
+  certified power assumes more precision than one item gives; the official Docker images
+  were not pulled."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "the app reproduces the simulation's task; whether people
+            behave as the model is untested; all wording is draft"}
+persistence: "CSL3 freezes/kg_delta_I042.yaml + Project mirror; no remote KG service"

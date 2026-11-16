@@ -469,10 +469,12 @@ class Settle(_Base):
     def vars_for_template(player: Player):
         player.settle_views += 1
         t = copy.MARKET
+        shell = _shell(player, 'settle')
+        shell['points'] -= player.wins          # the total rises only once the reveal is over (counted up in the browser)
         return dict(t=t, ticket_name=t['ticket_names'][player.ticket],
                     board_label=t['board_label'][player.board_source],
                     has_board=player.board_source != 'none',
-                    k=len(player.own_bits), **_shell(player, 'settle'))
+                    k=len(player.own_bits), **shell)
 
     @staticmethod
     def js_vars(player: Player):

@@ -1,6 +1,6 @@
 # Active claim ledger for the experiment after KGi-DISS-I041 (a retrieval aid, not a second
 # source of truth: every line points to its node in the KG deltas and its record).
-# Supersedes kg_active_I040.yaml.
+# Supersedes kg_active_I040.yaml. SUPERSEDED by kg_active_I042.yaml.
 as_of: "2026-11-11, CSL3 main after the I041 close; CSL lean-diss-core 11f09cb"
 
 formal_core:   # machine-checked (Lean 4.28.0 core, over Rat)

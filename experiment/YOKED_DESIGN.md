@@ -1,8 +1,9 @@
 # Yoked ten-repetition design (specification for the pilot build)
 
 Status: certified on synthetic cohorts only (KGi-DISS-I041; records
-`records/yoked_cert_I041.txt` and `records/yoked_ad_I041.txt`). Not built in
-oTree. Recruitment, ethics, payment, board wording, the production seed and any
+`records/yoked_cert_I041.txt` and `records/yoked_ad_I041.txt`). Built in oTree as
+`experiment/diss_market` (KGi-DISS-I042; see `MARKET_APP.md`); not run on people.
+Recruitment, ethics, payment, board wording, the production seed and any
 registration are author decisions.
 
 ## The session (ten repetitions)
@@ -15,7 +16,10 @@ registration are author decisions.
 
 - **Board.** HIGH: a trader winning at .72. LOW: a replay of the participant's own
   trailing record. In the rich round both members of a pair see the same board.
-- **Ratings.** Fairness and entitlement on 0–100 sliders after every round.
+- **Ratings.** After every round, three fairness items and one entitlement item
+  on 0–100 sliders. The fairness score is the mean of the three. The certified
+  rating noise (5.8) is that of a three-item scale; the entitlement test was
+  certified at the same noise, which one item does not deliver.
 - **Probe.** Two pairs of tickets (one favourable, one unfavourable record each);
   one pair about the participant's own draws, one about another trader's.
 
@@ -47,7 +51,7 @@ paired tests use complete pairs.
 |---|---|
 | schedule id, arm, slot | pairing |
 | ticket chosen in each round, wins in each round | checks; `PHI` |
-| fairness rating after each round | `H1a`, `FREEZE`, association, `PHI` |
+| fairness score (three items) after each round | `H1a`, `FREEZE`, association, `PHI` |
 | entitlement rating after each round | `K3` |
 | the eight probe forecasts | probe statistic `T` |
 | attention check, completion time | exclusions (supplementary trimming interval) |

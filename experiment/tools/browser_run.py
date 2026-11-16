@@ -40,6 +40,7 @@ class Run:
                 if urlparse(r.url).netloc not in (host, '') and not r.url.startswith('data:') else None)
         page.on('response', lambda r: self.failed.append(f'{r.status} {r.url}') if r.status >= 400 else None)
         self.n = 0
+        self.points = 0                                     # the participant's total as it should stand on screen
         self.html = ''                                      # the server's HTML of the current page, as sent
 
     def name(self):
@@ -99,15 +100,21 @@ class Run:
             labels.nth([j for j, t in enumerate(texts) if RIGHT.search(t)][0]).click()
         self.next()
 
-    def market_round(self, pick, ratings, reload_mid=False, back=False):
+    def market_round(self, pick, ratings, reload_mid=False, back=False, repost=False):
         assert self.name() == 'choose', self.name()
         self.keep_source('choose')
         assert self.page.is_disabled('#dm-next')
         self.page.locator('label.dm-ticket').nth(pick).click()
         self.shot('choose')
+        choose_url = self.page.url
+        other = self.page.locator('input[name=ticket]').nth(1 - pick).get_attribute('value')
         self.next()
         assert self.name() == 'settle'
+        if repost:                                          # a second, different submission of the choice already made
+            self.page.request.post(choose_url, form={'ticket': other, 'rt_choose_ms': '1'})
         self.keep_source('settle')
+        shown = re.search(r'id="dm-points">(\d+)<', self.html)
+        assert shown and int(shown.group(1)) == self.points, 'the points total must not show the round before its reveal'
         if reload_mid:
             self.page.wait_for_timeout(400)
             self.shot('settle_mid')
@@ -116,6 +123,8 @@ class Run:
         self.page.wait_for_selector('.dm-settle.is-settled', timeout=60000)
         self.page.wait_for_timeout(800)
         own = int(self.page.locator('[data-tape=own] [data-count]').inner_text())
+        self.points += own
+        assert int(self.page.locator('#dm-points').inner_text()) == self.points
         board = self.page.locator('[data-tape=board] [data-count]')
         board = int(board.inner_text()) if board.count() else None
         self.shot('settle_done')
@@ -190,7 +199,8 @@ def play(browser, link, base, shots, tag, viewport, picks, **kw):
     counts = []
     for r, pick in enumerate(picks):
         counts.append(run.market_round(pick, [20 + 10 * r, 55, 70 - 5 * r, 40],
-                                       reload_mid=kw.get('reload') and r == 1, back=kw.get('back') and r == 2))
+                                       reload_mid=kw.get('reload') and r == 1, back=kw.get('back') and r == 2,
+                                       repost=kw.get('repost') and r == 3))
     paid = [run.probe(40 + 5 * i, 60 - 5 * i) for i in range(4)]
     run.closing()
     ctx.close()
@@ -234,13 +244,21 @@ def time_one_round(browser, link, base):
     page.locator('label.dm-ticket').nth(0).click()
     run.next()
     t0 = time.time()
+    # the tab is hidden for three seconds in the middle: the reveal must stand still meanwhile
+    hide = "v => { Object.defineProperty(document, 'hidden', {configurable: true, get: () => v}); document.dispatchEvent(new Event('visibilitychange')); }"
+    page.wait_for_timeout(1500)
+    seen_before = int(page.locator('[data-tape=own] [data-seen]').inner_text())
+    page.evaluate(hide, True)
+    page.wait_for_timeout(3000)
+    seen_hidden = int(page.locator('[data-tape=own] [data-seen]').inner_text())
+    page.evaluate(hide, False)
     page.wait_for_selector('.dm-settle.is-settled', timeout=120000)
     dt = time.time() - t0 + 0.3                              # next() already waited 0.3 s on the page
     planned = page.evaluate('window.js_vars.reveal_ms')
     meta = json.loads(page.input_value('input[name=settle_meta]'))
     ctx.close()
     return dict(planned_reveal_ms=planned, measured_reveal_ms=meta['reveal_ms'], total_ms=meta['total_ms'], hidden_ms=meta['hidden_ms'],
-                page_to_settled_s=round(dt, 2))
+                page_to_settled_s=round(dt, 2), settlements_shown_while_hidden=seen_hidden - seen_before)
 
 
 def strip_board(html):
@@ -273,7 +291,8 @@ def main():
         links = start_links(admin, a.base, a.config)
         picks = [0, 1, 0, 0, 1, 0]
         # slots 0 and 1 are the two members of one pair: same choices, desktop
-        a_run, a_counts, a_paid = play(browser, links[0], a.base, a.shots, 'A_', DESKTOP, picks, reload=True, back=True)
+        a_run, a_counts, a_paid = play(browser, links[0], a.base, a.shots, 'A_', DESKTOP, picks, reload=True, back=True,
+                                       repost=True)
         b_run, b_counts, b_paid = play(browser, links[1], a.base, a.shots, 'B_', DESKTOP, picks)
         # third participant on a phone, fourth with reduced motion
         c_run, _, _ = play(browser, links[2], a.base, a.shots, 'C_', PHONE, picks, dpr=2)
@@ -317,6 +336,10 @@ def main():
     ok = not (report['console_errors'] or report['failed_requests'] or report['foreign_requests'] or diffs or leaks) \
         and report['pair_same_own_counts'] and complete and report['stored_own_counts_match_screen'] \
         and all(report['reduced_motion_recorded'])
+    if 'timing' in report:
+        t = report['timing']
+        ok = ok and abs(t['measured_reveal_ms'] - t['planned_reveal_ms']) <= 150 and abs(t['hidden_ms'] - 3000) <= 250 \
+            and t['settlements_shown_while_hidden'] <= 1
     print('BROWSER RUN', 'PASS' if ok else 'FAIL')
     sys.exit(0 if ok else 1)
 

@@ -130,3 +130,106 @@ expected:   # stated before building
 stopping: "close after the build, its verification, the Docker files, the memo and the KG
   update. Not in this iteration: the pilot specification, wording decisions, a seed wave,
   deployment to a server."
+
+# =================================================================== SCORECARD
+scorecard:   # verbatim, 2026-11-16
+  G1_engine: "PASS. 200 schedules, both arms, random choices: the own record is the chosen
+    ticket's bits, the HIGH board is the schedule's board bits and the LOW board equals an
+    independent ring-buffer implementation of the twins() rule, settlement by settlement;
+    HIGH board rate within .01 of .72, LOW board within .02 of the participant's own rate.
+    Added after the freeze: the gate kernel played on the app's engine (1,500 pairs in the
+    test, 3,000 offline) gives legitimacy at probe time .110 / .869 against the
+    certification's .109 / .869, a share of HIGH below .05 of .832 (.827), the same tickets
+    in all five deprivation rounds in .126 of pairs (.13) and a ratio of mean T of .136."
+  G2_schedules: "PASS. Format-1 fields of a format-2 file are identical for the same seed;
+    the committed example regenerates; verify() passes; the I041 tests pass."
+  G3_bots: "PASS, with one change of method. Random bots (ten arrivals for eight slots:
+    eight start, two see the session-full page), gate-kernel bots at 72 pairs, a seed wave
+    and a pool session: every participant ends with 6 choices, 6 rating sets and 8
+    forecasts, and every stored settlement record equals the schedule. Invalid submissions
+    are refused (unticked consent, a wrong quiz answer, an unknown ticket, a reveal not
+    finished, an untouched slider, a value off the grid, a record not finished). oTree's
+    bots cannot reload a page or repeat a submission: that part was run in the browser
+    (reload during a reveal, the back button, a second POST of the choice with the other
+    ticket) and nothing stored changed."
+  G4_export: "PASS. The export feeds yoked_analysis.decisions unedited; T from the export
+    equals the stored T for 144 of 144. At 72 pairs of gate bots H1a, K3, D1 and FREEZE
+    reject, PHI is not flagged, ASSOC_H does not reject; psi-hat .025 with interval
+    [-.126, .179]; mean T 0.9 (HIGH) and 37.0 (LOW); mean last fairness 27.9 and 68.8."
+  G5_no_leak: "PASS on the frozen check (server HTML of every choice and first-forecast
+    page holds no settlement record; a settle page holds exactly one own record). A defect
+    of the same kind lay outside that check: the points total in the top bar included the
+    round's wins while the round was still being revealed. I saw it on a frame of a screen
+    recording. Fixed (the server sends the earlier total; the browser counts up after the
+    reveal) and now checked by the browser run."
+  G6_front_end: "PASS. TypeScript strict: no error. 11 unit tests. Browser run with four
+    participants (two at 1280 px, one of them with a reload, the back button and a repeated
+    submission; one at 390 px; one with reduced motion): no console error, no failed
+    request, no request to another host; reduced motion recorded. Every screen looked at
+    on desktop and phone. Found by looking and fixed: on a phone the board panel was below
+    the fold during the reveal; panel heads misaligned; quiz answers lost after a failed
+    attempt; oTree's own error banner outside the page; a hint that stayed after use; a
+    highlight that stayed after the record; a forced focus ring. At the real speed the
+    reveal took 9,008 ms for 9,000 planned and 10.5 s until the button unlocked; a tab
+    hidden for 3 s stopped the reveal (no settlement shown meanwhile, 3,007 ms recorded)."
+  G7_equal_display: "PASS. For a yoked pair making the same choices the server's HTML of
+    the 12 choice and settle pages and of the 4 first-forecast pages is identical once the
+    board's record, the board's recap count and the participant's own URLs are removed."
+  G8_docker: "PARTIAL, as expected in E4. Docker Hub and ghcr.io are refused here; the
+    official images (node:22-slim, python:3.13-slim, postgres:16-alpine) were never pulled.
+    Run on stand-in images built from this sandbox's Ubuntu 24.04 files (Python 3.13.18
+    with no package installed, Node 22.23, Postgres 16): the Dockerfile builds unchanged
+    (build arguments only): npm ci, type check, 11 unit tests, bundle, pip install of otree
+    6.0.15 and psycopg2-binary 2.9.10; the container runs as user 'otree' in production
+    mode and reports healthy; under docker compose with Postgres both services are
+    healthy, the published port answers, the browser run passes, 40 repetition rows are in
+    Postgres and survive a restart of the web container; at the STUDY access level the
+    demo page redirects to the login and the export without its key returns 403. Changed
+    because of these runs: the health-check URL, and the '# syntax=' line removed (it pulls
+    an image from Docker Hub at build time). Not verified: anything specific to the
+    official images."
+  G9_regression: "PASS. 96 tests pass (84 earlier, 5 engine, 6 app, 1 browser) in 10 min 18 s;
+    the front end's 11 unit tests pass. diss_bandit's bot test runs again: the project had
+    no _static directory because .gitignore excluded it."
+  G10_constraints: "PASS. No recruitment, OSF filing, ethics claim or manuscript edit. No
+    credential in code, logs, images or records (the sandbox runs used throwaway values
+    passed on the command line). All wording marked DRAFT in one file. No referee document."
+  E1: "FAIL as frozen. psi-hat from the 72-pair bot session is .025 against the
+    certification's .123: off by .098 where I allowed .05. My band ignored sampling error:
+    the s.d. of T is 23, so the standard error of psi-hat at 72 pairs is about .09. On
+    3,000 pairs the same kernel on the app's engine gives .136."
+  E2: "PASS. 144 bots in 3 min 34 s."
+  E3: "PASS. 12.2 kB of JavaScript and 14.9 kB of CSS; five font files, 101 kB."
+  E4: "PASS: G8 is partial. More was possible than I expected: a Docker daemon runs here, so
+    the image and the stack were exercised on stand-in images."
+  found_while_building:
+    F6: "'otree test' loads the project's db.sqlite3. A bot run in the project directory
+      next to a development server mixes their data: my first 72-pair score counted 80
+      pairs. The gate tests run in a fresh copy of the project."
+    F7: "oTree 6 builds a yes/no choice field for a BooleanField unless it is given a
+      checkbox widget. The earlier app's consent box posts a checkbox value to such a field
+      and was only ever submitted by bots; I did not run it in a browser. The new app
+      posts integer flags."
+    F8: "a cross-page transition swallows clicks for about a fifth of a second after each
+      page loads (seen as lost clicks in the browser run until it waited)."
+
+closing_record:   # 2026-11-16
+  outcome:
+    survives: "the certified design as a running oTree app whose engine reproduces the
+      simulation's rule and whose stored data equal the schedule; equal display across
+      arms; nothing of a later round on a page; the path from export to the reporting set;
+      a truthful-board path (seed wave, pool, replay)"
+    corrected: "three fairness items, not one slider (my recap); schedule format 2; the
+      points total; the phone layout; the project's missing _static directory"
+    refuted: "E1 (my band for psi-hat at 72 pairs)"
+    unresolved: "nothing has been run on people. Wording, ethics, payment, the board's
+      source, probe-ticket rules, reveal speed, devices and time-outs are author decisions.
+      The official Docker images were not pulled. No slot refill after dropouts. The
+      entitlement test was certified at a noise one item does not deliver."
+  next: "I043 candidates: (1) the pilot specification on this build (what each pilot
+    quantity decides, the seed wave's size, reveal speed and settlements per round as pilot
+    factors); (2) page time-outs and slot refill; (3) the association by arm under other
+    rating shapes; (4) Lean: the two-type lower bound and a monotone-kernel T13."
+  kg: "freezes/kg_delta_I042.yaml: 5 new nodes, 6 updates, no id collision, edges and updates
+    resolve, requires-graph acyclic over the eight deltas. freezes/kg_active_I042.yaml: 44
+    node references resolve; kg_active_I041.yaml marked superseded."
