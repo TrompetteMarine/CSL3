@@ -1,0 +1,132 @@
+iteration_id: "KGi-DISS-I042"
+mode: "implementation of a certified design; no human data; no recruitment, OSF filing or
+  ethics claim; manuscript not edited. Written before any I042 code."
+freeze_time: "2026-11-16T13:40Z"
+freeze_relative_to_work: "done before freezing: the existing app experiment/diss_bandit and
+  its settings re-read; installed tools listed (oTree 6.0.15, Python 3.13, Node 22, Docker
+  29); a Docker daemon started and two base-image pulls attempted. Nothing built."
+baseline: {repo: "CSL3 main 7bbbd7a (I041 close)", lean: "CSL lean-diss-core 11f09cb",
+           kg: "kg_delta_I032 ... I041; kg_active_I041.yaml", tests: "84 passing"}
+author_directives:
+  - "2026-11-16: we will need the oTree build for the pilot; the interface is JavaScript,
+    CSS, HTML, Node.js, TypeScript, to make beautiful dynamic visuals"
+  - "2026-11-16: the oTree app is to be Docker-contained"
+
+found_before_freezing:
+  F1: "the certified rating noise (5.8) is the noise of a THREE-item fairness scale (10 per
+    item); freeze I033 says so. My recap of 2026-11-16 said 'two sliders'. The build shows
+    three fairness items and one entitlement item after each market round. K3 was certified
+    in I041 with noise 5.8 on the entitlement rating as well, which a single item does not
+    deliver: K3's certified power is optimistic for one item (it is supporting only)."
+  F2: "schedule files of I041 store the HIGH board as bits at .72 but not the uniform draw.
+    The LOW board of the simulation (the board trader wins when that same uniform is below
+    the participant's own trailing-15 rate) cannot be rebuilt from them."
+  F3: "the existing oTree project has no _static directory; under oTree 6.0.15 'otree test'
+    stops with 'Directory _static does not exist'."
+  F4: "Docker Hub and ghcr.io are refused by this sandbox's network policy. The official base
+    images cannot be pulled here."
+  F5: "the wording of the three fairness items was never written down. The trader board of a
+    human session must be a real earlier record (I032 audit rule, node DISS-PEER-REPLAY); a
+    first wave has no earlier record to show."
+
+contract:   # what the app must do; source: experiment/YOKED_DESIGN.md, node DISS-DESIGN-Y
+  K1_session: "ten repetitions: 1 rich market round, 5 deprivation rounds, 4 probe tickets.
+    A market round = one ticket choice, 120 settlements shown without any action, then the
+    ratings. A probe ticket = forecast, a record of 10 settlements, forecast again."
+  K2_outcomes: "every settlement comes from the participant's schedule: the chosen ticket's
+    bit for that settlement. Nothing is drawn while the participant plays."
+  K3_board: "sources: 'schedule' (HIGH = the schedule's bits at .72; LOW = the board uniform
+    below the participant's own trailing-15 rate clipped to [.05, .95], .5 before the first
+    settlement, exactly as twins_I040.twins); 'pool' (real earlier records: HIGH = a rich-
+    round record with a rate in [.65, .80]; LOW = a same-round record nearest to the
+    participant's own count); 'none' (a seed wave with no board). In the rich round both
+    members of a pair get the schedule's rich_board. A human session in production mode
+    refuses the 'schedule' source."
+  K4_ratings: "after each of the six market rounds: three fairness items and one entitlement
+    item, 0-100 in steps of 5, start positions pre-drawn in the schedule, each must be
+    touched. Fairness score = mean of the three items."
+  K5_probe: "four tickets in two pairs as the schedule says (favourable 9 of 10, unfavourable
+    1 of 10; one pair on the participant's own settlements, one on the board trader's);
+    forecasts 0-100 in steps of 5 with no starting position; the first forecast is locked
+    before the record is sent to the browser. T = mean over the two pairs of
+    [(post - pre) favourable - (post - pre) unfavourable]."
+  K6_allocation: "participants take the schedule file's slots in order of arrival at the
+    first task page; each slot is used once; a session without a free slot stops."
+  K7_data: "one row per participant and repetition, plus one analysis row per participant
+    with exactly the inputs of yoked_analysis.decisions; client timings and reload counts."
+  K8_equal_display: "the two arms receive the same pages, styles, scripts and timings; only
+    the board's numbers differ."
+  K9_no_leak: "no page contains an outcome of a later round, or a probe record before its
+    first forecast is stored."
+
+build:
+  app: "experiment/diss_market (new; diss_bandit untouched). Standard oTree pages, one
+    oTree round per repetition, so the server decides every sequence and a reload cannot
+    replay a choice."
+  engine: "experiment/diss_market/engine.py: pure Python, no oTree import"
+  schedules: "experiment/tools/yoked_schedules.py gains format 2: the fields of format 1
+    unchanged bit for bit for the same seed, plus the board uniforms, the ticket and side
+    mapping, the slider start positions and, for each probe ticket, its symbol, its payout
+    chance and the settlement that scores the forecasts. Drawn from a second generator so
+    format-1 draws do not move."
+  front_end: "experiment/frontend: TypeScript (strict), bundled by esbuild into
+    experiment/_static/diss_market; plain CSS; fonts bundled with the app (no request to a
+    third party); no framework. The browser only displays what the server sends: no
+    outcome is computed in the browser."
+  visuals: "settlement tape: 120 cells per panel revealed in order (own ticket and board in
+    step), then regrouped into a proportion bar with the count; probe record revealed cell
+    by cell. Paid and not paid differ by shape as well as colour; no red or green. One
+    fixed light theme for every participant. With reduced-motion set in the browser the
+    reveal runs in steps over the same duration, and the setting is recorded."
+  docker: "experiment/Dockerfile (Node stage builds the bundle, Python stage runs oTree as a
+    non-root user), experiment/docker-compose.yml (web + Postgres), experiment/.env.example
+    with no secret"
+  pool_tool: "experiment/tools/make_board_pool.py: builds the pool of real records from the
+    app's export; refuses bot data unless told, and then marks the pool as a placeholder"
+
+draft_and_author_gated:   # shipped as DRAFT text in one file; none of it is decided here
+  - "consent and study information; payment rates; completion link"
+  - "wording of the board, of the three fairness items and of the entitlement item"
+  - "probe wording; the payout chance of a probe ticket (draft: .9 favourable, .1
+    unfavourable, the shown record being 10 real settlements chosen to show 9 or 1 wins);
+    how forecasts are paid (draft: one of the eight at random, binarized scoring rule,
+    minimal information, as in the I032 build)"
+  - "the recall check after each probe ticket (draft: on); the closing questions"
+  - "board source for the pilot (replay from a seed wave, or another truthful description)"
+  - "reveal speed (draft: 9 s per round) and whether it is a pilot factor"
+
+gates:
+  G1_engine: "for 200 schedules and random choices the app's settlement counts equal the
+    schedule's bits, the HIGH board equals the schedule's board bits and the LOW board equals
+    an independent numpy implementation of the twins() rule, settlement by settlement"
+  G2_schedules: "format-1 fields of a format-2 file equal the I041 generator's output for
+    the same seed; the committed example file regenerates; verify() passes; I041 tests pass"
+  G3_bots: "'otree test' passes with random bots and with model-policy bots in both arms,
+    and with reloads and duplicate submissions; every participant ends with exactly 6
+    choices, 6 rating sets and 8 forecasts"
+  G4_export: "the export feeds yoked_analysis.decisions without hand editing; T from the
+    export equals T computed from the bots' own forecasts; with model-policy bots at 72
+    pairs H1a and D1 reject (pipeline validation, not evidence)"
+  G5_no_leak: "automated: page sources captured during a browser run contain no later
+    outcome and no probe record before the first forecast"
+  G6_front_end: "TypeScript compiles in strict mode with no error; unit tests pass; a browser
+    run goes through every page in both arms at desktop and phone width with no console
+    error, no failed request and no request to another host; every screen looked at"
+  G7_equal_display: "for a yoked pair making the same choices, the pages of the two arms
+    differ only in board numbers (automated comparison)"
+  G8_docker: "the image builds and the container serves a session with Postgres under
+    compose. If base images cannot be pulled here, the record says exactly what was run."
+  G9_regression: "all earlier tests pass; diss_bandit's bot test runs again; KG delta
+    validated; active ledger updated"
+  G10_constraints: "no recruitment, OSF filing, ethics claim or manuscript edit; no
+    credentials in code, logs or images; draft wording marked; referee documents stay out"
+
+expected:   # stated before building
+  E1: "model-policy bots at 72 pairs: H1a and D1 reject; psi-hat within .05 of the
+    certification's value at the same gate point"
+  E2: "a full bot session of 144 participants runs in under 5 minutes"
+  E3: "the bundle is below 150 kB of JavaScript and 60 kB of CSS before fonts"
+  E4: "G8 will be partial: I expect not to be able to build on the official base images here"
+stopping: "close after the build, its verification, the Docker files, the memo and the KG
+  update. Not in this iteration: the pilot specification, wording decisions, a seed wave,
+  deployment to a server."
