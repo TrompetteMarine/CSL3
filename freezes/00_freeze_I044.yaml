@@ -160,3 +160,115 @@ addenda:
     predictions: "focal HIGH legitimacy at probe time at P1 within .03 of .109 for 6 traders and within .05
       for 4 and 8; LOW >= .90; mean psi-hat at P1 <= .16; D1_M at P4 (12 twin sessions of 6, no session
       effect) >= .92"
+
+# =================================================================== SCORECARD
+scorecard:   # verbatim, 2026-11-16; record records/market_cert_I044.txt (seed 140000); first run kept as _run1
+  X1: "PASS. The kernel step with one trader, fixed fill chances and a board gives legitimacy at probe time
+    .111 (share below .05: .825) under HIGH and .871 under LOW; certified .109 (.827) and .869."
+  X2: "PASS. 0 violations in 8,100,000 checked clearings."
+  X3: "PASS. Largest gain from changing one bid: 0 in 200 clearings (numerical; the result is classical and is
+    not machine-checked here)."
+  X4: "PASS. Re-run bit-identical, also after the auction was moved into a function."
+  X5: "PASS. No credential; nothing run on people; main text untouched; no page of a live market built. The two
+    platform descriptions given in conversation were read on the platforms' own documentation pages."
+  W1_levels: "FAIL, both. P1: focal legitimacy at probe time .175 under HIGH (share below .05: .622; I said
+    .06-.16) and .935 under LOW (I said .80-.90). The rich neighbour fills .664 of its orders, not the
+    certified board's .72, and a market mean is a smoother reference than one trader's record."
+  W2_institution: "PASS. Divisible clearing at P1: legitimacy .938 under HIGH and 1.000 under LOW, mean
+    psi-hat .954, D1_M .025, H1a_M .229. At P4: .971 | 1.000, D1_M .005. In the model the contrast needs
+    all-or-nothing fills."
+  W3_own_outcomes: "PASS at P1-P4, FAIL at P0. Fill rate of the focal market in scarce rounds, HIGH | LOW:
+    .1836 | .1849 (P1), .1846 | .1852, .1848 | .1848, .1852 | .1846; at P0 .1762 | .1846 (difference .0084):
+    traders whose learning has stopped sort worse between the goods. Cash earned 65.5-66.3 in both arms at
+    every point (less than 1% apart)."
+  W4_board: "FAIL on two numbers, direction as said. With a cumulative reference focal LOW legitimacy is .684
+    (I said <= .65) and mean psi-hat .326 (>= .20, as said); with the trailing reference psi-hat is .190 (I
+    said <= .16). D1_M falls from 1.000 to .856 at P1 and from .894 to .271 at P4; H1a_M at P4 falls to .602."
+  W5_power: "PASS. One-update rule, 12 twin sessions, no session effect: H1a_M 1.000 at P0-P4; D1_M 1.000 /
+    1.000 / .999 / .999 at P0-P3 and .894 at P4. At 8 twin sessions D1_M .991 / .989 / .987 at P1-P3 (.653 at
+    P4). Count rule: D1_M .979 at P4. Intraclass correlation .2: D1_M .967 / .943 / .955 at P1-P3 and .410 at
+    P4 (H1a_M .910 at P4)."
+  W6_size: "PASS. (a) Market-level, intraclass correlation .2: D1_M .0040, H1a_M .0080 (.0065-.0085 at 0 and
+    .1). (b) Individual-level tests of I041 at nominal .005: D1 .0060 / .0200 / .0245 and H1a .0075 / .0235 /
+    .0475 at intraclass correlation 0 / .1 / .2."
+  W7_market_size: "PASS at P1, FAIL on the spread at P4. 72 traders per arm, intraclass correlation .1, D1_M:
+    P1 .987 (18 markets of 4), .996 (12 of 6), .993 (9 of 8); P4 .777, .660, .581: the order I said, spread
+    .196 against my .15."
+  W8_shading: "PASS. Focal LOW legitimacy .925 against .935; D1_M 1.000 against 1.000 at P1 (.850 against .894
+    at P4). Inequality of fills within a market (Gini) .211 against .142."
+  W9_collective_procurement: "main statement PASS, three numbers FAIL. Units sold, LOW minus HIGH: +.0065 at
+    P1, -.0031 at P4 (I said 0 to .03); after a switch of the plentiful good, rounds 5-6: -.0031 and -.0054 (I
+    said 0 to .05). EFF .001-.004. Orders still on the formerly plentiful good in round 6, HIGH minus LOW:
+    +.035 and +.026 (I said >= .10), test .013 and .008. Procurement gives no usable market-level test."
+  W10_repeated_news: "FAIL. PLAT in the gate world, P1, one-update rule: .556 (I said >= .70). Against a
+    uniformly slowed HIGH arm with 10% inattentive (corrected world) PLAT rejects in .021 at P1 under the
+    one-update rule (I said <= .02) but in .421 at P4, .307 at P1 under the count rule and .477 at P4: it
+    does not keep its level. In the LOW arm, with no gate, it rejects in .456. Gate world elsewhere: count
+    rule .929 (I said <= .50), P4 1.000 (I said .20-.60), P0 .024. In the first run the rival world was
+    mis-built (see first_run) and gave .345 / .979 / 1.000 / .982."
+  W11_price: "PASS except one cell. Ratio of price responses .200 at P1 against psi-hat .190. PRICE .994 /
+    .936 / .888 / .936 at P0-P3 (I said >= .90 at P1-P3: .888 at P2) and .448 at P4. Correlation of cash and
+    legitimacy within HIGH markets .000 at P1 (-.078 to +.091 at P2-P4; +.576 at P0). Two passes or a stake
+    of a tenth: ratio .184 and .182."
+  AD_W1: "sizes PASS: against a uniformly slowed HIGH arm with 10% inattentive PLAT2 rejects in .001-.008 at
+    every point and rule. Gate world: P1 .607 (one-update) and .961 (count), as said; P4 .993 and .933 (I
+    said >= .95: the count-rule cell fails); P0 .040 and .083 (I said <= .05). With 30% inattentive in a
+    uniformly slowed HIGH arm PLAT2 rejects in .066 at P1 under the one-update rule (I said >= .50), .558
+    under the count rule, .550 and .483 at P4: where closures are large it does not separate the gate from
+    disengagement that differs by arm."
+  AD_W2: "three of four PASS. With the rich neighbour filling .712-.724 of its orders, focal HIGH legitimacy
+    at P1 is .102 (4 traders), .068 (6; I said within .03 of .109) and .059 (8; at the edge of my .05); LOW
+    .946 / .914 / .903; mean psi-hat .113 / .071 / .066; D1_M at P4, 12 twin sessions of 6: .951 (.811 at
+    intraclass correlation .1; 18 of 4: .861; 9 of 8: .633)."
+  seen_after_the_run:
+    - "the model alone gives a within-market intraclass correlation of -.13 and -.11 for fills (HIGH, LOW: a
+      fixed supply is shared), +.13 and +.06 for the last fairness rating and +.05 and +.01 for the probe
+      statistic (one reference path is shared by a market)"
+    - "under the frozen supply the strength of the treatment depends on market size: focal HIGH legitimacy
+      .325 / .175 / .111 for 4 / 6 / 8 traders, because fewer traders waste more of a rich supply. With
+      supply calibrated to the neighbour's fill rate the spread is .043"
+    - "the advantaged neighbour's legitimacy is .98-1.00"
+
+# =================================================================== SECOND ADDENDA (frozen before their runs)
+addenda_2:   # 2026-11-16, written while drafting the memo; nothing of sections 11-12 has been run
+  why: "two statements in the draft memo could not be backed by the record. (1) I costed the design at 216
+    people by counting both markets of a LOW session as control units. The certification used only the focal
+    market of each session: 24 sessions, 288 people at N = 6. In the simulator the two markets of a LOW
+    session already are each other's reference, but no test used both. (2) I explained the divisible-clearing
+    result by 'a steady share is not a failure beyond the tolerance' without having measured erosion and
+    repair."
+  AD_W3_both_LOW_markets_as_units:
+    layout: "economy layout: 12 HIGH sessions and 6 LOW sessions (216 people at N = 6). Each market of a LOW
+      session runs the focal script of one HIGH session (two twin pairs per LOW session). Full layout, as
+      certified: 12 + 12 sessions (288 people), the focal market of each as the unit."
+    change_to_the_simulator: "run() takes an optional second script for market 1; without it nothing changes
+      (sections 0-10 must stay bit-identical)"
+    analyses: "markets as independent: paired t on the 12 twin differences (11 df); Fieller on 12 + 12 market
+      means (22 df). By triplets (a LOW session with its two HIGH twins as one unit): paired t on 6 differences
+      (5 df); Fieller on 6 + 6 means (10 df). Session effect: one normal shift per session, shared by the two
+      markets of a LOW session, intraclass correlation .1."
+    predictions:
+      dependence: "correlation across LOW sessions between the two markets' means, P1: last fairness between
+        -.20 and +.05; probe statistic within +/- .08"
+      size_P1: "nominal .005. No session effect: all four tests <= .009. Shared session effect at .1: markets
+        as independent, H1a_M and D1_M .006-.015; by triplets both <= .008"
+      power: "no session effect, P1: all four >= .97. P4: markets as independent D1_M .85-.93 (full layout
+        .894), by triplets D1_M .60-.85; H1a_M >= .99 and >= .95. Shared session effect at .1, P4: markets as
+        independent D1_M .55-.75 (full layout .660 in section 5), by triplets .40-.65"
+    decision_rule: "if a markets-as-independent size exceeds .012 under the shared session effect, the economy
+      layout is analysed by triplets and is costed with the triplet power"
+  AD_W4_anatomy_of_the_institution_effect:
+    measure: "focal market, scarce rounds, P1: mean erosion per clearing, nu x E[max(D - tolerance, 0)], and
+      mean repair per clearing, (repair rate) x P(D <= tolerance), before clipping. Read from the pools of
+      sections 1 and 4 by counters that use no random number; no new pool."
+    predictions: "unit orders, HIGH: erosion .0035-.0060, above repair .0018-.0028. Unit orders, LOW: erosion
+      .0010-.0030, below repair .0060-.0095. Divisible, HIGH: erosion .0015-.0040, below repair .0055-.0085.
+      Divisible, LOW: erosion <= .0015, repair >= .0090"
+
+closing_record:   # 2026-11-16
+  state: "design W certified on simulated twin sessions under assumed order and trading rules; implementation
+    gate still closed; nothing run on people; author-gated"
+  delivered: "records/113_live_economy_I044.md; experiment/LIVE_ECONOMY.md (specification for the build);
+    experiment/analysis/market_cert_I044.py with tests; freezes/kg_delta_I044.yaml; kg_active_I044.yaml"
+  next_executable_step: "the author's decisions listed in the memo; then the build (script format 4, engine,
+    oTree groups, live claim market) as its own iteration"

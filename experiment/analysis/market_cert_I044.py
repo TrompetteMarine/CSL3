@@ -71,9 +71,20 @@ def solo(pt, n, rng):
     return out
 
 
+# ------------------------------------------------------------------ the auctioneer
+
+def auction(b, m, kg):
+    """one good at one clearing. b: bids (-1 where a trader does not bid for the good), m: who bids,
+    kg: scripted units. Unit demands: the units go to the highest bids; the price is the highest
+    losing bid (the lowest market-clearing price), or the reserve 0 when no bid loses."""
+    above = (b[..., None, :] > b[..., :, None]).sum(-1)                             # bids strictly above one's own
+    win = m & (above < kg[..., None])
+    return win, np.where(m & ~win, b, 0.0).max(-1)
+
+
 # ------------------------------------------------------------------ a pool of sessions
 
-def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, reversal=None):
+def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, reversal=None, rich_pi=RICH):
     """S sessions of two markets (0 focal, 1 neighbour) of N traders. seeds: focal script (shared by
     twins), focal people, neighbour (script and people)."""
     gs, gp, go = (np.random.default_rng(s) for s in seeds)
@@ -92,7 +103,7 @@ def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, 
             arm = (uc >= sig(mg.BETA * (Q[..., 0] - Q[..., 1]))).astype(int)        # the good bid for in this round
             on0[..., r] = (arm == 0).mean(-1)
             rich = (True, True) if r == 0 else (False, neighbour_rich)
-            pis = np.array([RICH if x else SCARCE for x in rich])
+            pis = np.array([rich_pi if x else SCARCE for x in rich])
             if reversal is not None and r >= reversal:                              # scarce markets: the plentiful good switches
                 pis = np.where(np.array(rich)[:, None], pis, pis[:, ::-1])
         k = np.stack([gs.binomial(N, pis[0], (S, 2)), go.binomial(N, pis[1], (S, 2))], 1)
@@ -106,9 +117,7 @@ def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, 
             sold[..., r] += np.minimum(kg, n)
             if inst == 'unit':
                 b = np.where(m, bid, -1.0)
-                above = (b[..., None, :] > b[..., :, None]).sum(-1)                 # bids strictly above one's own
-                win = m & (above < kg[..., None])
-                price = np.where(m & ~win, b, 0.0).max(-1)                          # highest losing bid; reserve 0
+                win, price = auction(b, m, kg)
                 R = np.where(win, 1.0, R)
                 cash += np.where(win, v - price[..., None], 0.0)
                 if t % 40 == 0:                                                     # gate X2: the price clears the market
@@ -146,15 +155,17 @@ def rev(w, e, rng):
 
 
 def weights(L, c, rule, rng):
+    """revision weight of each trader and who is inattentive (one in ten, weight 0)"""
     g = 1 - c * (1 - L)
-    return np.where(rng.random(L.shape) < 0.10, 0.0, pg.weight(g, ec.M, rule))
+    off = rng.random(L.shape) < 0.10
+    return np.where(off, 0.0, pg.weight(g, ec.M, rule)), off
 
 
 def measures(o, mkt, rng, c=1.0, rule='event'):
     """last fairness rating, probe statistic (two record pairs) and beliefs of the traders of one market"""
     L = o['L'][:, mkt, :, -1]
     F = r5(50 + .5 * (100 * L - 50) + rng.normal(0, SIG_R, L.shape))
-    w = weights(L, c, rule, rng)
+    w, _ = weights(L, c, rule, rng)
     (d1, b1), (d0, b0), (e1, _), (e0, _) = rev(w, .9, rng), rev(w, .1, rng), rev(w, .9, rng), rev(w, .1, rng)
     return dict(F=F, T=.5 * ((d1 - d0) + (e1 - e0)), w=w, L=L, bel=(b1, b0))
 
@@ -245,6 +256,21 @@ def plat(c, S, rng):
     return (delta / se > tcrit(S - 1)).mean(), delta.mean(), E.mean(), Lw.mean()
 
 
+def plat2(c, cl, S, rng):
+    """PLAT2 (addendum AD-W1): the HIGH closures divided by the late closure of the twin LOW markets"""
+    E, Lw, Al = c[..., 2:5].mean(-1).mean(1), c[..., 9:12].mean(-1).mean(1), cl[..., 9:12].mean(-1).mean(1)
+    i = rng.integers(0, len(E), (B, S))
+    e, l, a = E[i], Lw[i], Al[i]
+    eb, lb, ab = e.mean(1), l.mean(1), np.clip(a.mean(1), .2, None)
+    x = np.clip(eb / ab, -1, .999)
+    delta = 1 - (1 - x) ** 2.75 - lb / ab
+    ge, gl = 2.75 * (1 - x) ** 1.75 / ab, -1 / ab
+    ga = (-2.75 * (1 - x) ** 1.75 * eb + lb) / ab ** 2
+    cov = lambda u, v: ((u - u.mean(1, keepdims=True)) * (v - v.mean(1, keepdims=True))).sum(1) / (S - 1)
+    var = (ge ** 2 * cov(e, e) + gl ** 2 * cov(l, l) + 2 * ge * gl * cov(e, l) + ga ** 2 * cov(a, a)) / S
+    return (delta / np.sqrt(np.maximum(var, 1e-12)) > tcrit(S - 1)).mean(), delta.mean()
+
+
 # ------------------------------------------------------------------ the claim market
 
 def lmsr(belief, stake, rng, b=60.0, passes=1):
@@ -290,7 +316,7 @@ def x3(rng, n=200):
     return worst
 
 
-CFG = ('base', 'div', 'cum', 'shade', 'rev5', 'N4', 'N8')
+CFG = ('base', 'div', 'cum', 'shade', 'rev5', 'N4', 'N8', 'cal4', 'cal6', 'cal8')
 KW = dict(base={}, div=dict(inst='div'), cum=dict(ref='cum'), shade=dict(shade=True), rev5=dict(reversal=4),
           N4=dict(N=4), N8=dict(N=8))
 
@@ -387,14 +413,13 @@ if __name__ == '__main__':
     for rule in ('event', 'outcome'):
         for k in ('P0', 'P1', 'P4'):
             L = base[k]['HIGH']['L'][:, 0, :, -1]
-            w = weights(L, 1.0, rule, rng)
-            att = w > 0
+            w, off = weights(L, 1.0, rule, rng)
             cells = []
-            for ww in (w, np.where(att, w[att].mean(), 0.0), np.full(w.shape, w[att].mean())):
+            for ww in (w, np.where(off, 0.0, w[~off].mean()), np.full(w.shape, w[~off].mean())):
                 p, d, e, l = plat(news(ww, rng), 12, rng)
                 cells.append(f"{p:.3f}  delta {d:+.3f}  ({e:.3f}, {l:.3f})")
             print(f"   {rule:7s}  {k}      " + "      ".join(cells), flush=True)
-    wl = weights(base['P1']['LOW']['L'][:, 0, :, -1], 1.0, 'event', rng)
+    wl, _ = weights(base['P1']['LOW']['L'][:, 0, :, -1], 1.0, 'event', rng)
     p, d, e, l = plat(news(wl, rng), 12, rng)
     print(f"   LOW arm, P1, one-update rule (10% inattentive): PLAT {p:.3f}  delta {d:+.3f}  ({e:.3f}, {l:.3f})")
 
@@ -412,4 +437,36 @@ if __name__ == '__main__':
     for label, kw in (('two passes', dict(passes=2)), ('stake a tenth of the bankroll', dict(share=.1))):
         pr = {a: price_response(base['P1'][a], M['P1'][a], rng, **kw) for a in ('HIGH', 'LOW')}
         print(f"   P1, {label}: {pr['HIGH'].mean():.3f} | {pr['LOW'].mean():.3f}, ratio {pr['HIGH'].mean() / pr['LOW'].mean():.3f}")
+
+    print("\n9. addendum AD-W1: the plateau net of inattention (PLAT2; HIGH closures divided by the late closure of the twin LOW markets)")
+    print("   rule     point   gate world          HIGH uniformly slowed, 10% inattentive    uniformly slowed, 30% inattentive in HIGH (LOW 10%)")
+    for rule in ('event', 'outcome'):
+        for k in ('P0', 'P1', 'P4'):
+            w, off = weights(base[k]['HIGH']['L'][:, 0, :, -1], 1.0, rule, rng)
+            wl, _ = weights(base[k]['LOW']['L'][:, 0, :, -1], 1.0, rule, rng)
+            cl = news(wl, rng)
+            off3 = off | (rng.random(w.shape) < 2 / 9)                               # 30% inattentive in all
+            worlds = (w, np.where(off, 0.0, w[~off].mean()), np.where(off3, 0.0, w.mean() / (1 - off3.mean())))
+            cells = ["%.3f  delta %+.3f" % plat2(news(ww, rng), cl, 12, rng) for ww in worlds]
+            print(f"   {rule:7s}  {k}      " + "         ".join(cells), flush=True)
+
+    print("\n10. addendum AD-W2: rich supply scaled so that the rich neighbour fills .72 of its orders")
+    for cfg, N, S in (('cal4', 4, 18), ('cal6', 6, 12), ('cal8', 8, 9)):
+        best = None
+        for f in np.arange(1.0, 1.6001, .05):
+            rp = tuple(min(.98, f * x) for x in RICH)
+            o = run(PT['P1'], 300, N, ([SEED, 50, N, 0], [SEED, 50, N, 1], [SEED, 50, N, 2]), True, rich_pi=rp)
+            fill = o['wins'][:, 1, :, 1:].mean() / K
+            if best is None or abs(fill - .72) < abs(best[1] - .72):
+                best = (f, fill, rp)
+        row = []
+        for k in ('P1', 'P4'):
+            o = twins(cfg, k, N=N, rich_pi=best[2])
+            mm = {a: measures(o[a], 0, rng) for a in ('HIGH', 'LOW')}
+            a0, a1 = conf(mm['HIGH'], mm['LOW'], S, rng), conf(mm['HIGH'], mm['LOW'], S, rng, .1)
+            Lh = o['HIGH']['L'][:, 0, :, -1]
+            row.append(f"{k}: legitimacy {Lh.mean():.3f} ({(Lh < .05).mean():.3f}) | {o['LOW']['L'][:, 0, :, -1].mean():.3f}, neighbour fills "
+                       f"{o['HIGH']['wins'][:, 1, :, 1:].mean() / K:.3f}, psi {a0['psi']:.3f}, D1_M {a0['D1']:.3f} (intraclass correlation .1: {a1['D1']:.3f})")
+        print(f"   {S} markets of {N}, factor {best[0]:.2f} (pilot fill {best[1]:.3f}):  " + "   ".join(row), flush=True)
+
     print(f"\n   X2 market clearing, whole run: {CHECKS['bad']} violations in {CHECKS['n']} checked clearings")
