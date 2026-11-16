@@ -1,0 +1,135 @@
+# KGi-DISS-I044 — FREEZE (written and pushed before any simulation or code of this iteration)
+iteration_id: "KGi-DISS-I044"
+freeze_time: "2026-11-16 (evening, Europe/London)"
+freeze_relative_to_work: "before any code. Already seen: the certified kernel's records (I039-I043) and one
+  re-run of twins_I040.twins at P1 to read legitimacy and aspiration by rigidity type and round (HIGH slow |
+  fast .013 | .212, LOW .741 | 1.0; LOW dips to .545 at round 3 and recovers to .87). No simulation of an
+  interacting market exists yet."
+baseline: {csl3_main: "c2ede62 (I043 close)", csl_lean: "lean-diss-core 11f09cb",
+           active_ledger: "freezes/kg_active_I043.yaml"}
+mode: "strict mathematics first: design and certification only. implementation_gate: CLOSED (no oTree page
+  of a live market is written in this iteration)."
+
+recovered_source:
+  proposal: "Social Cognition task draft (research proposal: behavioural experiments, EEG and endogenous
+    prediction markets), 13 pages, sha256 ef7ee37a6e5637c26e61e9aa2afbe61861d7c2b296e063b7f4f41504dedcde17.
+    Internal document; not copied into the repository."
+  what_it_fixes: "essential goods and one discretionary asset; assigned baskets with a completion payment;
+    one balance sheet for procurement and a prediction claim; one effective order per trader and round;
+    books cleared in simultaneous batches; scheduled supply shock; Protocol III (endogenous markets) with
+    the independent market as the unit of randomisation; a separate legitimacy extension (perceived
+    unfairness reduces feedback use under an unchanged reward rule) that points to this programme."
+
+directives:   # verbatim
+  - "2026-11-16 18:13: we are making very good progresses, this was the original research project, keeping
+    in mind that must be insightful for the DISS project, and this, how to account for the fact that
+    participant decisions affect the others, and make participant collect a \"basket\" / \"porfoglio\" that
+    create the clearing prices, because everyone buys and sells at the same time. participant, do task a-
+    complete the basket (they submit the complete basket) and collect the remaning fees to the predictive
+    market, they can only bet on things the physcial economy interractive participant are not buying (eg,
+    only square and circle in physcial market vs only triangle on trades) then predicitve market. We want
+    participants to interact and emulate in a predictive market env (eg, polymarket and kalshi -- they are
+    the most popular ones)."
+  - "2026-11-16 18:29: we will control the economy so all theory (eg, walarsian actionairs etc) and general
+    equilirbium in the abstract economy can determien the clearing prices, we would like to competely
+    control and intervene in the abstract economy in \" God In the Lab\" manner."
+decisions_of_the_author:   # dialog of 2026-11-16
+  sessions: "lab first, online later"
+  reference: "live neighbour market: two markets per session; the focal market's script is the same in both
+    arms; the neighbour is richly supplied (HIGH) or equally scarce (LOW) and its fills show live"
+  supply: "scripted supply, live demand"
+  claim_market: "automated market maker with a live price"
+my_readings_not_confirmed:
+  - "'remaining fees' = the cash a trader holds after procurement; it is the bankroll of the claim market"
+  - "'things they are not buying' = a good of a simulated sector with pre-drawn events (TRIANGLE), so that
+    evidence is controlled and the same in both arms"
+
+design_W:   # the live economy; a proposal for certification, every operational detail author-gated
+  script: "drawn before the session and logged: supply of each good at each clearing, every trader's private
+    value at each clearing, tie-breaks, signals, settlement draws, interventions. The engine is a
+    deterministic function of script and orders; any market can be replayed under other orders."
+  session: "two markets of N traders (focal and neighbour), no trade between them. Treatment by session.
+    Twin sessions: one HIGH, one LOW, same focal script, different people."
+  stage_A: "six rounds (one rich, five scarce in the focal market), 120 clearings per round. One standing
+    basket order per round; in the certification the order is the good bid for (the certified binary choice).
+    At each clearing a Walrasian auctioneer clears each good: every trader bidding for the good demands one
+    unit at their value, the scripted units go to the highest bids, the price is the highest losing bid (the
+    lowest market-clearing price) or the reserve when supply exceeds bidders. A filled unit earns value
+    minus price. The reference a trader sees is the other market's fills."
+  stage_B: "claims on TRIANGLE only. Private forecast, private evidence (ten trial closes), private forecast;
+    then the claim trades against an automated market maker with the cash earned in stage A; settlement at
+    the end. Variant under study: twelve successive records on one claim with a forecast after each."
+  left_to_the_author: "group size; baskets as recipes over the two goods and the completion payment; whether
+    the trader sets a bid or the engine bids the value; what is shown of the own market; the market maker's
+    liquidity; the conversion of cash to money"
+
+simulation:   # frozen settings; script experiment/analysis/market_cert_I044.py; seed 140000
+  pools: "2,400 simulated sessions per arm, gate point and configuration; 2,000 samples per cell"
+  kernel: "the gate kernel of twins_I040.twins unchanged (beta 12, alpha .2, phi_minus 1, phi_plus .25,
+    tolerance .3, nu .05, rigidity .002 | .02 half each, L0 1, A0 .5; gate points P0-P4); the outcome of a
+    clearing is the filled share of the unit (1 or 0 under unit orders)"
+  supply: "units of a good per clearing ~ Binomial(N, pi); (plentiful, other) = (.55, .22) when rich and
+    (.15, .05) when scarce; round 1 rich in both markets; rounds 2-6 focal scarce, neighbour rich (HIGH) or
+    scarce on its own script (LOW)"
+  values: "private value of a unit i.i.d. uniform on (0, 1) per trader and clearing; reserve 0; bids = values
+    (dominant under the highest-losing-bid price). Variant: persistent shading, bid = value x (1 - m_i),
+    m_i ~ U(0, .5)"
+  reference: "the other market's mean fill over its last 15 clearings. Variant: cumulative since the start"
+  institution_variant: "divisible clearing: every bidder for a good receives the same share min(1, units /
+    bidders)"
+  shared_by_twins: "the focal script (supply and values). Not shared: people (rigidity, choice noise, rating
+    and forecast noise)"
+  measures: "ratings and probes as in I041 (three-item fairness: gain .5, noise 5.8; two record pairs; weight
+    pg.weight(g, 10, rule); 10% inattentive; forecast noise 12); session effects added as a normal shift per
+    market with intraclass correlation 0, .1 or .2 relative to the within-market variance"
+  tests_at_market_level: "one-sided .005. H1a_M: paired t on the twin difference of market-mean last fairness.
+    D1_M: upper Fieller limit of mean(T_HIGH)/mean(T_LOW) below 1, from market means, t quantile with
+    2S - 2 df. EFF: paired t on the share of scripted units sold. PLAT: delta = [1 - (1 - E)^(11/4)] - L > 0
+    in the HIGH arm, E and L the closures (share of the gap between evidence closed) averaged over records
+    3-5 and 10-12, delta method on market means, t quantile with S - 1 df. PRICE: upper Fieller limit of the
+    ratio of market price responses below 1."
+  market_maker: "logarithmic scoring rule, liquidity 60; bankroll = 5 x surplus earned; a trader stakes at
+    most a quarter of the bankroll per claim and moves the price toward their belief; one pass in random
+    order"
+
+claims:   # predictions made before any run; N = 6 and S = 12 twin sessions (72 traders per arm) unless stated
+  W1_levels: "P1, unit orders, trailing reference: focal legitimacy at probe time .06-.16 under HIGH
+    (certified .109) and .80-.90 under LOW (certified .869)"
+  W2_institution: "divisible clearing at P1: focal HIGH legitimacy at probe time >= .85 and D1_M <= .03"
+  W3_own_outcomes: "the mean fill rate of focal markets in scarce rounds differs between arms by < .005; the
+    mean cash earned by < 2%"
+  W4_board: "cumulative reference at P1: focal LOW legitimacy at probe time <= .65 and mean psi-hat >= .20
+    (trailing: psi-hat <= .16)"
+  W5_power: "one-update rule, no session effects: H1a_M >= .99 at P0-P4; D1_M >= .97 at P0-P3 and .75-.92 at
+    P4; at S = 8 D1_M >= .90 at P1-P3. Count rule: D1_M >= .95 at P4. With intraclass correlation .2 in
+    ratings and T: D1_M >= .90 at P1-P3 and .40-.65 at P4"
+  W6_size: "(a) market-level tests keep their level under session effects: D1_M (ratings move, the gain does
+    not) and H1a_M (both markets LOW) <= .008 at intraclass correlation .2. (b) the individual-level tests
+    of I041 at nominal .005 with intraclass correlation .2: D1 .02-.05, H1a .02-.06; without session
+    effects both <= .008"
+  W7_market_size: "72 traders per arm as 18 markets of 4, 12 of 6 or 9 of 8, P4, intraclass correlation .1:
+    D1_M is highest with 18 markets and lowest with 9, spread <= .15; at P1 all three >= .97"
+  W8_shading: "persistent bid shading changes focal LOW legitimacy by < .05 and D1_M at P1 by < .03"
+  W9_collective_procurement: "the share of scripted units sold in scarce rounds is higher under LOW by 0-.03;
+    with the plentiful good switched at round 5 the difference in rounds 5-6 is 0-.05 and EFF <= .50: the
+    reversal does NOT give a usable market-level test at this size. Share of orders still on the formerly
+    plentiful good in round 6: HIGH minus LOW >= .10"
+  W10_repeated_news: "twelve records, P1, one-update rule: PLAT >= .70 in the gate world and <= .02 when the
+    HIGH arm is uniformly slowed to the same mean weight (10% inattentive in both); count rule <= .50; P4
+    .20-.60; P0 <= .05"
+  W11_price: "market maker, P1: the ratio of price responses HIGH/LOW lies within .10 of psi-hat; PRICE >= .90
+    at P1-P3 and .30-.60 at P4; within HIGH markets the correlation of cash and legitimacy is within
+    +/- .20"
+
+gates:
+  X1: "the simulator with one trader per market, the neighbour's fills replaced by a .72 board, and fixed fill
+    chances reproduces the certified legitimacy at probe time within .02 (bridge to twins_I040)"
+  X2: "every price is a market-clearing price: at each clearing the number of bids above the price is at most
+    the units and the number of bids at or above it is at least min(units, bidders) (checked in the run)"
+  X3: "truthful bidding is a best reply: in 200 simulated clearings no unilateral change of one bid raises
+    that trader's surplus (numerical check of the classical result; not machine-checked)"
+  X4: "re-run bit-identical"
+  X5: "constraints: no credential; nothing run on people; main text untouched; no page of the live market
+    built; no unverified citation"
+stopping: "close after the certification, the design memo with the author's open decisions, the KG update and
+  the push. Not here: the oTree build of a live market, the pilot specification, any wording."
