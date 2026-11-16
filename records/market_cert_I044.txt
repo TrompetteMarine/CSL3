@@ -89,4 +89,30 @@ markets of 6 traders and 12 twin sessions (72 traders per arm) unless stated; on
    12 markets of 6, factor 1.10 (pilot fill 0.724):  P1: legitimacy 0.068 (0.826) | 0.914, neighbour fills 0.723, psi 0.071, D1_M 1.000 (intraclass correlation .1: 1.000)   P4: legitimacy 0.404 (0.448) | 0.914, neighbour fills 0.723, psi 0.449, D1_M 0.951 (intraclass correlation .1: 0.811)
    9 markets of 8, factor 1.05 (pilot fill 0.716):  P1: legitimacy 0.059 (0.836) | 0.903, neighbour fills 0.716, psi 0.066, D1_M 1.000 (intraclass correlation .1: 1.000)   P4: legitimacy 0.406 (0.443) | 0.904, neighbour fills 0.716, psi 0.453, D1_M 0.923 (intraclass correlation .1: 0.633)
 
-   X2 market clearing, whole run: 0 violations in 8100000 checked clearings
+11. addendum AD-W3: both markets of a LOW session as control units (12 HIGH and 6 LOW sessions; 216 people at 6 per market)
+   H1a_M | D1_M with the markets taken as independent (11 and 22 df), then by triplets (5 and 10 df); full layout: 12 + 12 sessions
+   P1   scripts shared with the HIGH twins: True and True; correlation between the two markets of a LOW session: last fairness +0.244, probe statistic +0.014, legitimacy +0.308
+   P1   session effect 0.0: power, markets as independent 1.000 | 1.000   by triplets 1.000 | 1.000   full layout 1.000 | 1.000
+   P1   session effect 0.1: power, markets as independent 1.000 | 0.995   by triplets 1.000 | 0.968   full layout 1.000 | 0.993
+   P1   session effect 0.0: size, markets as independent 0.0030 | 0.0050   by triplets 0.0035 | 0.0035
+   P1   session effect 0.1: size, markets as independent 0.0110 | 0.0090   by triplets 0.0060 | 0.0045
+   P4   scripts shared with the HIGH twins: True and True; correlation between the two markets of a LOW session: last fairness +0.157, probe statistic +0.038, legitimacy +0.232
+   P4   session effect 0.0: power, markets as independent 1.000 | 0.876   by triplets 0.976 | 0.781   full layout 1.000 | 0.900
+   P4   session effect 0.1: power, markets as independent 0.978 | 0.620   by triplets 0.803 | 0.428   full layout 0.991 | 0.666
+
+12. addendum AD-W4: erosion and repair of legitimacy per clearing, focal market, scarce rounds, P1 (before clipping)
+   unit orders  HIGH erosion 0.0052, repair 0.0026   LOW erosion 0.0021, repair 0.0073
+   divisible    HIGH erosion 0.0030, repair 0.0060   LOW erosion 0.0012, repair 0.0092
+
+13. addendum AD-W5: layouts under calibrated supply (6 per market, rich supply x 1.10): H1a_M | D1_M
+   (i) 12 HIGH + 12 LOW sessions, focal markets as units, 288 people; (ii) 12 + 6 by triplets, 216; (iii) 16 + 8 by triplets, 288
+   P1   scripts shared with the HIGH twins: True and True; correlation between the two markets of a LOW session: last fairness +0.288, probe statistic +0.059
+   P1   session effect 0.0: (i) 1.000 | 1.000   (ii) 1.000 | 1.000   (iii) 1.000 | 1.000   [markets as independent: (ii) 1.000 | 1.000   (iii) 1.000 | 1.000]
+   P1   session effect 0.1: (i) 1.000 | 1.000   (ii) 1.000 | 0.987   (iii) 1.000 | 0.998   [markets as independent: (ii) 1.000 | 1.000   (iii) 1.000 | 1.000]
+   P1   session effect 0.0: size of (iii) by triplets 0.0060 | 0.0080   [markets as independent 0.0025 | 0.0050]
+   P1   session effect 0.1: size of (iii) by triplets 0.0050 | 0.0050   [markets as independent 0.0085 | 0.0080]
+   P4   scripts shared with the HIGH twins: True and True; correlation between the two markets of a LOW session: last fairness +0.164, probe statistic +0.014
+   P4   session effect 0.0: (i) 1.000 | 0.926   (ii) 0.993 | 0.900   (iii) 1.000 | 0.980   [markets as independent: (ii) 1.000 | 0.957   (iii) 1.000 | 0.990]
+   P4   session effect 0.1: (i) 0.998 | 0.774   (ii) 0.936 | 0.588   (iii) 0.992 | 0.770   [markets as independent: (ii) 0.998 | 0.784   (iii) 1.000 | 0.895]
+
+   X2 market clearing, whole run: 0 violations in 10173600 checked clearings

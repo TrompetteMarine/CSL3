@@ -1,0 +1,226 @@
+# KG delta — KGi-DISS-I044 (on top of kg_delta_I032 ... kg_delta_I043; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main c2ede62 (I043 close); CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-DESIGN-B
+    added_evidence: "stays the built individual design. Design W (DISS-DESIGN-W) is the interactive
+      candidate; it is certified on simulated sessions and not built. At the anchoring edge design Y
+      gives .94 with 144 people (two record pairs); design W gives .93-.98 with 288 and .77 with a
+      session effect of .1."
+  - id: DISS-REPORTING-SET
+    added_evidence: "for a live economy the confirmatory pair is taken on market values (H1a_M, D1_M;
+      DISS-INTERFERENCE, DISS-LAYOUT-TRIPLET). The individual-level forms of I041 are not valid there.
+      K3, FREEZE, the association by arm and the PHI flag were not recomputed at market level."
+  - id: DISS-RIVAL-HS-G
+    added_evidence: "a second statistic bears on this rival if a claim carries twelve successive
+      records (DISS-TEST-PLAT2): at P1 it rejects the gate world in .61 (one-update rule) and .96
+      (count rule) with 72 traders per arm, against .27 and .44-.49 for the HIGH-arm association at
+      72 pairs, and the uniform slowdown in .001-.008. At P0 nothing separates the two, as before."
+  - id: DISS-PEER-REPLAY
+    added_evidence: "in design W the reference is a live neighbouring market, not a replay; no seed
+      wave is needed for the board. The advantaged neighbours are participants who are not units of
+      the confirmatory tests."
+  - id: DISS-TEST-BET
+    added_evidence: "in design W the bet at a posted price is replaced by trading against a market
+      maker (DISS-PRICE-READOUT); the bet test itself was not rerun."
+  - id: DISS-CHOICE-EFFECT
+    added_evidence: "design W keeps a choice (the good bid for in a round). A market that assigns
+      units across both goods at each clearing would remove it and was not simulated."
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: the size of session effects (the intraclass correlation of
+      ratings and of T within a market); how people sort between the goods, which sets the rich
+      neighbour's fill rate and so the dose; whether people trade their forecasts against a market
+      maker; how they bid if they set bids; how they would split a basket target between goods"
+  - id: DISS-BUILD-DRAFTS
+    added_evidence: "added for a live market: market size and layout; whether the engine bids the
+      value; baskets as a count or as a round target; what is shown of the own market; the market
+      maker's liquidity and the conversion of cash; the stand-in for an empty seat; whether the
+      neighbour's supply is scripted or follows its demand"
+
+new_nodes:
+  - id: DISS-DESIGN-W
+    kind: design
+    status: certified-synthetic under ASSUMED order and trading rules; not built; author-gated
+    statement: "the session as a live economy. Two markets of N traders per session, no trade between
+      them, each sees the other's fills over its last 15 clearings. HIGH: from round 2 the focal market
+      is scarce and the neighbour rich. LOW: both scarce. Procurement: six rounds of 120 clearings, one
+      standing order per round (the good bid for), cleared by DISS-AUCTIONEER; a filled unit earns
+      value minus price. Then claims on a simulated good: private forecast, private evidence, private
+      forecast, trading against a market maker with the cash earned. T comes from the private
+      forecasts. Two gaps against the author's request: the order is not a basket over the goods, and
+      nobody sells in procurement."
+    evidence: "freezes/00_freeze_I044.yaml; experiment/LIVE_ECONOMY.md; records/113_live_economy_I044.md"
+  - id: DISS-GOD-SCRIPT
+    kind: definition
+    status: specified; simulated; not implemented
+    statement: "everything random (units of each good at each clearing, every trader's value at each
+      clearing, tie-breaks, claims, interventions) is drawn before the session. The engine is a
+      function of script and orders. Sessions to be compared share a script; a session can be replayed
+      under other orders; an intervention is a script entry."
+    evidence: "experiment/analysis/market_cert_I044.py (run); test_market_I044.py"
+  - id: DISS-AUCTIONEER
+    kind: definition
+    status: tested numerically; classical; NOT machine-checked
+    statement: "one good at one clearing, k units, bidders who want one unit each: the units go to the
+      k highest bids at the highest losing bid (reserve 0 when no bid loses). (a) The price is the
+      lowest market-clearing price: 0 violations in 10,173,600 checked clearings. (b) Bidding one's
+      value is a dominant strategy given the good: no gain from changing one bid in 200 clearings. The
+      property needs one unit per trader and clearing and says nothing about which good to bid for."
+    evidence: "records/market_cert_I044.txt, section 0; test_market_I044.py; citation log, I044 addendum"
+  - id: DISS-INTERFERENCE
+    kind: statistical
+    status: certified-synthetic
+    statement: "in a live market the market is the unit. The model alone gives a within-market
+      intraclass correlation of +.13 (HIGH) and +.06 (LOW) for the last fairness rating, +.05 and +.01
+      for T, -.13 and -.11 for fills. With session effects of .1 to .2 the individual-level tests of
+      I041 reject a true null in 2.0-2.5% (D1) and 2.4-4.8% (H1a) at nominal 0.5%; tests on market
+      values reject in .40-.85%."
+    evidence: "records/market_cert_I044.txt, sections 1 and 3"
+  - id: DISS-CERT-W
+    kind: numerical
+    status: certified-synthetic
+    statement: "12 HIGH + 12 LOW sessions of two markets of six, frozen supply, one-sided .005: H1a_M
+      1.000 at P0-P4; D1_M 1.000 / 1.000 / .999 / .999 at P0-P3 and .894 at P4 (count rule .979); with
+      8 + 8 sessions .99 at P1-P3 and .653 at P4; with a session effect of .2, .94-.97 at P1-P3 and
+      .410 at P4. Legitimacy at probe time HIGH | LOW: .175 | .935 at P1 (certified individual design
+      .109 | .869). Own fill rates differ between arms by .0013 or less at P1-P4 and by .0084 at P0.
+      Bid shading up to half the value: D1_M 1.000 at P1, .850 at P4. Plentiful good switched at round
+      5: 1.000 and .842."
+    evidence: "records/market_cert_I044.txt, sections 1-5; scorecard in freezes/00_freeze_I044.yaml"
+  - id: DISS-INSTITUTION-EFFECT
+    kind: model implication
+    status: certified-synthetic; a prediction about institutions, untested on people
+    statement: "the model's delegitimation needs all-or-nothing outcomes. If every bidder for a good
+      receives the same share, legitimacy under HIGH stays at .938 (LOW 1.000), mean psi-hat is .954
+      and D1_M rejects in .025 at P1 (.005 at P4). Per clearing in scarce rounds, HIGH arm: erosion
+      .0052 against repair .0026 with unit orders; .0030 against .0060 with shares; the share of
+      clearings inside the tolerance is .21 against .48."
+    evidence: "records/market_cert_I044.txt, sections 4 and 12"
+  - id: DISS-BOARD-DISPLAY
+    kind: design rule
+    status: certified-synthetic
+    statement: "the board shows the other market's fills over its last 15 clearings. With totals since
+      the start of the session the control arm keeps the rich round in view: its legitimacy falls from
+      .935 to .684, psi-hat rises from .190 to .326, D1_M falls from 1.000 to .856 at P1 and from .894
+      to .271 at P4."
+    evidence: "records/market_cert_I044.txt, section 4"
+  - id: DISS-SUPPLY-CALIBRATION
+    kind: design rule
+    status: certified-synthetic; to be redone on pilot orders
+    statement: "units per good and clearing ~ Binomial(N, pi); scarce (.15, .05); rich (.55, .22) times
+      1.15 / 1.10 / 1.05 for 4 / 6 / 8 traders, so that the model's rich neighbour fills .71-.72 of its
+      orders. Unscaled, legitimacy under HIGH at P1 is .325 / .175 / .111; scaled .102 / .068 / .059,
+      and D1_M at P4 is .93-.95 for 12 + 12 sessions of six. More, smaller markets: at 72 traders per
+      arm and a session effect of .1, .861 / .811 / .633 for markets of 4 / 6 / 8."
+    evidence: "records/market_cert_I044.txt, sections 5 and 10"
+  - id: DISS-LOW-COUPLING
+    kind: numerical
+    status: certified-synthetic
+    statement: "the two markets of a LOW session are positively dependent: correlation of their mean
+      last fairness ratings +.16 to +.29 (legitimacy +.23 to +.31, T +.01 to +.06). Each takes the
+      other as reference and a market's own fills raise its own aspiration, so both carry nearly the
+      same aspiration target."
+    evidence: "records/market_cert_I044.txt, sections 11 and 13"
+  - id: DISS-LAYOUT-TRIPLET
+    kind: design
+    status: certified-synthetic for six per market
+    statement: "a triplet is a LOW session whose two markets each run the focal script of one HIGH
+      session; the triplet is the unit (paired t on n values, n - 1 df; Fieller on n + n values, 2n - 2
+      df). Calibrated supply, D1_M at P4 without | with a session effect of .1 shared within a session:
+      twin pairs 12 + 12 sessions (288 people) .926 | .774; triplets 12 + 6 (216) .900 | .588; triplets
+      16 + 8 (288) .980 | .770. At P1 all >= .987. Sizes by triplets .0035-.0080. With the markets of a
+      triplet taken as independent the size is .8-1.1% under the session effect."
+    evidence: "records/market_cert_I044.txt, sections 11 and 13"
+  - id: DISS-TEST-PLAT2
+    kind: statistical
+    status: certified-synthetic; needs twelve successive records on a claim
+    statement: "closure E after records 3-5 and L after records 10-12, each divided by the late closure
+      of the twin LOW markets; delta = [1 - (1 - E)^(11/4)] - L > 0 in the HIGH arm; delta method on
+      market means. Gate world, 72 traders per arm: .607 (one-update) and .961 (count) at P1; .993 and
+      .933 at P4; .040 and .083 at P0. Uniformly slowed HIGH arm with 10% inattentive: .001-.008. It
+      does not separate the gate from disengagement that differs by arm (30% inattentive in a
+      uniformly slowed HIGH arm: .066 at P1 under the one-update rule, .48-.56 elsewhere)."
+    evidence: "records/market_cert_I044.txt, section 9"
+  - id: DISS-PRICE-READOUT
+    kind: statistical
+    status: certified-synthetic under an ASSUMED trading rule
+    statement: "claims trade against a logarithmic market scoring rule (liquidity 60; the maker's loss
+      is at most liquidity x ln 2 per claim and market). Rule assumed: bankroll 5 x cash, at most a
+      quarter staked per claim, each trader moves the price toward the own forecast, one pass. The
+      ratio of price responses HIGH / LOW is .200 at P1 against a forecast ratio of .190; its test
+      rejects in .994 / .936 / .888 / .936 at P0-P3 and .448 at P4. Cash and legitimacy within HIGH
+      markets: r between -.08 and +.09 at P1-P4, +.58 at P0."
+    evidence: "records/market_cert_I044.txt, section 8"
+  - id: DISS-PROCUREMENT-NULL
+    kind: numerical
+    status: certified-synthetic
+    statement: "procurement gives no usable market-level outcome: the share of scripted units sold
+      differs between arms by less than .01 with or without a switch of the plentiful good (test
+      power .001-.004); orders stay on the formerly plentiful good by .03 more under HIGH."
+    evidence: "records/market_cert_I044.txt, section 6"
+  - id: DISS-BASKET-EXISTENCE
+    kind: theory note
+    status: argument given; example checked by search; classical background cited at abstract level
+    statement: "a basket with a completion payment makes the goods complements, and with indivisible
+      units market-clearing prices may not exist (example: one square and one circle; one trader values
+      only the pair at 3, another wants one unit of either at 2). Divisible goods give existence and
+      remove the contrast (DISS-INSTITUTION-EFFECT). A basket compatible with DISS-AUCTIONEER is a
+      target for the round served by unit orders; it is not certified."
+    evidence: "experiment/LIVE_ECONOMY.md; test_market_I044.py; citation log, I044 addendum"
+  - id: DISS-SORTING-BENCHMARK
+    kind: analytic
+    status: derived; checked by simulation
+    statement: "values uniform on (0, 1), n bidders, k < n units: expected price (n - k)/(n + 1),
+      expected surplus of a bidder k(k + 1)/(2n(n + 1)); with k >= n price 0 and surplus 1/2. Splits of
+      a scarce market from which nobody gains by changing good: 3 : 1 (4 traders), 4 : 2 on surplus
+      and 5 : 1 on the chance of a fill (6), 6 : 2 (8); fill rate .194-.200. The model's traders fill
+      .18."
+    evidence: "experiment/analysis/sorting_benchmark_I044.py; records/sorting_benchmark_I044.txt"
+
+new_edges:
+  - {from: DISS-DESIGN-W, to: DISS-DESIGN-Y, type: requires, note: "the statistical skeleton and the kernel"}
+  - {from: DISS-DESIGN-W, to: DISS-GOD-SCRIPT, type: requires}
+  - {from: DISS-DESIGN-W, to: DISS-AUCTIONEER, type: requires}
+  - {from: DISS-DESIGN-W, to: DISS-BOARD-DISPLAY, type: requires}
+  - {from: DISS-DESIGN-W, to: DISS-SUPPLY-CALIBRATION, type: requires}
+  - {from: DISS-DESIGN-W, to: DISS-CERT-W, type: supported_by}
+  - {from: DISS-DESIGN-W, to: DISS-HUMAN-PARAMS, type: qualified_by, note: "order and trading rules are assumed; session effects unknown"}
+  - {from: DISS-DESIGN-W, to: DISS-INSTITUTION-EFFECT, type: qualified_by, note: "unit orders are needed"}
+  - {from: DISS-DESIGN-W, to: DISS-BASKET-EXISTENCE, type: qualified_by, note: "the order is not yet a basket"}
+  - {from: DISS-CERT-W, to: DISS-INTERFERENCE, type: requires, note: "tests on market values"}
+  - {from: DISS-CERT-W, to: DISS-ENGINE-FIDELITY, type: requires, note: "the kernel step reproduces the certified design (.111 | .871)"}
+  - {from: DISS-LAYOUT-TRIPLET, to: DISS-LOW-COUPLING, type: requires}
+  - {from: DISS-LAYOUT-TRIPLET, to: DISS-SUPPLY-CALIBRATION, type: requires}
+  - {from: DISS-DESIGN-W, to: DISS-LAYOUT-TRIPLET, type: supported_by}
+  - {from: DISS-REPORTING-SET, to: DISS-INTERFERENCE, type: qualified_by, note: "market-level forms in a live economy"}
+  - {from: DISS-TEST-PLAT2, to: DISS-RIVAL-HS-G, type: tested_by, note: "rejects the uniform slowdown at its size"}
+  - {from: DISS-TEST-PLAT2, to: DISS-HUMAN-PARAMS, type: qualified_by, note: "differential disengagement defeats it"}
+  - {from: DISS-PRICE-READOUT, to: DISS-HUMAN-PARAMS, type: qualified_by, note: "the trading rule is assumed"}
+  - {from: DISS-SORTING-BENCHMARK, to: DISS-AUCTIONEER, type: requires}
+
+refuted_preserved:
+  - "W1 (levels at P1: HIGH .06-.16, LOW .80-.90): .175 and .935; the rich neighbour fills .664, not .72"
+  - "W3 at P0 (own fill rates within .005): .0084"
+  - "W4, two numbers (cumulative board: LOW <= .65; trailing psi-hat <= .16): .684 and .190"
+  - "W7 (spread across market sizes at P4 <= .15): .196"
+  - "W9, sub-claims (units sold higher under LOW by 0-.03 / 0-.05; stickiness >= .10): -.003 to -.005 in three of four cells; +.03"
+  - "W10 (PLAT >= .70 at P1 and at its level against a uniform slowdown): .556, and .31-.48 against the rival; .456 in the LOW arm"
+  - "W11, one cell (PRICE >= .90 at P1-P3): .888 at P2"
+  - "AD-W1, three cells (P4 count rule >= .95; P0 <= .05; 30% inattentive defeats PLAT2 at P1): .933; .083; .066 under the one-update rule"
+  - "AD-W2, one cell (HIGH legitimacy within .03 of .109 at six traders): .068"
+  - "AD-W3, dependence (correlation between the two LOW markets of a session between -.20 and +.05): +.244"
+  - "AD-W5, one cell (H1a_M >= .95 at P4 in every layout): .936 for 12 + 6 sessions with a session effect"
+  - "first run: the 'uniformly slowed' worlds of the repeated-news test kept a mass of traders at zero weight (record kept as market_cert_I044_run1.txt)"
+  - "draft memo: design costed at 216 people (both LOW markets as units, which no test had used); 'a steady share is not a failure beyond the tolerance' (not measured); 'five claims passed in full' (four)"
+flags_not_patched: "none for the manuscript. For the experiment: the order is not a basket and nobody
+  sells in procurement; order, bidding and trading rules of people are unknown; session effects are
+  unknown and decide the anchoring edge; layouts were compared for six per market only; K3, FREEZE,
+  the association by arm and the PHI flag are not recomputed at market level."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "the simulator reproduces the certified individual design through the
+            same kernel step and then adds interaction; whether people order, bid and trade as assumed
+            is untested; no screen exists"}
+persistence: "CSL3 freezes/kg_delta_I044.yaml + Project mirror; no remote KG service"

@@ -7,6 +7,10 @@ probe KGi-DISS-I043, record `records/basket_cert_I043.txt`). Built in oTree as
 run on people. Recruitment, ethics, payment, the wording of the board and of the
 forecast sources, the production seed and any registration are author decisions.
 
+An interactive variant, in which the participants' orders set the clearing prices
+(design W, KGi-DISS-I044), is specified in `LIVE_ECONOMY.md`. It is certified on
+simulated sessions and not built; this document and the app are unchanged by it.
+
 ## The session (ten repetitions)
 
 The statistical skeleton is that of I041. Since I043 it is presented as a basket

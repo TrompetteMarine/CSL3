@@ -1,0 +1,25 @@
+KGi-DISS-I044: sorting benchmark of the procurement stage (arithmetic; values uniform on (0, 1), reserve 0)
+split = traders bidding for the plentiful good : for the other good
+
+scarce market (.15, .05)
+   4 traders, sorting on surplus: 3 : 1   fill rate 0.196   surplus per trader and clearing 0.0690   expected price 0.600 | 0.407
+   4 traders, sorting on fill   : 3 : 1   fill rate 0.196   surplus per trader and clearing 0.0690   expected price 0.600 | 0.407
+   4 traders, most units sold: 2 : 2   fill rate 0.197
+   6 traders, sorting on surplus: 4 : 2   fill rate 0.200   surplus per trader and clearing 0.0595   expected price 0.620 | 0.567
+   6 traders, sorting on fill   : 5 : 1   fill rate 0.194   surplus per trader and clearing 0.0564   expected price 0.683 | 0.368
+   6 traders, most units sold: 4 : 2   fill rate 0.200
+   8 traders, sorting on surplus: 6 : 2   fill rate 0.199   surplus per trader and clearing 0.0515   expected price 0.686 | 0.535
+   8 traders, sorting on fill   : 6 : 2   fill rate 0.199   surplus per trader and clearing 0.0515   expected price 0.686 | 0.535
+   8 traders, most units sold: 5 : 3   fill rate 0.200
+
+rich market, calibrated
+   4 traders, sorting on surplus: 3 : 1   fill rate 0.765   surplus per trader and clearing 0.3542   expected price 0.158 | 0.156
+   4 traders, sorting on fill   : 3 : 1   fill rate 0.765   surplus per trader and clearing 0.3542   expected price 0.158 | 0.156
+   4 traders, most units sold: 3 : 1   fill rate 0.765
+   6 traders, sorting on surplus: 5 : 1   fill rate 0.732   surplus per trader and clearing 0.3127   expected price 0.237 | 0.095
+   6 traders, sorting on fill   : 5 : 1   fill rate 0.732   surplus per trader and clearing 0.3127   expected price 0.237 | 0.095
+   6 traders, most units sold: 4 : 2   fill rate 0.766
+   8 traders, sorting on surplus: 6 : 2   fill rate 0.748   surplus per trader and clearing 0.3221   expected price 0.211 | 0.179
+   8 traders, sorting on fill   : 6 : 2   fill rate 0.748   surplus per trader and clearing 0.3221   expected price 0.211 | 0.179
+   8 traders, most units sold: 5 : 3   fill rate 0.749
+

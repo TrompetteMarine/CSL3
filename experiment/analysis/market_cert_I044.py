@@ -84,10 +84,12 @@ def auction(b, m, kg):
 
 # ------------------------------------------------------------------ a pool of sessions
 
-def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, reversal=None, rich_pi=RICH):
+def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, reversal=None, rich_pi=RICH, script2=None):
     """S sessions of two markets (0 focal, 1 neighbour) of N traders. seeds: focal script (shared by
-    twins), focal people, neighbour (script and people)."""
+    twins), focal people, neighbour (script and people). script2 (addendum AD-W3): market 1 runs the
+    script of that seed, i.e. the focal script of another pool, and its own generator gives people only."""
     gs, gp, go = (np.random.default_rng(s) for s in seeds)
+    g2 = go if script2 is None else np.random.default_rng(script2)
     nuf, nur, chi = mg.NUF * pt[1], mg.NUF * pt[1] * pt[2], pt[3]
     sh = (S, 2, N)
     rho = np.stack([np.where(gp.random((S, N)) < .5, .002, .02), np.where(go.random((S, N)) < .5, .002, .02)], 1)
@@ -96,6 +98,7 @@ def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, 
     ring, cum = np.zeros((S, 2, 15)), np.zeros((S, 2))
     Lr, wins = np.empty(sh + (ROUNDS,)), np.zeros(sh + (ROUNDS,))
     cash, units, sold, on0 = np.zeros(sh), np.zeros((S, 2, ROUNDS)), np.zeros((S, 2, ROUNDS)), np.zeros((S, 2, ROUNDS))
+    ero, rep = np.zeros((S, 2, ROUNDS)), np.zeros((S, 2, ROUNDS))                   # addendum AD-W4: counters, no random number
     for t in range(K * ROUNDS):
         r = t // K
         if t % K == 0:
@@ -106,8 +109,8 @@ def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, 
             pis = np.array([rich_pi if x else SCARCE for x in rich])
             if reversal is not None and r >= reversal:                              # scarce markets: the plentiful good switches
                 pis = np.where(np.array(rich)[:, None], pis, pis[:, ::-1])
-        k = np.stack([gs.binomial(N, pis[0], (S, 2)), go.binomial(N, pis[1], (S, 2))], 1)
-        v = np.stack([gs.random((S, N)), go.random((S, N))], 1)
+        k = np.stack([gs.binomial(N, pis[0], (S, 2)), g2.binomial(N, pis[1], (S, 2))], 1)
+        v = np.stack([gs.random((S, N)), g2.random((S, N))], 1)
         bid = v * (1 - mark)
         R = np.zeros(sh)
         for g in (0, 1):
@@ -131,11 +134,14 @@ def run(pt, S, N, seeds, neighbour_rich, inst='unit', ref='trail', shade=False, 
         ring[..., t % 15] = fill
         cum += fill
         shown = ring[..., :min(t + 1, 15)].mean(-1) if ref == 'trail' else cum / (t + 1)
+        Dm = mg.PHIM * np.maximum(A - R, 0) + mg.PHIP * np.maximum(R - A, 0)        # the D of kstep, read before the step
+        ero[..., r] += (nuf * np.maximum(Dm - mg.TAUF, 0)).mean(-1)
+        rep[..., r] += (nur * (Dm <= mg.TAUF)).mean(-1)
         L, A = kstep(Q, L, A, arm, R, shown[:, ::-1, None], rho, nuf, nur, chi)     # the reference is the other market
         wins[..., r] += R
         if (t + 1) % K == 0:
             Lr[..., r] = L
-    return dict(L=Lr, wins=wins, cash=cash, units=units, sold=sold, on0=on0)
+    return dict(L=Lr, wins=wins, cash=cash, units=units, sold=sold, on0=on0, ero=ero, rep=rep)
 
 
 def twins(cfg, k, N=6, **kw):
@@ -224,6 +230,30 @@ def naive(H, Lo, S, rng, icc=0.0):
     i = rng.integers(0, len(fh), (B, S))
     flat = lambda x: x[i].reshape(B, -1)
     return dict(H1a=(ya.signed_rank_z(flat(fl) - flat(fh)) > ya.ZC).mean(), D1=(ya.fieller(flat(th), flat(tl))[2] < 1).mean())
+
+
+def shift_pair(x0, x1, icc, rng):
+    """a session effect shared by the two markets of one session"""
+    if icc == 0:
+        return x0, x1
+    z = np.sqrt(icc / (1 - icc)) * rng.normal(size=(len(x0), 1))
+    sd = lambda x: np.sqrt(x.var(1, ddof=1).mean())
+    return x0 + sd(x0) * z, x1 + sd(x1) * z
+
+
+def economy(HA, HB, L0, L1, rng, icc=0.0, n=6):
+    """addendum AD-W3: 2n HIGH sessions and n LOW sessions whose two markets are both control units
+    (market 0 the twin of HA's focal market, market 1 the twin of HB's). Rates of H1a_M and D1_M with
+    the markets taken as independent, then by triplets (a LOW session with its two HIGH twins)."""
+    fa, fb = shift(HA['F'], icc, rng).mean(1), shift(HB['F'], icc, rng).mean(1)
+    ta, tb = shift(HA['T'], icc, rng).mean(1), shift(HB['T'], icc, rng).mean(1)
+    f0, f1 = (x.mean(1) for x in shift_pair(L0['F'], L1['F'], icc, rng))
+    t0, t1 = (x.mean(1) for x in shift_pair(L0['T'], L1['T'], icc, rng))
+    i = rng.integers(0, len(fa), (B, n))
+    cat = lambda u, v: np.concatenate([u[i], v[i]], 1)
+    return dict(H1a=paired_t(cat(f0 - fa, f1 - fb)).mean(), D1=(fieller_m(cat(ta, tb), cat(t0, t1))[1] < 1).mean(),
+                H1a_t=paired_t(.5 * ((f0 - fa) + (f1 - fb))[i]).mean(),
+                D1_t=(fieller_m(.5 * (ta + tb)[i], .5 * (t0 + t1)[i])[1] < 1).mean())
 
 
 # ------------------------------------------------------------------ twelve records on one claim
@@ -316,7 +346,7 @@ def x3(rng, n=200):
     return worst
 
 
-CFG = ('base', 'div', 'cum', 'shade', 'rev5', 'N4', 'N8', 'cal4', 'cal6', 'cal8')
+CFG = ('base', 'div', 'cum', 'shade', 'rev5', 'N4', 'N8', 'cal4', 'cal6', 'cal8', 'eco', 'eco2')
 KW = dict(base={}, div=dict(inst='div'), cum=dict(ref='cum'), shade=dict(shade=True), rev5=dict(reversal=4),
           N4=dict(N=4), N8=dict(N=8))
 
@@ -451,6 +481,7 @@ if __name__ == '__main__':
             print(f"   {rule:7s}  {k}      " + "         ".join(cells), flush=True)
 
     print("\n10. addendum AD-W2: rich supply scaled so that the rich neighbour fills .72 of its orders")
+    cal6 = {}                                                                        # kept for addendum AD-W5
     for cfg, N, S in (('cal4', 4, 18), ('cal6', 6, 12), ('cal8', 8, 9)):
         best = None
         for f in np.arange(1.0, 1.6001, .05):
@@ -462,11 +493,71 @@ if __name__ == '__main__':
         row = []
         for k in ('P1', 'P4'):
             o = twins(cfg, k, N=N, rich_pi=best[2])
+            if N == 6:
+                cal6[k], cal6['rp'] = o, best[2]
             mm = {a: measures(o[a], 0, rng) for a in ('HIGH', 'LOW')}
             a0, a1 = conf(mm['HIGH'], mm['LOW'], S, rng), conf(mm['HIGH'], mm['LOW'], S, rng, .1)
             Lh = o['HIGH']['L'][:, 0, :, -1]
             row.append(f"{k}: legitimacy {Lh.mean():.3f} ({(Lh < .05).mean():.3f}) | {o['LOW']['L'][:, 0, :, -1].mean():.3f}, neighbour fills "
                        f"{o['HIGH']['wins'][:, 1, :, 1:].mean() / K:.3f}, psi {a0['psi']:.3f}, D1_M {a0['D1']:.3f} (intraclass correlation .1: {a1['D1']:.3f})")
         print(f"   {S} markets of {N}, factor {best[0]:.2f} (pilot fill {best[1]:.3f}):  " + "   ".join(row), flush=True)
+
+    print("\n11. addendum AD-W3: both markets of a LOW session as control units (12 HIGH and 6 LOW sessions; 216 people at 6 per market)")
+    print("   H1a_M | D1_M with the markets taken as independent (11 and 22 df), then by triplets (5 and 10 df); full layout: 12 + 12 sessions")
+    cE = CFG.index('eco')
+    for k in ('P1', 'P4'):
+        p = PTS.index(k)
+        ob = twins('eco', k)                                                         # focal script B: its HIGH pool and its LOW pool
+        lab = run(PT[k], POOL, 6, ([SEED, 0, p, 0], [SEED, cE, p, 5], [SEED, cE, p, 6]), False, script2=[SEED, cE, p, 0])
+        same = (np.array_equal(lab['units'][:, 0], base[k]['HIGH']['units'][:, 0]), np.array_equal(lab['units'][:, 1], ob['HIGH']['units'][:, 0]))
+        mHB, mLB = measures(ob['HIGH'], 0, rng), measures(ob['LOW'], 0, rng)
+        mL0, mL1 = measures(lab, 0, rng), measures(lab, 1, rng)
+        cF = np.corrcoef(mL0['F'].mean(1), mL1['F'].mean(1))[0, 1]
+        cT = np.corrcoef(mL0['T'].mean(1), mL1['T'].mean(1))[0, 1]
+        cL = np.corrcoef(mL0['L'].mean(1), mL1['L'].mean(1))[0, 1]
+        print(f"   {k}   scripts shared with the HIGH twins: {same[0]} and {same[1]}; correlation between the two markets of a LOW session: "
+              f"last fairness {cF:+.3f}, probe statistic {cT:+.3f}, legitimacy {cL:+.3f}")
+        for icc in (0.0, 0.1):
+            e = economy(M[k]['HIGH'], mHB, mL0, mL1, rng, icc)
+            f = conf(M[k]['HIGH'], M[k]['LOW'], 12, rng, icc)
+            print(f"   {k}   session effect {icc:.1f}: power, markets as independent {e['H1a']:.3f} | {e['D1']:.3f}   by triplets {e['H1a_t']:.3f} | {e['D1_t']:.3f}"
+                  f"   full layout {f['H1a']:.3f} | {f['D1']:.3f}", flush=True)
+        if k == 'P1':
+            nHB = measures(ob['HIGH'], 0, rng, c=0.0)
+            nL0, nL1 = measures(lab, 0, rng, c=0.0), measures(lab, 1, rng, c=0.0)
+            for icc in (0.0, 0.1):
+                d = economy(Mnull['HIGH'], nHB, nL0, nL1, rng, icc)                  # ratings move, the gain does not
+                h = economy(M['P1']['LOW'], mLB, mL0, mL1, rng, icc)                 # every market on the LOW regime
+                print(f"   P1   session effect {icc:.1f}: size, markets as independent {h['H1a']:.4f} | {d['D1']:.4f}   by triplets {h['H1a_t']:.4f} | {d['D1_t']:.4f}", flush=True)
+
+    print("\n12. addendum AD-W4: erosion and repair of legitimacy per clearing, focal market, scarce rounds, P1 (before clipping)")
+    for label, o in (('unit orders', base['P1']), ('divisible', var['div', 'P1'])):
+        cells = [f"{a} erosion {o[a]['ero'][:, 0, 1:].mean() / K:.4f}, repair {o[a]['rep'][:, 0, 1:].mean() / K:.4f}" for a in ('HIGH', 'LOW')]
+        print(f"   {label:12s} " + "   ".join(cells))
+
+    print("\n13. addendum AD-W5: layouts under calibrated supply (6 per market, rich supply x 1.10): H1a_M | D1_M")
+    print("   (i) 12 HIGH + 12 LOW sessions, focal markets as units, 288 people; (ii) 12 + 6 by triplets, 216; (iii) 16 + 8 by triplets, 288")
+    c6, c2, rp = CFG.index('cal6'), CFG.index('eco2'), cal6['rp']
+    for k in ('P1', 'P4'):
+        p = PTS.index(k)
+        ob = twins('eco2', k, rich_pi=rp)
+        lab = run(PT[k], POOL, 6, ([SEED, c6, p, 0], [SEED, c2, p, 5], [SEED, c2, p, 6]), False, rich_pi=rp, script2=[SEED, c2, p, 0])
+        same = (np.array_equal(lab['units'][:, 0], cal6[k]['HIGH']['units'][:, 0]), np.array_equal(lab['units'][:, 1], ob['HIGH']['units'][:, 0]))
+        mHA, mLA = measures(cal6[k]['HIGH'], 0, rng), measures(cal6[k]['LOW'], 0, rng)
+        mHB, mLB = measures(ob['HIGH'], 0, rng), measures(ob['LOW'], 0, rng)
+        mL0, mL1 = measures(lab, 0, rng), measures(lab, 1, rng)
+        print(f"   {k}   scripts shared with the HIGH twins: {same[0]} and {same[1]}; correlation between the two markets of a LOW session: "
+              f"last fairness {np.corrcoef(mL0['F'].mean(1), mL1['F'].mean(1))[0, 1]:+.3f}, probe statistic {np.corrcoef(mL0['T'].mean(1), mL1['T'].mean(1))[0, 1]:+.3f}")
+        for icc in (0.0, 0.1):
+            f = conf(mHA, mLA, 12, rng, icc)
+            e6, e8 = economy(mHA, mHB, mL0, mL1, rng, icc, 6), economy(mHA, mHB, mL0, mL1, rng, icc, 8)
+            print(f"   {k}   session effect {icc:.1f}: (i) {f['H1a']:.3f} | {f['D1']:.3f}   (ii) {e6['H1a_t']:.3f} | {e6['D1_t']:.3f}   (iii) {e8['H1a_t']:.3f} | {e8['D1_t']:.3f}"
+                  f"   [markets as independent: (ii) {e6['H1a']:.3f} | {e6['D1']:.3f}   (iii) {e8['H1a']:.3f} | {e8['D1']:.3f}]", flush=True)
+        if k == 'P1':
+            nHA, nHB = measures(cal6[k]['HIGH'], 0, rng, c=0.0), measures(ob['HIGH'], 0, rng, c=0.0)
+            nL0, nL1 = measures(lab, 0, rng, c=0.0), measures(lab, 1, rng, c=0.0)
+            for icc in (0.0, 0.1):
+                d, h = economy(nHA, nHB, nL0, nL1, rng, icc, 8), economy(mLA, mLB, mL0, mL1, rng, icc, 8)
+                print(f"   P1   session effect {icc:.1f}: size of (iii) by triplets {h['H1a_t']:.4f} | {d['D1_t']:.4f}   [markets as independent {h['H1a']:.4f} | {d['D1']:.4f}]", flush=True)
 
     print(f"\n   X2 market clearing, whole run: {CHECKS['bad']} violations in {CHECKS['n']} checked clearings")

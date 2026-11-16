@@ -282,10 +282,57 @@ addenda_2:   # 2026-11-16, written while drafting the memo; nothing of sections 
       without and .70-.88 with. H1a_M at P4 >= .95 in every layout. Sizes of (iii) by triplets at P1, both
       session effects: <= .008."
 
+# =================================================================== SECOND SCORECARD
+scorecard_2:   # verbatim, 2026-11-16; records/market_cert_I044.txt, sections 11-13 (sections 0-10 bit-identical)
+  AD_W3: "dependence FAIL in sign, the rest PASS. Correlation between the two markets of a LOW session: last
+    fairness +.244 at P1 and +.157 at P4 (I said -.20 to +.05), probe statistic +.014 and +.038 (within my
+    +/- .08), legitimacy +.308 and +.232. I had reasoned that one market's luck is the other's grievance. In
+    the kernel a market's own fills also raise its own aspiration, so the two markets carry nearly the same
+    aspiration target (.6 own + .4 other against .6 other + .4 own). Sizes at P1, nominal .005, H1a_M | D1_M:
+    no session effect .0030 | .0050 (markets as independent) and .0035 | .0035 (by triplets); session effect
+    of .1 shared within a LOW session .0110 | .0090 and .0060 | .0045. Power: P1 all 1.000 without a session
+    effect (D1_M .995 and .968 with it). P4, D1_M: markets as independent .876, by triplets .781, full layout
+    .900; with the session effect .620, .428, .666. H1a_M at P4: 1.000 and .976 (.978 and .803 with the
+    session effect)."
+  AD_W3_decision_rule: "not triggered: the largest markets-as-independent size is .0110 against my threshold
+    of .012 (Monte Carlo standard error .0023). That is twice the nominal level. The triplet analysis is
+    adopted for costing all the same: the margin is smaller than the simulation error and a session effect
+    above .1 would cross it."
+  AD_W4: "PASS, all eight. Erosion | repair per clearing, focal market, scarce rounds, P1: unit orders HIGH
+    .0052 | .0026, LOW .0021 | .0073; divisible HIGH .0030 | .0060, LOW .0012 | .0092. The share of clearings
+    whose shortfall stays inside the tolerance (repair / .0125) is .21 in the HIGH arm under unit orders and
+    .48 under divisible clearing."
+  AD_W5: "PASS except one cell. P1: every layout and session effect >= .987. P4, D1_M without | with the
+    session effect: (i) full, 288 people .926 | .774 (section 10 gave .951 | .811 for the same sessions with
+    other rating and forecast draws); (ii) 12 + 6 by triplets, 216 people .900 | .588; (iii) 16 + 8 by
+    triplets, 288 people .980 | .770. H1a_M at P4: (i) 1.000 | .998, (ii) .993 | .936 (I said >= .95), (iii)
+    1.000 | .992. Sizes of (iii) by triplets at P1, H1a_M | D1_M: .0060 | .0080 without and .0050 | .0050 with
+    the session effect. Correlation between the two markets of a LOW session under calibrated supply: last
+    fairness +.288 (P1), +.164 (P4)."
+  seen_after_the_run:
+    - "two estimates of one quantity differ by .025 (.951 and .926) and by .037 (.811 and .774): the same
+      2,400 sessions with new rating and forecast draws. Power figures here carry about +/- .03 from the pool,
+      beyond the +/- .005 to .011 of the 2,000 samples. The lower figures are adopted."
+    - "for a fixed number of people the triplet layout is at least as good as the full layout: two thirds of
+      the participants are units of the test (192 of 288) instead of half"
+    - "X2 over the whole run: 0 violations in 10,173,600 checked clearings"
+    - "X4 again: with sections 11-13 added, the first 90 lines of the record (sections 0-10) are unchanged
+      and a second full run is bit-identical"
+  benchmark: "experiment/analysis/sorting_benchmark_I044.py (arithmetic, no prediction frozen): with values
+    uniform on (0, 1) the expected price of a good with n bidders and k < n units is (n - k)/(n + 1) and a
+    bidder's expected surplus k(k + 1)/(2n(n + 1)); the split of 6 traders from which nobody gains by changing
+    good is 4 : 2 on surplus and 5 : 1 on the chance of a fill; fill rate .194-.200 in a scarce market"
+
 closing_record:   # 2026-11-16
   state: "design W certified on simulated twin sessions under assumed order and trading rules; implementation
     gate still closed; nothing run on people; author-gated"
   delivered: "records/113_live_economy_I044.md; experiment/LIVE_ECONOMY.md (specification for the build);
-    experiment/analysis/market_cert_I044.py with tests; freezes/kg_delta_I044.yaml; kg_active_I044.yaml"
+    experiment/analysis/market_cert_I044.py and sorting_benchmark_I044.py with ten tests;
+    records/market_cert_I044.txt (first run kept as _run1) and records/sorting_benchmark_I044.txt;
+    freezes/kg_delta_I044.yaml; freezes/kg_active_I044.yaml; an addendum to the citation log"
+  corrected_while_closing: "the draft memo costed the design at 216 people and explained the divisible-clearing
+    result without a measurement. Both were replaced by addenda AD-W3 to AD-W5, frozen before their runs,
+    before the memo was committed. The draft also counted five claims as passed in full; the scorecard says
+    four."
   next_executable_step: "the author's decisions listed in the memo; then the build (script format 4, engine,
     oTree groups, live claim market) as its own iteration"
