@@ -1,0 +1,102 @@
+iteration_id: "KGi-DISS-I043"
+mode: "redesign of the task's institution, certification on synthetic cohorts of what changes
+  statistically, then implementation. No human data; no recruitment, OSF filing or ethics
+  claim; manuscript not edited. Written before any I043 simulation or code."
+freeze_time: "2026-11-16T16:05Z"
+freeze_relative_to_work: "done before freezing: the storyboard (Social Cognition v0.8.1, ten
+  slides) read; Yaniv & Kleinberger (2000) checked at the level of its abstract. Nothing
+  simulated, nothing built."
+baseline: {repo: "CSL3 main 516e46a (I042 close)", lean: "CSL lean-diss-core 11f09cb",
+           kg: "kg_delta_I032 ... I042; kg_active_I042.yaml", tests: "96 passing"}
+author_directives:
+  - "2026-11-16: the storyboard (basket completion task + predictive market) is the seminal
+    version of the project; a more 'predictive market' emulation is wanted, still informative
+    on the current paper"
+  - "2026-11-16: go with the basket plus predictive market, powered by an abstract economy;
+    borrow some aesthetics from e.g. Polymarket: coloured quotation curves, prices"
+
+design_B:   # the yoked ten-repetition design in the storyboard's institutions
+  kept_from_design_Y: "ten repetitions; six outcome rounds of 120 pre-drawn settlements with one
+    choice each and feedback on the chosen option only; odds .75/.35 then .25/.10; the board
+    (HIGH / LOW, rich round shared); three fairness items and one entitlement item per round;
+    four probes in two pairs (favourable / unfavourable) with a forecast before and after the
+    evidence; yoked pairs; T and the reporting set"
+  basket_rounds: "the participant is a basket player. Each round they order one good, SQUARE or
+    TRIANGLE, for the round. The goods market clears 120 times. An order fills when the clearing
+    price is at or below the participant's cap. A filled good is worth one point; six goods
+    make a basket (a count, with no stated quota). The clearing price is a fixed increasing
+    function of the schedule's own settlement draw, P = cap * exp(s * (z(u) - z(p))), so an
+    order fills exactly when the schedule's bit says so. The other good's prices are not shown."
+  board: "another basket player's filled orders, as before"
+  market_rounds: "four prediction markets, the same four for every participant of a schedule
+    file: 'will ASSET close above X?', two favourable (chance .9), two unfavourable (.1).
+    Screen 1: the asset's price history and a forecast. Screen 2: the evidence, then a second
+    forecast. Screen 3: a bet, YES / NO / pass, at a posted price that appears only now; a
+    winning ticket pays 1. The events settle at the end."
+  evidence: "one pair: a record of ten trial closes held with the participant's own tickets
+    (9 or 1 above; own points), as in design Y. Other pair: a source's forecast (90 or 10)
+    with the same description of the source in both arms. For people the source is a real
+    earlier participant's forecast of that market (seed wave); a computer-generated source is
+    for development only."
+  why_the_source: "the paper's object is the discrediting of outside voices; the trap needs
+    the social channel shut (I037). With the source described identically in both arms,
+    source-reliability learning predicts equal weight; the gate predicts less weight in HIGH."
+  excluded: "informative prices in the outcome rounds beyond the chosen good's own path (a
+    price for the other good, or a quote that tracks the odds ahead of the outcomes); the
+    two-stage route task; live order matching; a basket that needs both goods (it would force
+    alternating orders and break the choice); a stated basket quota (a fixed visible target
+    would hold aspiration up in both arms). These belong to the Social Cognition study or to
+    pilot arms and would each need their own certification."
+  display: "a price curve of the ordered good against the cap with fills marked; cumulative
+    filled orders, own against the board; prediction-market cards with a price history, a
+    probability readout and YES / NO price buttons. One fixed light theme."
+
+what_changes_statistically:
+  S1: "the weight on a source's forecast: w = kappa_s * g with the same gate g as the record.
+    kappa_s is unknown. Yaniv & Kleinberger (2000) report that advice is discounted relative to
+    one's own opinion (abstract; no number verified). Grid: kappa_s in {.5, .35, .2}."
+  S2: "a bet per market. ASSUMED bet rule: YES if the belief after the evidence plus N(0, 8)
+    exceeds price + 5, NO if below price - 5, else pass; price 50. B = mean over the two pairs
+    of (bet on the favourable market - bet on the unfavourable one) / 2, with YES = 1, pass =
+    0, NO = -1. Test BET: B lower in HIGH, signed rank within pairs, one-sided .005."
+  not_changed: "the outcome rounds are the same random variables as design Y: the price is a
+    relabelling of the settlement draw. Whether people read a price curve as they read a
+    record is not simulated."
+
+certification:
+  script: "experiment/analysis/basket_cert_I043.py, seed 139000; pools of 20,000 pairs per gate
+    point from twins_I040.twins (independent choices, as I041); 2,000 samples; plain ratings"
+  claims:   # 72 pairs, one-sided .005, full coupling unless stated
+    B1: "kappa_s = .5, one-update rule: D1 within .02 of I041 at every gate point (.94 at P4)"
+    B2: "one-update rule: D1 at P4 is .80-.92 at kappa_s = .35 and .60-.80 at .2; at P0-P3 it
+      is >= .99 for every kappa_s"
+    B3: "count rule on the record: D1 at P4 >= .97 for every kappa_s"
+    B4: "coupling 0 (ratings move, the gain does not): D1 <= .008 and BET <= .008 for every
+      kappa_s"
+    B5: "BET at kappa_s = .35, one-update rule: >= .95 at P0-P3 and .55-.85 at P4"
+    B6: "by channel at kappa_s = .35, one-update rule, the ratio interval on one pair alone:
+      record pair .60-.80 at P4, source pair .35-.60 at P4, both >= .97 at P1"
+    B7: "pairs for D1 >= .90 at P4, one-update rule: 96 suffice at kappa_s = .35; 96 do not
+      suffice at .2"
+    B8: "at kappa_s = .35, one-update rule, P1-P3: FREEZE >= .85; ASSOC_H .18-.36"
+
+build:
+  schedules: "format 3 = format 2 plus the settlement draw (for the price path), four markets
+    common to the file (asset, threshold, price history, chance, settlement draw), the evidence
+    type of each pair and the posted bet price. Format-1 fields unchanged for the same seed. A
+    switch gives two record pairs (the seed wave, and design Y's probe)."
+  app: "experiment/diss_market, changed in place: Order, Clearing, Rate; Market (forecast),
+    Evidence (record or source, forecast again), Bet; settlement on the last page"
+  gates:
+    H1_engine: "for 200 schedules every price lies at or below the cap exactly when the order
+      fills; fills, boards and the probe statistic are those of I042's engine"
+    H2_no_leak: "no page holds the other good's prices, a later round, a market's evidence
+      before its first forecast, or a bet price before the second forecast"
+    H3_bots_and_browser: "the I042 gates G3-G7 pass on the new screens (bots: stored data =
+      schedule; browser: no error, no outside request, equal display, reload, back, re-post)"
+    H4_export: "the export feeds yoked_analysis.decisions plus the bet statistic"
+    H5_docker: "the image builds and the stack serves a session, on stand-in images as in I042"
+    H6_regression: "earlier tests pass or are replaced with a stated reason"
+    H7_constraints: "as G10 of I042; no brand name, logo or copied layout of any real market"
+  stopping: "close after the certification, the build, its verification, the memo and the KG
+    update. Not here: the pilot specification, wording decisions, the seed wave."
