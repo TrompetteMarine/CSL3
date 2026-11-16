@@ -1,0 +1,78 @@
+KGi-DISS-I044: the yoked design as a live economy (2400 sessions per arm and cell; 2000 samples; seed 140000)
+markets of 6 traders and 12 twin sessions (72 traders per arm) unless stated; one-sided .005; t quantiles on market values
+
+0. gates
+   X1 bridge, P1: the kernel step with one trader, fixed fill chances and a board: legitimacy at probe time HIGH 0.111 (share below .05: 0.825), LOW 0.871; certified .109 (.827), .869
+   X3 truthful bidding: largest gain from changing one bid in 200 clearings: 0.00e+00
+   X2 market clearing: 0 violations in 1728000 checked clearings (so far)
+
+1. levels in the live economy (focal market; unit orders; trailing reference)
+   point  legitimacy at probe time HIGH (share below .05) | LOW   last fairness HIGH | LOW   fill rate, scarce rounds HIGH | LOW   cash earned HIGH | LOW   advantaged neighbour: legitimacy, fill rate
+   P0     0.030 (0.927) | 0.939                      26.5 | 72.0            0.1762 | 0.1846                 65.88 | 65.74        0.997, 0.664
+   P1     0.175 (0.622) | 0.935                      33.8 | 71.8            0.1836 | 0.1849                 66.25 | 66.18        0.990, 0.664
+   P2     0.250 (0.487) | 0.962                      37.5 | 73.0            0.1846 | 0.1852                 66.08 | 65.55        0.993, 0.665
+   P3     0.177 (0.606) | 0.917                      33.9 | 70.7            0.1848 | 0.1848                 65.91 | 65.50        0.990, 0.665
+   P4     0.480 (0.404) | 0.930                      49.0 | 71.4            0.1852 | 0.1846                 66.34 | 65.73        0.984, 0.665
+   P1 by round, legitimacy HIGH: 0.905 0.306 0.261 0.239 0.206 0.175 | LOW: 0.906 0.611 0.555 0.572 0.709 0.935
+   P1 intraclass correlation within a market (the model alone): fills in scarce rounds HIGH | LOW -0.128 | -0.112; last fairness +0.134 | +0.061; probe statistic +0.047 | +0.006
+
+2. the confirmatory pair on markets (H1a_M | D1_M | both), mean psi-hat
+   rule     point   12 twin sessions, no session effect      8 twin sessions                     12, intraclass correlation .2
+   event    P0      1.000 | 1.000 | 1.000  psi 0.034     1.000 | 1.000 | 1.000  psi 0.033     1.000 | 0.999 | 0.999  psi 0.032
+   event    P1      1.000 | 1.000 | 1.000  psi 0.190     1.000 | 0.991 | 0.991  psi 0.192     1.000 | 0.967 | 0.967  psi 0.204
+   event    P2      1.000 | 0.999 | 0.999  psi 0.259     1.000 | 0.989 | 0.989  psi 0.258     1.000 | 0.943 | 0.943  psi 0.258
+   event    P3      1.000 | 0.999 | 0.999  psi 0.195     1.000 | 0.987 | 0.987  psi 0.196     1.000 | 0.955 | 0.955  psi 0.189
+   event    P4      1.000 | 0.894 | 0.894  psi 0.523     0.966 | 0.653 | 0.641  psi 0.524     0.910 | 0.410 | 0.381  psi 0.539
+   outcome  P0      1.000 | 1.000 | 1.000  psi 0.048     1.000 | 1.000 | 1.000  psi 0.049     1.000 | 1.000 | 1.000  psi 0.055
+   outcome  P1      1.000 | 1.000 | 1.000  psi 0.247     1.000 | 0.999 | 0.999  psi 0.244     1.000 | 0.992 | 0.992  psi 0.252
+   outcome  P2      1.000 | 1.000 | 1.000  psi 0.346     1.000 | 0.993 | 0.993  psi 0.345     1.000 | 0.988 | 0.988  psi 0.348
+   outcome  P3      1.000 | 1.000 | 1.000  psi 0.261     1.000 | 0.999 | 0.999  psi 0.262     1.000 | 0.994 | 0.994  psi 0.264
+   outcome  P4      1.000 | 0.979 | 0.979  psi 0.544     0.968 | 0.827 | 0.815  psi 0.548     0.902 | 0.669 | 0.620  psi 0.541
+
+3. sizes at nominal .005, P1 (D1: ratings move, the gain does not; H1a: both markets on the LOW regime)
+   intraclass correlation   market-level D1_M | H1a_M        individual-level tests of I041: D1 | H1a
+   0.0                      0.0065 | 0.0065                 0.0060 | 0.0075
+   0.1                      0.0085 | 0.0065                 0.0200 | 0.0235
+   0.2                      0.0040 | 0.0080                 0.0245 | 0.0475
+
+4. variants at P1 and P4: legitimacy at probe time HIGH | LOW, mean psi-hat, D1_M at 12 twin sessions (one-update rule)
+   div    P1   0.938 | 1.000   psi 0.954   H1a_M 0.229  D1_M 0.025   inequality of fills within a LOW market (Gini) 0.097
+   div    P4   0.971 | 1.000   psi 0.984   H1a_M 0.062  D1_M 0.005   inequality of fills within a LOW market (Gini) 0.096
+   cum    P1   0.225 | 0.684   psi 0.326   H1a_M 0.978  D1_M 0.856   inequality of fills within a LOW market (Gini) 0.156
+   cum    P4   0.494 | 0.754   psi 0.664   H1a_M 0.602  D1_M 0.271   inequality of fills within a LOW market (Gini) 0.151
+   shade  P1   0.196 | 0.925   psi 0.213   H1a_M 1.000  D1_M 1.000   inequality of fills within a LOW market (Gini) 0.211
+   shade  P4   0.471 | 0.919   psi 0.529   H1a_M 1.000  D1_M 0.850   inequality of fills within a LOW market (Gini) 0.209
+   rev5   P1   0.215 | 0.941   psi 0.237   H1a_M 1.000  D1_M 1.000   inequality of fills within a LOW market (Gini) 0.143
+   rev5   P4   0.503 | 0.934   psi 0.546   H1a_M 1.000  D1_M 0.842   inequality of fills within a LOW market (Gini) 0.143
+   (base P1: Gini 0.142)
+
+5. market size at 72 traders per arm, intraclass correlation .1: D1_M (one-update rule)
+   P1   18 markets of 4: 0.987 (legitimacy 0.325 | 0.966)     12 markets of 6: 0.996 (legitimacy 0.175 | 0.935)     9 markets of 8: 0.993 (legitimacy 0.111 | 0.916)
+   P4   18 markets of 4: 0.777 (legitimacy 0.508 | 0.959)     12 markets of 6: 0.660 (legitimacy 0.480 | 0.930)     9 markets of 8: 0.581 (legitimacy 0.454 | 0.918)
+
+6. procurement as a collective outcome: share of scripted units sold, LOW minus HIGH, and EFF at 12 twin sessions
+   no reversal, rounds 2-6, P1: sold HIGH 0.9186, LOW 0.9251, difference +0.0065, EFF 0.004; round 6, share of orders on the good that was plentiful at first: HIGH minus LOW -0.059, test 0.001
+   no reversal, rounds 2-6, P4: sold HIGH 0.9269, LOW 0.9239, difference -0.0031, EFF 0.004; round 6, share of orders on the good that was plentiful at first: HIGH minus LOW -0.061, test 0.000
+   plentiful good switched at round 5, rounds 5-6, P1: sold HIGH 0.9440, LOW 0.9409, difference -0.0031, EFF 0.001; round 6, share of orders on the good that was plentiful at first: HIGH minus LOW +0.035, test 0.013
+   plentiful good switched at round 5, rounds 5-6, P4: sold HIGH 0.9407, LOW 0.9353, difference -0.0054, EFF 0.002; round 6, share of orders on the good that was plentiful at first: HIGH minus LOW +0.026, test 0.008
+
+7. twelve records on one claim (HIGH arm): PLAT, mean delta, closure after records 3-5 and 10-12
+   rule     point   gate world                              HIGH uniformly slowed, 10% inattentive      uniformly slowed, nobody inattentive
+   event    P0      0.024  delta +0.034  (0.037, 0.063)      0.013  delta +0.011  (0.051, 0.121)      0.005  delta -0.001  (0.153, 0.366)
+   event    P1      0.556  delta +0.158  (0.193, 0.281)      0.345  delta +0.082  (0.255, 0.470)      0.015  delta +0.006  (0.412, 0.760)
+   event    P4      1.000  delta +0.279  (0.426, 0.498)      0.979  delta +0.184  (0.542, 0.696)      0.047  delta +0.027  (0.735, 0.946)
+   outcome  P0      0.059  delta +0.062  (0.074, 0.125)      0.087  delta +0.058  (0.119, 0.235)      0.004  delta +0.001  (0.365, 0.711)
+   outcome  P1      0.929  delta +0.240  (0.309, 0.391)      1.000  delta +0.226  (0.466, 0.591)      0.059  delta +0.030  (0.751, 0.948)
+   outcome  P4      1.000  delta +0.289  (0.504, 0.560)      0.982  delta +0.247  (0.684, 0.708)      0.061  delta +0.037  (0.926, 0.962)
+   LOW arm, P1, one-update rule (10% inattentive): PLAT 0.456  delta +0.117  (0.794, 0.868)
+
+8. the claim market (market maker): price response (favourable minus unfavourable claim) HIGH | LOW, ratio, PRICE at 12 twin sessions
+   P0   0.011 | 0.338   ratio of means 0.033 (psi-hat from forecasts 0.034)   PRICE 0.994   cash and legitimacy within HIGH markets r = +0.576
+   P1   0.067 | 0.336   ratio of means 0.200 (psi-hat from forecasts 0.190)   PRICE 0.936   cash and legitimacy within HIGH markets r = -0.000
+   P2   0.094 | 0.343   ratio of means 0.274 (psi-hat from forecasts 0.259)   PRICE 0.888   cash and legitimacy within HIGH markets r = -0.004
+   P3   0.059 | 0.331   ratio of means 0.179 (psi-hat from forecasts 0.193)   PRICE 0.936   cash and legitimacy within HIGH markets r = -0.078
+   P4   0.168 | 0.336   ratio of means 0.499 (psi-hat from forecasts 0.519)   PRICE 0.448   cash and legitimacy within HIGH markets r = +0.091
+   P1, two passes: 0.062 | 0.337, ratio 0.184
+   P1, stake a tenth of the bankroll: 0.061 | 0.335, ratio 0.182
+
+   X2 market clearing, whole run: 0 violations in 5184000 checked clearings

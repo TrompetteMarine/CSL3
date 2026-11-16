@@ -133,3 +133,30 @@ gates:
     built; no unverified citation"
 stopping: "close after the certification, the design memo with the author's open decisions, the KG update and
   the push. Not here: the oTree build of a live market, the pilot specification, any wording."
+
+# =================================================================== ADDENDA (frozen before their runs)
+first_run:   # 2026-11-16; record records/market_cert_I044_run1.txt, kept as it came out
+  defect: "section 7, the two 'uniformly slowed' worlds. A trader was treated as inattentive when the weight
+    was zero, which also catches every trader whose legitimacy is exactly 0. The rival kept a mass at zero
+    and was not uniform. The gate-world column and every other section do not use that mask."
+  correction: "inattentive = the 10% drawn as such; uniform weight = the mean weight of the attentive"
+addenda:
+  AD_W1_plateau_net_of_inattention:
+    reason: "seen in the first run: in the LOW arm, where no gate operates, PLAT rejects in .456 of samples.
+      One trader in ten who never moves is enough to bend the path. PLAT cannot tell the gate from
+      inattention."
+    statistic: "PLAT2: the HIGH closures are divided by the late closure of the twin LOW markets (an estimate
+      of the share of traders who respond at all) before the same delta is computed; delta method on the
+      three market means; t quantile with S - 1 df"
+    predictions: "HIGH uniformly slowed with 10% inattentive (corrected world): PLAT2 <= .01 at P1 and P4 under
+      both rules. Gate world: P1 one-update .45-.65, P1 count >= .85, P4 >= .95 under both rules, P0 <= .05.
+      If the HIGH arm is uniformly slowed and 30% of it is inattentive (LOW 10%), PLAT2 rejects in >= .50 at
+      P1: it does not separate the gate from disengagement that differs by arm."
+  AD_W2_supply_calibrated_to_the_board_rate:
+    reason: "seen in the first run: the rich neighbour fills .664 of its orders, not the certified board's .72,
+      and the focal HIGH legitimacy moves with market size (.325 | .175 | .111 for 4 | 6 | 8 traders)"
+    change: "rich arrival chances scaled by one factor per market size (grid 1.00, 1.05, ..., 1.60; pilot pool
+      of 300 sessions at P1) so that the rich neighbour's fill rate in rounds 2-6 is nearest to .72"
+    predictions: "focal HIGH legitimacy at probe time at P1 within .03 of .109 for 6 traders and within .05
+      for 4 and 8; LOW >= .90; mean psi-hat at P1 <= .16; D1_M at P4 (12 twin sessions of 6, no session
+      effect) >= .92"
