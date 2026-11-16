@@ -178,3 +178,31 @@ my choices, not estimates from this or any paper.
 Considered and NOT cited (a bibliographic record only; the claim was not read): Soll &
 Larrick (2009). The storyboard (Social Cognition v0.8.1) is an internal project document,
 not a citation.
+
+## I044 addendum (2026-11-16; records/113_live_economy_I044.md, experiment/LIVE_ECONOMY.md)
+
+Levels as above: V-biblio (the record only), V-claim (abstract) (the abstract was read and
+supports the sentence it is used for), V-claim (secondary) (a description by a third party).
+
+| Reference | Level | What was verified | Where |
+|---|---|---|---|
+| Vickrey, W. (1961) Counterspeculation, auctions, and competitive sealed tenders. *J. Finance* 16(1):8–37 | V-biblio + V-claim (secondary) | in a sealed-bid auction of one object where the winner pays the second-highest bid, bidding one's value is a dominant strategy. NOT verified from the text: the paper's treatment of several identical units | two library listings (bibliographic); a descriptive wiki page (the single-object result) |
+| Demange, G., Gale, D. & Sotomayor, M. (1986) Multi-item auctions. *J. Polit. Econ.* 94(4):863–872. doi:10.1086/261411 | V-claim (abstract) | each bidder receives at most one item; an equilibrium price vector that is optimal for the bidders exists and is unique; two auction mechanisms reach it, one exactly and one approximately. NOT verified: any incentive property | IDEAS/RePEc record |
+| Kelso, A. S. & Crawford, V. P. (1982) Job matching, coalition formation, and gross substitutes. *Econometrica* 50(6):1483–1504 | V-claim (abstract) | with discrete choices (workers and heterogeneous firms) an equilibrium exists provided workers are gross substitutes from each firm's standpoint | Econometric Society page |
+| Ausubel, L. M., Cramton, P., Pycia, M., Rostek, M. & Weretka, M. (2014) Demand reduction and inefficiency in multi-unit auctions. *Rev. Econ. Stud.* 81(4):1366–1400 | V-claim (abstract) | when bidders want several units, bids for marginal units affect what is paid for the others; bids are shaded differently across units and uniform-price and pay-as-bid auctions are generally inefficient | EconPapers record |
+| Hanson, R. (2007) Logarithmic market scoring rules for modular combinatorial information aggregation. *J. Prediction Markets* 1(1):3–15 | V-claim (abstract) | market scoring rules combine a scoring rule with a market; the logarithmic versions are singled out. NOT taken from it: the loss bound of the market maker, which is derived in the specification | IDEAS/RePEc record |
+| Fréchette, G. R. (2012) Session-effects in the laboratory. *Exp. Econ.* 15(3):485–498. doi:10.1007/s10683-011-9309-1 | V-claim (abstract) | observations on subjects of one session may be more correlated than observations across sessions; standard remedies are at times inadequate | EconPapers record |
+| Polymarket documentation, "Prices & Orderbook" (docs.polymarket.com/concepts/prices-orderbook), read 2026-11-16 | V-claim | prices are not set by the platform but by users' orders in an order book; a share is priced between $0.00 and $1.00; a YES order at $0.60 matches a NO order at $0.40; the displayed price is the midpoint of the bid-ask spread, or the last traded price when the spread exceeds $0.10 | the platform's page |
+| Kalshi help centre, "How are prices determined?" (help.kalshi.com/en/articles/13823836-how-are-prices-determined), read 2026-11-16 | V-claim | the platform matches buyers and sellers with opposing views; the two sides together put up $1; a price of 70 cents for YES goes with 30 cents for NO and is read as a 70% chance | the platform's page |
+
+Used for positioning in the specification of the live economy only. The property that
+bidding one's value is dominant when several identical units are sold to bidders who want
+one each, at the highest losing bid, is NOT attributed to a paper: the specification gives
+the argument and the run checks it numerically (gate X3). The example of two goods without
+market-clearing prices (a bidder who values only the pair) is constructed in the
+specification and is not a citation.
+
+Considered and NOT cited: Bikhchandani & Mamer (1997, *J. Econ. Theory* 74(2):385–413;
+bibliographic record only, no abstract retrievable); Gul & Stacchetti (1999), Leonard
+(1983), Smith (1976), Hudgens & Halloran (2008) (not looked up). The research proposal
+(Social Cognition task draft) is an internal project document, not a citation.

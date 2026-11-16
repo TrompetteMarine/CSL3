@@ -265,6 +265,23 @@ addenda_2:   # 2026-11-16, written while drafting the memo; nothing of sections 
       .0010-.0030, below repair .0060-.0095. Divisible, HIGH: erosion .0015-.0040, below repair .0055-.0085.
       Divisible, LOW: erosion <= .0015, repair >= .0090"
 
+  AD_W5_layouts_for_a_fixed_number_of_people:   # frozen after a scratch run of sections 11-12 (seen; not yet a record)
+    seen: "sections 11-12 once, in a scratch file. Under the frozen supply the 216-person layout analysed by
+      triplets gives D1_M .781 at P4 against .900 for the full layout (.428 against .666 with a shared session
+      effect of .1); the two markets of a LOW session are positively correlated in fairness (+.244), not
+      negatively as I predicted."
+    reason: "the question the author has to answer is how to spend a number of people. The layouts have to be
+      compared under the supply the specification will recommend (calibrated), and the triplet layout has to be
+      tried at the full layout's cost."
+    layouts: "6 per market, rich supply x 1.10 (section 10). (i) full: 12 HIGH + 12 LOW sessions, focal markets
+      as units, 288 people. (ii) 12 HIGH + 6 LOW sessions by triplets, 216 people. (iii) 16 HIGH + 8 LOW sessions
+      by triplets (8 triplets; 7 and 14 df), 288 people. Session effect 0 and .1, shared by the two markets of
+      a LOW session in (ii) and (iii)."
+    predictions: "P1: D1_M and H1a_M >= .97 in every layout and at both session effects. P4, D1_M: (ii) .82-.92
+      without and .50-.70 with the session effect (full layout .951 and .811 in section 10); (iii) .93-.99
+      without and .70-.88 with. H1a_M at P4 >= .95 in every layout. Sizes of (iii) by triplets at P1, both
+      session effects: <= .008."
+
 closing_record:   # 2026-11-16
   state: "design W certified on simulated twin sessions under assumed order and trading rules; implementation
     gate still closed; nothing run on people; author-gated"
