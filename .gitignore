@@ -2,10 +2,16 @@ __pycache__/
 *.pyc
 .pytest_cache/
 experiment/db.sqlite3
-experiment/_static/
+# the built front end of diss_market is tracked, so the app runs from a clone without Node
+experiment/_static/*
+!experiment/_static/diss_market/
 experiment/staticfiles/
 experiment/be*/
 experiment/bp*/
 experiment/botexport*/
 experiment/analysis/smoke_report_participants.csv.bak
 engine/out/
+experiment/frontend/node_modules/
+experiment/schedules/_generated/
+experiment/pools/_generated/
+experiment/.env

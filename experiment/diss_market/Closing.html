@@ -1,0 +1,29 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow">
+    {{ include_sibling '_errors.html' }}
+    <h1 class="dm-h1">{{ t.title }}</h1>
+    <p class="dm-sub">{{ t.intro }}</p>
+    {{ for s in scales }}
+    <div class="dm-scale">
+      <p class="dm-q-label">{{ s.text }}</p>
+      <div class="dm-chips" role="radiogroup" aria-label="{{ s.text }}">
+        {{ for v in points7 }}
+        <label class="dm-chip"><input type="radio" name="{{ s.name }}" value="{{ v }}"><span>{{ v }}</span></label>
+        {{ endfor }}
+      </div>
+      <div class="dm-anchors"><span>1 · {{ s.lo }}</span><span>7 · {{ s.hi }}</span></div>
+    </div>
+    {{ endfor }}
+    <div class="dm-field"><label for="dm-purpose">{{ t.purpose_guess }}</label><textarea id="dm-purpose" name="purpose_guess"></textarea></div>
+    <div class="dm-row">
+      <div class="dm-field"><label for="dm-age">{{ t.age }}</label><input id="dm-age" type="number" name="age" min="18" max="99" inputmode="numeric"></div>
+      <div class="dm-field"><label for="dm-gender">{{ t.gender }}</label><input id="dm-gender" type="text" name="gender" autocomplete="off"></div>
+    </div>
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit">{{ t.next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

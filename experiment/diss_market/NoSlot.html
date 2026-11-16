@@ -1,0 +1,11 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow">
+    <h1 class="dm-h1">{{ t.title }}</h1>
+    <p class="dm-sub">{{ t.body }}</p>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

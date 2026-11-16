@@ -1,0 +1,29 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-choose">
+    {{ include_sibling '_errors.html' }}
+    <h1 class="dm-h1">{{ t.choose_title }}</h1>
+    <p class="dm-sub">{{ sub }}</p>
+    {{ if recap }}
+    <div class="dm-recap"><span>{{ recap.you }}</span>{{ if recap.board }}<span>{{ recap.board }}</span>{{ endif }}</div>
+    {{ endif }}
+    <div class="dm-tickets" role="radiogroup" aria-label="{{ t.choose_title }}">
+      {{ for tk in tickets }}
+      <label class="dm-ticket">
+        <input type="radio" name="ticket" value="{{ tk.value }}">
+        <span class="dm-ticket-card">
+          <span class="dm-ticket-tag">held</span>
+          <span class="dm-glyph" data-glyph="{{ tk.value }}"></span>
+          <span class="dm-ticket-name">{{ tk.name }}</span>
+        </span>
+      </label>
+      {{ endfor }}
+    </div>
+    <input type="hidden" name="rt_choose_ms" value="">
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.choose_next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

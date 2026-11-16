@@ -1,0 +1,25 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow">
+    {{ include_sibling '_errors.html' }}
+    <h1 class="dm-h1">{{ t.title }}</h1>
+    <p class="dm-sub">{{ t.intro }}</p>
+    {{ for r in rows }}
+    <fieldset class="dm-q" style="border:0;padding:0;margin-inline:0">
+      <legend class="dm-q-label">{{ r.label }}</legend>
+      {{ for o in r.options }}
+      <label class="dm-opt"><input type="radio" name="{{ r.name }}" value="{{ o.text }}" {{ if o.checked }}checked{{ endif }}><span>{{ o.text }}</span></label>
+      {{ endfor }}
+      {{ if r.name == 'cq_cost' }}{{ formfield_errors 'cq_cost' }}{{ endif }}
+      {{ if r.name == 'cq_count' }}{{ formfield_errors 'cq_count' }}{{ endif }}
+      {{ if r.name == 'cq_draws' }}{{ formfield_errors 'cq_draws' }}{{ endif }}
+      {{ if r.name == 'cq_board' }}{{ formfield_errors 'cq_board' }}{{ endif }}
+    </fieldset>
+    {{ endfor }}
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit">{{ t.next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

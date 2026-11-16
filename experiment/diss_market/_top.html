@@ -1,0 +1,12 @@
+<header class="dm-top">
+  <span class="dm-brand">{{ brand }}</span>
+  {{ if steps }}
+  <div class="dm-progress">
+    <ol class="dm-steps" aria-hidden="true">{{ for s in steps }}<li class="dm-step is-{{ s.kind }} is-{{ s.state }}"></li>{{ endfor }}</ol>
+    <span class="dm-roundlabel">{{ progress.round }} <b>{{ round }}</b> {{ progress.of }} {{ n_rounds }}</span>
+  </div>
+  <span class="dm-points">{{ progress.points }} <b id="dm-points">{{ points }}</b></span>
+  {{ else }}
+  <span></span><span></span>
+  {{ endif }}
+</header>

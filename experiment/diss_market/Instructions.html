@@ -1,0 +1,22 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow">
+    <h1 class="dm-h1">{{ t.title }}</h1>
+    <div class="dm-prose">
+      {{ for b in blocks }}
+      <h2>{{ b.head }}</h2>
+      <p>{{ b.body|safe }}</p>
+      {{ endfor }}
+    </div>
+    <div class="dm-legend" aria-label="How settlements are drawn">
+      <span><i class="is-paid"></i>{{ t.legend_paid }}</span>
+      <span><i class="is-unpaid"></i>{{ t.legend_unpaid }}</span>
+    </div>
+    <p class="dm-sub" style="margin-top:22px">{{ t.payment }}</p>
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit">{{ t.next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

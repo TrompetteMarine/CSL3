@@ -1,0 +1,34 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow dm-probe">
+    {{ include_sibling '_errors.html' }}
+    <div class="dm-newticket is-small">
+      <span class="dm-glyph" data-glyph="{{ symbol }}"></span>
+      <h1 class="dm-h1">{{ symbol_name }}</h1>
+    </div>
+    <div class="dm-record">
+      <section class="dm-tape" data-tape="record">
+        <p class="dm-record-text">{{ record_text|safe }}</p>
+        <div class="dm-grid" data-grid aria-hidden="true"></div>
+        <p class="dm-record-sum" aria-live="polite"><b data-count>0</b> {{ t.sum_paid }} {{ m }}</p>
+      </section>
+    </div>
+    <div id="dm-ask" hidden>
+      <p class="dm-question">{{ t.question_post }}</p>
+      <div class="dm-forecast">
+        <div data-slider data-step="5" data-show-value="1" data-unit="%" data-label="{{ t.question_post }}">
+          <input type="hidden" name="forecast_post" value="">
+        </div>
+        <div class="dm-anchors"><span>0% · {{ t.anchors.0 }}</span><span>100% · {{ t.anchors.1 }}</span></div>
+        <p class="dm-hint">{{ t.place_hint }}</p>
+      </div>
+    </div>
+    <input type="hidden" name="rt_post_ms" value="">
+    <input type="hidden" name="record_done" value="">
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

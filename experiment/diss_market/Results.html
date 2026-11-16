@@ -1,0 +1,19 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow">
+    <h1 class="dm-h1">{{ t.title }}</h1>
+    <div class="dm-card">
+      <p>{{ points_line|safe }}</p>
+      <p>{{ bonus_line|safe }}</p>
+      <p class="dm-total">{{ money_line|safe }}</p>
+    </div>
+    <p class="dm-sub" style="margin-top:22px">{{ t.thanks }}</p>
+    {{ if completion_url }}
+    <div class="dm-actions"><a class="dm-btn" href="{{ completion_url }}">{{ t.complete }}</a></div>
+    {{ endif }}
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

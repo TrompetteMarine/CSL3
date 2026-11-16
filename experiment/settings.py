@@ -69,6 +69,40 @@ SESSION_CONFIGS = [
          **BASE_CELL),
 ]
 
+# ---- diss_market: the yoked ten-repetition design (KGi-DISS-I042) ----------------
+# Every value marked DRAFT is an author decision (freeze I042). Slots of a schedule file are
+# taken in order of arrival; give two sessions that share a file disjoint first_slot/last_slot.
+MARKET_CELL = dict(
+    app_sequence=['diss_market'],
+    num_demo_participants=4,
+    schedule_path=environ.get('MARKET_SCHEDULE', 'schedules/example_seed0_4pairs_v2.json'),
+    board_source='schedule',       # 'schedule' (computer trader; dev and bots only) | 'pool' | 'none'
+    reveal_ms=9000,                # DRAFT: time over which a round's settlements appear
+    probe_reveal_ms=6000,          # DRAFT: time over which a probe record appears
+    recall_check=True,             # DRAFT: recall question after each probe ticket
+    prize_points=20,               # DRAFT: forecast bonus
+    points_to_currency=0.01,       # DRAFT: money per point
+    completion_url='',             # e.g. the recruitment platform's completion link
+    min_window_width=0,            # DRAFT: e.g. 900 keeps phones out; 0 lets every device in
+)
+SESSION_CONFIGS += [
+    dict(name='market_dev', display_name='MARKET dev: computer-generated board (never shown to people in production)',
+         **MARKET_CELL),
+    dict(name='market_seed', display_name='MARKET seed wave: no board (its records feed the pool)',
+         **{**MARKET_CELL, 'board_source': 'none'}),
+    dict(name='market_pilot', display_name='MARKET pilot: board replays real earlier records (needs a pool file)',
+         **{**MARKET_CELL, 'board_source': 'pool', 'pool_path': environ.get('MARKET_POOL', 'pools/pool.json')}),
+    # pipeline-validation bot sessions (never human evidence)
+    dict(name='market_bots_random', display_name='MARKET bots: random', bot_kind='random', **MARKET_CELL),
+    dict(name='market_bots_model', display_name='MARKET bots: gate kernel', bot_kind='model', **MARKET_CELL),
+    dict(name='market_bots_seed', display_name='MARKET bots: seed wave, no board', bot_kind='random',
+         **{**MARKET_CELL, 'board_source': 'none'}),
+    dict(name='market_e2e', display_name='MARKET browser test: short reveals (never for people)', bot_kind='browser',
+         **{**MARKET_CELL, 'reveal_ms': 1500, 'probe_reveal_ms': 1000}),
+    dict(name='market_bots_pool', display_name='MARKET bots: board from a pool', bot_kind='model',
+         **{**MARKET_CELL, 'board_source': 'pool', 'pool_path': environ.get('MARKET_POOL', 'pools/pool.json')}),
+]
+
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1.00,
                                participation_fee=4.20, doc="")   # AUDIT: DESIGN §2
 
@@ -82,7 +116,7 @@ USE_POINTS = False
 ROOMS = []
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
-DEMO_PAGE_INTRO_HTML = """diss_bandit — task v3 market skin (KGi-DISS-I032)"""
+DEMO_PAGE_INTRO_HTML = """diss_market — yoked ten-repetition design (KGi-DISS-I042); diss_bandit — task v3 (KGi-DISS-I032)"""
 # AUDIT: secret from the environment; refuse the dev key in production mode.
 SECRET_KEY = environ.get('OTREE_SECRET_KEY', 'dev-only-not-for-production')
 if environ.get('OTREE_PRODUCTION') and SECRET_KEY == 'dev-only-not-for-production':

@@ -1,0 +1,24 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow dm-rate">
+    {{ include_sibling '_errors.html' }}
+    <h1 class="dm-h1">{{ t.rate_title }}</h1>
+    <p class="dm-sub">{{ t.rate_sub }}</p>
+    {{ for it in items }}
+    <div class="dm-item {{ if it.name == 'entitle' }}is-other{{ endif }}">
+      <p class="dm-item-text">{{ it.text }}</p>
+      <div data-slider data-start="{{ it.start }}" data-step="5" data-label="{{ it.text }}">
+        <input type="hidden" name="{{ it.name }}" value="">
+      </div>
+      <div class="dm-anchors"><span>{{ it.lo }}</span><span>{{ it.hi }}</span></div>
+    </div>
+    {{ endfor }}
+    <input type="hidden" name="rate_meta" value="">
+    <input type="hidden" name="rt_rate_ms" value="">
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.rate_next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}
