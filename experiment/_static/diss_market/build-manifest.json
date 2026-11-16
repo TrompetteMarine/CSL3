@@ -1,27 +1,28 @@
 {
  "sources": {
+  "src/chart.ts": "f015aea06dd915aca52e3322aa6701fbd1e2f261e32be9893eb1741aa74acc5f",
   "src/env.ts": "57f9d7c0d39139b6d9ea4272224fc233d6563156b59bfa43af88b3c67d5cdeff",
   "src/glyphs.ts": "1162e0e2a62be49085d6208322084d618d9981a4018bb4bd33918e874a0b1c89",
-  "src/main.ts": "3b95a373aa4807b4b2aaf903c4f3f6c2b791e1cc9b22a7b056d296fa9027eb48",
-  "src/pages/choose.ts": "d699b234011e18cef05d40569e7e7d2f1b37814f328fc775779540143b09c673",
+  "src/main.ts": "c85fa7121ca5274fc780b830ca4361da223f0bfaf22eefdc8534fada8044b45b",
+  "src/pages/clearing.ts": "d18338a3a755186f0ffd97867982ae96446c2d8c3be0e54e35d1fd3c985d5f92",
+  "src/pages/market.ts": "d89c262f4edd50495902d06573eac2af9eaf461ddb90d46998b2b16b3a3bbb8a",
   "src/pages/misc.ts": "63aae5db725d7b99ca405eb89e047c4a651dce0e9c001c5e588b894fd4dcd0e4",
-  "src/pages/probe.ts": "26d9629087c5c79d0ea3422a4a3b590ba0c9153a27c4424b90e25e46cd28d0ed",
+  "src/pages/order.ts": "04e34618d41fc15214ea02da30985d418ccbbbe65709390fa64a66e02f903bf4",
   "src/pages/rate.ts": "ead937b131c18157861ab7a9c9dbc64224bda1e9c95e1b62315bd9bc1d2c8536",
-  "src/pages/settle.ts": "7606d45a08433ffe92a4776b05063f8e9373b6f50c5993e31808fc0f5f6df800",
   "src/slider.ts": "a7a4f697d23717f7d3deddb93203e0d3364ab0ab394129fc61bfd04fe3321521",
-  "src/styles/app.css": "5946622746c395bafac10fef8d34b63e9918281b905257f43acd4b01d45b995e",
-  "src/styles/fonts.css": "ae603f89948d1fe68c8c1adf0efd553692271117600781e412121927f88ae371",
-  "src/tape.ts": "113dab4ff34e41f45d7267fecf7f4d1f76333d3459baa70d75095033bd67cd91",
-  "src/timeline.ts": "0d66857b848fbfd70bf93e1f71e1c51135c4857c04235aaf7d309637fbad1f23",
-  "package.json": "d05ef03b15e438c09a9e33dd8ea80d0908e1672ac7d1355959c84604fb0fd504",
-  "package-lock.json": "a3d35a2c46b8d810e01e47e6dca6e9afd270a989b5993370bb1e483c2e2fd0c1",
+  "src/styles/app.css": "3c00b164aebc748c69be99e73b4bc43e9fe3f2481caec0ab477cd44ef825f052",
+  "src/styles/fonts.css": "0494fc380ee7d78a8fac7aa4ab00357558ae28cd153895ef154c8cab88199929",
+  "src/svgchart.ts": "b00bb7de6c48cfc2938255b8bdbb1b8fc93126fd1fee16f8f9cfede6cc35a049",
+  "src/timeline.ts": "442b2e3d28c98eb14cec3db9a077576731cc917f93f5488c3f4aa8255797506b",
+  "package.json": "ce502496c97fc4dc73c280816cc7fca0a75cfad1ea2b202569bc9b40368eca60",
+  "package-lock.json": "19e41eaa8dedf795616ded7dcbaf2fb309c44887cc94998066be015613ba353e",
   "build.mjs": "4206ece49310c4e41d25b99ecc54752886555dce005b8b06ba5d7e7f1107eacf",
   "tsconfig.json": "57fb4f7f24d2e40838b87c8cb9fce31d8d4df98ae06388ea50cd5192b52a1a65"
  },
  "outputs": {
   "app.js": {
-   "bytes": 12486,
-   "sha256": "7794ad4efcf39d899f425f7516a39da8f3575cf85f5dc4da11c692d445fe1571"
+   "bytes": 24606,
+   "sha256": "c84ee1ae13c3e3c91850f621c755d3c6f907163746fc78bf7ab1d7a0a0b598ba"
   },
   "fonts/ibm-plex-sans-latin-400-normal.woff2": {
    "bytes": 22588,
@@ -35,17 +36,9 @@
    "bytes": 24252,
    "sha256": "8960851d691c054ed38e259bdcf1a6190d157b4203ed5bb32c632a863fb8ec2f"
   },
-  "fonts/ibm-plex-mono-latin-400-normal.woff2": {
-   "bytes": 14708,
-   "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
-  },
-  "fonts/ibm-plex-mono-latin-500-normal.woff2": {
-   "bytes": 14888,
-   "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
-  },
   "app.css": {
-   "bytes": 15216,
-   "sha256": "1bd3d5eb46a383b08ea2ad059fd39a92e43cb79a9808a46ba6f1aebf70ffc32e"
+   "bytes": 23361,
+   "sha256": "10ad19c5a371ee0c1ab74c06642f7659dd177d8cf99d5b6194a8aa8a75ed9a24"
   }
  }
 }

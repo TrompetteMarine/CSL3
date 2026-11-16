@@ -1,0 +1,16 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow dm-market">
+    {{ include_sibling '_errors.html' }}
+    {{ include_sibling '_market.html' }}
+    <section class="dm-ask">
+      {{ include_sibling '_ask.html' }}
+    </section>
+    <input type="hidden" name="rt_pre_ms" value="">
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

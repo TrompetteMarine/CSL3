@@ -1,89 +1,97 @@
-"""Every sentence a participant reads (KGi-DISS-I042).
+"""Every sentence a participant reads (KGi-DISS-I042; the basket economy with prediction
+markets, KGi-DISS-I043).
 
 DRAFT. Nothing here is approved wording: consent, payment, the description of the trader
-board, the three fairness items, the entitlement item and the probe questions are author
-decisions (freeze I042, draft_and_author_gated). Edit this file only; templates and scripts
-take their text from it.
+board and of the forecast sources, the three fairness items, the entitlement item and the
+market questions are author decisions (freezes I042 and I043). Edit this file only;
+templates and scripts take their text from it.
 """
 
 STUDY = dict(
-    brand='Ticket market',
+    brand='Basket market',
     consent_title='Before you start',
     consent_body=[
         '[DRAFT — replace with the approved study information and consent text.]',
-        'In this study you take part in a simple ticket market for ten rounds. It takes about '
-        'ten minutes. You may stop at any time; payment requires completion.',
+        'In this study you take part in a simple market for ten rounds. It takes about ten '
+        'minutes. You may stop at any time; payment requires completion.',
     ],
     consent_label='I have read the above and consent to take part.',
     consent_error='Consent is required to take part.',
+    consent_next='Continue',
     narrow='This study needs a wider window. Please use a laptop or desktop computer, or widen this window.',
 )
 
 INSTRUCTIONS = dict(
     title='How the market works',
     market=[
-        ('Six market rounds',
-         'In each of the first six rounds you pick one of two tickets, <b>SQUARE</b> or '
-         '<b>TRIANGLE</b>, and hold it for the round. The market then settles your ticket '
-         '<b>{k} times</b>. Each settlement either pays <b>1 point</b> or pays nothing. You watch '
-         'the settlements come in; there is nothing to click.'),
-        ('How settlements are decided',
-         'Settlements follow a payout rule that was fixed before your session, using random '
-         'draws made in advance. One ticket can pay more often than the other, and how often a '
-         'ticket pays <b>can change during the study without warning</b>. Tickets are free: you '
-         'never pay for one and you cannot lose points.'),
+        ('The economy',
+         'This market trades two goods, <b>SQUARE</b> and <b>TRIANGLE</b>. You are a basket '
+         'player: you buy goods to fill baskets. Every good you get is worth <b>1 point</b>; '
+         '{basket} goods make a basket.'),
+        ('Six procurement rounds',
+         'In each of the first six rounds you order one good for the whole round. The goods '
+         'market then clears <b>{k} times</b>. Each time, your order fills if the clearing price '
+         'is at or below your cap of <b>{cap}</b>; otherwise it does not fill. You watch the '
+         'prices come in; there is nothing to click. Orders are funded by the house: you never '
+         'pay for a good and you cannot lose points.'),
+        ('How prices are set',
+         'Clearing prices follow a rule that was fixed before your session, using random draws '
+         'made in advance. One good can be cheaper than the other, and prices <b>can change '
+         'during the study without warning</b>.'),
     ],
     board=dict(
         pool=('The trader board',
-              'Next to your own settlements, a <b>trader board</b> shows the settlements of a '
-              '<b>previous participant</b> in this study, who played under the same payout rule '
-              'as you. Each round shows one previous participant; the record may come from a '
-              'different point in their session than the round you are at. These are real '
-              'records, not simulations.'),
+              'Next to your own orders, a <b>trader board</b> shows the filled orders of a '
+              '<b>previous participant</b> in this study, who traded under the same rule as you. '
+              'Each round shows one previous participant; the record may come from a different '
+              'point in their session than the round you are at. These are real records, not '
+              'simulations.'),
         schedule=('The trader board (development build)',
-                  'Next to your own settlements, a <b>trader board</b> shows the settlements of '
-                  'a <b>computer-generated trader</b>. This build is for testing only and is '
-                  'never shown to study participants.'),
+                  'Next to your own orders, a <b>trader board</b> shows the filled orders of a '
+                  '<b>computer-generated trader</b>. This build is for testing only and is never '
+                  'shown to study participants.'),
         none=None,
     ),
     ratings=('Four quick questions',
-             'After each market round we ask four quick questions about how you see the market. '
-             'There are no right or wrong answers.'),
-    probe=('Four new tickets',
-           'In the last four rounds you meet a ticket you have not seen before. You say how '
-           'likely it is to pay, then see ten of its settlements, then say again how likely it '
-           'is to pay. One of your eight forecasts is picked at random and can win a bonus of '
-           '<b>{prize} points</b>: the more accurate that forecast, the higher your chance of the '
-           'bonus.'),
+             'After each procurement round we ask four quick questions about how you see the '
+             'market. There are no right or wrong answers.'),
+    probe=('Four prediction markets',
+           'In the last four rounds you meet a market on an asset you have not seen: <i>will it '
+           'close above a given price?</i> You give your forecast, then get some evidence, and '
+           'forecast again. Then you can bet: buy a YES ticket, buy a NO ticket, or pass. A '
+           'winning ticket pays <b>{pay} points</b>; the markets settle at the end. One of your '
+           'eight forecasts is also picked at random and can win a bonus of <b>{prize} points</b>: '
+           'the more accurate that forecast, the higher your chance of the bonus.'),
     payment='Your points are converted to money at the rate shown at the end.',
-    legend_paid='paid',
-    legend_unpaid='did not pay',
+    legend_title='On the price chart',
+    legend_cap='your cap',
+    legend_paid='order filled',
     next='Continue',
 )
 
 QUIZ = dict(
     title='Quick check',
-    intro='Four quick questions about how the task works. If an answer is not right you will see '
+    intro='A few quick questions about how the task works. If an answer is not right you will see '
           'why and can try again. This check does not affect your payment.',
     items=dict(
         cq_cost=dict(
-            label='Do you pay for the tickets you choose?',
-            right='No — tickets are free',
-            wrong='Yes — each ticket costs a point',
-            hint='Tickets are free; you never pay for one.'),
+            label='Do you pay for the goods you order?',
+            right='No — orders are funded by the house',
+            wrong='Yes — each good costs a point',
+            hint='Orders are funded by the house; you never pay for a good.'),
         cq_count=dict(
-            label='In each of the first six rounds, how many times is your ticket settled?',
+            label='In each of the first six rounds, how many times does the goods market clear?',
             right='{k} times',
             wrong='Once',
-            hint='Each market round settles your ticket {k} times.'),
+            hint='In each procurement round the market clears {k} times.'),
         cq_draws=dict(
-            label='How is each settlement decided?',
+            label='How are clearing prices set?',
             right='By a rule fixed before my session, using random draws made in advance',
-            wrong='By the experimenter, live, as I play',
-            hint='Settlements follow a rule fixed in advance, with draws made in advance.'),
+            wrong='By other traders, live, as I play',
+            hint='Prices follow a rule fixed in advance, with draws made in advance.'),
         cq_board=dict(
             label='Who is shown on the trader board?',
-            right=dict(pool='A previous participant in this study, under the same payout rule as mine',
+            right=dict(pool='A previous participant in this study, under the same rule as mine',
                        schedule='A computer-generated trader (development build)'),
             wrong=dict(pool='A computer simulation',
                        schedule='A previous participant in this study'),
@@ -91,59 +99,85 @@ QUIZ = dict(
                       schedule='In this development build the board trader is computer-generated.')),
     ),
     retry='Not quite — ',
-    next='Start the market',
+    next='Open the market',
 )
 
 MARKET = dict(
-    choose_title='Choose your ticket for this round',
-    choose_sub='You hold it for all {k} settlements of the round.',
+    choose_title='Which good do you order this round?',
+    choose_sub='Your order stays in for all {k} clearings. It fills whenever the price is at or below your cap of {cap}.',
     ticket_names=dict(SQUARE='Square', TRIANGLE='Triangle'),
-    recap_you='Last round you held {ticket}: paid {wins} of {k}',
-    recap_board='Trader board: paid {wins} of {k}',
-    choose_next='Hold this ticket',
-    settle_title='The market is settling',
-    settle_done='Round settled',
-    own_label='Your ticket',
-    board_kicker='Trader board',
-    board_label=dict(pool='a previous participant',
-                     schedule='computer-generated trader',
-                     none=''),
-    paid_of='paid',
+    recap_you='Last round you ordered {ticket}: {wins} of {k} filled',
+    recap_board='Trader board: {wins} of {k} filled',
+    choose_next='Send the order',
+    held='ordered',
+    settle_title='The market is clearing',
+    settle_done='Round cleared',
+    clearing='Clearing',
+    price_label='Clearing price',
+    cap_label='your cap',
+    zone_label='your order fills at or below your cap',
+    fills_of='filled of',
+    filled='filled',
+    not_filled='not filled',
+    you='You',
+    trader='Trader',
+    trader_kind=dict(pool='a previous participant', schedule='computer-generated', none=''),
     of='of',
+    baskets='baskets',
     points_gain='+{wins} points',
     settle_next='Continue',
     rate_title='How do you see the market right now?',
     rate_sub='Move every slider, then continue.',
     fair_items=[
-        'The market settles fairly.',
-        'The payout rule can be trusted.',
+        'This market clears fairly.',
+        'The prices here can be trusted.',
         'I am treated fairly in this market.',
     ],
     fair_anchors=('completely disagree', 'completely agree'),
-    entitle_item='What I deserve to win in a round.',
-    entitle_anchors=('nothing', 'every settlement'),
+    entitle_item='The share of my orders that I deserve to have filled.',
+    entitle_anchors=('none', 'all of them'),
     rate_untouched='Please move every slider before continuing.',
     rate_next='Continue',
 )
 
 PROBE = dict(
-    pre_title='A new ticket',
-    pre_body='You have not seen this ticket before.',
-    question_pre='How likely is this ticket to pay at a settlement?',
-    question_post='Now, how likely is this ticket to pay at its next settlement?',
-    anchors=('never pays', 'always pays'),
+    eyebrow='New market',
+    question='Will {asset} close above {thr}?',
+    last='last price',
+    now='now',
+    close='close',
+    chance='chance',
+    above='above {thr}',
+    below='below {thr}',
+    question_pre='How likely is {asset} to close above {thr}?',
+    question_post='Now, how likely is {asset} to close above {thr}?',
+    anchors=('certainly not', 'certainly'),
     place_hint='Click or drag on the line to set your forecast.',
-    record_own='The market now settles this ticket ten times <b>for you</b>. Each settlement that '
-               'pays adds a point to your total.',
-    record_other='Here are ten settlements of this ticket. They are <b>not yours</b> and pay '
-                 'nothing to you.',
+    record_title='Ten trial closes',
+    record_text='Held with <b>your own</b> YES tickets. Each close above {thr} adds a point to your total.',
+    sum_paid='of {m} closed above',
+    source_title="Another trader's forecast",
+    source_kind=dict(pool='{label} is a previous participant who saw ten trial closes of this market.',
+                     schedule='{label} is a computer-generated forecaster (development build).'),
+    source_says='chance of closing above {thr}',
+    source_track='On the right side in {k} of {n} other markets.',
     names=dict(CIRCLE='Circle', DIAMOND='Diamond', HEXAGON='Hexagon', STAR='Star', CROSS='Cross',
                PENTAGON='Pentagon'),
     unset='Please set your forecast before continuing.',
-    sum_paid='paid of',
     next='Lock in forecast',
+    bet_title='Place your bet',
+    bet_text='You have a <b>{allow}-point</b> allowance for this market. A ticket pays <b>{pay} points</b> '
+             'if it wins. If you pass you keep the allowance. The market settles at the end.',
+    bet_yes='Buy YES',
+    bet_no='Buy NO',
+    bet_pass='Pass',
+    bet_pass_sub='keep {allow} points',
+    bet_cost='costs {cost} points',
+    bet_error='Please choose YES, NO or pass.',
+    bet_next='Place bet',
     recall_title='One quick question',
-    recall_q='Without looking back: how many of the ten settlements you just saw paid?',
+    recall_record='Without looking back: how many of the ten trial closes were above {thr}?',
+    recall_source='Without looking back: what chance did the other trader give?',
     recall_next='Continue',
 )
 
@@ -154,19 +188,25 @@ CLOSING = dict(
     peer_success_anchors=('not at all', 'extremely'),
     peer_real='The trader shown on the board was a real previous participant.',
     peer_real_anchors=('certainly not', 'certainly'),
-    rig_suspicion='The settlements in my session were manipulated against me specifically.',
+    rig_suspicion='The prices in my session were manipulated against me specifically.',
     rig_anchors=('certainly not', 'certainly'),
     betting_familiarity='How familiar are you with betting or prediction markets?',
     betting_anchors=('not at all', 'very'),
     purpose_guess='In your own words, what do you think this study was about?',
     age='Your age (optional)',
     gender='Your gender (optional)',
-    next='See my results',
+    next='Settle the markets',
 )
 
 RESULTS = dict(
-    title='Finished',
-    points='You earned <b>{points} points</b> in the market.',
+    title='The markets have settled',
+    closed_above='closed at {close}, above {thr}',
+    closed_below='closed at {close}, below {thr}',
+    resolved=dict(yes='YES', no='NO'),
+    your_bet=dict(YES='You bought YES', NO='You bought NO', PASS='You passed'),
+    bet_points='{pts} points',
+    points='You earned <b>{points} points</b> from goods and trial closes.',
+    bets='Your bets returned <b>{pts} points</b>.',
     bonus_won='The forecast picked at random won the bonus of <b>{prize} points</b>.',
     bonus_lost='The forecast picked at random did not win the bonus this time.',
     money='In total this converts to <b>{money}</b>.',

@@ -1,0 +1,11 @@
+<section class="dm-panel dm-mkt {{ if compact }}is-compact{{ endif }}">
+  <div class="dm-mkt-head">
+    <span class="dm-glyph dm-mkt-icon" data-glyph="{{ symbol }}"></span>
+    <div class="dm-mkt-title">
+      {{ if not compact }}<span class="dm-newtag">{{ t.eyebrow }}</span>{{ endif }}
+      <h1 class="dm-h1">{{ mt.question }}</h1>
+    </div>
+    <p class="dm-mkt-last"><b data-last>{{ last }}</b><span>{{ t.last }}</span></p>
+  </div>
+  <div class="dm-chart is-history" data-chart="history" data-now="{{ t.now }}" data-close="{{ t.close }}"></div>
+</section>

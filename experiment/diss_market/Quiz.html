@@ -7,7 +7,7 @@
     <h1 class="dm-h1">{{ t.title }}</h1>
     <p class="dm-sub">{{ t.intro }}</p>
     {{ for r in rows }}
-    <fieldset class="dm-q" style="border:0;padding:0;margin-inline:0">
+    <fieldset class="dm-q">
       <legend class="dm-q-label">{{ r.label }}</legend>
       {{ for o in r.options }}
       <label class="dm-opt"><input type="radio" name="{{ r.name }}" value="{{ o.text }}" {{ if o.checked }}checked{{ endif }}><span>{{ o.text }}</span></label>

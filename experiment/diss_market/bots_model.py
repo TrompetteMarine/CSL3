@@ -17,6 +17,8 @@ ITEM_NOISE = 10.0            # one slider; the mean of three fairness items has 
 GAIN = 0.5
 FORECAST_NOISE = 12.0
 INATTENTIVE = 0.10
+KAPPA_SOURCE = 0.35          # ASSUMED weight on a source's forecast at full legitimacy (pilot quantity)
+BET_NOISE, BET_BAND = 8.0, 5.0   # ASSUMED bet rule (freeze I043, S2)
 
 
 def _clip(x, lo=0.0, hi=1.0):
@@ -28,7 +30,8 @@ def _round5(x):
 
 
 class ModelAgent:
-    def __init__(self, seed, slow, point='P1', rule='event', coupling=1.0):
+    def __init__(self, seed, slow, point='P1', rule='event', coupling=1.0, kappa_source=KAPPA_SOURCE):
+        self.kappa_source = kappa_source
         speed, ratio, self.chi = GATE_POINTS[point]
         self.nuf, self.nur = NUF * speed, NUF * speed * ratio
         self.rho = 0.002 if slow else 0.02
@@ -61,10 +64,23 @@ class ModelAgent:
         item = lambda m: _round5(50 + GAIN * (100 * m - 50) + self.rng.gauss(0, ITEM_NOISE))
         return [item(self.L) for _ in range(3)], item(self.A)
 
-    def forecasts(self, e):
+    def market(self, e, evidence='record', price=50):
+        """one prediction market: forecast, forecast after the evidence (e in [0, 1]: the share
+        of trial closes above, or the source's forecast), and the bet"""
         g = 1 - self.c * (1 - self.L)
-        w = 0.0 if self.inattentive else (OMEGA * g if self.rule == 'event' else 1 - (1 - ALPHA * g) ** 10)
+        if self.inattentive:
+            w = 0.0
+        elif evidence == 'source':
+            w = self.kappa_source * g
+        else:
+            w = OMEGA * g if self.rule == 'event' else 1 - (1 - ALPHA * g) ** 10
         b0 = _clip(self.rng.gauss(50, 10), 5, 95)
         pre = _round5(b0 + self.rng.gauss(0, FORECAST_NOISE))
-        post = _round5(b0 + w * (100 * e - b0) + self.rng.gauss(0, FORECAST_NOISE))
-        return pre, post
+        belief = b0 + w * (100 * e - b0)
+        post = _round5(belief + self.rng.gauss(0, FORECAST_NOISE))
+        z = belief + self.rng.gauss(0, BET_NOISE)
+        bet = 'YES' if z > price + BET_BAND else ('NO' if z < price - BET_BAND else 'PASS')
+        return pre, post, bet
+
+    def forecasts(self, e):
+        return self.market(e)[:2]

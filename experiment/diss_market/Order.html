@@ -2,21 +2,22 @@
 {{ block content }}
 <div class="dm">
   {{ include_sibling '_top.html' }}
-  <main class="dm-main dm-choose">
+  <main class="dm-main dm-order">
     {{ include_sibling '_errors.html' }}
     <h1 class="dm-h1">{{ t.choose_title }}</h1>
     <p class="dm-sub">{{ sub }}</p>
     {{ if recap }}
     <div class="dm-recap"><span>{{ recap.you }}</span>{{ if recap.board }}<span>{{ recap.board }}</span>{{ endif }}</div>
     {{ endif }}
-    <div class="dm-tickets" role="radiogroup" aria-label="{{ t.choose_title }}">
+    <div class="dm-goods" role="radiogroup" aria-label="{{ t.choose_title }}">
       {{ for tk in tickets }}
-      <label class="dm-ticket">
+      <label class="dm-good" data-good="{{ tk.value }}">
         <input type="radio" name="ticket" value="{{ tk.value }}">
-        <span class="dm-ticket-card">
-          <span class="dm-ticket-tag">held</span>
+        <span class="dm-good-card">
+          <span class="dm-good-tag">{{ t.held }}</span>
           <span class="dm-glyph" data-glyph="{{ tk.value }}"></span>
-          <span class="dm-ticket-name">{{ tk.name }}</span>
+          <span class="dm-good-name">{{ tk.name }}</span>
+          <span class="dm-good-cap">{{ t.cap_label }} <b>{{ cap }}</b></span>
         </span>
       </label>
       {{ endfor }}

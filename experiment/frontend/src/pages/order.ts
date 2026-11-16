@@ -1,13 +1,13 @@
 import { elapsedMs, field, form, nextButton, onSubmit } from '../env';
 
-/** Two ticket cards (radio inputs). The button unlocks once one is picked. */
-export function choose(): void {
+/** Two goods (radio inputs). The button unlocks once one is ordered. */
+export function order(): void {
   const btn = nextButton();
   const radios = Array.from(form().querySelectorAll<HTMLInputElement>('input[name="ticket"]'));
   const sync = (): void => {
     const picked = radios.some((r) => r.checked);
     if (btn) btn.disabled = !picked;
-    document.querySelector('.dm-tickets')?.classList.toggle('has-pick', picked);
+    document.querySelector('.dm-goods')?.classList.toggle('has-pick', picked);
   };
   radios.forEach((r) => r.addEventListener('change', sync));
   sync();

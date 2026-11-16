@@ -2,14 +2,25 @@
 {{ block content }}
 <div class="dm">
   {{ include_sibling '_top.html' }}
-  <main class="dm-main dm-narrow">
+  <main class="dm-main dm-narrow dm-results">
     <h1 class="dm-h1">{{ t.title }}</h1>
+    <ul class="dm-settled">
+      {{ for r in rows }}
+      <li class="dm-settled-row">
+        <span class="dm-glyph" data-glyph="{{ r.symbol }}"></span>
+        <div class="dm-settled-main"><b>{{ r.name }}</b><span>{{ r.outcome }}</span></div>
+        <span class="dm-tag {{ if r.above }}is-yes{{ else }}is-no{{ endif }}">{{ r.tag }}</span>
+        <div class="dm-settled-bet"><span>{{ r.bet }}</span><b>{{ r.pts }}</b></div>
+      </li>
+      {{ endfor }}
+    </ul>
     <div class="dm-card">
       <p>{{ points_line|safe }}</p>
+      <p>{{ bets_line|safe }}</p>
       <p>{{ bonus_line|safe }}</p>
       <p class="dm-total">{{ money_line|safe }}</p>
     </div>
-    <p class="dm-sub" style="margin-top:22px">{{ t.thanks }}</p>
+    <p class="dm-sub dm-thanks">{{ t.thanks }}</p>
     {{ if completion_url }}
     <div class="dm-actions"><a class="dm-btn" href="{{ completion_url }}">{{ t.complete }}</a></div>
     {{ endif }}

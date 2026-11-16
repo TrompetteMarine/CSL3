@@ -2,13 +2,12 @@
 {{ block content }}
 <div class="dm">
   {{ include_sibling '_top.html' }}
-  <main class="dm-main dm-narrow">
+  <main class="dm-main dm-narrow dm-recall">
     {{ include_sibling '_errors.html' }}
-    <p class="dm-eyebrow">{{ t.recall_title }}</p>
-    <h1 class="dm-h1" style="font-size:24px">{{ t.recall_q }}</h1>
-    <div class="dm-chips" style="margin-top:26px" role="radiogroup">
-      {{ for v in options }}
-      <label class="dm-chip"><input type="radio" name="recall" value="{{ v }}"><span>{{ v }}</span></label>
+    <h1 class="dm-h1 is-small">{{ question }}</h1>
+    <div class="dm-chips {{ if wide }}is-wide{{ endif }}" role="radiogroup" aria-label="{{ question }}">
+      {{ for o in options }}
+      <label class="dm-chip"><input type="radio" name="recall" value="{{ o.v }}"><span>{{ o.label }}</span></label>
       {{ endfor }}
     </div>
     <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.recall_next }}</button></div>

@@ -123,3 +123,94 @@ scorecard_certification:   # verbatim, 2026-11-16; record records/basket_cert_I0
     (one-update rule). My rough estimate of 'about threefold' for the sample at the weakest gate
     point, given in conversation before this run, was wrong: 96 pairs give .91 even at
     kappa_s = .2, because only one of the two pairs is a source pair and the ratio is unchanged."
+
+# =================================================================== SCORECARD (build)
+scorecard_build:   # verbatim, 2026-11-16
+  H1_engine: "PASS. 120 schedules (the gate says 200; the test draws 120), six rounds, both
+    goods: every price lies at or below the cap exactly when the order fills, prices have two
+    decimals, and the file's price axis holds every path; deprivation fill shares .25 and .10
+    within .01. Fills, boards and the probe statistic pass the I042 tests on format 3 (200
+    schedules). Formats 1 and 2 are unchanged for the same seed and are refused by the app.
+    The gate kernel on the engine: legitimacy at probe time .112 / .865 (certification
+    .109 / .869), the same goods in all five deprivation rounds in .123 of pairs (.13); with
+    one source pair at kappa_s = .35 a ratio of mean T of .129 (.124) and a bet statistic of
+    .090 / .678 (.098 / .689)."
+  H2_no_leak: "PASS on the frozen checks, 125 page sources per browser run: no record or
+    price on an order page; one own record and one price series of the round's length on a
+    clearing page; no evidence, source or bet price on a first-forecast page; no bet price on
+    an evidence page; nothing about how a market settles before the last page. A copy of the
+    app with planted leaks (evidence on the first-forecast page, a bet price and the close on
+    the evidence page) fails the run on each of them. One leak lay outside these checks: the
+    source card's track record counted all four of the forecaster's markets, so next to the
+    forecast it told how the market on screen settles. I saw it on a still. The record now
+    counts the other three markets only, and a test checks that."
+  H3_bots_and_browser: "PASS. Bots: ten arrivals for eight slots (eight start); every
+    participant ends with 6 orders, 6 rating sets, 8 forecasts and 4 bets; every stored fill,
+    price, board record, market, evidence, bet, bet points and total equals schedule and
+    engine; the two members of a pair meet the same markets in the same order with the same
+    evidence; invalid submissions are refused (unknown good, clearing not finished, slider
+    untouched or off the grid, forecast off the grid, evidence not finished, unknown bet).
+    Browser, five participants (two at 1280 px as one pair, one of them with a reload, the
+    back button, a repeated order and the pointer read-out; 390 x 844; 375 x 667; reduced
+    motion): no console error, no failed request, no request to another host; the pair's
+    pages are identical apart from the board's numbers; nothing stored changes; the price
+    chart carries one fill mark per filled order; both charts are in view during the reveal
+    on every viewport; the points total moves only after a clearing and after record
+    evidence, and not after a bet; the total on the last page equals the stored total.
+    Reveal at the real speed: 9,003 ms for 9,000 planned; a tab hidden for 3 s stops it
+    (3,008 ms recorded, 0 clearings shown meanwhile)."
+  H4_export: "PASS. T and the bet statistic from the export equal the stored values for 144
+    of 144 bots. At 72 pairs of gate bots (kappa_s = .35): H1a, K3, D1, FREEZE and BET reject,
+    PHI is not flagged, ASSOC_H does not reject; psi-hat .156 with interval [-.02, .344];
+    mean T 4.5 (HIGH) and 29.0 (LOW), by evidence 5.7 | 35.0 (record) and 3.3 | 22.9
+    (source); bet statistic .031 | .622; mean last fairness 27.9 | 68.8."
+  seed_wave_to_pilot: "PASS with bots (not a frozen gate). 32 seed bots on a record-only
+    schedule: 192 fill records, 128 candidate forecasts, every market with forecasts inside
+    its band; a 16-participant pilot on a schedule that reuses the seed wave's markets shows
+    one source per pair and market, the same to both members (forecasts 5, 85 and 90); LOW
+    board distance to the own count: median 1, maximum 6 of 120. Refused at session
+    creation: a pilot whose markets are not the pool's, a seed wave on a schedule with
+    sources, and, for people in production, a placeholder pool or the computer-generated
+    board. Bot records are refused by the pool tool unless asked for."
+  H5_docker: "PARTIAL, as in I042. On the stand-in base images the Dockerfile builds unchanged
+    (npm ci, type check, 22 unit tests, bundle; pip install); run twice, the second time on
+    the final code. The database reports healthy; the web container reported healthy in the
+    first run and was still starting when queried three seconds after its start in the
+    second; it runs as uid 10001 with Python 3.13.18 and oTree 6.0.15; the browser run passes
+    against it with Postgres in both runs; the export without its key is refused (403).
+    Docker Hub and ghcr.io are refused here; the official images were not pulled."
+  H6_regression: "PASS with a stated replacement. Full suite 99 passed in 11 min 42 s (I042:
+    96). The three I042 test files tested format 2, which the app now refuses; they are
+    renamed test_market_*_I043.py and rewritten, keeping their checks (engine against the
+    simulation's rule, pool board rules, stored data against the schedule, 72 pairs of gate
+    bots, seed wave to pool, the earlier app's bots, the bundle's hashes, the browser run)
+    and adding prices, markets, bets and sources. Front end: 22 unit tests (I042: 11; two
+    tests of the removed settlement grid were dropped with it)."
+  H7_constraints: "PASS. No credential in code, logs or records (the stack's secrets were
+    drawn in the shell for the run and not written). No recruitment, registration or ethics
+    claim. Main text untouched. No name, logo or layout of a real market. Citation log
+    addendum: one reference at abstract level, one considered and not cited."
+  not_frozen_but_done: "the price axis is one for the whole schedule file, cut to the bounds
+    no price can leave; the pointer read-out on the clearing charts after the reveal; the
+    fill strip under the price chart."
+  failed_or_corrected_after_the_freeze:
+    - "the palette named in the conversation and used in the first build (trader #7b5cf0, YES
+      #1baf7a, NO #d6457a) had been validated on neighbouring colours of a list only. With
+      every pair checked: trader against Square 3.8 for red-green colour blindness and 11.4
+      with full vision (floors 8 and 15); YES against NO 5.1, and 2.1 for the selected
+      buttons. Replaced: trader slate #3f4756 (a neutral on purpose; at least 21 from either
+      good), YES #1f9d55 against NO #c93a9a (10.3; button inks 9.3)."
+    - "the source's track record over four markets (H2 above)"
+    - "the first build dimmed the option not chosen on the order and bet pages; an option
+      that can still be chosen should stay readable; removed"
+    - "a first capture of the pilot configuration ran against a development server that did
+      not have the pool (the server had not been stopped); the session did not start and
+      nothing was recorded from it"
+
+closing_record:   # 2026-11-16
+  state: "design B certified for what it changes and built; nothing run on people; all wording
+    draft; author-gated"
+  delivered: "records/112_basket_market_I043.md; experiment/YOKED_DESIGN.md and MARKET_APP.md
+    updated; freezes/kg_delta_I043.yaml; freezes/kg_active_I043.yaml (supersedes I042)"
+  next_executable_step: "author decisions listed in the memo (two waves, source description,
+    bet terms, market wording, whether the price curve stays); then the pilot specification"

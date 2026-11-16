@@ -1,4 +1,4 @@
-# diss_market (KGi-DISS-I042): oTree app with a TypeScript front end.
+# diss_market (KGi-DISS-I042, I043): oTree app with a TypeScript front end.
 #   stage 1  Node: type-checks, unit-tests and bundles the front end
 #   stage 2  Python: runs oTree in production mode as a non-root user
 # Build from this directory:  docker build -t diss-market .

@@ -36,7 +36,8 @@ services:
       OTREE_SECRET_KEY: ${OTREE_SECRET_KEY:?set OTREE_SECRET_KEY in .env}
       OTREE_REST_KEY: ${OTREE_REST_KEY:-}
       DATABASE_URL: postgresql://otree:${POSTGRES_PASSWORD}@db:5432/otree
-      MARKET_SCHEDULE: ${MARKET_SCHEDULE:-schedules/example_seed0_4pairs_v2.json}
+      MARKET_SCHEDULE: ${MARKET_SCHEDULE:-schedules/example_seed0_4pairs_v3.json}
+      MARKET_SEED_SCHEDULE: ${MARKET_SEED_SCHEDULE:-schedules/example_seed0_4pairs_v3_nosocial.json}
       MARKET_POOL: ${MARKET_POOL:-pools/pool.json}
       PORT: "8000"
     volumes:

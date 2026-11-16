@@ -1,9 +1,14 @@
-"""From the oTree app's export to the reporting set (KGi-DISS-I042).
+"""From the oTree app's export to the reporting set (KGi-DISS-I042, I043).
 
 Reads the custom export of experiment/diss_market (one 'repetition' row per participant and
 repetition, one 'participant' row each) and scores it with yoked_analysis.decisions, the code
 of the I041 certification. Pairs are the two participants who share a schedule; only complete
 pairs enter (both finished).
+
+Added in I043: the bet statistic B (mean over the two market pairs of the bet on the
+favourable market minus the bet on the unfavourable one, halved; YES = 1, pass = 0, NO = -1)
+and the decision BET (signed rank within pairs of B_LOW - B_HIGH, one-sided .005), as in
+basket_cert_I043.py; and T split by kind of evidence (record pair, source pair).
 
     python experiment/analysis/yoked_from_export.py path/to/diss_market_custom.csv
 """
@@ -28,6 +33,29 @@ def probe_T(rows):
     return float(np.mean([p[True] - p[False] for p in d.values()]))
 
 
+BET_VALUE = {'YES': 1, 'PASS': 0, 'NO': -1}
+
+
+def bet_B(rows):
+    d = {}
+    for r in rows:
+        d.setdefault(int(r['probe_pair']), {})[r['probe_favourable'] == '1'] = BET_VALUE[r['bet']]
+    return float(np.mean([(p[True] - p[False]) / 2 for p in d.values()]))
+
+
+def T_by_evidence(rows):
+    """revision after the favourable minus after the unfavourable market, by kind of evidence"""
+    d = {}
+    for r in rows:
+        d.setdefault((r['evidence'], r['probe_pair']), {})[r['probe_favourable'] == '1'] = \
+            int(r['forecast_post']) - int(r['forecast_pre'])
+    out = {}
+    for (kind, _), v in d.items():
+        if set(v) == {True, False}:
+            out.setdefault(kind, []).append(v[True] - v[False])
+    return {k: float(np.mean(v)) for k, v in out.items()}
+
+
 def load(path, config=None, session=None):
     """participants keyed by code: arm, schedule, slot, per-round arrays, T. An export holds
     every session of the database: config and session keep the ones wanted."""
@@ -48,7 +76,7 @@ def load(path, config=None, session=None):
         fin = p['final']
         done = (fin is not None and fin['finished'] == '1' and len(market) == N_MARKET and len(probe) == 4
                 and all(r[k] != '' for r in market for k in FAIR + ('entitle',))
-                and all(r['forecast_pre'] != '' and r['forecast_post'] != '' for r in probe))
+                and all(r['forecast_pre'] != '' and r['forecast_post'] != '' and r['bet'] in BET_VALUE for r in probe))
         base = (market or probe or [fin])[0]
         rec = dict(arm=base['arm'], schedule=int(base['schedule']), slot=int(base['slot']), session=base['session'],
                    complete=done)
@@ -58,6 +86,7 @@ def load(path, config=None, session=None):
                        entitle=np.array([int(r['entitle']) for r in market], float),
                        win_share=np.array([int(r['wins']) / k for r in market]),
                        T=probe_T(probe), T_stored=float(fin['probe_T']), k=k,
+                       B=bet_B(probe), B_stored=float(fin['bet_stat']), T_by=T_by_evidence(probe),
                        forecasts=[(int(r['forecast_pre']), int(r['forecast_post'])) for r in probe])
         out[code] = rec
     return out
@@ -89,6 +118,13 @@ def score(path, seed=0, config=None, session=None):
     pr = pairs(parts)
     d = ya.decisions(arrays(pr, seed))
     out = {k: (bool(v[0]) if v.dtype == bool else float(v[0])) for k, v in d.items()}
+    bh, bl = np.array([h['B'] for h, _ in pr])[None], np.array([l['B'] for _, l in pr])[None]
+    out.update(BET=bool(ya.signed_rank_z(bl - bh)[0] > ya.ZC), mean_B_high=float(bh.mean()), mean_B_low=float(bl.mean()))
+    for kind in ('record', 'source'):
+        hk = [h['T_by'][kind] for h, _ in pr if kind in h['T_by']]
+        lk = [l['T_by'][kind] for _, l in pr if kind in l['T_by']]
+        if hk and lk:
+            out[f'mean_T_{kind}_high'], out[f'mean_T_{kind}_low'] = float(np.mean(hk)), float(np.mean(lk))
     out.update(pairs=len(pr), participants=len(parts), complete=sum(p['complete'] for p in parts.values()),
                mean_T_high=float(np.mean([h['T'] for h, _ in pr])), mean_T_low=float(np.mean([l['T'] for _, l in pr])),
                mean_fair_high=float(np.mean([h['fair'][-1] for h, _ in pr])),

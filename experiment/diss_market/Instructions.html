@@ -8,13 +8,16 @@
       {{ for b in blocks }}
       <h2>{{ b.head }}</h2>
       <p>{{ b.body|safe }}</p>
+      {{ if b.legend }}
+      <div class="dm-legend">
+        <b>{{ t.legend_title }}</b>
+        <span><i class="is-cap"></i>{{ t.legend_cap }}</span>
+        <span><i class="is-fill"></i><i class="is-tick"></i>{{ t.legend_paid }}</span>
+      </div>
+      {{ endif }}
       {{ endfor }}
     </div>
-    <div class="dm-legend" aria-label="How settlements are drawn">
-      <span><i class="is-paid"></i>{{ t.legend_paid }}</span>
-      <span><i class="is-unpaid"></i>{{ t.legend_unpaid }}</span>
-    </div>
-    <p class="dm-sub" style="margin-top:22px">{{ t.payment }}</p>
+    <p class="dm-sub dm-thanks">{{ t.payment }}</p>
     <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit">{{ t.next }}</button></div>
   </main>
 </div>

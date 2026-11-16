@@ -1,0 +1,37 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow dm-market">
+    {{ include_sibling '_errors.html' }}
+    {{ include_sibling '_market.html' }}
+    {{ if is_record }}
+    <section class="dm-panel dm-evi" data-evidence="record">
+      <h2 class="dm-panel-title">{{ t.record_title }}</h2>
+      <p class="dm-evi-text">{{ record_text|safe }}</p>
+      <div class="dm-chart is-strip" data-chart="strip" data-above="{{ above }}" data-below="{{ below }}"></div>
+      <p class="dm-evi-sum" aria-live="polite"><b data-count>0</b> {{ sum_text }}</p>
+    </section>
+    {{ else }}
+    <section class="dm-panel dm-evi" data-evidence="source">
+      <h2 class="dm-panel-title">{{ t.source_title }}</h2>
+      <div class="dm-source">
+        <span class="dm-avatar" aria-hidden="true">{{ source_label }}</span>
+        <div class="dm-source-main">
+          <p class="dm-source-figure"><b>{{ cue }}%</b><span>{{ source_says }}</span></p>
+          <div class="dm-bar" aria-hidden="true"><i style="--v: {{ cue }}"></i></div>
+          <p class="dm-source-note">{{ source_kind }} {{ source_track }}</p>
+        </div>
+      </div>
+    </section>
+    {{ endif }}
+    <section class="dm-ask" id="dm-ask" hidden>
+      {{ include_sibling '_ask.html' }}
+    </section>
+    <input type="hidden" name="rt_post_ms" value="">
+    <input type="hidden" name="record_done" value="">
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

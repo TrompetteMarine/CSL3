@@ -2,11 +2,11 @@ import './styles/fonts.css';
 import './styles/app.css';
 import { vars } from './env';
 import { mountGlyphs } from './glyphs';
-import { choose } from './pages/choose';
+import { clearing } from './pages/clearing';
+import { bet, evidence, market } from './pages/market';
 import { consent, plain, radioGate } from './pages/misc';
-import { probePost, probePre } from './pages/probe';
+import { order } from './pages/order';
 import { rate } from './pages/rate';
-import { settle } from './pages/settle';
 
 /**
  * Entry point of the diss_market front end. Each oTree page names itself in js_vars.page;
@@ -17,12 +17,13 @@ const PAGES: Record<string, () => void> = {
   instructions: plain,
   quiz: () => radioGate(),
   noslot: () => undefined,
-  choose,
-  settle,
+  order,
+  clearing,
   rate,
-  probe_pre: probePre,
-  probe_post: probePost,
-  probe_recall: () => radioGate(),
+  market,
+  evidence,
+  bet,
+  recall: () => radioGate(),
   closing: () => radioGate(['peer_success', 'peer_real', 'rig_suspicion', 'betting_familiarity']),
   results: () => undefined,
 };

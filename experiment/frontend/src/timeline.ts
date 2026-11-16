@@ -20,12 +20,6 @@ export function paidAmong(bits: readonly boolean[], n: number): number {
   return s;
 }
 
-/** columns of the settlement grid: the widest of 15, 12, 10, 8, 5 that divides k (else 10) */
-export function gridCols(k: number): number {
-  for (const c of [15, 12, 10, 8, 5]) if (k % c === 0 && k / c >= 1) return c;
-  return 10;
-}
-
 /**
  * How many of n settlements are visible after `elapsed` ms of a reveal lasting `total` ms.
  * Constant pace; the last one appears exactly at `total`.
@@ -45,17 +39,6 @@ export function dueCountStepped(elapsed: number, total: number, n: number, chunk
   const c = Math.max(1, Math.min(chunks, n));
   const done = Math.floor((elapsed / total) * c + 1e-9);
   return Math.min(n, Math.round((done / c) * n));
-}
-
-/**
- * Regrouping after the reveal: paid settlements first, each group in its original order.
- * Returns, for each new position, the original index of the cell that moves there.
- */
-export function regroupOrder(bits: readonly boolean[]): number[] {
-  const paid: number[] = [];
-  const unpaid: number[] = [];
-  bits.forEach((b, i) => (b ? paid : unpaid).push(i));
-  return paid.concat(unpaid);
 }
 
 /** nearest multiple of `step` inside [min, max] */

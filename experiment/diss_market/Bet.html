@@ -1,0 +1,31 @@
+{{ block styles }}{{ include_sibling '_head.html' }}{{ endblock }}
+{{ block content }}
+<div class="dm">
+  {{ include_sibling '_top.html' }}
+  <main class="dm-main dm-narrow dm-market">
+    {{ include_sibling '_errors.html' }}
+    {{ include_sibling '_market.html' }}
+    <section class="dm-betting">
+      <h2 class="dm-h2">{{ t.bet_title }}</h2>
+      <p class="dm-sub">{{ bet_text|safe }}</p>
+      <div class="dm-bets" role="radiogroup" aria-label="{{ t.bet_title }}">
+        <label class="dm-bet is-yes">
+          <input type="radio" name="bet" value="YES">
+          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_yes }}</span><b class="dm-bet-price">{{ price_yes }}¢</b><span class="dm-bet-cost">{{ cost_yes }}</span></span>
+        </label>
+        <label class="dm-bet is-no">
+          <input type="radio" name="bet" value="NO">
+          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_no }}</span><b class="dm-bet-price">{{ price_no }}¢</b><span class="dm-bet-cost">{{ cost_no }}</span></span>
+        </label>
+        <label class="dm-bet is-pass">
+          <input type="radio" name="bet" value="PASS">
+          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_pass }}</span><span class="dm-bet-cost">{{ pass_sub }}</span></span>
+        </label>
+      </div>
+    </section>
+    <input type="hidden" name="rt_bet_ms" value="">
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.bet_next }}</button></div>
+  </main>
+</div>
+{{ endblock }}
+{{ block scripts }}{{ include_sibling '_foot.html' }}{{ endblock }}

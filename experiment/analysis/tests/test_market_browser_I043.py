@@ -1,4 +1,4 @@
-"""The app in a real browser (KGi-DISS-I042, gates G5, G6, G7): starts 'otree devserver' on a
+"""The app in a real browser (KGi-DISS-I042 gates G5, G6, G7; KGi-DISS-I043 gates H2, H3): starts 'otree devserver' on a
 free port in a fresh copy of the project and plays tools/browser_run.py against it.
 Run from the repository root. Skipped where oTree, Playwright or its browser is missing."""
 import os

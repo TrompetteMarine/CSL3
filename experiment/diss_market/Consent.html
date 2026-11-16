@@ -5,13 +5,13 @@
   <main class="dm-main dm-narrow">
     {{ include_sibling '_errors.html' }}
     <h1 class="dm-h1">{{ t.consent_title }}</h1>
-    <div class="dm-prose" style="margin-top:18px">
+    <div class="dm-prose dm-lead">
       {{ for p in t.consent_body }}<p>{{ p }}</p>{{ endfor }}
     </div>
     <p class="dm-notice" id="dm-narrow-notice" hidden>{{ t.narrow }}</p>
     <label class="dm-check"><input type="checkbox" name="consent" value="1"><span>{{ t.consent_label }}</span></label>
     <input type="hidden" name="client_info" value="">
-    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit">Continue</button></div>
+    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit">{{ t.consent_next }}</button></div>
   </main>
 </div>
 {{ endblock }}

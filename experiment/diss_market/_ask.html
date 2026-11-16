@@ -1,0 +1,11 @@
+<div class="dm-ask-head">
+  <p class="dm-question">{{ ask }}</p>
+  <p class="dm-yours" aria-hidden="true"><b data-forecast>&ndash;</b><span>{{ t.chance }}</span></p>
+</div>
+<div class="dm-forecast">
+  <div data-slider data-step="5" data-unit="%" data-label="{{ ask }}">
+    <input type="hidden" name="{{ forecast_field }}" value="">
+  </div>
+  <div class="dm-anchors"><span>0% {{ t.anchors.0 }}</span><span>100% {{ t.anchors.1 }}</span></div>
+  <p class="dm-hint">{{ t.place_hint }}</p>
+</div>

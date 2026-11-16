@@ -164,3 +164,17 @@ iteration: the Hausdorff moment theorem (the claim that the residual sequence
 determines the gain distribution is therefore not made), Granger (1980) on
 aggregating heterogeneous dynamics. Pesaran & Smith (1995) is used only through
 the FLOW log, where it was verified.
+
+## I043 addendum (2026-11-16; records/112_basket_market_I043.md)
+
+| Reference | Level | What was verified | Where |
+|---|---|---|---|
+| Yaniv & Kleinberger (2000) Advice taking in decision making: Egocentric discounting and reputation formation. *Organ. Behav. Hum. Decis. Process.* 83(2):260–281 | V-claim (abstract only) | advice is discounted relative to one's own opinion. No number was read; none is taken from it | abstract, as fetched for the freeze of I043 |
+
+Used for one sentence of positioning in the memo (a source's forecast is expected to
+carry less weight than one's own evidence). The values of `κ_s` examined (.2, .35, .5) are
+my choices, not estimates from this or any paper.
+
+Considered and NOT cited (a bibliographic record only; the claim was not read): Soll &
+Larrick (2009). The storyboard (Social Cognition v0.8.1) is an internal project document,
+not a citation.

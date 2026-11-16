@@ -1,27 +1,61 @@
 # Yoked ten-repetition design (specification for the pilot build)
 
-Status: certified on synthetic cohorts only (KGi-DISS-I041; records
-`records/yoked_cert_I041.txt` and `records/yoked_ad_I041.txt`). Built in oTree as
-`experiment/diss_market` (KGi-DISS-I042; see `MARKET_APP.md`); not run on people.
-Recruitment, ethics, payment, board wording, the production seed and any
-registration are author decisions.
+Status: certified on synthetic cohorts only (KGi-DISS-I041, records
+`records/yoked_cert_I041.txt` and `records/yoked_ad_I041.txt`; the prediction-market
+probe KGi-DISS-I043, record `records/basket_cert_I043.txt`). Built in oTree as
+`experiment/diss_market` (KGi-DISS-I042, redesigned I043; see `MARKET_APP.md`); not
+run on people. Recruitment, ethics, payment, the wording of the board and of the
+forecast sources, the production seed and any registration are author decisions.
 
 ## The session (ten repetitions)
 
+The statistical skeleton is that of I041. Since I043 it is presented as a basket
+economy followed by prediction markets (design B); what changed statistically is
+listed under "The prediction markets" below.
+
 | repetition | what happens |
 |---|---|
-| 1 | rich round: ticket choice, 120 settlements shown as a summary (odds .75 / .35), fairness and entitlement ratings |
-| 2–6 | deprivation rounds: the same, at odds .25 / .10 |
-| 7–10 | four probe tickets: forecast, a record of 10 settlements (9 or 1 wins), forecast again |
+| 1 | rich procurement round: the participant orders one of two goods; the goods market clears 120 times; the order fills whenever the clearing price is at or below the cap (fill chances .75 / .35); fairness and entitlement ratings |
+| 2–6 | deprivation rounds: the same, at fill chances .25 / .10 |
+| 7–10 | four prediction markets ("Will ASSET close above X?"): forecast, evidence, forecast again, then a bet (YES, NO or pass) |
 
-- **Board.** HIGH: a trader winning at .72. LOW: a replay of the participant's own
-  trailing record. In the rich round both members of a pair see the same board.
-- **Ratings.** After every round, three fairness items and one entitlement item
-  on 0–100 sliders. The fairness score is the mean of the three. The certified
-  rating noise (5.8) is that of a three-item scale; the entitlement test was
-  certified at the same noise, which one item does not deliver.
-- **Probe.** Two pairs of tickets (one favourable, one unfavourable record each);
-  one pair about the participant's own draws, one about another trader's.
+- **Prices.** The clearing price of the ordered good is a display of the schedule's
+  own draw: `price = cap · exp(σ (z(u) − z(p)))`, with `u` the settlement draw and
+  `p` the good's fill chance, so the order fills exactly where the schedule says.
+  Only the ordered good's own price path is shown. Every filled order is one good
+  and one point; six goods make a basket (a count, with no quota).
+- **Board.** HIGH: a trader whose orders fill at .72. LOW: a replay of the
+  participant's own trailing record. In the rich round both members of a pair see
+  the same board. The board shows filled orders only.
+- **Ratings.** After every procurement round, three fairness items and one
+  entitlement item on 0–100 sliders. The fairness score is the mean of the three.
+  The certified rating noise (5.8) is that of a three-item scale; the entitlement
+  test was certified at the same noise, which one item does not deliver.
+
+## The prediction markets (I043)
+
+Four markets, the same for every schedule of a file, met in an order the schedule
+fixes. Each shows a price history that ends on the line the asset has to close
+above; the history carries no information about the close.
+
+- **Two pairs** (one favourable, one unfavourable market each). In one pair the
+  evidence is a **record**: ten trial closes held with the participant's own
+  tickets (9 or 1 above the line). In the other it is a **source**: the forecast
+  of another trader (90% or 10% in the development build; in a pilot, a real
+  earlier forecast inside 80–100 or 0–20, described identically in both arms).
+- **Forecasts.** One before the evidence and one after, on 0–100 in steps of 5.
+  `T` is unchanged: the mean over the two pairs of the revision after the
+  favourable market minus the revision after the unfavourable one.
+- **Bet.** After the second forecast a price is posted (50) and the participant
+  buys YES, buys NO or passes, from a 10-point allowance; a winning ticket pays
+  20. The markets settle after the closing questions.
+- **What changed statistically.** (S1) One of the two pairs now measures the weight
+  on a source's forecast, assumed to be `κ_s · g` with `g` the gate and `κ_s`
+  unknown (.2 to .5 examined). (S2) The bet adds a second read-out of the updated
+  belief, under an assumed betting rule.
+- **Kept out of the session:** informative prices beyond the ordered good's own
+  path, the other good's prices, a two-stage route task, live order matching,
+  mixed-good baskets, a stated basket quota.
 
 ## Yoking
 
@@ -32,15 +66,20 @@ before the session by `experiment/tools/yoked_schedules.py` and fixes:
 - for every settlement, one draw that settles both tickets (the same ticket pays
   the same to both members; the better ticket wins whenever the worse one does);
 - the HIGH board's draws;
-- the probe tickets (which is favourable, whose record, the order shown).
+- the markets (which is favourable, which kind of evidence, the order met; since
+  I043 the four markets themselves belong to the file, not to the schedule).
 
 People choose their own tickets and give their own ratings and forecasts. Each
 schedule is used once in each arm, with the arm order drawn at random
 (`allocation` in the schedule file). `verify()` in the same tool checks a file.
 
 ```
-python experiment/tools/yoked_schedules.py --pairs 40 --seed <seed> --out experiment/schedules/pilot.json
+python experiment/tools/yoked_schedules.py --pairs 40 --seed <seed> --format 3 --out experiment/schedules/pilot.json
 ```
+
+`--no-social` draws a file with two record pairs (for a seed wave, which has no
+earlier forecast to show); `--markets-from FILE` reuses another file's markets, so
+that a pilot can show forecasts collected in the seed wave.
 
 If one member of a pair is lost, the other stays in every unpaired analysis; the
 paired tests use complete pairs.
@@ -53,7 +92,8 @@ paired tests use complete pairs.
 | ticket chosen in each round, wins in each round | checks; `PHI` |
 | fairness score (three items) after each round | `H1a`, `FREEZE`, association, `PHI` |
 | entitlement rating after each round | `K3` |
-| the eight probe forecasts | probe statistic `T` |
+| the eight forecasts | statistic `T`, and `T` by kind of evidence |
+| the four bets | bet statistic `B`; `BET` |
 | attention check, completion time | exclusions (supplementary trimming interval) |
 
 ## Reporting set
@@ -70,10 +110,11 @@ at .005.
 | ASSOC_H | within HIGH, revision follows reported fairness | rank association of `T` and the last fairness rating |
 | ASSOC_L | the same within LOW | same |
 | PHI | warning: wins erode fairness | in LOW, slope of the change in the rating on the round's win share |
+| BET (I043) | bets follow the evidence less under the HIGH board | `B` = mean over pairs of (bet on the favourable market − bet on the unfavourable one) / 2, with YES 1, pass 0, NO −1; LOW minus HIGH within pairs, signed rank |
 
 - **Confirmatory pair:** H1a, then D1 only if H1a rejects.
-- **Supporting:** K3, FREEZE, the association by arm; PHI is a check on an
-  assumption.
+- **Supporting:** K3, FREEZE, the association by arm, BET; PHI is a check on an
+  assumption. BET rests on an assumed betting rule and on a posted price of 50.
 - **ASSOC_H is the only statistic that bears on a homogeneous slowdown of the HIGH
   arm.** A pooled association (the frozen `ASSOC`) is carried largely by the LOW
   arm and rejects when only LOW is gated; it is kept in the code for the record
@@ -124,6 +165,30 @@ Entries in brackets are true statements in that world, not errors. At 216 pairs
 the pooled association rejects in .66 of samples in the last world; ASSOC_H
 stays at .006.
 
+## Certified performance with one source pair (I043)
+
+Record `records/basket_cert_I043.txt` (20,000 simulated pairs per gate point, 2,000
+samples, seed 139000). Source weight `κ_s · g`; bets by the assumed rule (YES if
+belief + N(0, 8) exceeds the price by 5, NO if it falls 5 below, else pass).
+
+| at 72 pairs | κ_s = .5 | κ_s = .35 | κ_s = .2 |
+|---|---|---|---|
+| D1 and confirmatory pair, P0–P3, both rules | 1.000 | 1.000 | 1.000 |
+| D1, P4, one-update rule | .947 | .893 | .790 |
+| D1, P4, count rule | .990 | .990 | .966 |
+| BET, P0–P3 | 1.000 | 1.000 | 1.000 |
+| BET, P4, one-update rule | .994 | .973 | .916 |
+| FREEZE, P1–P3, one-update rule | .90–.93 | .77–.84 | .59–.60 |
+| ASSOC_H, P1 / P2 / P3, one-update rule | .28 / .41 / .31 | .23 / .32 / .24 | .16 / .18 / .19 |
+| D1 from the source pair alone, P1–P3, one-update rule | 1.00 | .96–.97 | .45–.49 |
+
+- At the anchoring edge (P4) under the one-update rule, 96 pairs give .973 at
+  κ_s = .35 and .913 at κ_s = .2.
+- Sizes: D1 .004–.007 and BET .002–.006 when ratings move and the gain does not.
+- The source pair costs power wherever people give a source's forecast little
+  weight. `κ_s` is a human quantity no simulation supplies; the pilot estimates it
+  from the LOW arm's source pair.
+
 ## What the design can and cannot show
 
 - **It shows, with power .94–1.00 at 72 pairs across the trap region,** that
@@ -159,8 +224,11 @@ stays at .006.
 
 ## What the pilot of this design will show (no sizes fixed here)
 
-Ticket choices per round and the share of pairs with identical choices; the
-control arm's absolute revision weight and the forecast noise; which revision
-rule people follow (it sets the sample for ASSOC_H); the rating gain, noise and
-parking rate; the entitlement path; the PHI slope; attention-check and dropout
-rates by arm; completion time for ten repetitions.
+Orders per round and the share of pairs with identical orders; the control arm's
+absolute revision weight after a record and after a source's forecast (`κ_s`), and
+the forecast noise; which revision rule people follow (it sets the sample for
+ASSOC_H); how people bet at a posted price of 50 (shares of YES, NO and pass by
+forecast); the rating gain, noise and parking rate; the entitlement path; the PHI
+slope; whether a price curve is read as a record of fills (recall of the round's
+count would show it; not built); attention-check and dropout rates by arm;
+completion time for ten repetitions.

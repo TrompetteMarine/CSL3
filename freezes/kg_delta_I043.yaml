@@ -1,0 +1,156 @@
+# KG delta — KGi-DISS-I043 (on top of kg_delta_I032 ... kg_delta_I042; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 516e46a (I042 close); CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-DESIGN-Y
+    new_status: "certified-synthetic; since I043 presented as design B (node DISS-DESIGN-B);
+      not run on people; author-gated"
+    added_evidence: "the statistical skeleton is unchanged; one probe pair now carries a
+      source's forecast (DISS-SOURCE-WEIGHT) and each probe carries a bet (DISS-TEST-BET)"
+  - id: DISS-YOKED-SCHEDULES
+    added_evidence: "format 3 keeps formats 1 and 2 for the same seed and adds the settlement
+      draw (for the price path), four markets common to a file (asset, line, price history
+      ending on the line, chance, settlement draw, uid), the kind of evidence of each pair and
+      the posted bet price; --no-social gives two record pairs; --markets-from reuses another
+      file's markets. The app refuses formats 1 and 2."
+  - id: DISS-PEER-REPLAY
+    new_status: "implemented for board fills and for forecast sources (I043); author decision"
+    added_evidence: "DISS-SOURCE-POOL"
+  - id: DISS-REPORTING-SET
+    added_evidence: "supporting statistic BET added (DISS-TEST-BET); the export adapter also
+      gives T by kind of evidence; T and the bet statistic from the export equal the stored
+      values (144 of 144 bots)"
+  - id: DISS-OTREE-MARKET
+    new_status: "rebuilt for design B (I043); verified with bots and in a browser; not run on
+      people"
+    added_evidence: "pages Order, Clearing, Rate; Market, Evidence, Bet, Recall; Results settles
+      the markets. Tests renamed test_market_*_I043.py (the I042 files tested format 2, which
+      the app now refuses; their checks are kept)."
+  - id: DISS-ENGINE-FIDELITY
+    added_evidence: "fills, boards and T are those of I042's engine. On the engine the gate
+      kernel gives legitimacy at probe time .112 / .865 (certification .109 / .869) with two
+      record pairs, and with one source pair a ratio of mean T of .129 (.124) and a bet
+      statistic of .090 / .678 (.098 / .689)"
+  - id: DISS-FRONTEND
+    new_status: "rebuilt (I043); verified in Chromium (desktop, two phone sizes, reduced motion)"
+    added_evidence: "SVG charts drawn at the size of their host from tested arithmetic
+      (chart.ts): clearing price against the cap with a fill strip; filled orders, own and
+      trader, on a fixed axis; a market's price history; ten trial closes. Reveal 9,003 ms for
+      9,000; a hidden tab stops it."
+  - id: DISS-DOCKER
+    added_evidence: "re-checked on the stand-in images after the rebuild: image builds, both
+      services healthy, non-root, browser run passes against the container with Postgres.
+      Official images still not pulled."
+  - id: DISS-BUILD-DRAFTS
+    added_evidence: "added drafts: market questions and price histories; trial closes 'held
+      with your own YES tickets' that add points; the source's description and track record;
+      the bet (price 50, allowance 10, payout 20, pass allowed); whether the clearing price
+      curve is shown at all"
+  - id: DISS-HUMAN-PARAMS
+    new_status: "open (pilot), extended: the weight on a source's forecast (kappa_s), how
+      people bet at a posted price, and whether a price curve is read as a record of fills"
+
+new_nodes:
+  - id: DISS-DESIGN-B
+    kind: design
+    status: certified-synthetic for what it changes; built; not run on people; author-gated
+    statement: "design Y in the storyboard's institutions. Rounds 1-6: order one of two goods;
+      the goods market clears 120 times; the order fills when the clearing price is at or
+      below the cap; a trader board shows filled orders; one point per good, six goods a
+      basket (a count, no quota). Rounds 7-10: four prediction markets common to a file;
+      forecast, evidence (ten trial closes with own tickets, or a source's forecast), forecast
+      again, then a bet at a posted price; settlement at the end. Left out on purpose:
+      informative prices beyond the ordered good's own path, the other good's prices, a
+      two-stage route task, live order matching, mixed baskets, a stated quota."
+    evidence: "freezes/00_freeze_I043.yaml; experiment/YOKED_DESIGN.md; records/112_basket_market_I043.md"
+  - id: DISS-PRICE-DISPLAY
+    kind: definition
+    status: tested
+    statement: "price = cap * exp(sigma * (z(u) - z(p))), u the schedule's settlement draw, p
+      the ordered good's fill chance: a price is at or below the cap exactly when the
+      schedule's bit is 1 (120 schedules, six rounds, both goods). The price adds the size of
+      a miss to what design Y showed; it is the same for both members of a pair."
+    evidence: "experiment/diss_market/engine.py (price_path); test_market_engine_I043.py"
+  - id: DISS-SOURCE-WEIGHT
+    kind: assumption
+    status: open (pilot)
+    statement: "the weight on a source's forecast is kappa_s * g, g the gate; kappa_s is
+      unknown (.2, .35, .5 examined). Advice discounting is documented (Yaniv & Kleinberger
+      2000, abstract level); no value is taken from the literature."
+  - id: DISS-CERT-B
+    kind: numerical
+    status: certified-synthetic
+    statement: "72 pairs, one-sided .005. D1 and the confirmatory pair: 1.000 at P0-P3 for
+      every kappa_s; at P4, one-update rule, .947 / .893 / .790 for kappa_s .5 / .35 / .2
+      (count rule .990 / .990 / .966); 96 pairs give .973 / .913 at .35 / .2. FREEZE at P1-P3,
+      one-update rule: .90-.93 / .77-.84 / .59-.60. ASSOC_H at P1-P3: .23 / .32 / .24 at
+      kappa_s .35. Sizes D1 .004-.007."
+    evidence: "records/basket_cert_I043.txt (seed 139000); scorecard in freezes/00_freeze_I043.yaml"
+  - id: DISS-TEST-BET
+    kind: statistical
+    status: certified-synthetic under an ASSUMED betting rule
+    statement: "B = mean over the two market pairs of (bet on the favourable market - bet on
+      the unfavourable one) / 2, YES 1, pass 0, NO -1; decision: signed rank within pairs of
+      B_LOW - B_HIGH. Power 1.000 at P0-P3 and .994 / .973 / .916 at P4 (kappa_s .5 / .35 /
+      .2, one-update rule); size .002-.006. Rule assumed: YES if belief + N(0, 8) exceeds the
+      price by 5, NO if 5 below, else pass."
+    evidence: "records/basket_cert_I043.txt; experiment/analysis/yoked_from_export.py"
+  - id: DISS-SOURCE-POOL
+    kind: implementation
+    status: verified with bots
+    statement: "a source shown in a pilot is a real forecast of the same market (same uid),
+      given after ten trial closes in a seed wave on a record-only schedule, inside 80-100
+      (favourable) or 0-20 (unfavourable), from a forecaster with the best record on the other
+      three markets, as near 90 / 10 as the pool allows; the same for both members of a pair.
+      A session does not start without a usable forecast for every market."
+    defect_fixed: "the track record first counted all four markets; next to the forecast it
+      told how the market on screen settles (seen on a still, not by a test)"
+    evidence: "experiment/tools/make_board_pool.py; test_market_app_I043.py"
+  - id: DISS-PALETTE
+    kind: implementation
+    status: validated pair by pair
+    statement: "goods carry colour (Square #2a78d6, Triangle #eb6834; apart by more than 24
+      under every vision type); people are neutral (board trader slate #3f4756, at least 21
+      from either good; a source in ink); YES #1f9d55 against NO #c93a9a on bet buttons and
+      settled markets only, always with the word (10.3 for red-green colour blindness; 9.3
+      for the button inks)."
+    defect_fixed: "the palette named in the freeze was validated on neighbours in a list only:
+      the trader's violet was 3.8 from Square's blue for red-green colour blindness (11.4 with
+      full vision); YES green against NO pink was 5.1 (2.1 for the selected buttons)"
+    evidence: "experiment/frontend/src/styles/app.css; records/112_basket_market_I043.md"
+
+new_edges:
+  - {from: DISS-DESIGN-B, to: DISS-DESIGN-Y, type: requires}
+  - {from: DISS-DESIGN-B, to: DISS-PRICE-DISPLAY, type: requires}
+  - {from: DISS-DESIGN-B, to: DISS-SOURCE-WEIGHT, type: qualified_by}
+  - {from: DISS-DESIGN-B, to: DISS-OTREE-MARKET, type: implemented_by}
+  - {from: DISS-CERT-B, to: DISS-SOURCE-WEIGHT, type: requires}
+  - {from: DISS-DESIGN-B, to: DISS-CERT-B, type: supported_by}
+  - {from: DISS-TEST-BET, to: DISS-HUMAN-PARAMS, type: qualified_by, note: "the betting rule is assumed"}
+  - {from: DISS-REPORTING-SET, to: DISS-TEST-BET, type: requires, note: "supporting only"}
+  - {from: DISS-SOURCE-POOL, to: DISS-PEER-REPLAY, type: requires}
+  - {from: DISS-SOURCE-POOL, to: DISS-YOKED-SCHEDULES, type: requires, note: "markets reused across waves"}
+  - {from: DISS-OTREE-MARKET, to: DISS-SOURCE-POOL, type: qualified_by, note: "a human session with sources needs the pool"}
+  - {from: DISS-FRONTEND, to: DISS-PALETTE, type: requires}
+  - {from: DISS-PRICE-DISPLAY, to: DISS-ENGINE-FIDELITY, type: tested_by}
+
+refuted_preserved:
+  - "B3 (count rule, D1 at P4 >= .97 for every kappa_s): .966 at kappa_s = .2"
+  - "B5 (BET .55-.85 at P4): .973; under the assumed rule the bet is sharper than the forecasts"
+  - "B6 (record pair alone .60-.80 at P4): .809"
+  - "B7 (96 pairs do not suffice at kappa_s = .2): they give .913"
+  - "B8, FREEZE half (>= .85 at P1-P3, kappa_s .35): .765-.836"
+  - "conversation, before the run: 'about threefold' the sample at the weakest gate point - wrong"
+  - "freeze: palette '#7b5cf0 (trader), #d6457a (NO), all checks pass' - true for neighbours in a
+    list only; two pairs that appear together failed"
+  - "first source card: a track record over four markets - it disclosed the outcome"
+flags_not_patched: "none for the manuscript. For the experiment: kappa_s and the betting rule
+  are unknown; the supporting statistics lose power as kappa_s falls; whether a price curve is
+  read as a record of fills is unchecked; the official Docker images were not pulled."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "the app reproduces the simulation's task in new institutions;
+            whether people behave as the model is untested; all wording is draft"}
+persistence: "CSL3 freezes/kg_delta_I043.yaml + Project mirror; no remote KG service"

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  dueCount, dueCountStepped, fractionToValue, gridCols, paidAmong, parseBits, regroupOrder, snap, tween,
+  dueCount, dueCountStepped, fractionToValue, paidAmong, parseBits, snap, tween,
   valueToFraction,
 } from '../src/timeline';
 
@@ -45,23 +45,6 @@ describe('reveal timing', () => {
   it('degenerate inputs do not hang a page', () => {
     expect(dueCount(10, 0, 5)).toBe(5);
     expect(dueCount(10, 100, 0)).toBe(0);
-  });
-});
-
-describe('layout', () => {
-  it('picks a grid that divides the round', () => {
-    expect(gridCols(120)).toBe(15);
-    expect(gridCols(40)).toBe(10);
-    expect(gridCols(25)).toBe(5);
-    expect(gridCols(10)).toBe(10);
-    expect(gridCols(7)).toBe(10);
-  });
-  it('regroups paid first and keeps every cell exactly once', () => {
-    const b = parseBits('0101100');
-    const order = regroupOrder(b);
-    expect(order).toEqual([1, 3, 4, 0, 2, 5, 6]);
-    expect([...order].sort((x, y) => x - y)).toEqual([0, 1, 2, 3, 4, 5, 6]);
-    expect(order.slice(0, paidAmong(b, b.length)).every((i) => b[i])).toBe(true);
   });
 });
 
