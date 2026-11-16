@@ -100,3 +100,26 @@ build:
     H7_constraints: "as G10 of I042; no brand name, logo or copied layout of any real market"
   stopping: "close after the certification, the build, its verification, the memo and the KG
     update. Not here: the pilot specification, wording decisions, the seed wave."
+
+# =================================================================== SCORECARD (certification)
+scorecard_certification:   # verbatim, 2026-11-16; record records/basket_cert_I043.txt (seed 139000)
+  B1: "PASS. kappa_s = .5, one-update rule: D1 1.000 at P0-P3 and .947 at P4 (I041: .939 and .946)."
+  B2: "PASS. One-update rule, D1 at P4: .893 and .911 (two draws) at kappa_s = .35; .790 at .2.
+    At P0-P3 it is 1.000 for every kappa_s."
+  B3: "FAIL at one value. Count rule on the record, D1 at P4: .990 / .990 / .966 for kappa_s =
+    .5 / .35 / .2; I said >= .97."
+  B4: "PASS. Coupling 0: D1 .004-.007, BET .002-.006."
+  B5: "FAIL, in the favourable direction. BET at kappa_s = .35, one-update rule: 1.000 at P0-P3
+    and .973 at P4 (.982 on a second draw); I said .55-.85 at P4. Under the ASSUMED bet rule the
+    bet is sharper than the forecasts (it carries one noise term, the revision carries two)."
+  B6: "FAIL on one cell by .009. Ratio interval on one pair alone at kappa_s = .35, one-update
+    rule: record pair .809 at P4 (I said .60-.80) and .999 at P1; source pair .488 at P4 and .971
+    at P1."
+  B7: "FAIL. 96 pairs suffice at both values: D1 at P4 is .973 at kappa_s = .35 and .913 at .2
+    (I said 96 would not suffice at .2)."
+  B8: "FREEZE FAIL: .808 / .836 / .765 at P1-P3 against my >= .85. ASSOC_H PASS: .231 / .319 / .236."
+  seen_after_the_run: "on the source pair alone the ratio test is .96-.97 at P1-P3 with kappa_s =
+    .35 but .45-.49 with .2, and .49 / .14 at P4. FREEZE falls to .59-.63 at kappa_s = .2
+    (one-update rule). My rough estimate of 'about threefold' for the sample at the weakest gate
+    point, given in conversation before this run, was wrong: 96 pairs give .91 even at
+    kappa_s = .2, because only one of the two pairs is a source pair and the ratio is unchanged."
