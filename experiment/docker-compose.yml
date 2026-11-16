@@ -1,0 +1,49 @@
+# diss_market with Postgres. Copy .env.example to .env, set the three secrets, then:
+#   docker compose up --build -d
+#   open http://localhost:8000  (admin login: user "admin", password OTREE_ADMIN_PASSWORD)
+# Schedule and pool files are read from ./schedules and ./pools, so a new file needs no rebuild.
+services:
+  db:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: otree
+      POSTGRES_USER: otree
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U otree -d otree"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  web:
+    build:
+      context: .
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-slim}
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.13-slim}
+    image: diss-market:${IMAGE_TAG:-local}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      OTREE_PRODUCTION: "1"
+      OTREE_AUTH_LEVEL: ${OTREE_AUTH_LEVEL:-STUDY}
+      OTREE_ADMIN_PASSWORD: ${OTREE_ADMIN_PASSWORD:?set OTREE_ADMIN_PASSWORD in .env}
+      OTREE_SECRET_KEY: ${OTREE_SECRET_KEY:?set OTREE_SECRET_KEY in .env}
+      OTREE_REST_KEY: ${OTREE_REST_KEY:-}
+      DATABASE_URL: postgresql://otree:${POSTGRES_PASSWORD}@db:5432/otree
+      MARKET_SCHEDULE: ${MARKET_SCHEDULE:-schedules/example_seed0_4pairs_v2.json}
+      MARKET_POOL: ${MARKET_POOL:-pools/pool.json}
+      PORT: "8000"
+    volumes:
+      - ./schedules:/app/schedules:ro
+      - ./pools:/app/pools:ro
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+
+volumes:
+  dbdata:

@@ -1,0 +1,3 @@
+# Runtime of the oTree project (the analysis code has its own needs and is not in the image).
+otree==6.0.15
+psycopg2-binary==2.9.10

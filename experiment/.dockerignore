@@ -1,0 +1,14 @@
+# keep the build context to what the image needs
+**/__pycache__
+**/*.pyc
+db.sqlite3
+.env
+_static
+frontend/node_modules
+analysis
+botdata
+tools
+*.md
+schedules/_generated
+pools
+docker-compose*.yml
