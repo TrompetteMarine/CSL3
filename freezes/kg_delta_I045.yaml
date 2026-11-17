@@ -1,0 +1,262 @@
+# KG delta — KGi-DISS-I045 (on top of kg_delta_I032 ... kg_delta_I044; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 14ffaee (I044 close); CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-EFFECTIVE-DRAWS
+    new_status: "open (human). Its consequence is now sized and it can be read from one cell of a
+      first wave (DISS-ROUND-COUNT-READOUT)."
+    added_evidence: "if a round counts for 80 or 40 settlements instead of 120, legitimacy at probe
+      time HIGH | LOW is .123 | .594 and .230 | .610 at P1 (.112 | .871 at 120) and .368 | .602 and
+      .385 | .613 at P4 (.413 | .876). The confirmatory pair then needs 336 (288) and 288 (240) pairs
+      at the anchoring edge under the one-update rule (84 at 120) and 192 (168) and 240 (192) under the
+      count rule (60). I037 had said about 300 per arm at an effective 40 draws."
+  - id: DISS-HUMAN-PARAMS
+    added_evidence: "what each unknown costs at the anchoring edge, one at a time, in pairs for the
+      confirmatory pair (as built 84): the count of outcomes per round 288-336; forecast noise 8 / 16:
+      60 / 120; 20% inattentive: 120; weight on a source .2 / .5: 96 / 72; the revision rule: 84
+      (one-update) against 60 (count). The session effect in a live economy: 8 / 10 / 16 triplets of
+      six per market at 0 / .1 / .2. Combinations were not run. The size of the effect itself is not
+      among them: DISS-POWER-SCOPE."
+  - id: DISS-TEST-K3
+    added_evidence: "sized in pairs for power .90 (.80) at one-sided .005. One item as built (noise
+      10): 30 (24) at P0, 60 (48) at P1-P3, 96 (84) at P4; power at 24 / 36 / 72 pairs .4490 / .7025 /
+      .9730 at P1 and .2170 / .3815 / .7910 at P4. Three items (noise 5.8): 18 (12) at P0, 24 (24) at
+      P1-P3, 48 (36) at P4. At level .05: one item 36 (24) at P1 and 60 (48) at P4. Mean entitlement
+      ratings HIGH | LOW 45.7 | 37.5 at P1 and 43.8 | 37.6 at P4. Sizes .0025-.0055."
+  - id: DISS-PHI-PLUS
+    added_evidence: "the PHI flag at P1: flagging phi_plus .5 needs 168 (120) pairs, 1.0 needs 60
+      (48); rates at 72 pairs .5550 and .9675 (I040: .59 and .97). Under the frozen phi_plus .25 the
+      flag fires in .0080 / .0085 / .0080 / .0090 / .0130 at 36 / 72 / 144 / 288 / 576 pairs, above
+      its nominal .005."
+  - id: DISS-CERT-B
+    added_evidence: "as a requirement: the confirmatory pair reaches .90 (.80) at the anchoring edge
+      with 84 (60) pairs at kappa_s .35, 96 (84) at .2 and 72 (48) at .5 (one-update rule); 60 (48)
+      under the count rule. I043 gave .893 at 72 pairs and .973 at 96 at kappa_s .35: the two agree."
+  - id: DISS-SOURCE-WEIGHT
+    added_evidence: "a source pair in place of a second record pair costs the confirmatory pair one
+      grid step at the anchoring edge (84 against 72 pairs) and the HIGH-arm association two thirds
+      more participants at P1 (480 against 288 pairs, one-update rule)."
+  - id: DISS-RIVAL-HS-G
+    added_evidence: "pairs for power .90 (.80), binding point over P1-P3. HIGH-arm association: two
+      record pairs 288 (240) under the one-update rule and 192 (144) under the count rule; with one
+      record pair and one source pair, as built, 480 (336) and 240 (168). Top quarter against the
+      rest, two record pairs: 288 (192) and 144 (120). Sizes against a uniformly slowed HIGH arm at 72
+      / 288 pairs: .0010 / .0035 and .0025 / .0030. I041 gave .89 at 288 pairs at P1; the two agree
+      within the +-.03 between pools."
+  - id: DISS-ASSOC-BY-ARM
+    added_evidence: "sized by gate point, rule and probes in records/staged_power_I045.txt, section
+      4 (pairs for .90: 288 / 240 / 288 at P1-P3 with two record pairs, 480 / 288 / 336 with a source
+      pair, one-update rule; 192 / 120 / 192 and 192 / 168 / 240 under the count rule)."
+  - id: DISS-TEST-FREEZE
+    added_evidence: "freeze at .5 needs 72 (60) pairs with two record pairs and 96 (84) with a source
+      pair under the one-update rule (binding over P1-P3); 30 (24) and 60 (48) under the count rule.
+      When the coupling is .5 it rejects in .0025 / .0015 at 72 / 288 pairs. It does not exclude a
+      uniform slowdown."
+  - id: DISS-TEST-PLAT2
+    added_evidence: "taken on individuals, each participant a unit: 288 (240) per arm under the
+      one-update rule and 168 (120) under the count rule (binding over P1-P3); power at 72 / 144 per
+      arm .351 / .631 at P1 (one-update), .601 / .906 (count). A uniformly slowed HIGH arm is rejected
+      in .0000-.0095. I044 gave .607 for 12 markets of six: not a clean comparison (live market with
+      unscaled supply, legitimacy .175 | .935 against .112 | .871; markets as units). What accounts
+      for the difference was not measured."
+  - id: DISS-LAYOUT-TRIPLET
+    new_status: "certified-synthetic for six and for four per market"
+    added_evidence: "triplets needed for the confirmatory pair are in DISS-LIVE-N. Power of the pair
+      at 6 / 8 / 12 triplets of six per market at P4, one-update rule: .896 / .982 / 1.000 without a
+      session effect, .585 / .789 / .964 with .1, .289 / .549 / .837 with .2 (I044: D1_M .900 | .588
+      at 6 and .980 | .770 at 8). Sizes .0030-.0090 (H1a) and .0020-.0070 (D1)."
+  - id: DISS-DESIGN-W
+    added_evidence: "its cost for power .90 at the anchoring edge under the one-update rule: 288 /
+      360 / 576 people at six per market and 240 / 288 / 384 at four, for session effects 0 / .1 / .2
+      (DISS-LIVE-N). A basket that ends a trader's bidding multiplies it (DISS-COMPLETION-GATE-COST)."
+  - id: DISS-SUPPLY-CALIBRATION
+    added_evidence: "four per market needs fewer people than six at every session effect, by
+      triplets: 240 / 288 / 384 against 288 / 360 / 576 at P4 (one-update rule), with more sessions
+      (36 sessions of 8 against 30 of 12 at a session effect of .1)."
+  - id: DISS-INSTITUTION-EFFECT
+    added_evidence: "as a contrast between institutions, each in its own triplets of six per market:
+      fairness contrast (LOW minus HIGH) 42.3 points with unit orders and 5.0 with shares at P1, 25.9
+      and 2.2 at P4; psi .073 and .902 at P1, .428 and .961 at P4 (one-update rule). Its test:
+      DISS-TEST-INSTITUTION."
+  - id: DISS-BUILD-DRAFTS
+    added_evidence: "decisions raised by the sizing: one entitlement item or three; a 4-close probe
+      to identify the revision rule; whether the second probe pair stays a source; whether a basket
+      ends the bidding; market size for a live rung; whether the first wave is a pilot or the
+      confirmatory study."
+
+new_nodes:
+  - id: DISS-STAGED-BUDGET
+    kind: numerical
+    status: certified-synthetic under the kernel and ASSUMED human parameters; the steps are a
+      proposal the author has not approved as a plan
+    statement: "people for power .90 (.80) at one-sided .005, binding gate point. Step 1, a first
+      wave on the built app: 192 (168) with one entitlement item, 144 with three. Step 2, the gate:
+      168 (120) under the one-update rule, 120 (96) under the count rule; 672 / 576 and 384 / 480 if a
+      round counts for 80 / 40 settlements; 240 with forecast noise 16 or 20% inattentive. Step 3,
+      the gate against a uniform slowdown: association with the probes as built 960 (672) and 480
+      (336); with two record pairs 576 (480) and 384 (288); twelve-record claims 576 (480) and 336
+      (240). Step 4, the live economy: six per market 288 (216) / 360 (360) / 576 (432) at session
+      effects 0 / .1 / .2 (count rule 216 (180) / 288 (288) / 432 (360)); four per market 240 (192) /
+      288 (288) / 384 (384) (count rule 192 (144) / 240 (192) / 288 (240)). Sums: core (first wave,
+      gate, live at four per market) 504 (count rule, no session effect) and 648 (one-update rule,
+      session effect .1); every rung (plus the rival test with two record pairs and the institution
+      contrast on fairness) 1,128 and 1,584; 1,008 and 1,416 when the gate test is taken inside the
+      rival sample; 1,224 and 1,968 with the rival test on the probes as built."
+    evidence: "records/staged_power_I045.txt, section 6; records/114_staged_power_I045.md;
+      freezes/00_freeze_I045.yaml"
+  - id: DISS-WAVE1-CHECKS
+    kind: design
+    status: certified-synthetic; not specified as a study; author-gated
+    statement: "one cell of the built app ('streams completely separated'). Pairs for .90 (.80) at
+      the anchoring edge: fairness (H1a) 24 (24); entitlement (K3) 96 (84) with one item, 48 (36)
+      with three. PHI flag at P1: 60 (48) pairs for phi_plus 1.0, 168 (120) for .5. Count of outcomes
+      per round: DISS-ROUND-COUNT-READOUT, 36 pairs. Precision at P1: control arm's weight .33 with
+      standard error .053 / .044 / .038 / .031 / .027 at 24 / 36 / 48 / 72 / 96 pairs (one-update
+      rule; count rule .50 and .061 / .050 / .042 / .035 / .031); relative s.d. of the main-study size
+      computed from the wave .45 / .36 / .30 / .24 / .21 (count rule .40 / .32 / .26 / .22 / .19). 96
+      pairs cover every check; 72 do with three entitlement items."
+    evidence: "records/staged_power_I045.txt, sections 1 and 2"
+  - id: DISS-ROUND-COUNT-READOUT
+    kind: statistical
+    status: certified-synthetic inside the model's family of trajectories
+    statement: "how many outcomes a person takes from a round, read from the fairness ratings after
+      every round in one cell (120 settlements shown). Classifier: the twelve mean ratings (six
+      rounds, two arms) against the model's mean legitimacy by round and arm for counts 40, 80 and
+      120 at P1-P4; rating scale fitted by least squares; smallest residual chosen. Correct with the
+      gate point known | unknown, worst cell over P1 and P4 and the three counts: .883 | .832 at 12
+      pairs, .976 | .917 at 24, .994 | .951 at 36, 1.000 | .991 at 72. Recovery test (control arm, last
+      rating above the rating after round 3, signed rank): 30 / 30 / 36 / 30 control participants at
+      P1-P4; rejects in at most .006 when a round counts for 80 or 40, except at P2 with 80 (.0195 at
+      24, .0395 at 72; the control arm recovers +1.2 points there against +16.2). Two cells between
+      participants (40 against 120 shown): 84 (72) per cell for the control arm; the HIGH arm 120 (96)
+      at P1 and more than 288 at P4."
+    evidence: "records/staged_power_I045.txt, section 2 (a) and (d); addendum AD-S1 of the freeze"
+  - id: DISS-TEST-REVISION-RULE
+    kind: statistical
+    status: certified-synthetic; needs a probe the app does not have
+    statement: "weight on a record of 10 closes against a record of 4, within participant, control
+      arm (P1). Count rule: mean weights .741 | .473; 120 (84) participants; rate .378 / .796 / .986 /
+      1.000 at 36 / 72 / 144 / 288. One-update rule: .390 | .390; rejection .0035-.0050."
+    evidence: "records/staged_power_I045.txt, section 2 (b)"
+  - id: DISS-GATE-N
+    kind: numerical
+    status: certified-synthetic under ASSUMED human parameters
+    statement: "pairs for the confirmatory pair (H1a then D1), power .90 (.80), design B as built
+      (record + source at .35, forecast noise 12, 10% inattentive, 120 settlements per round).
+      One-update rule: 24 (18) at P0, 30 (24) / 24 (24) / 30 (24) at P1-P3, 84 (60) at P4. Count rule:
+      12 (12), 18 (18) at P1-P3, 60 (48) at P4. D1 alone gives the same figures. The as-built cell was
+      drawn three times (ratings and forecasts redrawn on one kernel pool): 84, 84 and 72 at P4 and
+      30, 30 and 24 at P1; the larger is kept. One change at a time: node updates of
+      DISS-HUMAN-PARAMS. Sizes at 12 / 72 / 288 null pairs: H1a .0020 / .0030 / .0050, D1 .0040 /
+      .0040 / .0030; ratings move and the gain does not: D1 .0040 / .0035 / .0070."
+    evidence: "records/staged_power_I045.txt, sections 3 and 5a"
+  - id: DISS-CLOSED-FORM-LOW
+    kind: numerical
+    status: certified-synthetic
+    statement: "n = 14.88 (s_H^2 + s_L^2) / (m_L - m_H)^2 (pairs; one-sided .005, power .90) is on
+      the low side of the simulated requirement for D1: 23 against 30 and 13 against 18 at P1, 72
+      against 84 and 48 against 60 at P4 (one-update and count rule). Computed from a wave at P1 with
+      the model's psi at the anchoring edge its median is 63 pairs (one-update rule) and 38 (count
+      rule). A lookup built on the closed form needs the simulated correction."
+    evidence: "records/staged_power_I045.txt, sections 2 (c) and 3 (G6)"
+  - id: DISS-COMPLETION-GATE-COST
+    kind: numerical
+    status: certified-synthetic
+    statement: "a basket of q fills per round that ends the bidding (30 fills expected on the better
+      ticket); the prediction market open to those who completed the last basket. Individual design,
+      one-update rule, pairs for D1 with everyone measured | completers only: q 20: 48 | 60 at P1 and
+      240 | 336 at P4 (completed by .826 | .874 and .854 | .873; psi .193 and .627); q 15: 72 | 84 and
+      576 | more than 576 (psi .267 and .713); q 10: 120 | 120 and more than 576 (psi .387 and .808);
+      no basket 24 and 72 in the same section. Measuring completers only moves psi by .002-.022. Live
+      economy, six per market, triplets without | with a session effect of .1: basket 15: 6 | 10 at
+      P1, 20 | more than 32 at P4 (count rule 5 | 8 and 16 | 24); basket 10: 8 | 12 at P1, more than 32
+      at P4 (count rule 6 | 10; 32 | more than 32)."
+    evidence: "records/staged_power_I045.txt, sections 5a and 5c"
+  - id: DISS-LIVE-N
+    kind: numerical
+    status: certified-synthetic under ASSUMED order rules; session effect unknown
+    statement: "triplets for the confirmatory pair on market values, calibrated supply, power .90
+      (.80), session effect 0 / .1 / .2. Six per market: P1 4 (4) / 5 (4) / 6 (6) under the
+      one-update rule and 4 / 4 / 5 (4) under the count rule; P4 8 (6) / 10 (10) / 16 (12) and 6 (5) /
+      8 (8) / 12 (10). Four per market: P1 5 (4) / 6 (5) / 8 (6) and 4 (4) / 5 (4) / 5 (5); P4 10 (8) /
+      12 (12) / 16 (16) and 8 (6) / 10 (8) / 12 (10). A triplet is 36 people at six per market and 24
+      at four."
+    evidence: "records/staged_power_I045.txt, section 5b"
+  - id: DISS-TEST-INSTITUTION
+    kind: statistical
+    status: certified-synthetic
+    statement: "unit orders against shares, each in its own triplets of six per market; Welch test on
+      triplet values (LOW minus HIGH within a triplet, for the last fairness rating and for T),
+      one-sided .005. Triplets per institution for .90 (.80), session effect 0 | .1. Fairness contrast
+      larger under unit orders: P1 4 (3) | 4 (4); P4 6 (5) | 8 (6) under the one-update rule and 6 (5)
+      | 6 (6) under the count rule. Uptake contrast larger under unit orders: P1 6 (5) | 10 (8) (count
+      rule 5 (4) | 6 (5)); P4 12 (10) | 20 (16) (count rule 8 (8) | 12 (12)). Size, unit orders against
+      unit orders: .0020-.0050."
+    evidence: "records/staged_power_I045.txt, section 5d"
+  - id: DISS-POWER-SCOPE
+    kind: scope
+    status: stated; a limit of every requirement of I045
+    statement: "every requirement is the sample at which power reaches .90 when people sit at the
+      model's own effect at the stated gate point. The binding point is the anchoring edge P4 (psi
+      .478 under the one-update rule, .498 under the count rule; legitimacy at probe time .413 |
+      .876). A gate weaker than that is outside the paper's trap region and is not detected reliably
+      at these samples. No requirement was computed for a smallest effect of interest set
+      independently of the model."
+    evidence: "records/114_staged_power_I045.md, 'What the figures rest on'"
+
+new_edges:
+  - {from: DISS-STAGED-BUDGET, to: DISS-WAVE1-CHECKS, type: requires}
+  - {from: DISS-STAGED-BUDGET, to: DISS-GATE-N, type: requires}
+  - {from: DISS-STAGED-BUDGET, to: DISS-RIVAL-HS-G, type: requires, note: "step 3"}
+  - {from: DISS-STAGED-BUDGET, to: DISS-LIVE-N, type: requires}
+  - {from: DISS-STAGED-BUDGET, to: DISS-TEST-INSTITUTION, type: requires}
+  - {from: DISS-STAGED-BUDGET, to: DISS-POWER-SCOPE, type: qualified_by}
+  - {from: DISS-STAGED-BUDGET, to: DISS-HUMAN-PARAMS, type: qualified_by, note: "noise, inattention, revision rule and session effect are assumed"}
+  - {from: DISS-GATE-N, to: DISS-DESIGN-B, type: requires}
+  - {from: DISS-GATE-N, to: DISS-EFFECTIVE-DRAWS, type: qualified_by, note: "84 pairs, or 288-336 if a round counts for 40-80 settlements"}
+  - {from: DISS-GATE-N, to: DISS-SOURCE-WEIGHT, type: qualified_by}
+  - {from: DISS-GATE-N, to: DISS-POWER-SCOPE, type: qualified_by}
+  - {from: DISS-EFFECTIVE-DRAWS, to: DISS-ROUND-COUNT-READOUT, type: tested_by}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-ROUND-COUNT-READOUT, type: requires}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-TEST-K3, type: requires}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-PHI-PLUS, type: requires}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-CLOSED-FORM-LOW, type: qualified_by, note: "a size computed from the wave runs low"}
+  - {from: DISS-HUMAN-PARAMS, to: DISS-TEST-REVISION-RULE, type: tested_by, note: "the revision rule"}
+  - {from: DISS-TEST-REVISION-RULE, to: DISS-OTREE-MARKET, type: qualified_by, note: "needs a 4-close probe the app does not have"}
+  - {from: DISS-LIVE-N, to: DISS-LAYOUT-TRIPLET, type: requires}
+  - {from: DISS-LIVE-N, to: DISS-SUPPLY-CALIBRATION, type: requires}
+  - {from: DISS-LIVE-N, to: DISS-INTERFERENCE, type: qualified_by, note: "the session effect is unknown; 0 to .2 doubles the requirement"}
+  - {from: DISS-DESIGN-W, to: DISS-COMPLETION-GATE-COST, type: qualified_by, note: "a basket that ends a trader's bidding"}
+  - {from: DISS-DESIGN-B, to: DISS-COMPLETION-GATE-COST, type: qualified_by, note: "a basket that ends the bidding"}
+  - {from: DISS-INSTITUTION-EFFECT, to: DISS-TEST-INSTITUTION, type: tested_by}
+
+refuted_preserved:
+  - "S3, false alarm of the PHI flag (at most .012 at every n): .0130 at 576 pairs"
+  - "S4, sample sizes (control arm rated fairer at 120 than at 40: 24-48 participants per cell at P1, 24-60 at P4): 84 at both"
+  - "S5 (the revision rule identified with 54-84 control participants): 120"
+  - "S6, one cell (relative s.d. of the computed size 20-35% at 36 pairs): 36%"
+  - "S7, four cells (count rule at P4 40-54 pairs; forecast noise 8: 36-54; 20% inattentive: 90-108; a round counting for 80 settlements: 120-300): 60; 60; 120; 336"
+  - "S8, PLAT2 on individuals (96-144 per arm under the one-update rule, at most 72 under the count rule): 288 and 144 at P1"
+  - "S10, three cells (six per market: at most 4 triplets at P1 with a session effect of .1; P4 without a session effect 6-7 and, count rule, 4-5): 5; 8; 6"
+  - "S11, one cell (basket of 15 at P4: more than 32 triplets): 24 under the count rule with a session effect of .1"
+  - "S12 (fairness contrast 4-6 triplets at P4; uptake at most 4 at P1 and 6-10 at P4): 8 with a session effect of .1; 6-10 and 12-20"
+  - "AD-S1 (recovery test: at most 24 control participants; rejection at most .01 when a round counts for 80 or 40; classifier with the gate point unknown not reaching .80 at P4 with 144 pairs): 30-36; .0195-.0395 at P2 with 80; .917 at 24 pairs"
+  - "scorecard draft, two notes giving a mechanism that was not measured: 'at 80 the control arm sits at the bottom of its dip'; PLAT2 on individuals 'lives on a mixture'. Withdrawn."
+  - "memo draft: 'fairness 1.00 from 36 pairs' (.99); 'a basket multiplies the requirement by more than three' (2.9-3.3); a ladder total of 1,300-1,800 without its sum (1,128 and 1,584); the rival test costed with two record pairs without the as-built figure (960 and 480 people); 'two draws gave the same answer' (a third gave one grid step less)"
+flags_not_patched: "none for the manuscript. For the experiment: every requirement is at the model's
+  own effect (DISS-POWER-SCOPE); ratings are plain (linear, gain .5) and the rating shapes of I041,
+  under which the entitlement test is much weaker, were not rerun; human parameters were varied one
+  at a time; the classifier was
+  scored inside the model's family of trajectories and at P1 and P4 only; the rival tests were sized
+  over P1-P3; shares in the individual design, a basket as a milestone with trading on, session
+  effects in the individual design, stand-ins and dropouts were not simulated; the cash link and
+  ownership were not simulated because the model predicts no change."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+            application_bridge: "the two runners equal the certified simulators (twins_I040.twins on
+            the same seed; market_cert_I044.run bit for bit) and the figures agree with I040, I041,
+            I043 and I044 where cells coincide; whether people rate, forecast and revise as assumed is
+            untested; nothing was run on people"}
+persistence: "CSL3 freezes/kg_delta_I045.yaml + Project mirror; no remote KG service"

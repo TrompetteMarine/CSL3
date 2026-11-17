@@ -144,3 +144,107 @@ addenda:
       power .90 at P1-P4; rejection at most .01 when a round counts for 80 or 40. Classifier, gate point known:
       accuracy at least .90 for every true count from 36 pairs at P1 and from 72 at P4. Gate point unknown: at
       least .80 from 72 pairs at P1; not reached at P4 with 144 pairs."
+
+# =================================================================== SCORECARD (verbatim; records/staged_power_I045.txt, seed 141000)
+scorecard:
+  G1_bridge_individual: "PASS. The new individual runner equals twins_I040.twins on the same seed (legitimacy,
+    aspiration and wins, both arms, P1 and P4). Pools: P1 HIGH .112 (share below .05: .824), LOW .871; P4 .413
+    (.399), .876."
+  G2_bridge_live: "PASS. Equal to market_cert_I044.run bit for bit in two settings."
+  G3_sizes: "PASS for every test, with one exception that is a flag. Individual design, null pairs at 12 / 72 /
+    288 pairs: H1a .0020 / .0030 / .0050 [.051 / .051 / .052 at nominal .05], K3 .0025 / .0025 / .0055 [.067 /
+    .046 / .065], D1 .0040 / .0040 / .0030; ratings move and the gain does not: D1 .0040 / .0035 / .0070. Two
+    cells: .0020-.0075. Revision rule under the one-update rule: .0035-.0050. Uniform slowdown: association
+    .0010 / .0035, top quarter .0025 / .0030, PLAT2 .0000-.0095; freeze at coupling .5: .0025 / .0015. Live
+    economy by triplets: H1a .0030-.0090, D1 .0020-.0070. Institution contrast: .0020-.0050. Exception: the PHI
+    flag fires under the frozen model in .0080 / .0085 / .0080 / .0090 / .0130 at 36 / 72 / 144 / 288 / 576
+    pairs."
+  G4_determinism: "PASS. A second full run is bit-identical (153 lines)."
+  G5_constraints: "PASS. Nothing run on people; app, wording and main text untouched; no credential."
+  G6_formula: "PASS as frozen (within one grid step), and the closed form is on the low side: D1 at power .90,
+    formula | simulated: P1 one-update 23 | 30, P1 count 13 | 18, P4 one-update 72 | 84, P4 count 48 | 60."
+  S1_fairness: "PASS. Pairs at .005: 12 at P0-P3, 24 at P4. At .05: 12 at P0-P3, 18 at P4."
+  S2_entitlement: "PASS. Three items: 24 at P1, 48 at P4. One item, as built: 60 at P1-P3, 96 at P4 (30 at P0)."
+  S3_phi_flag: "sample sizes PASS, false alarm FAIL at the largest n. Flagging phi_plus .5: 168 pairs (120 for
+    power .80); 1.0: 60 (48). False alarm at the frozen phi_plus: .0080-.0090 up to 288 pairs, .0130 at 576
+    (I said at most .012 at every n)."
+  S4_settlements_per_round: "levels PASS, sample sizes FAIL. Kernel at 40 settlements, P1: HIGH .230, LOW .610
+    (at 80: .123 and .594). Control arm rated fairer at 120 than at 40: 84 participants per cell at P1 and at
+    P4 (I said 24-48 and 24-60). HIGH arm rated less fair at 120: 120 at P1, more than 288 at P4. The HIGH-LOW
+    contrast larger at 120: 60 at P1, 192 at P4."
+  S5_revision_rule: "sample size FAIL, size PASS. Under the count rule 120 control participants (84 for power
+    .80); I said 54-84. Mean weights at 10 and 4 closes .741 and .473. Rejection under the one-update rule
+    .0035-.0050."
+  S6_precision: "PASS except one cell by .01. Wave of 36 pairs: standard error of the control arm's weight .044
+    (one-update), .050 (count); relative standard deviation of the computed main-study sample size .36 (I said
+    .20-.35) and .32. At 72 pairs .24 and .22. The computed size has a median of 63 pairs where the simulation
+    needs 84 (one-update rule)."
+  S7_gate: "PASS except four cells. Confirmatory pair, design B as built. One-update rule: 30 / 24 / 30 pairs at
+    P1-P3, 84 at P4 (60 for power .80). Count rule: 18 at P1-P3, 60 at P4 (I said 40-54). At P4 under the
+    one-update rule with one change: source weight .2: 96; .5: 72; two record pairs: 72; noise 8: 60 (I said
+    36-54); noise 16: 120; 20% inattentive: 120 (I said 90-108); a round counting for 80 settlements: 336 at
+    the binding point P4 (I said 120-300); for 40: 288. Count rule: 192 and 240."
+  S8_rivals: "association and freeze PASS, PLAT2 FAIL. Pairs at P1. HIGH-arm association: one-update rule 288
+    with two record pairs and 480 with a source pair; count rule 192 with two record pairs. Freeze at .5
+    (one-update): 72 and 96. PLAT2 on individuals, per arm: 288 under the one-update rule (I said 96-144) and
+    144 under the count rule (I said at most 72); power at 72 per arm .351 and .601. The uniformly slowed HIGH
+    arm is rejected in at most .0095."
+  S9_completion_gate_individual: "PASS. Basket of 20: 82.6% (HIGH) and 87.4% (LOW) complete the last basket at
+    P1, 85.4% and 87.3% at P4; psi-hat .193 at P1 (.127 without a basket); pairs for D1 with everyone measured |
+    completers only: 48 | 60 at P1, 240 | 336 at P4. Basket of 15: 72 | 84 and 576 | more than 576. Basket of
+    10: 120 | 120 and more than 576. Measuring completers only moves psi-hat by .002-.022."
+  S10_live: "PASS except three cells. Six per market, triplets: P1 one-update rule 4 / 5 / 6 at session effects
+    0 / .1 / .2 (I said at most 4 at 0 and .1), count rule 4 / 4 / 5. P4 one-update rule 8 / 10 / 16 (I said
+    6-7 without a session effect), count rule 6 / 8 / 12 (I said 4-5 without). Four per market, P4: 10 / 12 /
+    16 and 8 / 10 / 12; at a session effect of .1 that is 288 people against 360 at six per market."
+  S11_live_stopping_basket: "PASS under the one-update rule, one cell FAIL under the count rule. Basket of 15:
+    P1 6 triplets without and 10 with a session effect of .1 (count rule 5 and 8); P4 20 without and more than
+    32 with it (count rule 16 and 24: I said more than 32). Basket of 10: P1 8 and 12 (count 6 and 10); P4 more
+    than 32 (count rule 32 without a session effect)."
+  S12_institution: "fairness PASS except one cell, uptake FAIL. Triplets per institution, session effect 0 |
+    .1. Fairness contrast larger under unit orders: P1 4 | 4, P4 6 | 8 (count rule 6 | 6); I said 4-6 at P4.
+    Uptake ratio lower under unit orders: P1 6 | 10 (count 5 | 6), P4 12 | 20 (count 8 | 12); I said at most 4
+    and 6-10. Fairness contrast 42 points with unit orders and 5 with shares at P1; psi .07 and .90."
+  AD_S1_reading_the_rounds: "recovery test FAIL on both parts, classifier PASS and better than I said at the
+    anchoring edge. Recovery test under settlement-by-settlement integration: 30 / 30 / 36 / 30 control
+    participants at P1-P4 (I said at most 24). When a round counts for 80 it rejects in .0195 (24) and .0395
+    (72) at P2, where the control arm already recovers a little (+1.2 points against +16.2); elsewhere at most
+    .006. Classifier, gate point known | unknown: at 24 pairs at least .976 | .917, at 36 pairs .994 | .951, at
+    72 pairs 1.000 | .991; at 12 pairs .883 | .832 at worst. I said the unknown case would not reach .80 at P4
+    with 144 pairs."
+  seen_after_the_run:
+    - "the closed form underestimates the requirement by one grid step in three of four cells; a lookup built on
+      it needs the simulated correction"
+    - "at the anchoring edge under the one-update rule a round counting for 80 settlements needs one grid step
+      more than one counting for 40 (336 against 288 pairs; psi .627 and .633; control arm's legitimacy .602 and
+      .613). Under the count rule the order is the reverse (192 and 240 pairs), and at P1 too (72 and 120). No
+      mechanism was measured."
+    - "PLAT2 on individuals: .351 at 72 per arm (P1, one-update rule), where I044 gave .607 for 12 markets of
+      six. Not a clean comparison: I044's figure is on the live market with unscaled supply (legitimacy .175 |
+      .935 at P1 against .112 | .871 here) and with markets as units. What accounts for the difference was not
+      measured."
+    - "four per market needs fewer people than six at every session effect at P4 (240 / 288 / 384 against 288 /
+      360 / 576), at the price of more sessions"
+    - "the as-built cell was drawn three times (ratings and forecasts redrawn on the same kernel pool, sections 3
+      and 5a): D1 needs 84, 84 and 72 pairs at P4 and 30, 30 and 24 at P1. The larger is kept."
+    - "the sensitivities of section 3 change one thing at a time; no combination of adverse values was run"
+    - "every cohort has plain ratings (linear, gain .5); the rating shapes of I041 were not rerun"
+
+closing_record:   # 2026-11-17
+  state: "sample sizes by step, from simulated cohorts under the kernel and the assumed noise and revision
+    rules; implementation gate closed; nothing run on people; author-gated"
+  delivered: "records/114_staged_power_I045.md; records/staged_power_I045.txt; experiment/analysis/
+    staged_power_I045.py with eight tests; freezes/kg_delta_I045.yaml; freezes/kg_active_I045.yaml; a
+    pointer paragraph in experiment/YOKED_DESIGN.md (no figure of that document is changed)"
+  corrected_before_close:
+    - "two notes in the first draft of this scorecard gave a mechanism that no run had measured ('at 80 the
+      control arm sits at the bottom of its dip'; 'the statistic lives on a mixture'). Both are withdrawn; the
+      notes now give the measured figures and say that no mechanism was measured."
+    - "first draft of the memo: 'fairness 1.00 from 36 pairs' (.99 at the anchoring edge); 'a basket multiplies
+      the requirement by more than three' (240 against 72-84 pairs: 2.9-3.3); a total for the whole ladder of
+      1,300-1,800 people given without its sum (1,128 and 1,584 as now itemised); the rival test costed with
+      two record pairs without saying that the built app has one record pair and one source pair (960 and 480
+      people as built); 'two draws of one cell gave the same answer' (a third draw, in section 5a, gave one
+      grid step less)."
+  next_executable_step: "the author's choice of which steps are to be confirmatory; then the specification of
+    the first wave with its frozen analysis"

@@ -11,6 +11,11 @@ An interactive variant, in which the participants' orders set the clearing price
 (design W, KGi-DISS-I044), is specified in `LIVE_ECONOMY.md`. It is certified on
 simulated sessions and not built; this document and the app are unchanged by it.
 
+The participants each step of a staged validation needs, as requirements for power
+.90 on simulated cohorts (KGi-DISS-I045), are in `records/114_staged_power_I045.md`.
+The decision rates below are unchanged by it. As built, the confirmatory pair needs
+84 pairs at the anchoring edge under the one-update rule.
+
 ## The session (ten repetitions)
 
 The statistical skeleton is that of I041. Since I043 it is presented as a basket
