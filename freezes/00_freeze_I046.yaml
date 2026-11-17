@@ -1,0 +1,143 @@
+# KGi-DISS-I046 — FREEZE (written and pushed before any change to the app)
+iteration_id: "KGi-DISS-I046"
+freeze_time: "2026-11-17T15:12Z"
+freeze_relative_to_work: "before any change to the app, its styles, scripts, templates or test tools. Already
+  done on the unchanged tree: the app, its front end and its tests read; every page photographed with
+  tools/browser_run.py (246 screenshots: five participants, desktop 1280 x 860, phones 390 x 844 and 375 x 667,
+  one with reduced motion), kept outside the repository; three bot sessions exported twice and found identical;
+  the front-end check run (22 unit tests; the bundle rebuilds byte for byte); the engine, app and browser tests
+  started."
+baseline: {csl3_main: "c73284a (I045 close)", csl_lean: "lean-diss-core 11f09cb",
+           active_ledger: "freezes/kg_active_I045.yaml"}
+
+directive:   # verbatim, 2026-11-17 14:51
+  - "let us consider it a pilot now take your ux and design grandmaster hat, expert in aesthetics guru and
+    polish the experiment app for a user experience and graphical pov."
+author_decision: "the first wave is a pilot (decision 2 of records/114_staged_power_I045.md)"
+my_reading: "polish the presentation of experiment/diss_market, the app built for the first wave: how it looks
+  and how it is used. Not the engine, the schedules, the data model, the session flow, the wording of the
+  measures, the live-economy variant (not built), the earlier bandit app, or the database structure, which the
+  author named on 2026-11-17 10:27 for a later step."
+mode: "implementation, presentation layer of experiment/diss_market only. Nothing is run on people. No
+  recruitment, no OSF filing, no ethics claim. The main text is not edited. No credential anywhere."
+
+# =================================================================== WHAT MAY NOT CHANGE
+invariants:
+  I1_server: "diss_market/engine.py and diss_market/bots_model.py stay byte-identical. In
+    diss_market/__init__.py only what a page hands to its template or script for display may change: no model
+    field, form field, validation, page order, payoff, export column or bot."
+  I2_information: "every page shows the same data as before, at the same moment, and nothing more: the same
+    numbers and words, the same order of appearance within a reveal, the same durations (reveal_ms,
+    probe_reveal_ms, source_reveal_ms, the 500 ms pause) and the same pacing functions. Aids that carry no
+    outcome (where one is in the session, how far a reveal has run, which items are answered) may be added."
+  I3_wording: "every string of diss_market/copy_en.py stays as it is, character for character. New visible
+    strings: at most 2, each marked DRAFT in the file and listed in the memo. Planned: none."
+  I4_arms: "one set of templates, styles and scripts for both arms; two members of a pair who make the same
+    choices get the same pages except for the board's numbers."
+  I5_measures: "rating sliders: pre-drawn start, hollow until touched, step 5, no number shown, every slider
+    must be touched; forecast slider: no handle until placed, step 5, the value echoed; bets, recall and closing
+    questions as now. What is stored about them (values, start positions, moves, first touch, timings) is
+    unchanged."
+  I6_colour_rule: "goods carry colour (Square #2a78d6, Triangle #eb6834); the trader is drawn in slate and a
+    source in ink; YES #1f9d55 and NO #c93a9a appear on the bet buttons and the settled markets only, with the
+    word; nothing on a procurement screen (order, clearing, rating) is green or red. One light theme."
+  I7_isolation: "no request leaves the study server; fonts ship with the app under an open licence; no name,
+    logo or layout of a real market."
+  I8_access: "reduced-motion behaviour (the stepped reveal, no pulse) and keyboard use are kept."
+  I9_leaks: "no page carries a later round, the other good's prices, a market's evidence before its first
+    forecast, a bet price before the second forecast, or how a market settles (gates G5 and H2 of I042, I043)."
+
+# =================================================================== WHAT THE POLISH COVERS
+design_decisions:   # taken before building; anything else is detail
+  D1: "clearing page: one instrument on one sheet. Price above, running counts of filled orders below, on one
+    shared time axis at full width, the two counters (You, Trader) between them with equal weight. The same
+    structure at every screen width."
+  D2: "one sheet per page on a tinted ground; sheet width about 720 px for forms and text, about 1120 px for the
+    clearing page."
+  D3: "typeface chosen from specimens rendered on the real screens. Candidates: IBM Plex Sans as now; IBM Plex
+    Sans with IBM Plex Sans Condensed for figures and labels; Mona Sans; Archivo. Criteria in order: body text
+    legible at 16 px on an ordinary screen; figures of equal width, 0 and O, 1, l and I told apart at 12 px;
+    open licence, shipped with the app; all fonts together at most 160 KB; character. The specimens and the
+    choice are recorded."
+  D4: "colours: the values of I6 stay. Neutrals and tints may be retuned inside the contrast gate. The focus
+    ring becomes ink; it was Square's blue, which could mark the Triangle card."
+  D5: "top bar: the ten steps stay; the current step also shows how far into the round one is, without words."
+  D6: "rating page: a mark on each answered item and a four-pip count beside the button, without words."
+  D7: "hover on the cleared chart: the same readout text, shown beside the pointer."
+  D8: "instructions: headings hang beside the text on wide screens; the chart legend becomes a small annotated
+    example with one filled and one unfilled order; a legend of the two goods. Words already in the file only."
+  D9: "motion: one page cross-fade as now; state changes of 120-240 ms. Nothing celebrates or punishes an
+    outcome: no flash, shake or burst tied to a fill, a miss, a basket or a bet."
+  D10: "page title and tab icon: the brand name and its mark (the framework sends an empty title)."
+  D11: "the page declares its language (the framework sends none)."
+  D12: "charts keep the mark rules used since I043: 2 px lines, ringed end dots, solid hairline grid, a dashed
+    line only for the cap or the threshold, text in text colours."
+harness: "tools/browser_run.py gains checks (visible text per page, counts of chart marks, stored slider
+  values against the values dragged, an accessibility audit with axe-core loaded from a local file, a
+  keyboard-only session, layout fit at five sizes, a scan of colours in use, frame times). No existing check
+  is weakened. A page hook is renamed only if listed in the memo. The baseline is measured with the extended
+  harness on the tree of c73284a."
+risks_stated_before:
+  - "the display is part of the stimulus. D1 changes how the price, the participant's count and the trader's
+    count are laid out. Both arms get the same change and no human data predates it, but how strongly people
+    attend to the board is a human quantity the certification assumed."
+  - "a clearer display may change how many outcomes a person takes from a round (DISS-EFFECTIVE-DRAWS), the
+    quantity the pilot is run to read."
+
+# =================================================================== GATES
+gates:
+  G1_data: "bot exports of market_bots_random, market_bots_model and market_bots_seed (8 participants each),
+    with session and participant codes replaced by their order, are identical to the baseline: sha256
+    beginning ebc1e22e0d1da7ec, 5e0082b07b945e88, 0dbd4d4190087a36. Export header unchanged. engine.py and
+    bots_model.py unchanged."
+  G2_suites: "test_market_engine_I043, test_market_app_I043 and test_market_browser_I043 pass; the front-end
+    type check and unit tests pass; the bundle is the one built from the sources (manifest test)."
+  G3_information: "for participant A of the browser run (same slot, same choices), the visible text of every
+    page outside the charts, taken as a bag of words and numbers, is the same before and after, apart from an
+    allow-list printed in the memo. On the clearing page: one fill dot per filled order, one strip tick per
+    clearing, one price vertex per clearing, k + 1 vertices per running count."
+  G4_wording: "git diff of copy_en.py shows no changed or removed line; added lines at most 2 strings."
+  G5_arms: "no page difference between the two members of the pair beyond the board (the I042 check)."
+  G6_leaks: "no leak on any checked page (the I042 and I043 checks)."
+  G7_isolation: "no request to another host; no console error; no failed request."
+  G8_measures: "every rating and forecast stored equals the value the browser run dragged to; rate_meta holds
+    four touched sliders with start positions as before; a rating page cannot be left with an untouched slider."
+  G9_timing: "at the session's real speed the measured reveal is within 150 ms of the planned one, stands still
+    while the tab is hidden, and at four-fold CPU slowdown stays within 250 ms."
+  G10_fit: "no sideways scrolling at 320 px and wider. Clearing page: both charts, the counters and the button
+    in view without scrolling at 1920 x 1080, 1366 x 768, 1366 x 650, 390 x 844 and 375 x 667. Order, market,
+    bet and recall pages: the button in view without scrolling at 1366 x 650. Rating and evidence pages: the
+    button in view without scrolling at 1366 x 768."
+  G11_access: "axe-core (WCAG 2.1 A and AA rules) reports no violation of impact serious or critical on any
+    page. A session completed with the keyboard alone stores a complete record. On the phone sizes every
+    control is at least 44 x 44 px. Text contrast at least 4.5:1 (7:1 for body text); marks and control
+    boundaries that carry meaning at least 3:1. With reduced motion no animation runs except the stepped
+    reveal."
+  G12_colour_rule: "on order, clearing and rating pages every chromatic colour in use (computed colour,
+    background, border, fill, stroke; chroma above .03) is one of: the two goods' colours, their tints, the
+    note colour of an error banner."
+  G13_weight: "styles, scripts and fonts together at most 250 KB; a second build is byte-identical."
+  G14_smooth: "during a reveal at 1280 x 860 the median frame is at most 20 ms and no frame exceeds 100 ms; at
+    four-fold CPU slowdown the median frame is at most 34 ms."
+
+expectations:   # written before any measurement beyond those named above
+  E1: "G1, G4, G5, G6, G7, G9 pass at the first attempt."
+  E2: "baseline audit: 'html-has-lang' and 'document-title' on every page, and 'color-contrast' on the bet
+    page (the cost line at 85% opacity on the tinted buttons). After: none of impact serious or critical."
+  E3: "the keyboard-only session completes on the baseline as well as after."
+  E4: "G10: the rating page fits at 1366 x 768 and needs scrolling at 1366 x 650; the evidence page fits at
+    1366 x 768 with a record and with a source."
+  E5: "G13: between 150 and 250 KB (116 KB now)."
+  E6: "G14 passes without slowdown; with four-fold slowdown the median frame is between 17 and 34 ms."
+  E7: "G3: the allow-list is empty or holds chart axis labels only."
+
+verification_queue:
+  - "baseline measured with the extended harness on c73284a before the first change to the app"
+  - "specimens for D3 looked at on the clearing, rating and instruction pages before the choice"
+  - "every page looked at after the build at 1920 x 1080, 1366 x 768, 1280 x 860, 390 x 844 and 375 x 667, in
+    both arms, without a board (seed wave), with reduced motion, and at 200% zoom"
+  - "the goods' colours and the trader's slate run through the palette validator against the sheet colour"
+  - "figures in the memo and in MARKET_APP.md checked against the harness report"
+stopping_rule: "close after the build, the checks, the before-and-after record, the updated MARKET_APP.md, the
+  memo, the KG update and the push. Not here: any wording, the first-wave specification, the data model, the
+  live economy, recruitment."
