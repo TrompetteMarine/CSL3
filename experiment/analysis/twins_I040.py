@@ -23,9 +23,11 @@ ARMS = ('HIGH', 'LOW')
 sig = lambda x: 1 / (1 + np.exp(-x))
 
 
-def twins(pt, n, rng, phip=None, same_person=True, choice_free=False, indep_choice=False, regime=None):
+def twins(pt, n, rng, phip=None, same_person=True, choice_free=False, indep_choice=False, regime=None, informed=None):
     # I041 options (defaults reproduce the I040 records): indep_choice gives each member its own
     # ticket-choice noise; regime sets the deprivation board of each member, e.g. both 'LOW'
+    # I047 option (the default reproduces the earlier records): informed = {'HIGH': mask, 'LOW': mask} marks the
+    # members who take the better ticket in every deprivation round (they have seen both goods' prices)
     regime = {'HIGH': 'HIGH', 'LOW': 'LOW'} if regime is None else regime
     nuf, nur, chi = mg.NUF * pt[1], mg.NUF * pt[1] * pt[2], pt[3]
     phip = mg.PHIP if phip is None else phip
@@ -50,6 +52,8 @@ def twins(pt, n, rng, phip=None, same_person=True, choice_free=False, indep_choi
                 s['arm'] = (uc_of[a] >= sig(mg.BETA * (s['Q'][:, 0] - s['Q'][:, 1]))).astype(int)
                 if choice_free and ph == 1:
                     s['arm'] = np.zeros(n, int)
+                if informed is not None and ph == 1:
+                    s['arm'] = np.where(informed[a], 0, s['arm'])
             if ph == 1:
                 same_choice &= S['HIGH']['arm'] == S['LOW']['arm']
         uo, up = rng.random(n), rng.random(n)

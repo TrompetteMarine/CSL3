@@ -1,6 +1,6 @@
 # KGi-DISS-I047 — FREEZE (written and pushed before any change to the app, its tools or the analysis code)
 iteration_id: "KGi-DISS-I047"
-freeze_time: "2026-11-17T21:40Z"
+freeze_time: "2026-11-17T21:33Z"   # the time of commit b389e71; first written as 21:40Z (see addendum AD1)
 freeze_relative_to_work: "before any change to the app, its styles, scripts, templates, tools or analysis code,
   and before any new simulation. Already done on the unchanged tree: the app, its front end, its tools and the
   records of I040, I041, I043, I044 and I046 read; the page at the address the author gave read once through
@@ -232,3 +232,34 @@ verification_queue:
     worse good ordered"
   - "figures in the memo, MARKET_APP.md and YOKED_DESIGN.md checked against the reports they come from"
   - "what cannot be measured here is named as such: a real phone, Safari, Firefox, a screen reader, a person"
+
+# =================================================================== ADDENDUM AD1
+# written 2026-11-17T21:39Z, after the first run of live_cert_I047.py and before the replicate run it adds.
+# Correction of the same minute: the freeze above was committed at 21:33Z (commit b389e71); its freeze_time
+# line said 21:40Z, a figure I wrote without reading the clock. The line now carries the commit time.
+addendum_AD1:
+  seen_before_writing: "records/live_cert_I047.txt (the first run, kept as it came out). G18(a) passes. G18(b)
+    FAILS at the frozen tolerance of .03: against the I043 record the q = 0 rows differ by up to .038
+    (confirmatory pair, P4, kappa_s .2), .049 (FREEZE), .091 (association within HIGH) and .098 (D1 from the
+    source pair alone). Inside the run the same cell (q = 0, P4, kappa_s .2, 72 pairs) reads .828 in section 1
+    and .784 in section 3, which differ only in the forecasts drawn for the pool. The decision rule read on
+    that run gives 'both' (largest fall .011, largest rise .064, largest size .0085)."
+  diagnosis: "the +-.03 taken over from the I041 and I043 records understates the Monte Carlo error of rates
+    away from 0 and 1. Each rate comes from one simulated pool of 20,000 pairs, and the pool's own draw moves
+    it. The unchanged I043 script reproduces its record byte for byte here: the record is a correct single
+    draw, and its stated precision is what is in question."
+  what_is_added: "experiment/analysis/live_cert_ad_I047.py: eight independent pools per cell (seeds 141100 to
+    141107), the same thirty cells and three values of q at 72 pairs, the both-LOW world, and the anchoring
+    edge by number of pairs. For every rate: mean and standard deviation across the pools."
+  G18b_replaced_by: "G18(b'): every value of the I043 record that is compared lies inside the range of the
+    eight q = 0 pools widened by .02 on each side (2,000 samples at a rate of .5 carry a sampling error of
+    .011)."
+  decision_rule_restated: "the frozen rule read on the means over the eight pools: 'both' if at q = .5 and at
+    q = 1 the mean confirmatory pair is no lower than at q = 0 by more than .03 in any of the thirty cells, and
+    the mean sizes of H1a, D1 and BET in the two null worlds are at or below .010."
+  expectations:
+    E11: "the standard deviation across pools of the confirmatory pair at P4 under the one-update rule lies
+      between .015 and .04; at cells at or above .99 it is below .005."
+    E12: "the rule read on the means gives 'both'."
+    E13: "FREEZE in the both-LOW world at q = 1 has a mean above .02: once everyone is on the better good the
+      LOW board no longer leaves a homogeneous control arm, and its lowest-rated third revises visibly less."
