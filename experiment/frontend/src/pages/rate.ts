@@ -5,9 +5,14 @@ import { mountSliders } from '../slider';
 export function rate(): void {
   const btn = nextButton();
   const sliders = mountSliders(document, t0);
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.dm-item'));
+  const pips = Array.from(document.querySelectorAll<HTMLElement>('[data-left] i'));
   const sync = (): void => {
     const left = sliders.filter((s) => !s.touched()).length;
     if (btn) btn.disabled = left > 0;
+    // which items are answered, and how many: marks without a word
+    sliders.forEach((s, i) => items[i]?.classList.toggle('is-answered', s.touched()));
+    pips.forEach((p, i) => p.classList.toggle('is-on', i < sliders.length - left));
   };
   sliders.forEach((s) => s.onChange(sync));
   sync();

@@ -2,7 +2,7 @@
   "name": "diss-market-frontend",
   "version": "0.1.0",
   "private": true,
-  "description": "Front end of the diss_market oTree app (KGi-DISS-I042, I043): TypeScript, bundled into ../_static/diss_market",
+  "description": "Front end of the diss_market oTree app (KGi-DISS-I042, I043; interface polished in I046): TypeScript, bundled into ../_static/diss_market",
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -12,6 +12,8 @@
   },
   "devDependencies": {
     "@fontsource/ibm-plex-sans": "5.2.8",
+    "@fontsource/ibm-plex-sans-condensed": "5.3.0",
+    "axe-core": "4.14.1",
     "esbuild": "0.25.12",
     "typescript": "5.9.3",
     "vitest": "3.2.4"

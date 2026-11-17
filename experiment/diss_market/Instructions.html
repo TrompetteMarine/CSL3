@@ -2,19 +2,39 @@
 {{ block content }}
 <div class="dm">
   {{ include_sibling '_top.html' }}
-  <main class="dm-main dm-narrow">
+  <main class="dm-main dm-read">
     <h1 class="dm-h1">{{ t.title }}</h1>
-    <div class="dm-prose">
+    <div class="dm-secs">
       {{ for b in blocks }}
-      <h2>{{ b.head }}</h2>
-      <p>{{ b.body|safe }}</p>
-      {{ if b.legend }}
-      <div class="dm-legend">
-        <b>{{ t.legend_title }}</b>
-        <span><i class="is-cap"></i>{{ t.legend_cap }}</span>
-        <span><i class="is-fill"></i><i class="is-tick"></i>{{ t.legend_paid }}</span>
-      </div>
-      {{ endif }}
+      <section class="dm-sec">
+        <h2>{{ b.head }}</h2>
+        <div class="dm-sec-body">
+          <p>{{ b.body|safe }}</p>
+          {{ if b.goods }}
+          <div class="dm-legend">
+            {{ for g in goods }}<span data-good="{{ g.value }}"><span class="dm-glyph" data-glyph="{{ g.value }}"></span>{{ g.name }}</span>{{ endfor }}
+          </div>
+          {{ endif }}
+          {{ if b.legend }}
+          <div class="dm-eg">
+            <b class="dm-eg-title">{{ t.legend_title }}</b>
+            <div class="dm-eg-plot">
+              <svg class="dm-eg-svg" viewBox="0 0 300 92" aria-hidden="true" focusable="false">
+                <rect x="0" y="38" width="300" height="34" rx="3" class="dm-eg-zone"/>
+                <line x1="0" x2="300" y1="38.5" y2="38.5" class="dm-cap-line"/>
+                <path d="M78 56 L196 18" class="dm-eg-path"/>
+                <circle cx="78" cy="56" r="4.5" class="dm-eg-dot"/>
+                <rect x="75.5" y="78" width="5" height="11" rx="1" class="dm-eg-fill"/>
+                <rect x="193.5" y="78" width="5" height="11" rx="1" class="dm-eg-miss"/>
+              </svg>
+              <span class="dm-eg-word is-cap">{{ t.legend_cap }}</span>
+              <span class="dm-eg-word is-fill">{{ t.legend_paid }}</span>
+              <span class="dm-eg-word is-miss">{{ not_filled }}</span>
+            </div>
+          </div>
+          {{ endif }}
+        </div>
+      </section>
       {{ endfor }}
     </div>
     <p class="dm-sub dm-thanks">{{ t.payment }}</p>

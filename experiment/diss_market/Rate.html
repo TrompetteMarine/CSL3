@@ -9,6 +9,7 @@
     {{ for it in items }}
     <div class="dm-item {{ if it.name == 'entitle' }}is-other{{ endif }}">
       <p class="dm-item-text">{{ it.text }}</p>
+      <span class="dm-item-done" aria-hidden="true"></span>
       <div data-slider data-start="{{ it.start }}" data-step="5" data-label="{{ it.text }}">
         <input type="hidden" name="{{ it.name }}" value="">
       </div>
@@ -17,7 +18,7 @@
     {{ endfor }}
     <input type="hidden" name="rate_meta" value="">
     <input type="hidden" name="rt_rate_ms" value="">
-    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.rate_next }}</button></div>
+    <div class="dm-actions"><span class="dm-left" data-left aria-hidden="true">{{ for it in items }}<i></i>{{ endfor }}</span><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.rate_next }}</button></div>
   </main>
 </div>
 {{ endblock }}

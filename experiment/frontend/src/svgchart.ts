@@ -9,7 +9,19 @@ import {
  */
 
 const NS = 'http://www.w3.org/2000/svg';
-const STRIP_H = 9;
+const STRIP_H = 10;
+/** height of the band at the foot of the price chart's fill zone that no price reaches: the zone's caption stands in it */
+const WORD_ROOM = 22;
+/**
+ * The price chart and the running-count chart of the clearing page share their time axis: both
+ * keep the same room on the left (axis figures) and on the right (the cap, the line names), and
+ * both put clearing j at x(j) on [0, k]. A fill is then a dot straight above its step.
+ */
+const ROOM_LEFT = 34;
+/** room on the right of both clearing charts: less on a phone, where the line names carry no key */
+function roomRight(w: number): number {
+  return w < 480 ? 56 : 72;
+}
 type Attrs = Record<string, string | number>;
 
 function s<K extends keyof SVGElementTagNameMap>(name: K, attrs: Attrs, parent?: Element): SVGElementTagNameMap[K] {
@@ -111,19 +123,24 @@ export class PriceChart extends Chart {
   protected build(): void {
     const { prices, cap, lo, hi, zoneLabel } = this.data;
     const k = prices.length;
-    const box: Box = { x: 4, y: 10, w: this.w - 4 - 44, h: this.h - 10 - 22 - STRIP_H - 6 };
-    const x = linear(0, k - 1, box.x + 5, box.x + box.w - 5);
-    const y = logScale(lo, hi, box.y + box.h, box.y);
-    const spacing = k > 1 ? (box.w - 10) / (k - 1) : box.w;
-    this.tickW = clamp(spacing - 1, 1, 6);
-    this.dotR = clamp(spacing * 0.62, 1.9, 3.25);
-    this.stripY = box.y + box.h + 6;
-    this.xs = prices.map((_, i) => x(i));
+    const box: Box = { x: ROOM_LEFT, y: 10, w: this.w - ROOM_LEFT - roomRight(this.w), h: this.h - 10 - 22 - STRIP_H - 8 };
+    const x = linear(0, k, box.x, box.x + box.w);
+    // no price is below `lo`: the band under it, at the foot of the fill zone, is kept for the zone's caption
+    const y = logScale(lo, hi, box.y + box.h - WORD_ROOM, box.y);
+    const spacing = box.w / Math.max(1, k);
+    this.tickW = clamp(spacing - 1.5, 1, 6);
+    this.dotR = clamp(spacing * 0.5, 1.9, 3.6);
+    this.stripY = box.y + box.h + 7;
+    this.xs = prices.map((_, i) => x(i + 1));
     this.ys = prices.map((p) => y(p));
     const capY = Math.round(y(cap)) + 0.5;
     const right = box.x + box.w;
 
     s('rect', { x: box.x, y: capY, width: box.w, height: box.y + box.h - capY, class: 'dm-zone', rx: 3 }, this.svg);
+    for (const v of [k / 4, k / 2, (3 * k) / 4]) {
+      const gx = Math.round(x(Math.round(v))) + 0.5;
+      s('line', { x1: gx, x2: gx, y1: box.y, y2: box.y + box.h, class: 'dm-grid-line' }, this.svg);
+    }
     let lastY = Infinity;                 // a price label needs room: from the one below it and from the cap tag
     for (const v of wholeTicks(lo, hi)) {
       const gy = Math.round(y(v)) + 0.5;
@@ -132,19 +149,20 @@ export class PriceChart extends Chart {
         continue;
       }
       s('line', { x1: box.x, x2: right, y1: gy, y2: gy, class: 'dm-grid-line' }, this.svg);
-      if (lastY - gy >= 15 && Math.abs(gy - capY) >= 16) {
-        label(this.svg, right + 8, gy + 4, price2(v));
+      if (lastY - gy >= 15) {
+        label(this.svg, box.x - 8, gy + 4, price2(v), '', 'end');
         lastY = gy;
       }
     }
+    // the caption stands in its own band, under every mark: nothing that carries data is ever covered by it
+    label(this.svg, box.x + 10, box.y + box.h - 7, zoneLabel, 'dm-zone-word');
     s('line', { x1: box.x, x2: right, y1: capY, y2: capY, class: 'dm-cap-line' }, this.svg);
     const tag = s('g', { class: 'dm-cap-tag' }, this.svg);
-    s('rect', { x: right + 3, y: capY - 10, width: 40, height: 20, rx: 5 }, tag);
-    label(tag, right + 23, capY + 4, price2(cap), '', 'middle');
-    label(this.svg, box.x + 9, box.y + box.h - 9, zoneLabel, 'dm-zone-word');
+    s('rect', { x: right + 7, y: capY - 11, width: 44, height: 22, rx: 6 }, tag);
+    label(tag, right + 29, capY + 4, price2(cap), '', 'middle');
     for (const v of [1, k / 4, k / 2, (3 * k) / 4, k]) {
       const i = Math.round(v);
-      label(this.svg, x(i - 1), this.h - 5, String(i), '', i === 1 ? 'start' : i === k ? 'end' : 'middle');
+      label(this.svg, x(i), this.h - 4, String(i), '', i === k ? 'end' : 'middle');
     }
     this.strip = s('g', {}, this.svg);
     this.line = s('path', { class: 'dm-line is-price', d: '' }, this.svg);
@@ -168,6 +186,11 @@ export class PriceChart extends Chart {
   rest(): void {
     this.resting = true;
     this.head?.setAttribute('visibility', 'hidden');
+  }
+
+  /** where clearing i sits, in px from the left edge of the chart */
+  xOf(i: number): number {
+    return this.xs[i] ?? 0;
   }
 
   mark(i: number | null): void {
@@ -225,6 +248,7 @@ export class FillsChart extends Chart {
     own: SVGPathElement; halo: SVGPathElement; board: SVGPathElement | null;
     ownEnd: SVGCircleElement; boardEnd: SVGCircleElement | null;
     ownLabel: SVGTextElement; boardLabel: SVGTextElement | null; cross: SVGLineElement;
+    ownKey: SVGLineElement | null; boardKey: SVGLineElement | null;
   } | null = null;
   private shown = 0;
   private resting = false;
@@ -241,17 +265,22 @@ export class FillsChart extends Chart {
 
   protected build(): void {
     const k = this.data.own.length;
-    const box = (this.box = { x: 30, y: 10, w: this.w - 30 - 56, h: this.h - 10 - 22 });
+    const box = (this.box = { x: ROOM_LEFT, y: 10, w: this.w - ROOM_LEFT - roomRight(this.w), h: this.h - 10 - 22 });
     const x = linear(0, k, box.x, box.x + box.w);
     const y = (this.yOf = linear(0, k, box.y + box.h, box.y));
     this.xs = Array.from({ length: k + 1 }, (_, i) => x(i));
     for (const v of [0, k / 4, k / 2, (3 * k) / 4, k]) {
       const gy = Math.round(y(v)) + 0.5;
       s('line', { x1: box.x, x2: box.x + box.w, y1: gy, y2: gy, class: v === 0 ? 'dm-base-line' : 'dm-grid-line' }, this.svg);
-      label(this.svg, box.x - 7, gy + 4, String(Math.round(v)), '', 'end');
+      label(this.svg, box.x - 8, gy + 4, String(Math.round(v)), '', 'end');
     }
-    for (const v of [k / 4, k / 2, (3 * k) / 4, k]) {
-      label(this.svg, x(v), this.h - 5, String(Math.round(v)), '', v === k ? 'end' : 'middle');
+    for (const v of [1, k / 4, k / 2, (3 * k) / 4, k]) {
+      const i = Math.round(v);
+      label(this.svg, x(i), this.h - 4, String(i), '', i === k ? 'end' : 'middle');
+    }
+    for (const v of [k / 4, k / 2, (3 * k) / 4]) {
+      const gx = Math.round(x(Math.round(v))) + 0.5;
+      s('line', { x1: gx, x2: gx, y1: box.y, y2: box.y + box.h, class: 'dm-grid-line' }, this.svg);
     }
     const cross = s('line', { class: 'dm-cross', y1: box.y, y2: box.y + box.h, x1: 0, x2: 0, visibility: 'hidden' }, this.svg);
     const board = this.board ? s('path', { class: 'dm-line is-board', d: '' }, this.svg) : null;
@@ -261,7 +290,11 @@ export class FillsChart extends Chart {
     const ownEnd = s('circle', { class: 'dm-end is-own', r: 4.5 }, this.svg);
     const boardLabel = this.board ? label(this.svg, 0, 0, this.data.boardLabel, 'dm-end-label') : null;
     const ownLabel = label(this.svg, 0, 0, this.data.ownLabel, 'dm-end-label');
-    this.parts = { own, halo, board, ownEnd, boardEnd, ownLabel, boardLabel, cross };
+    // a short stroke of the line's colour before each name, where there is room for it
+    const keyed = this.w >= 480;
+    const boardKey = this.board && keyed ? s('line', { class: 'dm-key is-board' }, this.svg) : null;
+    const ownKey = keyed ? s('line', { class: 'dm-key is-own' }, this.svg) : null;
+    this.parts = { own, halo, board, ownEnd, boardEnd, ownLabel, boardLabel, cross, ownKey, boardKey };
     this.render();
   }
 
@@ -312,11 +345,18 @@ export class FillsChart extends Chart {
     const lo = this.box.y + 4;
     const hi = this.box.y + this.box.h + 2;
     const [ly, lby] = by === null ? [Math.min(hi, Math.max(lo, oy)), 0] : dodge(oy, by, 15, lo, hi);
-    p.ownLabel.setAttribute('x', String(ex + 9));
-    p.ownLabel.setAttribute('y', String(ly + 4));
+    const place = (name: SVGTextElement, key: SVGLineElement | null, at: number): void => {
+      name.setAttribute('x', String(key ? ex + 24 : ex + 9));
+      name.setAttribute('y', String(at + 4.5));
+      if (!key) return;
+      key.setAttribute('x1', String(ex + 11));
+      key.setAttribute('x2', String(ex + 19));
+      key.setAttribute('y1', String(at));
+      key.setAttribute('y2', String(at));
+    };
+    place(p.ownLabel, p.ownKey, ly);
     if (p.boardLabel && by !== null) {
-      p.boardLabel.setAttribute('x', String(ex + 9));
-      p.boardLabel.setAttribute('y', String(lby + 4));
+      place(p.boardLabel, p.boardKey, lby);
     }
   }
 }
@@ -354,7 +394,7 @@ export class HistoryChart extends Chart {
   protected build(): void {
     const { chart, threshold, nowLabel, closeLabel } = this.data;
     const n = chart.length;
-    const box: Box = { x: 4, y: 12, w: this.w - 4 - 50, h: this.h - 12 - 24 };
+    const box: Box = { x: 2, y: 12, w: this.w - 2 - 56, h: this.h - 12 - 24 };
     const right = box.x + box.w;
     const nowX = box.x + box.w * 0.8;
     const x = linear(0, n - 1, box.x + 4, nowX);
@@ -381,8 +421,8 @@ export class HistoryChart extends Chart {
     s('path', { class: 'dm-area', d: areaPath(this.xs, this.ys, box.y + box.h), fill: 'url(#dm-hist-fill)' }, this.svg);
     s('line', { x1: box.x, x2: right, y1: thrY, y2: thrY, class: 'dm-cap-line' }, this.svg);
     const tag = s('g', { class: 'dm-cap-tag' }, this.svg);
-    s('rect', { x: right + 3, y: thrY - 10, width: 46, height: 20, rx: 5 }, tag);
-    label(tag, right + 26, thrY + 4, price2(threshold), '', 'middle');
+    s('rect', { x: right + 6, y: thrY - 11, width: 50, height: 22, rx: 6 }, tag);
+    label(tag, right + 31, thrY + 4, price2(threshold), '', 'middle');
     s('line', { x1: right, x2: right, y1: box.y, y2: box.y + box.h, class: 'dm-close-line' }, this.svg);
     s('path', { class: 'dm-line is-history', d: linePath(this.xs, this.ys) }, this.svg);
     this.cross = s('line', { class: 'dm-cross', y1: box.y, y2: box.y + box.h, x1: 0, x2: 0, visibility: 'hidden' }, this.svg);

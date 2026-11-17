@@ -7,38 +7,33 @@
       <h1 class="dm-h1" id="dm-clear-title" aria-live="polite">{{ t.settle_title }}</h1>
       <p class="dm-ticker">{{ t.clearing }} <b data-seen>0</b> {{ t.of }} {{ k }}</p>
     </div>
-    <div class="dm-clear-grid">
-      <section class="dm-panel dm-quote">
-        <div class="dm-panel-head">
-          <span class="dm-asset"><span class="dm-glyph" data-glyph="{{ player.ticket }}"></span>{{ ticket_name }}</span>
-          <span class="dm-now"><span>{{ t.price_label }}</span><b data-price>&ndash;</b></span>
+    <section class="dm-inst">
+      <div class="dm-quote">
+        <span class="dm-asset"><span class="dm-glyph" data-glyph="{{ player.ticket }}"></span>{{ ticket_name }}</span>
+        <span class="dm-now"><span>{{ t.price_label }}</span><b data-price>&ndash;</b></span>
+      </div>
+      <div class="dm-chart is-price" data-chart="price"></div>
+      <div class="dm-counters">
+        <div class="dm-counter is-own">
+          <span class="dm-counter-who">{{ t.you }}</span>
+          <span class="dm-counter-fig"><b data-count="own">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
+          <span class="dm-baskets"><span class="dm-pips" data-pips aria-hidden="true">{{ for i in pips }}<i></i>{{ endfor }}</span><b data-baskets>0</b> {{ t.baskets }}</span>
         </div>
-        <div class="dm-chart is-price" data-chart="price"></div>
-      </section>
-      <section class="dm-panel dm-fills">
-        <div class="dm-counters">
-          <div class="dm-counter is-own">
-            <span class="dm-counter-who">{{ t.you }}</span>
-            <span class="dm-counter-fig"><b data-count="own">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
-            <span class="dm-baskets"><span class="dm-pips" data-pips aria-hidden="true">{{ for i in pips }}<i></i>{{ endfor }}</span><b data-baskets>0</b> {{ t.baskets }}</span>
-          </div>
-          {{ if has_board }}
-          <div class="dm-counter is-board">
-            <span class="dm-counter-who">{{ board_name }}</span>
-            <span class="dm-counter-fig"><b data-count="board">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
-            <span class="dm-counter-kind">{{ board_kind }}</span>
-          </div>
-          {{ endif }}
+        {{ if has_board }}
+        <div class="dm-counter is-board">
+          <span class="dm-counter-who">{{ board_name }}</span>
+          <span class="dm-counter-fig"><b data-count="board">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
+          <span class="dm-counter-kind">{{ board_kind }}</span>
         </div>
-        <div class="dm-chart is-fills" data-chart="fills"></div>
-      </section>
-    </div>
-    <p class="dm-readout" id="dm-readout" aria-hidden="true"></p>
-    <p class="dm-gain" id="dm-gain" hidden></p>
+        {{ endif }}
+      </div>
+      <div class="dm-chart is-fills" data-chart="fills"></div>
+      <p class="dm-readout" id="dm-readout" aria-hidden="true"></p>
+    </section>
     <input type="hidden" name="rt_settle_ms" value="">
     <input type="hidden" name="settle_done" value="">
     <input type="hidden" name="settle_meta" value="">
-    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.settle_next }}</button></div>
+    <div class="dm-actions"><p class="dm-gain" id="dm-gain" hidden></p><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.settle_next }}</button></div>
   </main>
 </div>
 {{ endblock }}

@@ -30,6 +30,10 @@ const PAGES: Record<string, () => void> = {
 
 function start(): void {
   document.documentElement.classList.add('dm-js');
+  // the framework's page declares neither a language nor a title
+  if (!document.documentElement.lang) document.documentElement.lang = 'en';
+  const brand = document.querySelector('.dm-brand')?.textContent?.trim();
+  if (brand && !document.title.trim()) document.title = brand;
   mountGlyphs();
   const run = PAGES[vars.page];
   if (!run) throw new Error(`unknown page: ${vars.page}`);

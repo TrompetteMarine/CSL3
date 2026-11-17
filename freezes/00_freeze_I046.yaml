@@ -141,3 +141,111 @@ verification_queue:
 stopping_rule: "close after the build, the checks, the before-and-after record, the updated MARKET_APP.md, the
   memo, the KG update and the push. Not here: any wording, the first-wave specification, the data model, the
   live economy, recruitment."
+
+# =================================================================== SCORECARD (appended at the close)
+scorecard:
+  measured_with: "tools/browser_run.py --strict --axe ... --keyboard --sizes --frames-config market_dev
+    --timing-config market_dev on the final build, and the same version of the tool on the tree of c73284a (ten
+    sessions in Chromium each); three bot sessions exported; tools/mark_contrast.py on the 442 screenshots; the
+    test files. The tree of c73284a was first measured before any change, with an earlier version of the tool;
+    the two measurements of it agree on every check both made."
+  G1_data: "PASS. market_bots_random, market_bots_model, market_bots_seed (88 rows, 82 columns each): sha256
+    beginning ebc1e22e0d1da7ec, 5e0082b07b945e88, 0dbd4d4190087a36, as at the baseline. engine.py and
+    bots_model.py byte-identical."
+  G2_suites: "PASS. 8 engine, 6 app and 11 style tests; the browser test (strict, with the keyboard session, the
+    extra sizes and the audit); type check and 22 unit tests; the bundle is the one built from the sources.
+    One earlier run of the browser test failed for a reason not found: see the closing record."
+  G3_information: "PASS with an allow-list of four words. Participant A: the same bag of words on 42 of 43
+    pages (2,702 words before, 2,706 after); the instructions page gained 'Square', 'Triangle', 'not',
+    'filled', all existing strings, from two legends. Marks counted right on 54 of 54 clearing pages. Beyond
+    the gate: inside the charts one axis label was added (the '1' of the lower chart's time axis); on phones
+    the round label, hidden before, is kept for screen readers and not shown."
+  G4_wording: "PASS. copy_en.py unchanged; no new string."
+  G5_arms: "PASS. No page difference inside the pair beyond the board."
+  G6_leaks: "PASS. None on 125 pages."
+  G7_isolation: "PASS. No request to another host, no console error, no failed request (ten sessions)."
+  G8_measures: "PASS. 192 of 192 stored ratings and forecasts equal the values set (five sessions by drag, one
+    by keyboard); every rating record holds four touched sliders and their start positions; the button stays
+    disabled until the fourth slider is touched."
+  G9_timing: "PASS. 9,014 ms measured for 9,000 planned (9,012 before); with a tab hidden for 3 s the reveal
+    stood still 3,010 ms and showed nothing meanwhile; 9,009 ms with the processor slowed four-fold."
+  G10_fit: "PASS. No finding on 389 pages at 1920 x 1080, 1366 x 768, 1366 x 650, 1280 x 860, 390 x 844,
+    375 x 667 and 320 x 568 (34 before: the rating page at 1280 x 860 and 1366 x 768, the evidence page with a
+    record at 1366 x 768, the market and bet pages at 1366 x 650)."
+  G11_access: "PASS, three clauses only after corrections. Audit: no finding of any impact on 86 pages (before:
+    serious colour contrast on the bet and order pages, no language on any page; in production mode also no
+    title). Keyboard-only session complete. Controls on the 390 and 375 px phones at least 44 x 44 px (before:
+    the answer buttons of the recall and closing questions, 42 px high). Contrast: small text 4.8:1 or more,
+    body text 8.3:1 or more, boundaries of controls 3.0:1 or more, data marks 3.0:1 or more. Reduced motion: no
+    animation running in the session (six kinds on every page change before). Corrected after the first full
+    check: a price line at 2.1-2.7:1; Triangle's colour at 2.96:1 on two grounds; a cross-fade of the top bar
+    under reduced motion."
+  G12_colour_rule: "PASS. No colour but the goods' on order, clearing and rating pages."
+  G13_weight: "PASS. 169,076 bytes (118,991 before); a second build is byte-identical."
+  G14_smooth: "PASS. Ten rounds on each tree. Median frame 16.7 ms in every round, slowed or not, on both
+    trees. Longest frame of a round without slowdown: 24-72 ms (old app 30-53 ms). With the processor slowed
+    four-fold: 51-73 ms in nine rounds and 122 ms in one (old app 52-88 ms); the gate limits the longest frame
+    without slowdown (100 ms) and only the median with it (34 ms). The reveal took 9,003-9,019 ms."
+  added_after_the_freeze: "two checks, for defects found by looking at the screenshots of the second full check.
+    Marks of the price chart touching the caption of its fill zone: none on 54 clearing pages (117 before).
+    The hover readout over the point it describes: no (and not before, when it was a line under the charts).
+    After the third full check, tools/layout_check.py: text cut off, text over text, text outside the window
+    or its sheet: none on 305 pages at seven window sizes, none on 87 pages of a session without a board,
+    none at 640 x 430 (the test window at 200% zoom); the check finds each of three faults put in by hand."
+  E1: "FAILED. The first build crashed the order page: a display variable of mine had the name of one the page
+    already used. G1, G4, G5, G6, G7 and G9 passed from the second build on."
+  E2: "PARTLY. No language on every page: yes. Colour contrast on the bet page: yes, and on the order page,
+    which I had not predicted. No title: not reported on the development server, which writes its own tab
+    title; reported in production mode. Afterwards: no finding of any impact."
+  E3: "HELD."
+  E4: "PARTLY. Rating and evidence pages fit at 1366 x 768. The rating page also fits at 1366 x 650 (button
+    ends at 606 px), where I said it would need scrolling."
+  E5: "HELD. 169,076 bytes (165 KB)."
+  E6: "PARTLY. G14 passes. The median frame under a four-fold slowdown is 16.7 ms, below the 17-34 ms I gave."
+  E7: "FAILED. Four words on the instructions page, and one axis label inside a chart."
+  D9_as_written: "wrong in one case: 'state changes of 120-240 ms'; the chosen good's shape took 280 ms, as
+    in the old app; now 220 ms."
+
+closing_record:   # 2026-11-17
+  state: "the interface of experiment/diss_market is polished and verified in Chromium; server, wording,
+    measures and data unchanged; nothing run on people; the pilot is not specified; author-gated"
+  delivered: "the app (templates, styles, scripts, two font files); experiment/tools/browser_run.py extended;
+    experiment/tools/mark_contrast.py; experiment/tools/text_before_after.py;
+    experiment/tools/layout_check.py;
+    experiment/analysis/tests/test_market_ui_I046.py; experiment/MARKET_APP.md;
+    records/115_interface_polish_I046.md; records/ui_I046_*.png (five pictures); freezes/kg_delta_I046.yaml;
+    freezes/kg_active_I046.yaml"
+  corrected_before_close:
+    - "the first full check of the build passed every gate it measured. Three clauses of G11 were not measured
+      by it; reading them against the build found a price line at 2.1-2.7:1 (1.8-2.1:1 since I043), Triangle's
+      colour at 2.96:1 on the grey panels I had put under the order cards and the goods legend and on a 7.5%
+      tint, and a 250 ms cross-fade of the top bar under reduced motion (since I042). All three corrected,
+      and each is now measured on every run (style test, tools/mark_contrast.py, the runner's record of
+      animations under reduced motion)."
+    - "the second full check passed every gate, those three included. Looking through its screenshots found
+      two defects of my own making: the caption of the fill zone, drawn over the marks, hid the dot of a
+      filled order; the hover readout, centred on its clearing, covered the clearing's own point. Both
+      corrected (a band for the caption under the lowest possible price; the readout beside the crosshair)
+      and both checked on every run."
+    - "the runner's completeness check counted five participants while the keyboard session adds a sixth: it
+      printed FAIL on the baseline and on the first full check for that reason alone. The runner also read
+      the order page at once after the choice, while the word on the chosen card fades in over 180 ms: it
+      was counted on some pages and not on others. Both corrected; the old app was then measured again with
+      the final runner."
+    - "one run of the browser test failed, and I did not find why: the test at the end of the second full
+      check. The same checks had passed on that build a quarter of an hour earlier, in the full run. The
+      test's output was not kept (my chain kept its last six lines), and while it ran I was rebuilding the
+      front end and playing two more browser sessions on the same two-core machine. On the final build the
+      test passed four times: three times alone and once with two more browser sessions playing beside it
+      from start to end."
+    - "the browser test left its server's child process running after every run (since I043): it terminated
+      the parent only. It now stops the server's whole process group."
+    - "the first stacked layout of the clearing page made the lower chart flatter than the old one; the two
+      charts were given equal heights."
+    - "drafts of the memo: the names at the ends of the two curves listed as new (they were there before); a
+      contrast of 4.2:1 for the old cost line of the bet buttons (3.6-4.5:1); 'text 4.8:1 or more' without
+      the one large placeholder figure at 4.5:1; 60 order pages observed (54); the old app's marks said to
+      cut the caption's letters in the first round (the lowest dot reached their top and stayed in view)."
+  not_measured: "no person has seen the pages; no screen reader; no real phone; no browser but Chromium."
+  next_executable_step: "the author's decisions on the five points of the memo's section 'For the author' and
+    on which later steps are confirmatory; then the specification of the pilot with its frozen analysis"

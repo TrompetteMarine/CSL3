@@ -6,14 +6,14 @@
     {{ include_sibling '_errors.html' }}
     {{ include_sibling '_market.html' }}
     {{ if is_record }}
-    <section class="dm-panel dm-evi" data-evidence="record">
+    <section class="dm-evi" data-evidence="record">
       <h2 class="dm-panel-title">{{ t.record_title }}</h2>
       <p class="dm-evi-text">{{ record_text|safe }}</p>
       <div class="dm-chart is-strip" data-chart="strip" data-above="{{ above }}" data-below="{{ below }}"></div>
       <p class="dm-evi-sum" aria-live="polite"><b data-count>0</b> {{ sum_text }}</p>
     </section>
     {{ else }}
-    <section class="dm-panel dm-evi" data-evidence="source">
+    <section class="dm-evi" data-evidence="source">
       <h2 class="dm-panel-title">{{ t.source_title }}</h2>
       <div class="dm-source">
         <span class="dm-avatar" aria-hidden="true">{{ source_label }}</span>

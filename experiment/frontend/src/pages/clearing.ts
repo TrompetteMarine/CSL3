@@ -76,13 +76,25 @@ export function clearing(): void {
     fills.mark(i);
     if (!readout) return;
     if (i === null) {
-      readout.textContent = '';
+      readout.replaceChildren();
       return;
     }
     const bits = [`${text.clearing} ${i + 1}`, `${price2(prices[i]!)}, ${own[i] ? text.filled : text.not_filled}`,
       `${text.you} ${ownCum[i + 1]!}`];
     if (boardCum) bits.push(`${text.trader} ${boardCum[i + 1]!}`);
-    readout.textContent = bits.join('   ');
+    readout.replaceChildren(...bits.map((b) => {
+      const row = document.createElement('span');
+      row.textContent = b;
+      return row;
+    }));
+    // beside the clearing it describes and never over it: to its right, or to its left where the right has no room
+    const frame = readout.offsetParent instanceof HTMLElement ? readout.offsetParent.clientWidth : window.innerWidth;
+    const width = readout.offsetWidth;
+    const at = priceHost.offsetLeft + price.xOf(i);
+    const gap = 14;
+    const left = at + gap + width <= frame ? at + gap : at - gap - width;
+    readout.style.left = `${Math.max(0, left)}px`;
+    readout.style.top = `${priceHost.offsetTop + 2}px`;
   };
   price.onHover = point;
   fills.onHover = point;

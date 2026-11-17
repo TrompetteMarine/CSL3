@@ -3,26 +3,26 @@
   "src/chart.ts": "f015aea06dd915aca52e3322aa6701fbd1e2f261e32be9893eb1741aa74acc5f",
   "src/env.ts": "57f9d7c0d39139b6d9ea4272224fc233d6563156b59bfa43af88b3c67d5cdeff",
   "src/glyphs.ts": "1162e0e2a62be49085d6208322084d618d9981a4018bb4bd33918e874a0b1c89",
-  "src/main.ts": "c85fa7121ca5274fc780b830ca4361da223f0bfaf22eefdc8534fada8044b45b",
-  "src/pages/clearing.ts": "d18338a3a755186f0ffd97867982ae96446c2d8c3be0e54e35d1fd3c985d5f92",
+  "src/main.ts": "1d5031fd087d76a2a4c26c90991e68b9b5be67c1341734182697b6216faf8068",
+  "src/pages/clearing.ts": "6e40dba375ff4b57bf0412e9356db0a6085bf31befdd8e43bded16e09701b947",
   "src/pages/market.ts": "d89c262f4edd50495902d06573eac2af9eaf461ddb90d46998b2b16b3a3bbb8a",
   "src/pages/misc.ts": "63aae5db725d7b99ca405eb89e047c4a651dce0e9c001c5e588b894fd4dcd0e4",
   "src/pages/order.ts": "04e34618d41fc15214ea02da30985d418ccbbbe65709390fa64a66e02f903bf4",
-  "src/pages/rate.ts": "ead937b131c18157861ab7a9c9dbc64224bda1e9c95e1b62315bd9bc1d2c8536",
+  "src/pages/rate.ts": "03148426d942cf6d51ee1c259e410acf6350a7f51513e4d992eb0465838abbea",
   "src/slider.ts": "a7a4f697d23717f7d3deddb93203e0d3364ab0ab394129fc61bfd04fe3321521",
-  "src/styles/app.css": "3c00b164aebc748c69be99e73b4bc43e9fe3f2481caec0ab477cd44ef825f052",
-  "src/styles/fonts.css": "0494fc380ee7d78a8fac7aa4ab00357558ae28cd153895ef154c8cab88199929",
-  "src/svgchart.ts": "b00bb7de6c48cfc2938255b8bdbb1b8fc93126fd1fee16f8f9cfede6cc35a049",
+  "src/styles/app.css": "906b43d66d134bf8e5a750f14b41b9e1d57020af179eea567ea1ecd95e462fb9",
+  "src/styles/fonts.css": "ff7347023418cdb98e64b2710d30a2a53b6fa153ce2ca2b296afe8d4d1f00340",
+  "src/svgchart.ts": "c6f4ff035e29d702c2e6f17458a5bcc061f6d44faf4d5ac7dd080dcee0a2cdab",
   "src/timeline.ts": "442b2e3d28c98eb14cec3db9a077576731cc917f93f5488c3f4aa8255797506b",
-  "package.json": "ce502496c97fc4dc73c280816cc7fca0a75cfad1ea2b202569bc9b40368eca60",
-  "package-lock.json": "19e41eaa8dedf795616ded7dcbaf2fb309c44887cc94998066be015613ba353e",
+  "package.json": "af30e3e29c137536c5f4fc693aee4bdfda8761fe8779c70c4c61b6b501a19722",
+  "package-lock.json": "268187ba836e38b3396072002f8999f7d1760c4b9027b14bcf072fbfea4ef83e",
   "build.mjs": "4206ece49310c4e41d25b99ecc54752886555dce005b8b06ba5d7e7f1107eacf",
   "tsconfig.json": "57fb4f7f24d2e40838b87c8cb9fce31d8d4df98ae06388ea50cd5192b52a1a65"
  },
  "outputs": {
   "app.js": {
-   "bytes": 24606,
-   "sha256": "c84ee1ae13c3e3c91850f621c755d3c6f907163746fc78bf7ab1d7a0a0b598ba"
+   "bytes": 26021,
+   "sha256": "14cdc77c1d901403f085f6cf691c4ac2b17e30c03c845750440f99315c7c429e"
   },
   "fonts/ibm-plex-sans-latin-400-normal.woff2": {
    "bytes": 22588,
@@ -36,9 +36,17 @@
    "bytes": 24252,
    "sha256": "8960851d691c054ed38e259bdcf1a6190d157b4203ed5bb32c632a863fb8ec2f"
   },
+  "fonts/ibm-plex-sans-condensed-latin-500-normal.woff2": {
+   "bytes": 19952,
+   "sha256": "e3b4fd97fd20bc70fda66d8d5f0745d8d6958068a024cb4724bbc1ffb6cbc183"
+  },
+  "fonts/ibm-plex-sans-condensed-latin-600-normal.woff2": {
+   "bytes": 19816,
+   "sha256": "3d72a0923c5830358b0a8e25b258aecadbecbf542b6ee9a25f387803e37d56b9"
+  },
   "app.css": {
-   "bytes": 23361,
-   "sha256": "10ad19c5a371ee0c1ab74c06642f7659dd177d8cf99d5b6194a8aa8a75ed9a24"
+   "bytes": 32263,
+   "sha256": "8cc2c152ae6572b47fe30955641fa046c57b18469772d7c8d8f6e708b1bfc69a"
   }
  }
 }

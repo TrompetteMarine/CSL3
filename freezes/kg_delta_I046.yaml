@@ -1,0 +1,154 @@
+# KG delta — KGi-DISS-I046 (on top of kg_delta_I032 ... kg_delta_I045; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main c73284a (I045 close), freeze b527df8; CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-FRONTEND
+    new_status: "rebuilt (I043); presentation polished (I046); verified in Chromium at seven window sizes, with
+      the keyboard alone, with reduced motion and by an accessibility audit; not run on people"
+    added_evidence: "one sheet per page on a tinted ground. The clearing page is one instrument at every
+      width: price above, the two counters, running counts below, one time axis (before: two panels side by
+      side on a desktop). Prose in IBM Plex Sans, figures and captions in IBM Plex Sans Condensed (figures of
+      one width in both; five files, 110,792 bytes, OFL 1.1). Top bar: the current step fills as the round's
+      pages are passed. Rating page: a tick on each answered item and four pips. Page language and title set
+      by script. Measured on the final build: reveal 9,014 ms for 9,000 (9,009 with the processor slowed
+      four-fold); a hidden tab stops it; frames during a reveal, ten rounds: median 16.7 ms in
+      every round, longest 24-72 ms (old app 30-53 ms); with the processor slowed four-fold median 16.7 ms,
+      longest 51-122 ms (old app 52-88 ms);
+      no fit finding on 389 pages at 1920 x 1080, 1366 x 768, 1366 x 650, 1280 x 860, 390 x 844, 375 x 667 and
+      320 x 568 (34 before); no audit finding of any impact on 86 pages (before: colour contrast on the bet and
+      order pages, no language on any page, and in production mode no title); no mark of the price chart
+      touches the caption of its zone (117 touches on 54 pages before); bundle 169,076 bytes (118,991)."
+    defect_fixed: "five, none of them seen by a gate when it was found. After the first full check, by reading
+      the clauses of gate G11 it had not measured: (1) the price line was drawn at 70% of its colour, 2.1-2.7:1
+      against its ground (55% and 1.8-2.1:1 since I043); now full strength, 1.25 px (1 px on phones). (2)
+      Triangle's colour stood on grey panels and on a 7.5% tint at 2.96:1 (2.88 and 2.93:1 on two grounds in
+      the old app); now on white and a 5% tint only. (3) With reduced motion the top bar still cross-faded for
+      250 ms on every page change (since I042); now no animation runs. After the second, by looking through
+      its screenshots: (4) the caption of the fill zone, which I had drawn over the marks, hid the dot of a
+      filled order (in the old app it lay under the marks); it now has a band of its own under the lowest
+      possible price. (5) The hover readout, which I had centred on its clearing, covered the clearing's own
+      point; it now stands beside the crosshair. Also: a display variable of mine crashed the order page in
+      the first build."
+  - id: DISS-PALETTE
+    added_evidence: "I046: the five values are unchanged and were validated again against the white sheet
+      (goods apart by 24.7 under the worst colour-vision type and 33.6 with full vision; slate at least 21.6
+      from either good; YES against NO 10.3). The slate fails the validator's lightness band (.397 against
+      .43-.77) and chroma floor (.028 against .10): it is a neutral by the rule. New rule: a good's colour is
+      drawn at full strength on white or on its own tint (its colour at 5%) and nowhere else, because
+      Triangle has 3.20:1 on white, 3.02:1 on its tint and 2.96:1 on the grey panel. Text 4.8:1 or more
+      (body 8.3:1 or more), boundaries of controls 3.0:1 or more (1.3-1.4:1 before). The focus ring is ink
+      (it was Square's blue). Faint on purpose: marks of an empty place (1.3-1.5:1)."
+  - id: DISS-OTREE-MARKET
+    added_evidence: "I046 changed the presentation only. engine.py, bots_model.py and copy_en.py are
+      byte-identical; __init__.py differs in eleven lines that hand display values to templates. The exports
+      of three bot sessions are identical to those of c73284a (sha256 beginning ebc1e22e0d1da7ec,
+      5e0082b07b945e88, 0dbd4d4190087a36). tools/browser_run.py now also records the text of every page, the
+      chart marks, the fit at seven window sizes, an accessibility audit, a keyboard-only session, the
+      animations left under reduced motion, the marks that touch the caption of the fill zone, whether
+      the hover readout covers its own point, and frame times; tools/mark_contrast.py and
+      tools/text_before_after.py read its output; tools/layout_check.py looks at every page for text that is
+      cut off, overlaps or leaves its sheet."
+  - id: DISS-BUILD-DRAFTS
+    added_evidence: "decided on 2026-11-17: the first wave is a pilot (DISS-PILOT-DECISION). Raised by the
+      polish and left to the author because each needs a new sentence or changes a term: a caption for the
+      lower chart of the clearing page; the bet button shows a price in cents and a cost in points; a text
+      alternative for the charts; the devices admitted (min_window_width is 0; at 320 px the seven answer
+      buttons are 37 px wide); whether the two legends on the instructions page stay."
+  - id: DISS-WAVE1-CHECKS
+    added_evidence: "the author decided on 2026-11-17 that the first wave is a pilot. Its specification and
+      frozen analysis are not written. The app it would run on had its interface changed in I046
+      (DISS-DISPLAY-RISK)."
+  - id: DISS-STAGED-BUDGET
+    added_evidence: "decision 2 of records/114_staged_power_I045.md is taken: the first wave is a pilot.
+      Decision 1, which later steps are confirmatory, is open."
+  - id: DISS-EFFECTIVE-DRAWS
+    added_evidence: "the page from which a participant reads a round was laid out anew in I046. How many
+      outcomes a person takes from a round was an assumption before and is one now; the pilot reads it on
+      the new display (DISS-DISPLAY-RISK)."
+
+new_nodes:
+  - id: DISS-PILOT-DECISION
+    kind: decision
+    status: author decision, 2026-11-17
+    statement: "the first wave on the built app is a pilot, not the confirmatory study. Open: which later
+      steps are confirmatory; the pilot's size, cells and frozen analysis."
+    evidence: "directive of 2026-11-17 14:51, verbatim in freezes/00_freeze_I046.yaml"
+  - id: DISS-UI-INVARIANTS
+    kind: design
+    status: frozen before the change (b527df8); held on the final build
+    statement: "what a change of the interface may not touch. I1 the server (engine, bot model, data model,
+      page order, payoffs, export). I2 what a page shows and when, and every duration. I3 the wording. I4 one
+      set of pages for both arms. I5 the measures (rating sliders with a pre-drawn start, hollow until
+      touched, steps of 5, no number; forecast slider without a handle until placed). I6 the colour rule. I7
+      no request leaves the study server. I8 keyboard use and reduced motion. I9 no leak of a later outcome."
+    evidence: "freezes/00_freeze_I046.yaml; records/115_interface_polish_I046.md, 'What did not change'"
+  - id: DISS-UI-GATES
+    kind: implementation
+    status: passed on the final build, in Chromium; three clauses of one gate passed only after corrections
+    statement: "fourteen gates. G1 bot exports identical. G2 engine, app, style and browser tests and the
+      front-end check. G3 visible text outside the charts the same for participant A on 42 of 43 pages; the
+      instructions page gained four words ('Square', 'Triangle', 'not', 'filled'), all existing strings; chart
+      marks right on 54 clearing pages. G4 wording file unchanged. G5 no page difference inside the pair
+      beyond the board. G6 no leak on 125 pages. G7 no outside request, console error or failed request in
+      ten sessions. G8 192 of 192 stored ratings and forecasts equal the values set. G9 reveal 9,014 ms for
+      9,000. G10 no fit finding. G11 no audit finding; keyboard-only session complete; phone controls at
+      least 44 x 44 px; contrast; nothing moving under reduced motion. G12 only the goods' colours on
+      procurement pages. G13 169,076 bytes, second build identical. G14 median frame 16.7 ms. Added after the
+      freeze: no mark touches the caption of the fill zone; the hover readout does not cover its own point; no
+      text cut off, over other text or outside its sheet (305 pages at seven window sizes, 87 pages without
+      a board)."
+    evidence: "records/115_interface_polish_I046.md; experiment/tools/browser_run.py --strict;
+      experiment/analysis/tests/test_market_browser_I043.py, test_market_ui_I046.py;
+      experiment/tools/mark_contrast.py (442 screenshots: Square on white 4.42:1 and on its tint 4.14:1,
+      Triangle 3.20:1 and 3.02:1, no other ground)"
+  - id: DISS-DISPLAY-RISK
+    kind: assumption
+    status: open (human)
+    statement: "the display is part of the stimulus and I046 changed it. Clearing page: the price above the
+      counts instead of beside them, both charts about twice as wide on a desktop, a price line at full
+      strength. Rating page: a tick on each answered item, four pips, a darker slider track with darker
+      marks at 0, 25, 50, 75, 100. Both arms get the same pages and no person has seen either version, so no
+      comparison is broken. How strongly people attend to the board, how many outcomes they take from a
+      round, and whether ratings heap at the slider's marks are not known for either display."
+    evidence: "records/115_interface_polish_I046.md, 'Risks'; records/ui_I046_*.png"
+
+new_edges:
+  - {from: DISS-FRONTEND, to: DISS-UI-INVARIANTS, type: requires}
+  - {from: DISS-FRONTEND, to: DISS-UI-GATES, type: tested_by}
+  - {from: DISS-UI-GATES, to: DISS-UI-INVARIANTS, type: requires}
+  - {from: DISS-PALETTE, to: DISS-UI-GATES, type: tested_by, note: "contrast of the goods' colours against their grounds"}
+  - {from: DISS-OTREE-MARKET, to: DISS-UI-GATES, type: tested_by, note: "G1: bot exports identical"}
+  - {from: DISS-FRONTEND, to: DISS-DISPLAY-RISK, type: qualified_by}
+  - {from: DISS-EFFECTIVE-DRAWS, to: DISS-DISPLAY-RISK, type: qualified_by}
+  - {from: DISS-HUMAN-PARAMS, to: DISS-DISPLAY-RISK, type: qualified_by, note: "attention to the board; heaping of ratings at the slider's marks"}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-PILOT-DECISION, type: qualified_by}
+  - {from: DISS-STAGED-BUDGET, to: DISS-PILOT-DECISION, type: qualified_by}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-DISPLAY-RISK, type: qualified_by, note: "the pilot reads the human quantities on the new display"}
+
+refuted_preserved:
+  - "E1 (G1, G4, G5, G6, G7, G9 pass at the first attempt): the first build crashed the order page (a display variable of mine had the name of one the page already used); all six passed from the second build on"
+  - "E2 (baseline audit: no language and no title on every page, colour contrast on the bet page): colour contrast also on the order page; no title is not reported on the development server, which writes its own tab title, and is reported in production mode"
+  - "E4 (the rating page needs scrolling at 1366 x 650): it fits, with 44 px to spare"
+  - "E6 (with a four-fold slowdown the median frame is 17-34 ms): 16.7 ms; the slowdown did not move the median"
+  - "E7 (the list of added text is empty or holds chart axis labels only): four words on the instructions page ('Square', 'Triangle', 'not', 'filled') and one axis label inside a chart"
+  - "the first full check of the build passed every gate it measured while three clauses of G11 were unmeasured and violated: a price line at 2.1-2.7:1, Triangle's colour at 2.96:1 on two grounds, and a cross-fade of the top bar under reduced motion"
+  - "the second full check passed every gate, the three added ones included, while the caption of the fill zone hid the dot of a filled order and the hover readout covered the point it described: both were my own changes, made to stop marks from cutting letters and to bring the readout to the pointer"
+  - "my drawing of the zone's caption over the data on a halo (to keep its letters whole) traded a cosmetic flaw for a hidden data mark"
+  - "decision D9 of the freeze (control states change in 120-240 ms): one took 280 ms, as since I043; now 220 ms"
+  - "my runner printed FAIL on the baseline and on the first full check because its completeness check counted five participants and the keyboard session adds a sixth"
+  - "in the first stacked layout of the clearing page the lower chart was flatter than the old one; the two charts were then given equal heights"
+  - "one run of the browser test failed for a reason not found: its output was not kept and the machine was loaded by my own sessions; the same checks had passed on that build, and the test passed on the later builds, alone and under load"
+  - "the browser test left its server's child process running after every run since I043; it now stops the whole process group"
+
+flags_not_patched: "none for the manuscript. For the experiment: the display changed and no person has seen
+  it (DISS-DISPLAY-RISK); every check ran in Chromium only, none on a real phone, in Firefox or in Safari, and
+  none with a screen reader; the charts have no text alternative; the lower chart of the clearing page has no
+  caption; the wording is untouched and still draft; the pilot is not specified."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+  application_bridge: "the gates were measured by playing whole sessions in a browser against the running
+    app and by exporting bot sessions; the baseline was measured with the same runner on the tree of c73284a;
+    whether people read the pages as intended is untested; nothing was run on people"}
+persistence: "CSL3 freezes/kg_delta_I046.yaml + Project mirror; no remote KG service"

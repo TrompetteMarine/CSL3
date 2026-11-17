@@ -2,7 +2,7 @@
   <span class="dm-brand"><svg class="dm-mark" viewBox="0 0 30 20" aria-hidden="true" focusable="false"><rect x="1" y="5" width="13" height="13" rx="2.5" class="dm-mark-sq"/><path d="M20.5 3 29 18H12z" class="dm-mark-tri"/></svg>{{ brand }}</span>
   {{ if steps }}
   <div class="dm-progress">
-    <ol class="dm-steps" aria-hidden="true">{{ for s in steps }}<li class="dm-step is-{{ s.kind }} is-{{ s.state }}"></li>{{ endfor }}</ol>
+    <ol class="dm-steps" aria-hidden="true">{{ for s in steps }}<li class="dm-step is-{{ s.kind }} is-{{ s.state }}"{{ if s.state == 'now' }} style="--sub: {{ step_share }}"{{ endif }}></li>{{ endfor }}</ol>
     <span class="dm-roundlabel">{{ progress.round }} <b>{{ round }}</b> {{ progress.of }} {{ n_rounds }}</span>
   </div>
   <span class="dm-points">{{ progress.points }} <b id="dm-points">{{ points }}</b></span>

@@ -362,6 +362,10 @@ def _step_ok(*values):
     return all(v is not None and 0 <= v <= 100 and v % C.STEP == 0 for v in values)
 
 
+# how far into its round a page is: the top bar fills the current step by this share (display only, I046)
+SUB_STEP = dict(order=0.33, clearing=0.67, rate=1, market=0.25, evidence=0.5, bet=0.75, recall=1)
+
+
 def _shell(player: Player, page):
     """what every task page needs for the top bar"""
     part = player.participant
@@ -369,7 +373,7 @@ def _shell(player: Player, page):
     steps = [dict(n=n, kind='market' if n <= C.MARKET_ROUNDS else 'probe',
                   state='done' if n < now else ('now' if n == now else 'todo')) for n in range(1, C.NUM_ROUNDS + 1)]
     return dict(page=page, round=now, n_rounds=C.NUM_ROUNDS, steps=steps, brand=copy.STUDY['brand'],
-                progress=copy.PROGRESS, points=part.vars.get('points', 0))
+                progress=copy.PROGRESS, points=part.vars.get('points', 0), step_share=SUB_STEP.get(page, 1))
 
 
 def _plain(t):
@@ -423,7 +427,10 @@ class Instructions(_Base):
             blocks.append(board)
         blocks.append(t['ratings'])
         blocks.append((t['probe'][0], t['probe'][1].format(**fmt)))
-        return dict(blocks=[dict(head=h, body=b, legend=i == 1) for i, (h, b) in enumerate(blocks)], **_plain(t))
+        # the first block gets a legend of the two goods, the second an example of the chart's marks (display only)
+        return dict(blocks=[dict(head=h, body=b, goods=i == 0, legend=i == 1) for i, (h, b) in enumerate(blocks)],
+                    goods=[dict(value=x, name=copy.MARKET['ticket_names'][x]) for x in C.TICKETS],
+                    not_filled=copy.MARKET['not_filled'], **_plain(t))
 
     @staticmethod
     def js_vars(player: Player):

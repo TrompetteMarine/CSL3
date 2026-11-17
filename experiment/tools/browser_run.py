@@ -11,6 +11,15 @@ reveals) and checks what a bot cannot:
   - a reload during a reveal, and the back button, change nothing that is stored;
   - on a phone, the price chart and the filled-orders chart are in view together.
 
+Since KGi-DISS-I046 it also records, for every page it stops on: the visible text outside the
+charts, the number of chart marks, where the button and the charts sit in the window, the size of
+every control on a phone, the colours in use on procurement pages, and (with --axe) what an
+accessibility audit finds. It compares every stored rating and forecast with the value it dragged
+to, lists every animation still running in the session played with reduced motion, plays one
+session with the keyboard alone (--keyboard), plays more window sizes (--sizes) and measures frame
+times during a reveal (--frames-config). --out writes all of it as JSON; --strict makes the I046
+gates binding. tools/mark_contrast.py reads the screenshots written with --shots.
+
     otree devserver 8000        # in another shell, from experiment/
     python tools/browser_run.py --base http://localhost:8000 --shots /path/for/screenshots
 """
@@ -18,6 +27,7 @@ import argparse
 import csv
 import io
 import json
+import math
 import os
 import re
 import sys
@@ -31,6 +41,173 @@ PHONE = dict(width=390, height=844)
 SMALL_PHONE = dict(width=375, height=667)
 BETS = ('YES', 'NO', 'PASS', 'YES')
 DESKTOP = dict(width=1280, height=860)
+SIZES = dict(hd=dict(width=1920, height=1080), kiosk=dict(width=1366, height=768), laptop=dict(width=1366, height=650),
+             narrow=dict(width=320, height=568))
+PROCUREMENT = ('order', 'clearing_done', 'rate')
+AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
+
+# visible text outside the charts ('seen') and text for screen readers only ('spoken')
+TEXT_JS = r"""() => {
+  const root = document.querySelector('.dm');
+  const seen = [], spoken = [];
+  if (!root) return {seen, spoken};
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let n = w.nextNode(); n; n = w.nextNode()) {
+    const el = n.parentElement, s = n.nodeValue.replace(/\s+/g, ' ').trim();
+    if (!el || !s || el.closest('svg, script, style, noscript, template')) continue;
+    if (el.closest('.dm-sr')) { spoken.push(s); continue; }
+    const vis = !el.checkVisibility || el.checkVisibility({checkOpacity: true, checkVisibilityCSS: true, opacityProperty: true, visibilityProperty: true});
+    if (vis) seen.push(s);
+  }
+  return {seen, spoken};
+}"""
+
+# where things sit, in page coordinates (so a scrolled page reads the same)
+FIT_JS = r"""() => {
+  const root = document.querySelector('.dm');
+  const y0 = window.scrollY;
+  let maxRight = 0, worst = '';
+  for (const el of root.querySelectorAll('*')) {
+    if (el instanceof SVGElement && el.tagName.toLowerCase() !== 'svg') continue;
+    if (el.checkVisibility && !el.checkVisibility()) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) continue;
+    if (r.right > maxRight) { maxRight = r.right; worst = (el.getAttribute('class') || el.tagName).slice(0, 60); }
+  }
+  const box = (sel) => {
+    const e = document.querySelector(sel);
+    if (!e || (e.checkVisibility && !e.checkVisibility())) return null;
+    const r = e.getBoundingClientRect();
+    return [r.left, r.top + y0, r.right, r.bottom + y0].map((v) => Math.round(v * 10) / 10);
+  };
+  const btn = document.querySelector('#dm-next');
+  return {vw: window.innerWidth, vh: window.innerHeight, maxRight: Math.round(maxRight * 10) / 10, worst,
+          next: box('#dm-next'), nextOff: btn ? btn.disabled : null,
+          nextShown: btn ? getComputedStyle(btn).visibility !== 'hidden' : null,
+          price: box('[data-chart=price]'), fills: box('[data-chart=fills]'), counters: box('.dm-counters'),
+          sliders: Array.from(document.querySelectorAll('.dm-sl')).map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.top + y0), Math.round(r.bottom + y0)]; })};
+}"""
+
+# controls smaller than 44 x 44 px
+TARGET_JS = r"""() => {
+  const out = [];
+  const sel = ['button', 'a[href]', 'label.dm-good', 'label.dm-opt', 'label.dm-chip', 'label.dm-bet', 'label.dm-check', '.dm-sl',
+               'textarea', 'input[type=text]', 'input[type=number]'].map((x) => '.dm ' + x).join(', ');
+  for (const el of document.querySelectorAll(sel)) {
+    if (el.checkVisibility && !el.checkVisibility()) continue;
+    if (getComputedStyle(el).visibility === 'hidden') continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 43.5 || r.height < 43.5) out.push([(el.getAttribute('class') || el.tagName).slice(0, 40), Math.round(r.width), Math.round(r.height)]);
+  }
+  return out;
+}"""
+
+# every colour in use on the page, with what it colours
+COLOUR_JS = r"""() => {
+  const seen = {};
+  const add = (c, what) => {
+    if (!c || c === 'none' || c === 'transparent' || c.startsWith('url(') || /rgba\(\d+, \d+, \d+, 0\)/.test(c)) return;
+    (seen[c] = seen[c] || {})[what] = 1;
+  };
+  for (const el of document.querySelectorAll('.dm, .dm *')) {
+    const tag = el.tagName.toLowerCase();
+    const s = getComputedStyle(el);
+    if (tag === 'stop') { add(s.stopColor, 'gradient'); continue; }
+    if (el.checkVisibility && !el.checkVisibility()) continue;
+    if (el instanceof SVGElement && tag !== 'svg') {
+      add(s.fill, tag === 'text' ? 'text' : 'fill');
+      if (parseFloat(s.strokeWidth) > 0) add(s.stroke, 'stroke');
+    } else {
+      add(s.color, 'text');
+      add(s.backgroundColor, 'background');
+      for (const side of ['Top', 'Right', 'Bottom', 'Left']) if (parseFloat(s['border' + side + 'Width']) > 0) add(s['border' + side + 'Color'], 'border');
+      if (s.boxShadow && s.boxShadow !== 'none') (s.boxShadow.match(/rgba?\([^)]*\)/g) || []).forEach((c) => add(c, 'shadow'));
+      if (s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) add(s.outlineColor, 'outline');
+      if (s.accentColor && s.accentColor !== 'auto') add(s.accentColor, 'accent');
+    }
+  }
+  return Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, Object.keys(v)]));
+}"""
+
+MARKS_JS = r"""() => {
+  const verts = (sel) => { const e = document.querySelector(sel); const d = e ? (e.getAttribute('d') || '') : ''; return d ? d.split(/[ML]/).length - 1 : null; };
+  // the caption of the fill zone and the marks of the price chart must not meet: how many dots and line vertices touch its box
+  const word = document.querySelector('[data-chart=price] text.dm-zone-word');
+  let met = null;
+  if (word) {
+    const b = word.getBBox(), pad = 2;
+    const x0 = b.x - pad, x1 = b.x + b.width + pad, y0 = b.y - pad, y1 = b.y + b.height + pad;
+    const near = (cx, cy, r) => { const nx = Math.max(x0, Math.min(cx, x1)), ny = Math.max(y0, Math.min(cy, y1)); return (cx - nx) ** 2 + (cy - ny) ** 2 < r * r; };
+    met = 0;
+    for (const c of document.querySelectorAll('[data-chart=price] circle.dm-dot')) met += near(+c.getAttribute('cx'), +c.getAttribute('cy'), +c.getAttribute('r') + 0.5);
+    const line = document.querySelector('[data-chart=price] path.dm-line.is-price');
+    for (const p of ((line && line.getAttribute('d')) || '').split(/[ML]/).filter(Boolean)) { const [x, y] = p.trim().split(/[ ,]+/).map(Number); met += near(x, y, 1); }
+  }
+  return {met,
+          dots: document.querySelectorAll('[data-chart=price] circle.dm-dot').length,
+          ticks: document.querySelectorAll('[data-chart=price] rect.dm-tickmark').length,
+          price: verts('[data-chart=price] path.dm-line.is-price'),
+          own: verts('[data-chart=fills] path.dm-line.is-own'),
+          board: verts('[data-chart=fills] path.dm-line.is-board'),
+          k: window.js_vars.own.length, wins: window.js_vars.own.split('1').length - 1};
+}"""
+
+# is the point of clearing i on the price line under the readout that describes it? (null: not found)
+READOUT_OVER_JS = r"""(i) => {
+  const svg = document.querySelector('[data-chart=price] svg'), line = svg && svg.querySelector('path.dm-line.is-price');
+  const box = document.getElementById('dm-readout');
+  const pts = ((line && line.getAttribute('d')) || '').split(/[ML]/).filter(Boolean).map((p) => p.trim().split(/[ ,]+/).map(Number));
+  if (!box || !pts[i]) return null;
+  const r = svg.getBoundingClientRect(), b = box.getBoundingClientRect();
+  const x = r.left + pts[i][0], y = r.top + pts[i][1];
+  return x >= b.left - 4 && x <= b.right + 4 && y >= b.top - 4 && y <= b.bottom + 4;
+}"""
+
+AXE_JS = r"""async (tags) => {
+  const r = await axe.run({exclude: [['.debug-info'], ['#debug-info'], ['.otree-debug-info'], ['#_otree-debug']]},
+                          {runOnly: {type: 'tag', values: tags}, resultTypes: ['violations']});
+  return r.violations.map((v) => ({id: v.id, impact: v.impact, n: v.nodes.length, where: v.nodes.slice(0, 3).map((x) => x.target.join(' '))}));
+}"""
+
+
+def _oklch(rgb):
+    """(r, g, b) in 0..255 -> (lightness, chroma, hue in degrees) in OKLCH"""
+    lin = [c / 255 for c in rgb]
+    lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in lin]
+    l_ = 0.4122214708 * lin[0] + 0.5363325363 * lin[1] + 0.0514459929 * lin[2]
+    m_ = 0.2119034982 * lin[0] + 0.6806995451 * lin[1] + 0.1073969566 * lin[2]
+    s_ = 0.0883024619 * lin[0] + 0.2817188376 * lin[1] + 0.6299787005 * lin[2]
+    l_, m_, s_ = (x ** (1 / 3) for x in (l_, m_, s_))
+    L = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_
+    a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_
+    b = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_
+    return L, math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360
+
+
+def _rgb(text):
+    m = re.match(r'rgba?\((\d+),\s*(\d+),\s*(\d+)', text)
+    if m:
+        return tuple(int(x) for x in m.groups())
+    m = re.match(r'color\(srgb ([\d.]+) ([\d.]+) ([\d.]+)', text)
+    return tuple(round(float(x) * 255) for x in m.groups()) if m else None
+
+
+GOODS = dict(SQUARE=(0x2a, 0x78, 0xd6), TRIANGLE=(0xeb, 0x68, 0x34))
+
+
+def foreign_colours(colours):
+    """chromatic colours of a procurement page that are not one of the two goods' hues (rule I6)"""
+    hues = [_oklch(v)[2] for v in GOODS.values()]
+    out = []
+    for text, uses in colours.items():
+        rgb = _rgb(text)
+        if rgb is None:
+            out.append((text, uses, 'unreadable'))
+            continue
+        _, c, h = _oklch(rgb)
+        if c > 0.03 and min(min(abs(h - g), 360 - abs(h - g)) for g in hues) > 10:
+            out.append((text, uses, round(h)))
+    return out
 
 
 class Run:
@@ -48,12 +225,38 @@ class Run:
         self.points = 0                                     # the participant's total as it should stand on screen
         self.html = ''                                      # the server's HTML of the current page, as sent
         self.notes = []                                     # what a check found wrong
+        self.obs = []                                       # one record per page the run stopped on (I046)
+        self.axe = None                                     # path of axe.min.js when an audit is wanted
+        self.expected = []                                  # (round, field, value) the run dragged or keyed to
+        self.moving = []                                    # animations seen running in a reduced-motion session
 
     def name(self):
         return self.page.evaluate('window.js_vars && window.js_vars.page')
 
+    def observe(self, label):
+        """what the page shows and where, for the before-and-after comparison (KGi-DISS-I046)"""
+        if label.endswith('_mid'):
+            return                                          # a moving page: nothing stable to record
+        o = dict(label=label, n=len(self.obs), round=self.page.evaluate("document.querySelector('.dm-roundlabel b') ? document.querySelector('.dm-roundlabel b').textContent : ''"))
+        o['fit'] = self.page.evaluate(FIT_JS)
+        if label != 'clearing_hover':
+            o.update(self.page.evaluate(TEXT_JS))
+        if label == 'clearing_done':
+            o['marks'] = self.page.evaluate(MARKS_JS)
+        if self.page.viewport_size['width'] <= 400:
+            o['small'] = self.page.evaluate(TARGET_JS)
+        if label in PROCUREMENT:
+            o['colours'] = self.page.evaluate(COLOUR_JS)
+        if self.axe and label != 'clearing_hover':
+            self.page.add_script_tag(path=self.axe)
+            o['axe'] = self.page.evaluate(AXE_JS, AXE_TAGS)
+        o['lang'] = self.page.evaluate('document.documentElement.lang')
+        o['title'] = self.page.title()
+        self.obs.append(o)
+
     def shot(self, label):
         self.n += 1
+        self.observe(label)
         if self.shots:
             self.page.wait_for_timeout(450)                 # let the page transition finish
             self.page.add_style_tag(content='.debug-info, #debug-info, .otree-debug-info { display: none !important; }')
@@ -115,6 +318,7 @@ class Run:
         self.keep_source('order')
         assert self.page.is_disabled('#dm-next')
         self.page.locator('label.dm-good').nth(pick).click()
+        self.page.wait_for_timeout(250)                     # the word on the chosen card fades in over 180 ms: read the page after it
         self.shot('order')
         order_url = self.page.url
         other = self.page.locator('input[name=ticket]').nth(1 - pick).get_attribute('value')
@@ -166,6 +370,8 @@ class Run:
                 price, bit = self.page.evaluate(f'[window.js_vars.prices[{i}], window.js_vars.own[{i}]]')
                 if f'{price:.2f}' != m.group(2) or (bit == '1') != (m.group(3) == 'filled'):
                     self.notes.append(f'the readout does not match clearing {i + 1}: {text!r}')
+                if self.page.evaluate(READOUT_OVER_JS, i) is not False:   # the readout stands beside its clearing (I046)
+                    self.notes.append(f'the readout covers the point of clearing {i + 1}, which it describes')
             self.shot('clearing_hover')
             self.page.mouse.move(2, 2)
         self.shot('clearing_done')
@@ -177,10 +383,13 @@ class Run:
         self.next()
         assert self.name() == 'rate'
         assert self.page.is_disabled('#dm-next')
+        names = self.page.evaluate("Array.from(document.querySelectorAll('[data-slider] input[type=hidden]')).map(e => e.name)")
         for i, v in enumerate(ratings[:-1]):
             self.slide(i, v)
         assert self.page.is_disabled('#dm-next'), 'every slider must be touched'
         self.slide(len(ratings) - 1, ratings[-1])
+        rnd = self.page.evaluate("Number(document.querySelector('.dm-roundlabel b').textContent)")
+        self.expected += [(rnd, nm, v) for nm, v in zip(names, ratings)]
         self.shot('rate')
         self.next()
         return own, board
@@ -192,6 +401,8 @@ class Run:
         assert self.page.is_disabled('#dm-next')
         self.shot('market_unset')
         self.slide(0, pre)
+        rnd = self.page.evaluate("Number(document.querySelector('.dm-roundlabel b').textContent)")
+        self.expected += [(rnd, 'forecast_pre', pre), (rnd, 'forecast_post', post)]
         if self.page.locator('[data-forecast]').inner_text() != f'{pre}%':
             self.notes.append('the forecast figure does not show the slider value')
         self.shot('market')
@@ -259,10 +470,16 @@ def start_links(pw_page, base, config):
 
 
 def play(browser, link, base, shots, tag, viewport, picks, **kw):
-    ctx = browser.new_context(viewport=viewport, device_scale_factor=kw.pop('dpr', 1),
-                              reduced_motion=kw.pop('reduced', 'no-preference'))
+    reduced = kw.pop('reduced', 'no-preference')
+    ctx = browser.new_context(viewport=viewport, device_scale_factor=kw.pop('dpr', 1), reduced_motion=reduced)
+    moving = []
+    if reduced == 'reduce':                                 # what still moves when motion is to be reduced (I046, G11)
+        ctx.expose_function('__dmMoving', lambda key: moving.append(key))
+        ctx.add_init_script(MOVING_JS)
     page = ctx.new_page()
     run = Run(page, base, shots, tag)
+    run.moving = moving
+    run.axe = kw.pop('axe', None)
     run.html = page.goto(link).text()
     run.preamble()
     counts = []
@@ -274,6 +491,192 @@ def play(browser, link, base, shots, tag, viewport, picks, **kw):
     run.closing()
     ctx.close()
     return run, counts, paid
+
+
+def tab_to(page, test, limit=80):
+    """press Tab until the focused element passes the test (a JS function of the element)"""
+    for _ in range(limit):
+        page.keyboard.press('Tab')
+        if page.evaluate(f'(() => {{ const e = document.activeElement; return !!e && ({test})(e); }})()'):
+            return
+    raise AssertionError(f'the keyboard does not reach: {test}')
+
+
+def play_keyboard(browser, link, base, picks):
+    """a whole session with the keyboard alone: Tab, Space, the arrow keys, Enter (KGi-DISS-I046, G11)"""
+    ctx = browser.new_context(viewport=DESKTOP)
+    page = ctx.new_page()
+    run = Run(page, base, None, 'K_')
+    run.html = page.goto(link).text()
+    kb = page.keyboard
+
+    def go():
+        tab_to(page, "e => e.id === 'dm-next' && !e.disabled")
+        with page.expect_navigation() as nav:
+            kb.press('Enter')
+        run.html = nav.value.text()
+        page.wait_for_timeout(300)
+
+    def radio(name, index):
+        tab_to(page, f"e => e.type === 'radio' && e.name === '{name}'")
+        group = f"Array.from(document.querySelectorAll('input[name={name}]'))"
+        at = page.evaluate(f'{group}.indexOf(document.activeElement)')
+        if at == index:
+            kb.press('Space')
+        for _ in range(abs(index - at)):
+            kb.press('ArrowDown' if index > at else 'ArrowUp')
+        assert page.evaluate(f'{group}.findIndex(e => e.checked)') == index, f'the keyboard did not pick option {index} of {name}'
+
+    def slider(i, keys):
+        tab_to(page, f"e => e.getAttribute('role') === 'slider' && Array.from(document.querySelectorAll('.dm-sl')).indexOf(e) === {i}")
+        for key in keys:
+            kb.press(key)
+        return int(page.evaluate(f"document.querySelectorAll('[data-slider] input[type=hidden]')[{i}].value"))
+
+    assert run.name() == 'consent', run.name()
+    tab_to(page, "e => e.name === 'consent'")
+    kb.press('Space')
+    go()
+    assert run.name() == 'instructions'
+    go()
+    assert run.name() == 'quiz'
+    for name in page.evaluate("Array.from(new Set(Array.from(document.querySelectorAll('fieldset.dm-q input[type=radio]')).map(e => e.name)))"):
+        texts = page.evaluate(f"Array.from(document.querySelectorAll('input[name={name}]')).map(e => e.value)")
+        radio(name, [j for j, t in enumerate(texts) if RIGHT.search(t)][0])
+    go()
+    expected = []
+    for r, pick in enumerate(picks):
+        assert run.name() == 'order', run.name()
+        radio('ticket', pick)
+        go()
+        assert run.name() == 'clearing'
+        page.wait_for_selector('.dm-clearing.is-cleared', timeout=60000)
+        go()
+        assert run.name() == 'rate'
+        names = page.evaluate("Array.from(document.querySelectorAll('[data-slider] input[type=hidden]')).map(e => e.name)")
+        starts = page.evaluate("Array.from(document.querySelectorAll('[data-slider]')).map(e => Number(e.dataset.start))")
+        for i, (nm, start) in enumerate(zip(names, starts)):
+            if i == len(names) - 1:
+                assert page.is_disabled('#dm-next'), 'every slider must be touched'
+            up = i % 2 == 0
+            got = slider(i, ['ArrowRight'] if up else ['ArrowLeft'])
+            want = min(100, start + 5) if up else max(0, start - 5)
+            if got != want:
+                run.notes.append(f'round {r + 1}, {nm}: an arrow key from {start} gave {got}, not {want}')
+            expected.append((r + 1, nm, got))
+        go()
+    for i in range(4):
+        assert run.name() == 'market', run.name()
+        rnd = len(picks) + i + 1
+        pre = slider(0, ['ArrowRight', 'ArrowRight', 'ArrowRight'])           # the first key places the handle at 50
+        go()
+        assert run.name() == 'evidence'
+        page.wait_for_selector('#dm-ask:not([hidden])', timeout=60000)
+        post = slider(0, ['ArrowLeft', 'ArrowLeft', 'End', 'PageDown'])
+        if (pre, post) != (60, 90):
+            run.notes.append(f'market {i + 1}: the keys gave forecasts {pre} and {post}, not 60 and 90')
+        expected += [(rnd, 'forecast_pre', pre), (rnd, 'forecast_post', post)]
+        go()
+        assert run.name() == 'bet', run.name()
+        radio('bet', i % 3)
+        go()
+        if run.name() == 'recall':
+            radio('recall', 1)
+            go()
+    assert run.name() == 'closing', run.name()
+    tab_to(page, "e => e.tagName === 'TEXTAREA'")
+    kb.type('keyboard run')
+    go()
+    assert run.name() == 'results'
+    run.final_points = run.top_points()
+    run.observe('results')
+    ctx.close()
+    return run, expected
+
+
+# every CSS animation or transition seen running for longer than 1 ms, polled every 50 ms on every page and
+# during the page transitions; the stepped reveal is drawn by script and is not one of them (KGi-DISS-I046, G11)
+MOVING_JS = """
+(() => {
+  const seen = new Set();
+  const look = () => {
+    let list = [];
+    try { list = document.getAnimations(); } catch (e) { return; }
+    for (const a of list) {
+      if (a.playState !== 'running') continue;
+      let d = 0;
+      try { d = Number(a.effect.getComputedTiming().duration) || 0; } catch (e) {}
+      if (d <= 1) continue;
+      const t = a.effect && a.effect.target;
+      const who = t ? (t.className && t.className.baseVal !== undefined ? t.className.baseVal : t.className) || t.tagName : '?';
+      const key = (a.animationName || a.transitionProperty || a.constructor.name) + ' on ' + String(who).split(' ')[0]
+        + ((a.effect && a.effect.pseudoElement) || '') + ', ' + Math.round(d) + ' ms';
+      if (!seen.has(key)) { seen.add(key); window.__dmMoving(key); }
+    }
+  };
+  setInterval(look, 50);
+  document.addEventListener('DOMContentLoaded', look);
+})();
+"""
+
+FRAMES_INIT = """
+window.__frames = []; window.__span = [null, null];
+(function f() {
+  const t = performance.now();
+  window.__frames.push(t);
+  const el = document.querySelector('[data-seen]');
+  if (el && window.js_vars && window.js_vars.own) {
+    const v = Number(el.textContent);
+    if (v > 0 && window.__span[0] === null) window.__span[0] = t;
+    if (v >= window.js_vars.own.length && window.__span[1] === null) window.__span[1] = t;
+  }
+  requestAnimationFrame(f);
+})();
+"""
+
+
+def frames_one_round(browser, link, base, slowdown=1):
+    """frame times during one reveal at the session's real speed, with the processor slowed if asked (G9, G14)"""
+    ctx = browser.new_context(viewport=DESKTOP)
+    page = ctx.new_page()
+    page.add_init_script(FRAMES_INIT)
+    run = Run(page, base)
+    run.html = page.goto(link).text()
+    run.preamble()
+    page.locator('label.dm-good').nth(0).click()
+    if slowdown > 1:
+        ctx.new_cdp_session(page).send('Emulation.setCPUThrottlingRate', {'rate': slowdown})
+    run.next()
+    page.wait_for_selector('.dm-clearing.is-cleared', timeout=180000)
+    meta = json.loads(page.input_value('input[name=settle_meta]'))
+    frames, (t0, t1) = page.evaluate('[window.__frames, window.__span]')
+    planned = page.evaluate('window.js_vars.reveal_ms')
+    ctx.close()
+    gaps = sorted(b - a for a, b in zip(frames, frames[1:]) if t0 <= a and b <= t1)
+    q = lambda p: round(gaps[min(len(gaps) - 1, int(p * len(gaps)))], 1) if gaps else None
+    return dict(slowdown=slowdown, planned_reveal_ms=planned, measured_reveal_ms=meta['reveal_ms'], frames=len(gaps),
+                median_ms=q(0.5), p95_ms=q(0.95), max_ms=round(gaps[-1], 1) if gaps else None)
+
+
+def fit_findings(runs):
+    """G10 of I046: nothing reaches past the window's right edge; what must be in view without scrolling"""
+    out = []
+    for tag, run in runs.items():
+        for o in run.obs:
+            f, lab = o['fit'], o['label']
+            size = f"{f['vw']}x{f['vh']}"
+            if f['maxRight'] > f['vw'] + 1:
+                out.append(f"{tag} {lab} {size}: content reaches {f['maxRight']} px ({f['worst']})")
+            inside = lambda b: b is not None and b[1] >= 0 and b[3] <= f['vh'] + 0.5
+            desk = f['vw'] >= 1000
+            if lab == 'clearing_done' and ((desk and f['vh'] >= 650) or (f['vw'], f['vh']) in ((390, 844), (375, 667))):
+                out += [f'{tag} {lab} {size}: {part} is not in view without scrolling {f[part]}'
+                        for part in ('price', 'fills', 'counters', 'next') if not inside(f[part])]
+            elif lab in ('order', 'market', 'bet', 'recall') and desk and f['vh'] >= 650 and not inside(f['next']):
+                out.append(f"{tag} {lab} {size}: the button is not in view without scrolling {f['next']}")
+            elif (lab == 'rate' or lab.startswith('evidence')) and desk and f['vh'] >= 768 and not inside(f['next']):
+                out.append(f"{tag} {lab} {size}: the button is not in view without scrolling {f['next']}")
+    return out
 
 
 def export_rows(base, rest_key=''):
@@ -291,7 +694,13 @@ def stored(rows, session):
         if r['session'] != session or r['row_type'] != 'repetition':
             continue
         d = out.setdefault(int(r['slot']), dict(market=0, probe=0, ratings=0, forecasts=0, bets=[], wins=[], views=[],
-                                                meta=[], prices=[], bits=[]))
+                                                meta=[], prices=[], bits=[], values={}, rate_meta=[], inits=[]))
+        for name in ('fair1', 'fair2', 'fair3', 'entitle', 'forecast_pre', 'forecast_post'):
+            if r.get(name, '') != '':
+                d['values'][(int(r['repetition']), name)] = int(float(r[name]))
+        if r['kind'] == 'market':
+            d['rate_meta'].append(json.loads(r['rate_meta'] or '{}'))
+            d['inits'].append(r['rate_inits'])
         if r['kind'] == 'market':
             d['market'] += 1
             d['ratings'] += all(r[k] != '' for k in ('fair1', 'fair2', 'fair3', 'entitle'))
@@ -387,6 +796,13 @@ def main():
     ap.add_argument('--shots', default='')
     ap.add_argument('--timing-config', default='', help='also time one round of this session config at its real speed')
     ap.add_argument('--rest-key', default=os.environ.get('OTREE_REST_KEY', ''))
+    ap.add_argument('--axe', default='', help='path of axe.min.js: audit the desktop and the phone session with it')
+    ap.add_argument('--keyboard', action='store_true', help='also play one session with the keyboard alone')
+    ap.add_argument('--sizes', action='store_true', help='also play 1920 x 1080, 1366 x 768, 1366 x 650 and 320 x 568')
+    ap.add_argument('--frames-config', default='', help='also measure frame times during a reveal of this session config')
+    ap.add_argument('--out', default='', help='write everything recorded to this JSON file')
+    ap.add_argument('--strict', action='store_true',
+                    help='the I046 gates (fit, access, colours, marks, stored values, nothing moving under reduced motion) are binding')
     a = ap.parse_args()
     if a.shots:
         os.makedirs(a.shots, exist_ok=True)
@@ -398,13 +814,22 @@ def main():
         picks = [0, 1, 0, 0, 1, 0]
         # slots 0 and 1 are the two members of one pair: same choices, desktop
         a_run, a_counts, a_paid = play(browser, links[0], a.base, a.shots, 'A_', DESKTOP, picks, reload=True, back=True,
-                                       repost=True, hover=True)
+                                       repost=True, hover=True, axe=a.axe or None)
         b_run, b_counts, b_paid = play(browser, links[1], a.base, a.shots, 'B_', DESKTOP, picks)
         # third participant on a phone, fourth with reduced motion, fifth on a small phone
-        c_run, _, _ = play(browser, links[2], a.base, a.shots, 'C_', PHONE, picks, dpr=2)
+        c_run, _, _ = play(browser, links[2], a.base, a.shots, 'C_', PHONE, picks, dpr=2, axe=a.axe or None)
         d_run, _, _ = play(browser, links[3], a.base, a.shots, 'D_', DESKTOP, picks, reduced='reduce')
         e_run, _, _ = play(browser, links[4], a.base, a.shots, 'E_', SMALL_PHONE, picks, dpr=2)
         session = re.search(r'/SessionStartLinks/(\w+)', admin.url).group(1)
+        k_run, k_expected, size_runs = None, [], {}
+        if a.keyboard:
+            k_run, k_expected = play_keyboard(browser, links[5], a.base, picks)
+        if a.sizes:
+            for (name, viewport), link in zip(SIZES.items(), start_links(admin, a.base, a.config)):
+                size_runs[name], _, _ = play(browser, link, a.base, a.shots, f'{name}_', viewport, picks)
+        if a.frames_config:
+            fl = start_links(admin, a.base, a.frames_config)
+            report['frames'] = [frames_one_round(browser, fl[0], a.base, 1), frames_one_round(browser, fl[1], a.base, 4)]
         if a.timing_config:
             report['timing'] = time_one_round(browser, start_links(admin, a.base, a.timing_config)[0], a.base)
         browser.close()
@@ -413,7 +838,7 @@ def main():
     st = stored(rows, session)
     report['stored'] = {k: {x: v[x] for x in ('market', 'probe', 'ratings', 'forecasts', 'bets')} for k, v in st.items()}
     complete = all(v['market'] == 6 and v['probe'] == 4 and v['ratings'] == 6 and v['forecasts'] == 8
-                   and v['bets'] == list(BETS) for v in st.values()) and len(st) == 5
+                   and v['bets'] == list(BETS) for v in st.values()) and len(st) == 5 + bool(a.keyboard)
     # every stored price is at or below the cap exactly when the order filled
     cap = 4.0
     report['stored_prices_match_fills'] = all(
@@ -428,9 +853,10 @@ def main():
     report['reduced_motion_recorded'] = [m.get('reduced_motion') for m in st[3]['meta']]
     runs = dict(A=a_run, B=b_run, C=c_run, D=d_run, E=e_run)
     report['notes'] = {k: r.notes for k, r in runs.items() if r.notes}
-    report['console_errors'] = {k: r.errors for k, r in runs.items() if r.errors}
-    report['failed_requests'] = {k: r.failed for k, r in runs.items() if r.failed}
-    report['foreign_requests'] = {k: r.foreign for k, r in runs.items() if r.foreign}
+    watched = dict(runs, **size_runs)                       # the sessions at the extra window sizes are watched for errors and requests too
+    report['console_errors'] = {k: r.errors for k, r in watched.items() if r.errors}
+    report['failed_requests'] = {k: r.failed for k, r in watched.items() if r.failed}
+    report['foreign_requests'] = {k: r.foreign for k, r in watched.items() if r.foreign}
     # G7: the two members of the pair, same choices
     diffs = []
     for (la, ha), (lb, hb) in zip(a_run.sources, b_run.sources):
@@ -445,7 +871,52 @@ def main():
     report['leaks'] = leaks
     report['pages_checked_for_leaks'] = sum(len(r.sources) for r in runs.values())
     report['evidence_seen'] = dict(A=a_paid, B=b_paid)
-    print(json.dumps(report, indent=1))
+    # ---- KGi-DISS-I046: stored values, chart marks, fit, sizes of controls, colours, audit
+    everyone = dict(runs, **({'K': k_run} if k_run else {}), **size_runs)
+    exp = {i: r.expected for i, r in runs_by_slot.items()}
+    if k_run:
+        exp[5] = k_expected
+        report['keyboard'] = dict(notes=k_run.notes, errors=k_run.errors,
+                                  complete=5 in st and st[5]['market'] == 6 and st[5]['probe'] == 4 and st[5]['ratings'] == 6
+                                  and st[5]['forecasts'] == 8)
+    report['values_checked'] = sum(len(v) for v in exp.values())
+    report['stored_values_differ_from_those_set'] = [
+        [slot, rnd, name, want, st.get(slot, {}).get('values', {}).get((rnd, name))]
+        for slot, items in exp.items() for rnd, name, want in items
+        if st.get(slot, {}).get('values', {}).get((rnd, name)) != want]
+    report['rate_meta_incomplete'] = [slot for slot, v in st.items() for m, init in zip(v['rate_meta'], v['inits'])
+                                      if not (len(m.get('touched', [])) == 4 and all(m['touched']) and init)]
+    marks = [o['marks'] for r in everyone.values() for o in r.obs if 'marks' in o]
+    report['marks_checked'] = len(marks)
+    report['marks_wrong'] = [m for m in marks if not (m['dots'] == m['wins'] and m['ticks'] == m['k'] and m['price'] == m['k']
+                                                      and not m.get('met')
+                                                      and m['own'] == m['k'] + 1 and m['board'] in (None, m['k'] + 1))]
+    report['caption_meets_marks'] = sum(m.get('met') or 0 for m in marks)      # dots and line vertices touching the zone's caption
+    report['fit'] = fit_findings(everyone)
+    report['small_controls'] = sorted({(tag, o['label'], *x) for tag, r in everyone.items() for o in r.obs
+                                       for x in o.get('small', []) if o['fit']['vw'] in (390, 375)})
+    report['small_controls_at_320'] = sorted({(o['label'], *x) for r in everyone.values() for o in r.obs
+                                              for x in o.get('small', []) if o['fit']['vw'] == 320})
+    report['foreign_colours'] = sorted({(o['label'], c, ','.join(u), str(h)) for r in everyone.values() for o in r.obs
+                                        for c, u, h in foreign_colours(o.get('colours', {}))})
+    audit = {}
+    for tag, r in everyone.items():
+        for o in r.obs:
+            for v in o.get('axe', []):
+                audit.setdefault((v['impact'], v['id']), set()).add(o['label'])
+    report['audit'] = [dict(impact=k[0], rule=k[1], pages=sorted(v)) for k, v in sorted(audit.items(), key=lambda x: str(x[0]))]
+    report['audit_pages'] = sum('axe' in o for r in everyone.values() for o in r.obs)
+    report['no_language'] = sorted({o['label'] for r in everyone.values() for o in r.obs if not o['lang']})
+    report['no_title'] = sorted({o['label'] for r in everyone.values() for o in r.obs if not o['title'].strip()})
+    report['moving_with_reduced_motion'] = sorted(set(d_run.moving))
+    if k_run:
+        report['notes'].update({'K': k_run.notes} if k_run.notes else {})
+        report['console_errors'].update({'K': k_run.errors} if k_run.errors else {})
+        report['failed_requests'].update({'K': k_run.failed} if k_run.failed else {})
+        report['foreign_requests'].update({'K': k_run.foreign} if k_run.foreign else {})
+    if a.out:
+        json.dump(dict(report=report, obs={tag: r.obs for tag, r in everyone.items()}), open(a.out, 'w'), indent=1, default=list)
+    print(json.dumps(report, indent=1, default=list))
     ok = not (report['console_errors'] or report['failed_requests'] or report['foreign_requests'] or diffs or leaks
               or report['notes']) \
         and report['pair_same_own_counts'] and complete and report['stored_own_counts_match_screen'] \
@@ -455,6 +926,19 @@ def main():
         t = report['timing']
         ok = ok and abs(t['measured_reveal_ms'] - t['planned_reveal_ms']) <= 150 and abs(t['hidden_ms'] - 3000) <= 250 \
             and t['settlements_shown_while_hidden'] <= 1
+    serious = [x for x in report['audit'] if x['impact'] in ('serious', 'critical')]
+    gates = dict(values=not report['stored_values_differ_from_those_set'] and not report['rate_meta_incomplete'],
+                 marks=not report['marks_wrong'], fit=not report['fit'], controls=not report['small_controls'],
+                 colours=not report['foreign_colours'], audit=not serious, language=not report['no_language'],
+                 title=not report['no_title'], keyboard=report.get('keyboard', {}).get('complete', True),
+                 motion=not report['moving_with_reduced_motion'])
+    if 'frames' in report:
+        plain, slowed = report['frames']
+        gates['smooth'] = plain['median_ms'] <= 20 and plain['max_ms'] <= 100 and slowed['median_ms'] <= 34
+        gates['timing_slowed'] = abs(slowed['measured_reveal_ms'] - slowed['planned_reveal_ms']) <= 250
+    print('I046 GATES', json.dumps(gates))
+    if a.strict:
+        ok = ok and all(gates.values())
     print('BROWSER RUN', 'PASS' if ok else 'FAIL')
     sys.exit(0 if ok else 1)
 

@@ -9,7 +9,7 @@
     {{ for s in scales }}
     <div class="dm-scale">
       <p class="dm-q-label">{{ s.text }}</p>
-      <div class="dm-chips" role="radiogroup" aria-label="{{ s.text }}">
+      <div class="dm-chips is-seven" role="radiogroup" aria-label="{{ s.text }}">
         {{ for v in points7 }}
         <label class="dm-chip"><input type="radio" name="{{ s.name }}" value="{{ v }}"><span>{{ v }}</span></label>
         {{ endfor }}
