@@ -1,9 +1,14 @@
 """The app in a real browser (KGi-DISS-I042 gates G5, G6, G7; KGi-DISS-I043 gates H2, H3; KGi-DISS-I046 gates
-G3 and G8 in part, G10, G11, G12): starts 'otree devserver' on a free port in a fresh copy of the project and plays
-tools/browser_run.py against it, with the keyboard-only session, the extra window sizes and, where axe-core is
-installed (experiment/frontend/node_modules), the accessibility audit. The I046 gates are binding (--strict).
-Run from the repository root. Skipped where oTree, Playwright or its browser is missing. Takes about nine minutes
-on two cores."""
+G3 and G8 in part, G10, G11, G12; KGi-DISS-I047 gates G3, G5 to G12, G15, G16): starts 'otree devserver' on a free
+port in a fresh copy of the project and plays tools/browser_run.py against it, once for each display mode (both
+goods' clearing prices drawn, or the ordered good's only), with the session by touch, the keyboard-only session,
+the extra window sizes and, where axe-core is installed (experiment/frontend/node_modules), the accessibility
+audit. The gates are binding (--strict). Run from the repository root. Skipped where oTree, Playwright or its
+browser is missing. Takes about a quarter of an hour per mode on two cores.
+
+With MARKET_BROWSER_OUT set to a directory the runs also time and measure one round at the session's real speed
+(gates G9 and G14) and leave there, per mode, the report (both.json, own.json), the runner's output and the
+screenshots."""
 import os
 import shutil
 import signal
@@ -60,7 +65,15 @@ def test_browser_run_passes(tmp_path, config, curves):
         axe = os.path.join(EXP, 'frontend', 'node_modules', 'axe-core', 'axe.min.js')
         if os.path.exists(axe):
             cmd += ['--axe', axe]
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=2700)
+        keep = os.environ.get('MARKET_BROWSER_OUT')
+        if keep:
+            os.makedirs(keep, exist_ok=True)
+            cmd += ['--out', os.path.join(keep, f'{curves}.json'), '--shots', os.path.join(keep, curves),
+                    '--frames-config', f'market_real_{curves}', '--timing-config', f'market_real_{curves}']
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=3300)
+        if keep:
+            with open(os.path.join(keep, f'{curves}.txt'), 'w') as f:
+                f.write(r.stdout + '\n--- stderr ---\n' + r.stderr)
         assert r.returncode == 0 and 'BROWSER RUN PASS' in r.stdout, r.stdout[-6000:] + r.stderr[-3000:]
     finally:
         for sig in (signal.SIGTERM, signal.SIGKILL):

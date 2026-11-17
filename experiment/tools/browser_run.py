@@ -484,14 +484,17 @@ class Run:
                 self.page.mouse.move(mx, my)
             self.page.wait_for_timeout(120)
             text = self.page.locator('#dm-readout').inner_text()
-            m = re.search(r'Clearing (\d+)\s+(\d+\.\d\d), (filled|not filled)', text)
+            m = re.search(r'Clearing (\d+)\s+(?:(Square|Triangle) )?(\d+\.\d\d), (filled|not filled)', text)
             if not m:
                 self.notes.append(f'no readout under the pointer: {text!r}')
             else:
                 i = int(m.group(1)) - 1
-                price, bit = self.page.evaluate(f'[window.js_vars.prices[{i}], window.js_vars.own[{i}]]')
-                if f'{price:.2f}' != m.group(2) or (bit == '1') != (m.group(3) == 'filled'):
+                price, bit, ticket = self.page.evaluate(f'[window.js_vars.prices[{i}], window.js_vars.own[{i}], window.js_vars.ticket]')
+                if f'{price:.2f}' != m.group(3) or (bit == '1') != (m.group(4) == 'filled'):
                     self.notes.append(f'the readout does not match clearing {i + 1}: {text!r}')
+                named = dict(SQUARE='Square', TRIANGLE='Triangle')[ticket] if self.page.evaluate('!!window.js_vars.other_prices') else None
+                if m.group(2) != named:             # the ordered good's price is named exactly when a second line is drawn
+                    self.notes.append(f"the readout names the ordered good's price {m.group(2)!r}, expected {named!r}: {text!r}")
                 if self.page.evaluate(READOUT_OVER_JS, i) is not False:   # the readout never lies over its clearing (I046)
                     self.notes.append(f'the readout covers the point of clearing {i + 1}, which it describes')
                 sent = self.page.evaluate(f'window.js_vars.other_prices ? [window.js_vars.other_ticket, window.js_vars.other_prices[{i}]] : null')

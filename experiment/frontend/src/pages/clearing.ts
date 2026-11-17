@@ -90,7 +90,9 @@ export function clearing(): void {
       readout.replaceChildren();
       return;
     }
-    const bits = [`${text.clearing} ${i + 1}`, `${price2(prices[i]!)}, ${own[i] ? text.filled : text.not_filled}`];
+    // with two price lines each price is named by its good; with one, the price stands alone as before
+    const mine = `${price2(prices[i]!)}, ${own[i] ? text.filled : text.not_filled}`;
+    const bits = [`${text.clearing} ${i + 1}`, otherTicket ? `${text.names[ticket] ?? ticket} ${mine}` : mine];
     if (otherTicket && otherPrices) bits.push(`${text.names[otherTicket] ?? otherTicket} ${price2(otherPrices[i]!)}`);
     bits.push(`${text.you} ${ownCum[i + 1]!}`);
     if (boardCum) bits.push(`${text.trader} ${boardCum[i + 1]!}`);

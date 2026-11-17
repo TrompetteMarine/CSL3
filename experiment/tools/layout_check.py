@@ -2,13 +2,14 @@
 sheet, on every page at several window sizes (KGi-DISS-I046; the sizes are those of the phone-first layout
 of KGi-DISS-I047).
 
-A glance at a reduced screenshot misses these. The script plays one session per window size against a
-running server, the way tools/browser_run.py does, and on every page the session stops on it looks at
-every piece of text, in the page and in the charts:
+A glance at a reduced screenshot misses these. The script plays one session against a running server, the
+way tools/browser_run.py does. On every page the session stops on, it sets the window to each size in turn
+(the charts are drawn anew for each) and looks at every piece of text, in the page and in the charts:
   cut    the text does not fit the box that clips it;
   over   two pieces of text overlap by more than 1.5 px across and 3 px down;
   out    a piece of text reaches past the window, or past the sheet it belongs to.
-It prints what it finds and exits with status 1 if it finds anything.
+It prints what it finds and exits with status 1 if it finds anything. With --sessions it plays one whole
+session per window size instead (slower; the page is then also loaded at that size).
 
     otree devserver 8000        # in another shell, from experiment/
     python tools/layout_check.py --base http://localhost:8000
@@ -74,22 +75,31 @@ LOOK_JS = r"""() => {
 }"""
 
 
-def look_at_a_session(browser, link, base, width, height):
-    """one whole session at this window size: {kind: {finding: pages}}, pages looked at, the run"""
-    ctx = browser.new_context(viewport=dict(width=width, height=height), device_scale_factor=2 if width <= 480 else 1)
+def look_at_a_session(browser, link, base, sizes, one_size=None):
+    """one whole session. sizes: the window sizes each page is looked at in; one_size: play the session at this size
+    and look at it there only. Returns {size: {kind: {finding: pages}}}, {size: pages looked at}, the run"""
+    first = one_size or sizes[0]
+    ctx = browser.new_context(viewport=dict(width=first[0], height=first[1]), device_scale_factor=2 if first[0] <= 480 else 1)
     page = ctx.new_page()
     run = br.Run(page, base)
-    found = collections.defaultdict(lambda: collections.defaultdict(set))
-    seen = [0]
-    plain_shot = run.shot
+    found = {s: collections.defaultdict(lambda: collections.defaultdict(set)) for s in ([one_size] if one_size else sizes)}
+    seen = collections.Counter()
 
     def shot(label):
-        plain_shot(label)
+        if label.endswith('_mid'):
+            return                                          # a moving page
         page.wait_for_timeout(350)                          # let the page transition and the fades end
-        seen[0] += 1
-        for kind, items in page.evaluate(LOOK_JS).items():
-            for item in items:
-                found[kind][json.dumps(item)].add(label)
+        for size in ([one_size] if one_size else sizes):
+            if not one_size:
+                page.set_viewport_size(dict(width=size[0], height=size[1]))
+                page.wait_for_timeout(160)                  # the charts are drawn anew for the new size
+            seen[size] += 1
+            for kind, items in page.evaluate(LOOK_JS).items():
+                for item in items:
+                    found[size][kind][json.dumps(item)].add(label)
+        if not one_size:
+            page.set_viewport_size(dict(width=first[0], height=first[1]))
+            page.wait_for_timeout(160)
     run.shot = shot
     run.html = page.goto(link).text()
     run.preamble()
@@ -99,7 +109,7 @@ def look_at_a_session(browser, link, base, width, height):
         run.market(40 + 5 * i, 60 - 5 * i, bet)
     run.closing()
     ctx.close()
-    return found, seen[0], run
+    return found, seen, run
 
 
 def main():
@@ -107,22 +117,34 @@ def main():
     ap.add_argument('--base', default='http://localhost:8000')
     ap.add_argument('--config', default='market_e2e_both')
     ap.add_argument('--sizes', default=SIZES, help='window sizes, e.g. 1280x860,390x844')
+    ap.add_argument('--sessions', action='store_true', help='one whole session per window size, instead of one session resized')
     a = ap.parse_args()
     sizes = [tuple(int(v) for v in s.split('x')) for s in a.sizes.split(',')]
     bad = 0
+
+    def tell(size, found, pages, errors):
+        print(f'{size[0]} x {size[1]}: {pages} pages; cut {len(found["cut"])}, over {len(found["over"])}, out {len(found["out"])}'
+              + (f'; console errors {errors}' if errors is not None else ''), flush=True)
+        for kind in ('cut', 'over', 'out'):
+            for item, labels in sorted(found[kind].items()):
+                print(f'    {kind}: {item} on {", ".join(sorted(labels))}')
+        return sum(len(v) for v in found.values())
+
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         admin = browser.new_page()
-        for width, height in sizes:
+        if a.sessions:
+            for size in sizes:
+                link = br.start_links(admin, a.base, a.config)[0]
+                found, pages, run = look_at_a_session(browser, link, a.base, sizes, one_size=size)
+                bad += tell(size, found[size], pages[size], len(run.errors)) + len(run.errors) + len(run.notes)
+        else:
             link = br.start_links(admin, a.base, a.config)[0]
-            found, pages, run = look_at_a_session(browser, link, a.base, width, height)
-            n = sum(len(v) for v in found.values())
-            bad += n + len(run.errors)
-            print(f'{width} x {height}: {pages} pages; cut {len(found["cut"])}, over {len(found["over"])}, out {len(found["out"])}; '
-                  f'console errors {len(run.errors)}', flush=True)
-            for kind in ('cut', 'over', 'out'):
-                for item, labels in sorted(found[kind].items()):
-                    print(f'    {kind}: {item} on {", ".join(sorted(labels))}')
+            found, pages, run = look_at_a_session(browser, link, a.base, sizes)
+            for size in sizes:
+                bad += tell(size, found[size], pages[size], None)
+            print(f'console errors {len(run.errors)} {sorted(set(run.errors))[:4]}; notes of the run {run.notes}')
+            bad += len(run.errors) + len(run.notes)
         browser.close()
     print('LAYOUT CHECK', 'FAIL' if bad else 'PASS')
     sys.exit(1 if bad else 0)
