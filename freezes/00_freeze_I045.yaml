@@ -121,3 +121,26 @@ stopping: "close after the record, the memo with the participant budget by step 
   and the push. Not here: any change to the app, the pilot specification, any wording, any recruitment."
 verification_queue: ["sizes of every test (G3)", "bridges to the certified simulators (G1, G2)", "re-run
   bit-identity (G4)", "numbers in the memo against the record", "no citation is added in this iteration"]
+
+# =================================================================== ADDENDUM (frozen before the record is run)
+addenda:
+  AD_S1_reading_the_rounds:   # 2026-11-17, after a reduced-size development run of the script (not a record)
+    seen: "one development run at 3,000 pairs, 200 samples and 300 sessions, to debug the script. It showed, among
+      other things, legitimacy at probe time when a round counts for 80 or 40 settlements (P1: .12 | .59 and
+      .23 | .61 against .12 | .87 at 120) and that the comparison of S4, two cells between participants, needs
+      about 96 participants per cell and arm at P1, not my 24-48. The predictions S1-S12 stand as frozen and
+      will be scored as they are."
+    reason: "S4 is an expensive way to learn how many outcomes a person takes from a round. The ratings after
+      every round already carry that information within one cell."
+    recovery_test: "control arm, within participant: the last fairness rating is above the rating after round 3
+      (signed rank, one-sided .005). Under settlement-by-settlement integration the control arm dips and
+      recovers; if a round counts for 80 or 40 it is still falling."
+    classifier: "data: the mean fairness rating by round and arm in a wave of n pairs (12 means). Candidates: the
+      model's mean legitimacy by round and arm when a round counts for 40, 80 or 120 settlements, at each of
+      P1-P4. For each candidate the rating scale (offset and positive gain) is fitted by least squares and the
+      candidate with the smallest residual is chosen. Accuracy: the chosen count is the true one, (a) with the
+      gate point known, (b) with it unknown."
+    predictions: "informed in part by the development run. Recovery test: at most 24 control participants for
+      power .90 at P1-P4; rejection at most .01 when a round counts for 80 or 40. Classifier, gate point known:
+      accuracy at least .90 for every true count from 36 pairs at P1 and from 72 at P4. Gate point unknown: at
+      least .80 from 72 pairs at P1; not reached at P4 with 144 pairs."
