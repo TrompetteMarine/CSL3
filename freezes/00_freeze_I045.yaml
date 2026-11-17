@@ -1,0 +1,123 @@
+# KGi-DISS-I045 — FREEZE (written and pushed before any code or simulation of this iteration)
+iteration_id: "KGi-DISS-I045"
+freeze_time: "2026-11-17 (midday, Europe/London)"
+freeze_relative_to_work: "before any code of this iteration. Already seen: the records of I037-I044, and four
+  scratch runs made today for a discussion, outside the repository and not recorded: (a) the kernel on graded
+  outcomes and by number of purchases; (b) earnings as buyer and as owner; (c) a closed market with all units
+  present; (d) the live economy with a stopping basket (12 + 12 twin sessions of six: D1_M .97-.98 at P1 and
+  .32-.37 at P4 for a basket of 15, .90-.91 and .13-.15 for 10; completion in scarce rounds; 86% against 96%
+  reaching 60 units). Claims S11 and parts of S9 are therefore informed predictions, and are marked."
+baseline: {csl3_main: "14ffaee (I044 close)", csl_lean: "lean-diss-core 11f09cb",
+           active_ledger: "freezes/kg_active_I044.yaml"}
+mode: "simulation only. implementation_gate: CLOSED. The app, the main text and every wording are untouched.
+  Nothing is run on people; recruitment, ethics and registration stay with the author."
+
+directives:   # verbatim, 2026-11-17
+  - "11:25: this is currently unknown territory, we want to test maybe progressively, eg, first they have a
+    basket to complete, then they can do the predicitve market once the basket is completed, or the two streams
+    are completely separated. We want to test and valide (i.e. isolate to which extent its assumption hold) and
+    confirm / validate its prediction, see which ones work. from on there we are doing research to isolate the
+    best way to fullfil the aforementionned obejctives."
+  - "11:33: let us simulate fisrt, see how much participant woudl be required via power calculation on the
+    simulated empirical distribution  outcome to have enough information."
+my_reading: "for every step of the staged programme I proposed at 11:27 (assumptions, the gate, the rivals, then
+  the economy one feature at a time), compute from simulated cohorts how many participants the step needs. The
+  steps and the order are mine; the author has not approved them as a plan."
+
+# =================================================================== WHAT IS COMPUTED
+conventions:
+  level: "one-sided .005 (the programme's level) for every decision; the first wave's checks also at .05"
+  target: "power .90 (primary) and .80"
+  required_n: "the smallest n of a fixed grid at which the estimated power reaches the target. Pairs: 12, 18,
+    24, 30, 36, 48, 60, 72, 84, 96, 120, 144, 168, 192, 240, 288, 336, 384, 480, 576. Triplets: 3, 4, 5, 6, 8,
+    10, 12, 16, 20, 24, 32. 'More than the grid' is a result."
+  cohorts: "individual design: 20,000 simulated pairs per cell (twins_I040.twins, different people, own ticket
+    noise); live economy: 3,000 simulated sessions per arm and cell; 2,000 samples per n; seed 141000"
+  gate_points: "P0-P4 of I038 (P1 the paper's values, P4 the anchoring edge). 'Binding' = the largest
+    requirement over P1-P4."
+  people: "a pair is 2 participants; a triplet is 36 at six per market and 24 at four"
+  worst_case: "where two estimates of one quantity differ, the larger requirement is adopted"
+
+steps:
+  wave_1_assumptions: "the built individual app (design B: procurement, then four prediction markets; no cash and
+    no completion link). K3 entitlement HIGH above LOW (one item, noise 10, as built; three items, noise 5.8, as
+    certified); H1a last fairness LOW above HIGH; PHI flag inside LOW when a win erodes fairness (phi_plus .5,
+    1.0 against the frozen .25)."
+  wave_1_people: "what the wave tells about people. (a) Settlements per round varied between participants (40
+    against 120): does the control arm's last fairness rating differ, as it does if a round is integrated
+    settlement by settlement? (b) Records of 4 against 10 closes within participant: does the revision weight
+    rise with the length of the record (count rule) or not (one-update rule)? (c) Precision of the control
+    arm's revision weight and of the spread of T, and of the main-study sample size computed from them."
+  gate: "the confirmatory pair (H1a then D1) on the individual design: by gate point and revision rule; then one
+    change at a time at the binding point: weight on a source .2 / .5; two record pairs; forecast noise 8 / 16;
+    20% inattentive; a round counting for 80 or 40 settlements."
+  rivals: "HIGH-arm association, top quarter against the rest, freeze at .5; the plateau statistic PLAT2 on
+    twelve successive records, taken on individuals (each participant a unit), with its size against a
+    uniformly slowed HIGH arm"
+  economy:
+    cash_link: "not simulated: T is taken from private forecasts before any trade, so the model predicts no
+      change; the requirement is that of the rung it is added to"
+    ownership: "not simulated: fills and prices are unchanged by construction"
+    completion_gate_individual: "a basket of q fills per round (10, 15, 20; 30 are expected on the better
+      ticket); bidding stops at completion; the prediction market is open to those who completed the last
+      round's basket"
+    live_market: "design W by triplets, calibrated supply, six and four per market; session effect 0, .1, .2
+      shared within a session"
+    live_stopping_basket: "the same with a basket of 15 or 10 units per round that ends a trader's bidding"
+    institution: "unit orders against shares, each in its own triplets: is the fairness contrast larger and
+      the uptake ratio lower under unit orders?"
+
+# =================================================================== GATES
+gates:
+  G1_bridge_individual: "the new individual runner without a basket gives legitimacy at probe time within .01
+    of twins_I040.twins at P1 and P4"
+  G2_bridge_live: "the new live runner without a basket equals market_cert_I044.run bit for bit on the same
+    seeds"
+  G3_sizes: "every test behind a required n rejects a true null in at most .012 at nominal .005 and at most
+    .07 at nominal .05, at the smallest n and at 72 pairs (6 triplets)"
+  G4_determinism: "a second run is bit-identical"
+  G5_constraints: "nothing run on people; app, wording and main text untouched; no credential anywhere"
+  G6_formula: "the closed form n = 14.88 (s_H^2 + s_L^2) / (m_L - m_H)^2 agrees with the simulated requirement
+    for D1 within one grid step at P1 and P4"
+
+# =================================================================== PREDICTIONS (required n for power .90 at one-sided .005 unless stated)
+claims:
+  S1_fairness: "H1a, pairs: at most 18 at P0-P3; 24-36 at P4. At level .05: at most 12 at P0-P3, at most 24
+    at P4."
+  S2_entitlement: "K3, pairs. Three items: 18-30 at P1, 30-48 at P4. One item, as built: 40-60 at P1, 72-108 at
+    P4."
+  S3_phi_flag: "false alarm at the frozen phi_plus at most .012 at every n. Flagging phi_plus .5: 120-168
+    pairs; phi_plus 1.0: 48-60."
+  S4_settlements_per_round: "kernel at 40 settlements per round, P1: legitimacy at probe time HIGH .22-.38,
+    LOW .52-.68 (against .11 and .87 at 120). Control arm's last fairness rating higher at 120 than at 40:
+    24-48 participants per cell at P1, 24-60 at P4."
+  S5_revision_rule: "weight at 10 closes above weight at 4, within participant, in the control arm: 54-84
+    participants under the count rule; rejection at most .008 under the one-update rule."
+  S6_precision: "a wave of 36 pairs: standard error of the control arm's weight .03-.05 (one-update rule);
+    relative standard deviation of the main-study sample size computed from the wave 20-35%; at 72 pairs
+    15-25%."
+  S7_gate: "confirmatory pair, design B (weight on a source .35), forecast noise 12, 120 settlements. One-update
+    rule: 24-36 pairs at P1-P3, 72-84 at P4. Count rule: at most 24 at P1-P3, 40-54 at P4. At P4 under the
+    one-update rule with one change: source weight .2: 84-100; .5: 54-72; two record pairs: 60-72; noise 8:
+    36-54; noise 16: 108-144; 20% inattentive: 90-108; a round counting for 80 settlements: 120-300 at the
+    binding point; for 40: 280-480 at the binding point."
+  S8_rivals: "pairs, P1. HIGH-arm association: one-update rule 288-336 with two record pairs, 336-480 with a
+    source pair; count rule 168-216 with two record pairs. Freeze at .5: 72-96 with two record pairs, 96-120
+    with a source pair (one-update rule). PLAT2 on individuals, participants per arm: 96-144 under the
+    one-update rule, at most 72 under the count rule; rejection of the uniformly slowed HIGH arm at most .010."
+  S9_completion_gate_individual: "informed in part by scratch run (d). Basket of 20: 80-92% complete the last
+    round's basket in each arm, the arms within .05 of each other; psi-hat .18-.35 at P1 (.13 without a
+    basket); pairs for D1: 36-60 at P1, 240-480 at P4. Basket of 10: 72-120 at P1, more than 480 at P4.
+    Measuring completers only changes psi-hat by less than .03."
+  S10_live: "triplets for the confirmatory pair. Six per market: at most 4 at P1 with session effects 0 and .1;
+    at P4 under the one-update rule 6-7 without a session effect, 10-14 with .1, 16-32 with .2; under the count
+    rule 4-5 and 6-8. Four per market, P4, session effect .1: 10-14 triplets, fewer people than at six."
+  S11_live_stopping_basket: "informed by scratch run (d). Basket of 15: 6-10 triplets at P1 with a session
+    effect of .1; more than 32 at P4. Basket of 10: 10-20 at P1; more than 32 at P4."
+  S12_institution: "triplets per institution. Fairness contrast larger under unit orders: 3-4 at P1, 4-6 at
+    P4. Uptake ratio lower under unit orders: at most 4 at P1, 6-10 at P4."
+
+stopping: "close after the record, the memo with the participant budget by step and in total, the KG update
+  and the push. Not here: any change to the app, the pilot specification, any wording, any recruitment."
+verification_queue: ["sizes of every test (G3)", "bridges to the certified simulators (G1, G2)", "re-run
+  bit-identity (G4)", "numbers in the memo against the record", "no citation is added in this iteration"]
