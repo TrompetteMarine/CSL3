@@ -1,0 +1,234 @@
+# KGi-DISS-I047 — FREEZE (written and pushed before any change to the app, its tools or the analysis code)
+iteration_id: "KGi-DISS-I047"
+freeze_time: "2026-11-17T21:40Z"
+freeze_relative_to_work: "before any change to the app, its styles, scripts, templates, tools or analysis code,
+  and before any new simulation. Already done on the unchanged tree: the app, its front end, its tools and the
+  records of I040, I041, I043, I044 and I046 read; the page at the address the author gave read once through
+  the web tool, as text (the order of its elements and their units; no picture of it was seen); the
+  repository checked against the remote."
+baseline: {csl3_main: "569c3f8 (I046 close)", csl_lean: "lean-diss-core 11f09cb",
+           active_ledger: "freezes/kg_active_I046.yaml"}
+
+directive:   # verbatim, 2026-11-17 21:12, in answer to the five points of records/115_interface_polish_I046.md
+  - "1 - yes, 2 - keep both at the same units, abstract values are better,3- no, but color should be neutral,
+    4- let us focus on phones, 5 - yes, but I think the market should run live and the participant should
+    select in a plolymarket way - https://polymarket.com/event/next-french-presidential-election/will-juan-branco-win-the-2027-french-presidential-election ;
+    this should be the interface with the shapes, and curves."
+the_five_points_as_put:
+  1: "should the lower chart of the clearing page get a caption ('Filled orders')?"
+  2: "the bet button shows a price in cents and a cost in points: keep both units?"
+  3: "should the charts get a text alternative for screen-reader users?"
+  4: "which devices are admitted? (min_window_width is 0; the weak points of the phone layout were listed)"
+  5: "do the two legends on the instructions page stay?"
+
+my_reading:
+  R1: "the lower chart gets the caption."
+  R2: "one unit on the bet buttons, and an abstract one: points. The figure in cents goes; the ticket's price is
+    its cost in points. The payment parameters (allowance 10, payout 20, posted price 50) are not touched: a
+    price shown on the forecasts' scale of 0 to 100 would need a payout of 100 points, which is a payment
+    decision."
+  R3: "no text alternative for the charts. 'Neutral': no colour stands for an outcome or a side. YES and NO
+    lose green and magenta and are told apart by the word. Colour says which good a mark belongs to and nothing
+    else, and every such mark also carries the good's shape, so nothing is read from hue alone. Two other
+    readings are possible and are not taken: goods without hue (the same message asks for the shapes and the
+    curves of a market page, which the earlier directive of 2026-11-16 called 'coloured quotation curves');
+    and equal visual weight of the two goods' hues (their lightness is reported, not changed)."
+  R4: "the phone is the reference device. One layout, a single column, at every window width: a participant on
+    a laptop sees the same column. Who is admitted is a recruitment setting and stays the author's; the
+    min_window_width key stays as it is."
+  R5: "the legends of the instructions stay. The goods market of rounds 1 to 6 becomes one market screen in
+    the pattern of a multi-outcome prediction-market page: a chart with one curve per good, a row per good
+    with its price and a button, the order sent from that screen, and the round then running on it in real
+    time. 'Live' is read as: the screen runs in real time from the pre-drawn schedule. It is NOT read as:
+    the participants' orders set the prices (design W of I044: synchronous groups, lab first, not built; its
+    implementation gate stays closed). If the author meant design W, this screen is its front end and the
+    engine is the part still missing."
+  on_the_reference: "the interaction pattern is taken (rows of outcomes with prices, one curve per outcome, a
+    buy button per row, a ticket to confirm). The platform's name, logo, colours, typeface, icons and page are
+    not reproduced. Nothing in the app says or suggests that it is that platform or any real market."
+mode: "implementation of the presentation and of one display option of experiment/diss_market, and one
+  certification on simulated cohorts. Nothing is run on people. No recruitment, no OSF filing, no ethics claim.
+  The main text is not edited. No credential anywhere. All wording stays DRAFT."
+
+# =================================================================== WHAT THE AUTHOR'S ANSWERS CHANGE IN THE I046 CONTRACT
+invariants:   # those of freezes/00_freeze_I046.yaml, with every amendment stated
+  I1_server: "KEPT. diss_market/engine.py and diss_market/bots_model.py stay byte-identical. In
+    diss_market/__init__.py only what a page hands to its template or script for display may change: no model
+    field, form field, validation, page order, payoff, export column or bot. Planned display changes: the
+    clearing page may receive the other good's price path of the same round (D4); the bet page receives its
+    cost line in another form; the settle_meta record written by the browser gains keys."
+  I2_information: "AMENDED by answer 5. With price_curves = 'own' every page shows the same data as at 569c3f8.
+    With price_curves = 'both' the clearing page also shows the other good's clearing prices of the same round,
+    computed by engine.price_path for the good not ordered (what the participant would have seen for it).
+    Durations and pacing functions unchanged (reveal_ms, probe_reveal_ms, source_reveal_ms, the 500 ms pause).
+    Nothing of a later round on any page; no price on the order page."
+  I3_wording: "AMENDED by answers 1, 2 and 5. Every existing string of copy_en.py stays character for
+    character. New strings: at most 3, each marked DRAFT (planned: the caption of the lower chart; the word on
+    a row's button). The cent sign leaves the bet template."
+  I4_arms: "KEPT. One set of templates, styles and scripts; two members of a pair who make the same choices
+    get the same pages except for the board's numbers."
+  I5_measures: "KEPT for what is asked and stored. AMENDED for how a finger sets a slider (D9): a tap sets the
+    value when the finger lifts; a sideways drag sets it while it moves; a gesture the browser takes for
+    scrolling leaves the slider exactly as it was. Mouse and keyboard as before."
+  I6_colour_rule: "AMENDED by answer 3. Goods carry colour (Square #2a78d6, Triangle #eb6834), always with
+    their shape. Everything else is neutral: the trader in slate, sources in ink, YES and NO in ink with the
+    word. No green and no magenta anywhere. One light theme."
+  I7_isolation: "AMENDED by answer 5 in one clause. No request leaves the study server; fonts ship with the
+    app under an open licence; the interaction pattern of a prediction-market page is used; no name, logo,
+    colour scheme, typeface, icon or copied page of a real market."
+  I8_access: "KEPT. Reduced motion (stepped reveal, no pulse) and keyboard use."
+  I9_leaks: "AMENDED with I2. No page carries a later round, a market's evidence before its first forecast, a
+    bet price before the second forecast, or how a market settles. The other good's prices: never under
+    'own'; under 'both' on the clearing page only, the same round only."
+
+# =================================================================== THE CLAIM THAT HAS TO BE TESTED BEFORE 'BOTH' CAN BE THE DEFAULT
+why: "the ledger holds DISS-CHOICE-EFFECT (I040): ticket choice sets the model's levels, and a choice-free
+  variant needs its own certification. Showing both goods' prices tells every participant after round 1 which
+  good is cheaper. People who then order the cheaper good in every deprivation round are the choice-free case.
+  Design B was certified with model-like choices (records/basket_cert_I043.txt)."
+claims:
+  C1:
+    kind: statistical
+    statement: "with a share q of participants who order the better good in every deprivation round (round 1
+      chosen as before), q in {0, .5, 1}, the decision rates of the reporting set at 72 pairs are computed for
+      the five gate points, both revision rules and kappa_s in {.5, .35, .2}, with the kernel, the ratings
+      (gain .5, noise 5.8), the forecasts, the bets and the tests of basket_cert_I043.py."
+    assumption_A_CF: "the display changes the kernel's inputs only through the good ordered: seeing the other
+      good's price has no effect of its own on legitimacy or aspiration (no regret channel). A human quantity;
+      the model has no term for it."
+    assumption_A_Q: "informed participants order the better good from round 2 on; the others choose as the
+      model does. Each member of a pair is informed independently with probability q."
+    verifier: "simulation, experiment/analysis/live_cert_I047.py, seed 141000, 20,000 pairs per cell, 2,000
+      samples; analysis/twins_I040.py gains an optional argument whose default reproduces the earlier records."
+    acceptance: "G18"
+    if_it_fails: "price_curves = 'own' is the default, 'both' stays an option, and the memo says at which
+      points the two-curve display costs power."
+decision_rule_for_the_default: "price_curves = 'both' becomes the default of the development and pilot
+  configurations if, at q = .5 and at q = 1, the confirmatory pair at 72 pairs is no lower than at q = 0 by
+  more than .03 in any of the thirty cells (five points, two rules, three kappa_s), and the sizes of H1a, D1
+  and BET in the two null worlds of the I043 record stay at or below .010. Otherwise 'own'."
+
+# =================================================================== DESIGN DECISIONS (taken before building)
+design_decisions:
+  D1: "one layout: a single column of at most 480 px, at every window width. Reference phones 390 x 844 and
+    360 x 640. On a wider screen the column stands in the middle of the tinted ground."
+  D2: "rounds 1 to 6 are one market screen in two states, on the two existing pages (Order, Clearing). Open:
+    the chart frame with the cap, a row per good with a button, and, once a good is chosen, a ticket docked
+    at the foot with the cap and the existing button 'Send the order'. Running: the same chart drawn in real
+    time, the rows with the clearing prices, the ordered good marked, then the filled orders. The server's
+    flow, forms and stored fields are those of 569c3f8."
+  D3: "the chart: one line per good shown, in the good's colour; the head of each line is the good's shape;
+    the ordered good's line lies on top and carries a dot at every filled order; the strip of ticks under the
+    plot is the ordered good's. One cap line; the fixed logarithmic price axis of the session's file."
+  D4: "a session key price_curves with the values 'both' and 'own'. The browser writes into settle_meta how
+    many price lines it drew."
+  D5: "before the order the chart frame shows the cap, the zone under it and its existing caption, and no
+    price: a picture of the rule the order follows. No earlier round is shown again."
+  D6: "the lower chart of the running screen gets the caption (answer 1)."
+  D7: "bet page: three choices as now (YES, NO, pass) and the existing button. Each ticket shows one figure,
+    its cost in points, inside the existing sentence 'costs N points'. Neutral cards. The settled markets'
+    YES and NO tags are neutral too."
+  D8: "colour tokens for YES and NO are removed from the stylesheet."
+  D9: "touch: every control at least 44 x 44 px and the main button of a page at least 48 px high; no feature
+    needs a pointer that hovers; after a round has cleared, a finger moved along the chart shows the clearing
+    under it in a line above the chart; sliders follow I5 as amended."
+  D10: "the main button of a page sits at the foot of the column; heights are set from the visible height of
+    the window (dvh), so that the browser's bars do not push it out of view."
+  D11: "the viewport and whether the whole running screen fitted it are written into settle_meta. No layout
+    for a phone held sideways and no notice asking to turn it: that would be a new sentence."
+  D12: "prediction-market pages (rounds 7 to 10): the same column; flow, order of appearance and durations
+    unchanged."
+  D13: "instructions: both legends stay (answer 5); headings above their text."
+  D14: "type, neutrals and the goods' colours of I046 stay. Motion as in I046: nothing marks a fill, a miss, a
+    basket or a bet with a flash or a burst."
+not_in_scope:
+  - "prices set by participants' orders (design W), an order placed or changed while a round runs, a time
+    limit on ordering: each changes what a round is"
+  - "the schedule format, the engine, the data model, the export, the bots, the payment parameters"
+  - "a text alternative for the charts (answer 3); a layout for a phone held sideways; a rule on which devices
+    are admitted"
+  - "the earlier bandit app; the database structure the author named for a later step"
+
+# =================================================================== GATES
+gates:
+  G1_data: "bot exports of market_bots_random, market_bots_model and market_bots_seed (8 participants each),
+    with session and participant codes replaced by their order, are identical to the baseline: sha256
+    beginning ebc1e22e0d1da7ec, 5e0082b07b945e88, 0dbd4d4190087a36. Export header unchanged. engine.py and
+    bots_model.py unchanged."
+  G2_suites: "test_market_engine_I043 and test_market_app_I043 pass unchanged; the interface tests pass (the
+    I046 file amended only where an invariant above was amended, each amendment listed in the memo); the
+    browser test passes; type check and unit tests pass; the bundle is the one built from the sources."
+  G3_information: "'own': the clearing page's script receives one price series, the ordered good's, of the
+    round's length. 'both': exactly two, the second equal to engine.price_path for the other good in the same
+    round. The order page receives no price in either mode. On the running screen: one dot per filled order
+    on the ordered good's line and none on the other, one tick per clearing, one vertex per clearing on each
+    price line, k + 1 vertices per running count. Every difference in the words of each page against
+    569c3f8, for the same participant and choices, is listed in the memo."
+  G4_wording: "git diff of copy_en.py shows no changed or removed line and at most 3 added strings."
+  G5_arms: "no page difference between the two members of a pair beyond the board, in both modes."
+  G6_leaks: "no leak on any checked page, by I9 as amended."
+  G7_isolation: "no request to another host; no console error; no failed request."
+  G8_measures: "every stored rating and forecast equals the value set, by mouse, by keyboard and by finger (a
+    tap and a sideways drag, on an emulated phone). A scroll gesture that starts on a slider stores nothing
+    and leaves it untouched. A rating page cannot be left with an untouched slider. rate_meta as before."
+  G9_timing: "at the session's real speed the measured reveal is within 150 ms of the planned one, stands still
+    while the tab is hidden, and stays within 250 ms at four-fold CPU slowdown; measured on an emulated
+    phone (390 x 844, touch) in both modes."
+  G10_fit: "no sideways scrolling at 320 px and wider. Running screen: the price chart, the rows, the counters,
+    the lower chart and the button in view without scrolling at 360 x 640, 375 x 667, 390 x 844, 412 x 915,
+    430 x 932, and at 375 x 553 and 390 x 664 (the same phones with the browser's bars showing). Open screen:
+    both rows and the ticket's button in view at the same sizes. Bet page: the three choices and the button
+    in view at 375 x 667 and larger. Market, recall: the button in view at 375 x 667 and larger. Rating page:
+    the four sliders and the button in view at 390 x 844 and larger; what it needs at smaller sizes is
+    reported. Evidence page: the evidence and the forecast slider in view together at 390 x 844 and larger."
+  G11_access: "axe-core (WCAG 2.1 A and AA) reports no violation of impact serious or critical on any page; a
+    session with the keyboard alone stores a complete record; every control at least 44 x 44 px at 360 px
+    and wider; text contrast at least 4.5:1 (7:1 for body text), marks and control boundaries that carry
+    meaning at least 3:1; a good's colour at full strength on white or its own tint only; with reduced
+    motion no animation runs except the stepped reveal."
+  G12_colour_rule: "on every task page every chromatic colour in use (chroma above .03) is one of the two
+    goods' colours or their tints, or the note colour of an error banner."
+  G13_weight: "styles, scripts and fonts together at most 250 KB; a second build is byte-identical."
+  G14_smooth: "during a reveal on the emulated phone the median frame is at most 20 ms and no frame exceeds
+    100 ms; at four-fold CPU slowdown the median frame is at most 34 ms; in both modes."
+  G15_touch: "a whole session played with taps and touch drags on an emulated phone stores a complete record;
+    a finger moved along the cleared chart shows the clearing under it, and the line names that clearing's
+    price and whether the order filled."
+  G16_modes: "the browser run passes under price_curves = 'own' and under 'both'."
+  G17_layout: "tools/layout_check.py (text cut off, text over text, text outside the window or its sheet)
+    finds nothing at the sizes of G10 and at 320 x 568, 768 x 1024 and 1280 x 860, in both modes and in a
+    session without a board."
+  G18_cert: "(a) with the new argument left at its default, analysis/twins_I040.py gives the same arrays as
+    before for the same seed, and with every participant informed it gives the same arrays as
+    choice_free = True; (b) the q = 0 column of the new record agrees with records/basket_cert_I043.txt within
+    .03 in every cell compared; (c) the decision rule above is evaluated on the record as written."
+
+expectations:   # written before any new simulation and before any change to the app
+  E1: "G1, G4, G5, G7 pass at the first attempt."
+  E2: "C1 at q = 1: H1a 1.00 everywhere; the confirmatory pair at the anchoring edge (P4), one-update rule,
+    rises from .947 / .893 / .790 (kappa_s .5 / .35 / .2) to at least .97 / .94 / .85, because HIGH legitimacy
+    there is .24 instead of .41 while LOW falls only to .74; at P0 to P3 it stays at 1.000."
+  E3: "C1 at q = 1: the association within HIGH at P4 falls from .95-1.00 to below .90 (the arm is more alike
+    once nobody is on the worse good); at P1 to P3 it stays within .05 of the record."
+  E4: "C1 at q = .5: every rate lies between its values at q = 0 and q = 1, within .03."
+  E5: "the decision rule selects 'both'."
+  E6: "G10: the rating page does not fit 375 x 667 without scrolling and fits 390 x 844; the evidence page
+    with a record fits 390 x 844 only with the market's chart made smaller."
+  E7: "G13: between 170 and 200 KB (169,076 bytes now)."
+  E8: "G14 passes on the emulated phone in both modes; the longest frame is higher under 'both' than 'own'."
+  E9: "two price lines in step with each other (one draw settles both goods, so one line is the other moved
+    up) will look like a doubled line on a phone. If the ordered good's fills cannot be read from the strip
+    and the dots at 360 px, the other good's line is drawn thinner and behind; no price is changed to make
+    the picture clearer."
+  E10: "the synthetic touch gestures of the test browser can show the scroll case of G8; if they cannot, it
+    is reported as not measured, not as passed."
+
+verification_queue:
+  - "the unchanged analysis/basket_cert_I043.py run once here and compared with its record, before the new
+    script is trusted"
+  - "every page looked at after the build at 360 x 640, 375 x 667, 390 x 844, 430 x 932 and 1280 x 860, in
+    both modes, both arms, without a board, with reduced motion, and with the browser's text size at 200%"
+  - "the running screen looked at in the rich round and in a deprivation round, with the better and with the
+    worse good ordered"
+  - "figures in the memo, MARKET_APP.md and YOKED_DESIGN.md checked against the reports they come from"
+  - "what cannot be measured here is named as such: a real phone, Safari, Firefox, a screen reader, a person"
