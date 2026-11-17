@@ -85,25 +85,62 @@ export function mountSlider(host: HTMLElement, t0: number): SliderHandle {
     return fractionToValue((ev.clientX - r.left) / r.width, step, min, max);
   }
 
+  /**
+   * Pointer. A mouse or a pen sets the value at once and while it drags. A finger is different,
+   * because the same finger scrolls the page (the slider lets the browser scroll up and down):
+   * a tap sets the value when the finger lifts where it came down, a sideways drag sets it from
+   * its first sideways step on, and every other gesture leaves the slider exactly as it was: one
+   * the browser takes for scrolling (pointercancel), and one that moved up or down without
+   * scrolling anything (the page was at its end). Nothing is stored for a touch that was not
+   * meant for the slider.
+   */
+  const SLOP = 6;
+  const TAP_SLOP = 10;
   let dragging = false;
+  let pending: { id: number; x: number; y: number } | null = null;
+  const release = (ev: PointerEvent): void => {
+    root.classList.remove('is-dragging');
+    if (root.hasPointerCapture(ev.pointerId)) root.releasePointerCapture(ev.pointerId);
+  };
   root.addEventListener('pointerdown', (ev) => {
     if (ev.button !== 0 && ev.pointerType === 'mouse') return;
+    if (ev.pointerType === 'touch') {
+      pending = { id: ev.pointerId, x: ev.clientX, y: ev.clientY };
+      return;
+    }
     dragging = true;
     root.setPointerCapture(ev.pointerId);
     root.classList.add('is-dragging');
     commit(fromPointer(ev), 'pointer');
   });
   root.addEventListener('pointermove', (ev) => {
+    if (pending && ev.pointerId === pending.id) {
+      const dx = Math.abs(ev.clientX - pending.x);
+      if (dx < SLOP || dx < Math.abs(ev.clientY - pending.y)) return;      // not yet a sideways drag
+      pending = null;
+      dragging = true;
+      root.setPointerCapture(ev.pointerId);
+      root.classList.add('is-dragging');
+    }
     if (dragging) commit(fromPointer(ev), 'pointer');
   });
-  const end = (ev: PointerEvent): void => {
+  root.addEventListener('pointerup', (ev) => {
+    if (pending && ev.pointerId === pending.id) {
+      const still = Math.hypot(ev.clientX - pending.x, ev.clientY - pending.y) <= TAP_SLOP;
+      pending = null;
+      if (still) commit(fromPointer(ev), 'pointer');                        // a tap; a finger that wandered sets nothing
+      return;
+    }
     if (!dragging) return;
     dragging = false;
-    root.classList.remove('is-dragging');
-    if (root.hasPointerCapture(ev.pointerId)) root.releasePointerCapture(ev.pointerId);
-  };
-  root.addEventListener('pointerup', end);
-  root.addEventListener('pointercancel', end);
+    release(ev);
+  });
+  root.addEventListener('pointercancel', (ev) => {
+    pending = null;                                                          // the browser scrolled: no value
+    if (!dragging) return;
+    dragging = false;
+    release(ev);
+  });
 
   root.addEventListener('keydown', (ev) => {
     const base = current ?? (min + max) / 2;

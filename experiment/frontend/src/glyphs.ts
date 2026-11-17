@@ -10,6 +10,13 @@ const SHAPES: Record<string, string> = {
   PENTAGON: '<path d="M12 2.8 21.2 9.5l-3.5 10.9H6.3L2.8 9.5z"/>',
 };
 
+/** the bare shape of a symbol, in its 24 x 24 box (for marks drawn inside a chart) */
+export function glyphShape(name: string): string {
+  const shape = SHAPES[name];
+  if (!shape) throw new Error(`unknown ticket symbol: ${name}`);
+  return shape;
+}
+
 export function glyphSvg(name: string): string {
   const shape = SHAPES[name];
   if (!shape) throw new Error(`unknown ticket symbol: ${name}`);

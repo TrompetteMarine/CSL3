@@ -69,7 +69,12 @@ export function evidence(): void {
 
   const open = async (): Promise<void> => {
     await wait(reducedMotion ? 0 : 400);
-    if (ask) ask.hidden = false;
+    if (ask) {
+      ask.hidden = false;
+      // on a short screen the question opens below the fold: bring it and the button into view
+      const foot = document.querySelector<HTMLElement>('.dm-actions') ?? ask;
+      if (foot.getBoundingClientRect().bottom > window.innerHeight) foot.scrollIntoView({ block: 'end', behavior: reducedMotion ? 'auto' : 'smooth' });
+    }
     field('record_done').value = '1';
     sync();
   };

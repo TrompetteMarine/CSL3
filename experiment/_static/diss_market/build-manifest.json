@@ -2,17 +2,17 @@
  "sources": {
   "src/chart.ts": "f015aea06dd915aca52e3322aa6701fbd1e2f261e32be9893eb1741aa74acc5f",
   "src/env.ts": "57f9d7c0d39139b6d9ea4272224fc233d6563156b59bfa43af88b3c67d5cdeff",
-  "src/glyphs.ts": "1162e0e2a62be49085d6208322084d618d9981a4018bb4bd33918e874a0b1c89",
+  "src/glyphs.ts": "18214e302310dba853b179459371eb1632dc1c3de31f4a4f4d060e700b43aea2",
   "src/main.ts": "1d5031fd087d76a2a4c26c90991e68b9b5be67c1341734182697b6216faf8068",
-  "src/pages/clearing.ts": "6e40dba375ff4b57bf0412e9356db0a6085bf31befdd8e43bded16e09701b947",
-  "src/pages/market.ts": "d89c262f4edd50495902d06573eac2af9eaf461ddb90d46998b2b16b3a3bbb8a",
+  "src/pages/clearing.ts": "ea3bb2f78a66931881a8cf12236d4448d12666712917bf2266ed8fcde62c9ff1",
+  "src/pages/market.ts": "b6b5c6b9194554ff3f029f8a0f445000bacf52b3df04509099608422bfa1becd",
   "src/pages/misc.ts": "63aae5db725d7b99ca405eb89e047c4a651dce0e9c001c5e588b894fd4dcd0e4",
-  "src/pages/order.ts": "04e34618d41fc15214ea02da30985d418ccbbbe65709390fa64a66e02f903bf4",
+  "src/pages/order.ts": "898e3e4eaef3c0ebacf47e82b718a366fc12fba3209726a30951dfbcb3aae824",
   "src/pages/rate.ts": "03148426d942cf6d51ee1c259e410acf6350a7f51513e4d992eb0465838abbea",
-  "src/slider.ts": "a7a4f697d23717f7d3deddb93203e0d3364ab0ab394129fc61bfd04fe3321521",
-  "src/styles/app.css": "906b43d66d134bf8e5a750f14b41b9e1d57020af179eea567ea1ecd95e462fb9",
+  "src/slider.ts": "a438b5a4d29742e79427c6df4f35bb8ed3dea9650296073f65e3a5b19124921a",
+  "src/styles/app.css": "886a7b4fee20915073815dedb2b41ed0fc71f85f430acbf3dc42e224a6b92477",
   "src/styles/fonts.css": "ff7347023418cdb98e64b2710d30a2a53b6fa153ce2ca2b296afe8d4d1f00340",
-  "src/svgchart.ts": "c6f4ff035e29d702c2e6f17458a5bcc061f6d44faf4d5ac7dd080dcee0a2cdab",
+  "src/svgchart.ts": "fe4256dca01ef3855de043c2f3c822f488a249338fa02bbc7eae901b40771451",
   "src/timeline.ts": "442b2e3d28c98eb14cec3db9a077576731cc917f93f5488c3f4aa8255797506b",
   "package.json": "af30e3e29c137536c5f4fc693aee4bdfda8761fe8779c70c4c61b6b501a19722",
   "package-lock.json": "268187ba836e38b3396072002f8999f7d1760c4b9027b14bcf072fbfea4ef83e",
@@ -21,8 +21,8 @@
  },
  "outputs": {
   "app.js": {
-   "bytes": 26021,
-   "sha256": "14cdc77c1d901403f085f6cf691c4ac2b17e30c03c845750440f99315c7c429e"
+   "bytes": 28644,
+   "sha256": "8836bf93f341dcbd4fc773dd7d26af852038ef40f810e952c46170ffd6300507"
   },
   "fonts/ibm-plex-sans-latin-400-normal.woff2": {
    "bytes": 22588,
@@ -45,8 +45,8 @@
    "sha256": "3d72a0923c5830358b0a8e25b258aecadbecbf542b6ee9a25f387803e37d56b9"
   },
   "app.css": {
-   "bytes": 32263,
-   "sha256": "8cc2c152ae6572b47fe30955641fa046c57b18469772d7c8d8f6e708b1bfc69a"
+   "bytes": 28821,
+   "sha256": "0f350d34e9e9d5490bfa84e4aec14438026b957164bfd64fe1cdc348309c1559"
   }
  }
 }

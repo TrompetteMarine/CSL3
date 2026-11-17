@@ -30,8 +30,10 @@ def _browser_ok():
         return False
 
 
+# both display modes of KGi-DISS-I047: the two goods' clearing prices drawn, or the ordered good's only
+@pytest.mark.parametrize('config,curves', [('market_e2e_both', 'both'), ('market_e2e_own', 'own')])
 @pytest.mark.skipif(OTREE is None or not _browser_ok(), reason='needs oTree and Playwright with Chromium')
-def test_browser_run_passes(tmp_path):
+def test_browser_run_passes(tmp_path, config, curves):
     proj = tmp_path / 'experiment'
     shutil.copytree(EXP, proj, ignore=shutil.ignore_patterns(
         'node_modules', 'db.sqlite3', '__pycache__', 'botdata', 'analysis', 'frontend', '_generated', '.env'))
@@ -53,7 +55,8 @@ def test_browser_run_passes(tmp_path):
                 time.sleep(0.5)
         else:
             pytest.fail('the development server did not start')
-        cmd = [sys.executable, os.path.join(EXP, 'tools', 'browser_run.py'), '--base', base, '--strict', '--keyboard', '--sizes']
+        cmd = [sys.executable, os.path.join(EXP, 'tools', 'browser_run.py'), '--base', base, '--strict', '--keyboard', '--sizes',
+               '--config', config, '--curves', curves]
         axe = os.path.join(EXP, 'frontend', 'node_modules', 'axe-core', 'axe.min.js')
         if os.path.exists(axe):
             cmd += ['--axe', axe]

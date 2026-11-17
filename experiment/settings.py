@@ -86,6 +86,9 @@ MARKET_CELL = dict(
     points_to_currency=0.01,       # DRAFT: money per point
     completion_url='',             # e.g. the recruitment platform's completion link
     min_window_width=0,            # DRAFT: e.g. 900 keeps phones out; 0 lets every device in
+    price_curves='both',           # 'both': the market screen draws both goods' clearing prices | 'own': only the ordered
+                                   # good's (the display certified in I043). 'both' by the rule frozen in I047 and read on
+                                   # records/live_cert_ad_I047.txt; a configuration without the key gets 'own'
 )
 SEED_SCHEDULE = environ.get('MARKET_SEED_SCHEDULE', 'schedules/example_seed0_4pairs_v3_nosocial.json')
 SESSION_CONFIGS += [
@@ -103,6 +106,20 @@ SESSION_CONFIGS += [
     dict(name='market_e2e', display_name='MARKET browser test: short reveals (never for people)', bot_kind='browser',
          **{**MARKET_CELL, 'reveal_ms': 1500, 'probe_reveal_ms': 1000, 'source_reveal_ms': 600,
             'num_demo_participants': 6}),
+    dict(name='market_e2e_own', display_name="MARKET browser test: only the ordered good's prices drawn (never for people)",
+         bot_kind='browser', **{**MARKET_CELL, 'reveal_ms': 1500, 'probe_reveal_ms': 1000, 'source_reveal_ms': 600,
+                                'num_demo_participants': 6, 'price_curves': 'own'}),
+    dict(name='market_e2e_both', display_name="MARKET browser test: both goods' prices drawn (never for people)",
+         bot_kind='browser', **{**MARKET_CELL, 'reveal_ms': 1500, 'probe_reveal_ms': 1000, 'source_reveal_ms': 600,
+                                'num_demo_participants': 6, 'price_curves': 'both'}),
+    dict(name='market_e2e_seed', display_name='MARKET browser test: no board, short reveals (never for people)',
+         bot_kind='browser', **{**MARKET_CELL, 'board_source': 'none', 'schedule_path': SEED_SCHEDULE, 'reveal_ms': 1500,
+                                'probe_reveal_ms': 1000, 'source_reveal_ms': 600, 'num_demo_participants': 6}),
+    # one round at the session's real speed, for the timing and frame measurements of tools/browser_run.py
+    dict(name='market_real_own', display_name="MARKET timing test at real speed: only the ordered good's prices (never for people)",
+         bot_kind='browser', **{**MARKET_CELL, 'price_curves': 'own'}),
+    dict(name='market_real_both', display_name="MARKET timing test at real speed: both goods' prices (never for people)",
+         bot_kind='browser', **{**MARKET_CELL, 'price_curves': 'both'}),
     dict(name='market_bots_pool', display_name='MARKET bots: board from a pool', bot_kind='model',
          **{**MARKET_CELL, 'board_source': 'pool', 'pool_path': environ.get('MARKET_POOL', 'pools/pool.json')}),
 ]

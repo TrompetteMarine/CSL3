@@ -1,5 +1,6 @@
 """Text that is cut off, pieces of text that lie over each other, and text that leaves the window or its
-sheet, on every page at several window sizes (KGi-DISS-I046).
+sheet, on every page at several window sizes (KGi-DISS-I046; the sizes are those of the phone-first layout
+of KGi-DISS-I047).
 
 A glance at a reduced screenshot misses these. The script plays one session per window size against a
 running server, the way tools/browser_run.py does, and on every page the session stops on it looks at
@@ -11,7 +12,8 @@ It prints what it finds and exits with status 1 if it finds anything.
 
     otree devserver 8000        # in another shell, from experiment/
     python tools/layout_check.py --base http://localhost:8000
-    python tools/layout_check.py --config market_seed --sizes 1280x860,390x844      # a session without a board
+    python tools/layout_check.py --config market_e2e_own                            # only the ordered good's prices drawn
+    python tools/layout_check.py --config market_e2e_seed --sizes 390x844,360x640   # a session without a board
 """
 import argparse
 import collections
@@ -24,7 +26,7 @@ from playwright.sync_api import sync_playwright
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import browser_run as br  # noqa: E402
 
-SIZES = '1920x1080,1366x768,1366x650,1280x860,390x844,375x667,320x568'
+SIZES = '360x640,375x667,390x844,412x915,430x932,375x553,390x664,320x568,768x1024,1280x860'
 
 LOOK_JS = r"""() => {
   const root = document.querySelector('.dm');
@@ -74,7 +76,7 @@ LOOK_JS = r"""() => {
 
 def look_at_a_session(browser, link, base, width, height):
     """one whole session at this window size: {kind: {finding: pages}}, pages looked at, the run"""
-    ctx = browser.new_context(viewport=dict(width=width, height=height), device_scale_factor=2 if width <= 400 else 1)
+    ctx = browser.new_context(viewport=dict(width=width, height=height), device_scale_factor=2 if width <= 480 else 1)
     page = ctx.new_page()
     run = br.Run(page, base)
     found = collections.defaultdict(lambda: collections.defaultdict(set))
@@ -92,7 +94,7 @@ def look_at_a_session(browser, link, base, width, height):
     run.html = page.goto(link).text()
     run.preamble()
     for r, pick in enumerate([0, 1, 0, 0, 1, 0]):
-        run.market_round(pick, [20 + 10 * r, 55, 70 - 5 * r, 40], hover=(r == 4 and width > 760))
+        run.market_round(pick, [20 + 10 * r, 55, 70 - 5 * r, 40], hover=(r == 4))
     for i, bet in enumerate(br.BETS):
         run.market(40 + 5 * i, 60 - 5 * i, bet)
     run.closing()
@@ -103,7 +105,7 @@ def look_at_a_session(browser, link, base, width, height):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--base', default='http://localhost:8000')
-    ap.add_argument('--config', default='market_e2e')
+    ap.add_argument('--config', default='market_e2e_both')
     ap.add_argument('--sizes', default=SIZES, help='window sizes, e.g. 1280x860,390x844')
     a = ap.parse_args()
     sizes = [tuple(int(v) for v in s.split('x')) for s in a.sizes.split(',')]

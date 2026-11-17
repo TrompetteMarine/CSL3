@@ -11,11 +11,11 @@
       <div class="dm-bets" role="radiogroup" aria-label="{{ t.bet_title }}">
         <label class="dm-bet is-yes">
           <input type="radio" name="bet" value="YES">
-          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_yes }}</span><b class="dm-bet-price">{{ price_yes }}¢</b><span class="dm-bet-cost">{{ cost_yes }}</span></span>
+          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_yes }}</span><span class="dm-bet-cost">{{ cost_yes|safe }}</span></span>
         </label>
         <label class="dm-bet is-no">
           <input type="radio" name="bet" value="NO">
-          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_no }}</span><b class="dm-bet-price">{{ price_no }}¢</b><span class="dm-bet-cost">{{ cost_no }}</span></span>
+          <span class="dm-bet-card"><span class="dm-bet-name">{{ t.bet_no }}</span><span class="dm-bet-cost">{{ cost_no|safe }}</span></span>
         </label>
         <label class="dm-bet is-pass">
           <input type="radio" name="bet" value="PASS">

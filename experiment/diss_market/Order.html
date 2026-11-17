@@ -2,28 +2,34 @@
 {{ block content }}
 <div class="dm">
   {{ include_sibling '_top.html' }}
-  <main class="dm-main dm-order">
+  <main class="dm-main dm-screen dm-order">
     {{ include_sibling '_errors.html' }}
     <h1 class="dm-h1">{{ t.choose_title }}</h1>
     <p class="dm-sub">{{ sub }}</p>
     {{ if recap }}
     <div class="dm-recap"><span>{{ recap.you }}</span>{{ if recap.board }}<span>{{ recap.board }}</span>{{ endif }}</div>
     {{ endif }}
-    <div class="dm-goods" role="radiogroup" aria-label="{{ t.choose_title }}">
+    <div class="dm-chart is-price is-frame" data-chart="frame"></div>
+    <div class="dm-rows dm-goods" role="radiogroup" aria-label="{{ t.choose_title }}">
       {{ for tk in tickets }}
-      <label class="dm-good" data-good="{{ tk.value }}">
+      <label class="dm-row dm-good" data-good="{{ tk.value }}">
         <input type="radio" name="ticket" value="{{ tk.value }}">
-        <span class="dm-good-card">
-          <span class="dm-good-tag">{{ t.held }}</span>
+        <span class="dm-row-body">
           <span class="dm-glyph" data-glyph="{{ tk.value }}"></span>
-          <span class="dm-good-name">{{ tk.name }}</span>
-          <span class="dm-good-cap">{{ t.cap_label }} <b>{{ cap }}</b></span>
+          <span class="dm-row-name">{{ tk.name }}</span>
+          <span class="dm-row-btn">{{ t.order_btn }}</span>
         </span>
       </label>
       {{ endfor }}
     </div>
     <input type="hidden" name="rt_choose_ms" value="">
-    <div class="dm-actions"><button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.choose_next }}</button></div>
+    <div class="dm-actions dm-ticket">
+      <p class="dm-ticket-line">
+        <span class="dm-ticket-good" id="dm-ticket-good" hidden>{{ for tk in tickets }}<span data-good="{{ tk.value }}" hidden><span class="dm-glyph" data-glyph="{{ tk.value }}"></span>{{ tk.name }}</span>{{ endfor }}</span>
+        <span class="dm-ticket-cap">{{ t.cap_label }} <b>{{ cap }}</b></span>
+      </p>
+      <button class="dm-btn" id="dm-next" type="submit" disabled>{{ t.choose_next }}</button>
+    </div>
   </main>
 </div>
 {{ endblock }}
