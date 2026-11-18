@@ -53,6 +53,9 @@ body {
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; -webkit-tap-highlight-color: transparent;
 }
 form.otree-form { margin: 0; }
+/* the framework ends every page with an empty line after the form: it made every page a line higher than the window,
+   so a screen that fits could still be pushed up by a finger (found in I047, there since I042) */
+body > br { display: none; }
 /* the column is as high as the window that is visible (the browser's bars are not part of it): a chart takes the room
    the rest of its page leaves, between a least and a greatest height, and the page's button stands at the foot */
 .dm { width: min(480px, 100%); min-height: 100vh; min-height: 100dvh; margin: 0 auto; display: flex; flex-direction: column; background: var(--surface); }
@@ -445,7 +448,8 @@ form.otree-form { margin: 0; }
 
 /* ---------- a small phone: the rating page's four items and its button, and the evidence with its question, in one view from 375 x 667 on ---------- */
 @media (max-height: 700px) {
-  .dm-mkt.is-compact .dm-chart.is-history { height: 76px; }
+  /* 84 px is the least height at which the chart's two axis figures clear the dark tag of its line (at 76 px the tag hid a third of each) */
+  .dm-mkt.is-compact .dm-chart.is-history { height: 84px; }
   .dm-rate { padding-top: 14px; }
   .dm-rate .dm-item { padding: 9px 0 8px; }
   .dm-rate .dm-item-done { top: 10px; }

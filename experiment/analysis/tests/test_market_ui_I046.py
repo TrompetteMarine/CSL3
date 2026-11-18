@@ -94,6 +94,9 @@ def test_a_goods_colour_stands_on_white_or_on_its_own_tint():
         grounds = [g.strip() for _, body in _blocks(selector) for g in re.findall(r'background(?:-color)?:\s*([^;}]+)', body)]
         assert set(grounds) <= {'var(--surface)', 'var(--wash)'}, (selector, grounds)
     assert contrast('tri', 'inset') < 3 < contrast('tri', 'tri-wash')                    # why: the grey panel is too dark
+    # with both goods' price lines drawn (I047) the line of the good not ordered crosses the fill zone, which has the
+    # ordered good's tint: Triangle's orange on Square's tint is at the floor (3.001:1), Square's blue on Triangle's 4.17:1
+    assert 3 <= contrast('tri', 'sq-wash') < 3.01 and contrast('sq', 'tri-wash') > 4
 
 
 def test_data_marks_are_drawn_at_full_strength():
@@ -121,6 +124,31 @@ def test_the_zone_caption_has_its_own_band_and_lies_under_every_mark():
                                                         "this.dots = s('g'"))
     assert word < other < line < dots                    # caption, then the other good's line, then the ordered good's, then its dots
     assert int(re.search(r'const WORD_ROOM = (\d+);', src).group(1)) >= 20
+
+
+def test_the_market_charts_axis_figures_never_lie_under_the_tag_of_its_line():
+    """the price history of a market (svgchart.ts, HistoryChart): its two axis figures stand at the line plus and minus
+    the reach of the data; the line's tag is a dark box. At every height the stylesheet gives the chart, the ink of
+    both figures clears the box by 2 px or more. (I047: on small phones I had set the chart to 76 px, where the box
+    hid a third of each figure; the text-over-text check did not see it, because a box is not text.)"""
+    ts = open(os.path.join(EXP, 'frontend', 'src', 'svgchart.ts'), encoding='utf-8').read()
+    hist = ts[ts.index('export class HistoryChart'):ts.index('export class TrialStrip')]
+    top, foot = (float(v) for v in re.search(r'h: this\.h - (\d+) - (\d+) \}', hist).groups())
+    pad = float(re.search(r'centred\(chart, threshold, ([\d.]+)\)', hist).group(1))
+    assert f'(d1 - d0) / 2 / {1 + pad}' in hist                     # the figures stand at the reach of the data
+    tag_half = float(re.search(r'y: thrY - (\d+), width: \d+, height: \d+', hist).group(1))
+    base = float(re.search(r'label\(this\.svg, right \+ 8, gy \+ (\d+)', hist).group(1))
+    ink = 0.72 * float(re.search(r'\.dm-svg text \{ font: \d+ ([\d.]+)px', CSS).group(1))    # the height of a digit
+    heights = set()
+    for _, body in _blocks(r'\.dm-chart\.is-history'):
+        for v in re.findall(r'(?<![a-z-])height:\s*([^;}]+)', body):
+            m = re.match(r'(?:clamp\()?([\d.]+)px', v.strip())
+            heights.add(float(m.group(1)))                          # a fixed height, or the least of a clamp
+    assert heights and min(heights) >= 84, sorted(heights)
+    for h in heights:
+        off = (h - top - foot) / 2 / (1 + pad)
+        above, below = off - base - tag_half, off + base - ink - tag_half
+        assert min(above, below) >= 2, (h, round(above, 2), round(below, 2))
 
 
 def test_page_transitions_only_without_reduced_motion():
@@ -220,6 +248,17 @@ def test_one_column_at_every_width():
     wide = re.findall(r'@media \(min-width:[^)]*\)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}', CSS)
     assert len(wide) == 1 and re.fullmatch(r'\s*\.dm \{ border-left: [^;]+; border-right: [^;]+; \}\s*', wide[0]), wide
     assert 'min-height: 100dvh' in CSS                                                  # the visible height, without the browser's bars
+
+
+def test_nothing_follows_the_column_in_the_page():
+    """the framework ends every page with an empty line after the form (otree/templates/otree/Page.html). Left in
+    place it makes every page a line higher than the window, so a screen that fits can still be pushed up by a finger
+    (found in I047; there since I042). The stylesheet takes the line out, and the browser run measures on every page
+    that nothing after the form takes room and, without a debug panel, that a fitting screen is not higher than the
+    window."""
+    assert re.search(r'(?m)^body > br \{ display: none; \}', CSS)
+    run = open(os.path.join(EXP, 'tools', 'browser_run.py'), encoding='utf-8').read()
+    assert 'something follows the form' in run and 'higher than the window' in run
 
 
 def test_controls_are_large_enough_for_a_finger():

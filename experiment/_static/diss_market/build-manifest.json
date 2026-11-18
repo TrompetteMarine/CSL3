@@ -10,7 +10,7 @@
   "src/pages/order.ts": "898e3e4eaef3c0ebacf47e82b718a366fc12fba3209726a30951dfbcb3aae824",
   "src/pages/rate.ts": "03148426d942cf6d51ee1c259e410acf6350a7f51513e4d992eb0465838abbea",
   "src/slider.ts": "a438b5a4d29742e79427c6df4f35bb8ed3dea9650296073f65e3a5b19124921a",
-  "src/styles/app.css": "bb3de58933ffb634584d3736d26afd2fddd6fa9ffc69c751c6df80dee1b83c19",
+  "src/styles/app.css": "b992051d1a32baa64cb94a492e869b501460b463b39f6ff7851f8c7f26e53420",
   "src/styles/fonts.css": "ff7347023418cdb98e64b2710d30a2a53b6fa153ce2ca2b296afe8d4d1f00340",
   "src/svgchart.ts": "fe4256dca01ef3855de043c2f3c822f488a249338fa02bbc7eae901b40771451",
   "src/timeline.ts": "442b2e3d28c98eb14cec3db9a077576731cc917f93f5488c3f4aa8255797506b",
@@ -22,7 +22,7 @@
  "outputs": {
   "app.js": {
    "bytes": 28692,
-   "sha256": "a5130bd082ca725ffc9573fb41c4a68b72c4b1fcc3c718c8e40bb785cf5d0f46"
+   "sha256": "a10f7b9281cf3759c4af9a639c02490fc4fed0641b8abd81a772c733ca75ce82"
   },
   "fonts/ibm-plex-sans-latin-400-normal.woff2": {
    "bytes": 22588,
@@ -45,8 +45,8 @@
    "sha256": "3d72a0923c5830358b0a8e25b258aecadbecbf542b6ee9a25f387803e37d56b9"
   },
   "app.css": {
-   "bytes": 29018,
-   "sha256": "3bb5153e5e9bb9aa975a2063ebe95a8893f104a59a238f8cee8d9cf91426e7e6"
+   "bytes": 29039,
+   "sha256": "26004b78fb8ed44b59f17d65067045586880453d7452a8eaf65c1ecc2a10e59c"
   }
  }
 }

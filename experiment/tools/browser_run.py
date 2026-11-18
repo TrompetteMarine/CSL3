@@ -97,7 +97,17 @@ FIT_JS = r"""() => {
     return [r.left, r.top + y0, r.right, r.bottom + y0].map((v) => Math.round(v * 10) / 10);
   };
   const btn = document.querySelector('#dm-next');
+  // what follows the app's form in the page and takes room: nothing may. (The framework ends a page with an empty line,
+  // which the stylesheet hides; a development server adds its debug panel, which is not counted.)
+  const DEBUG = '.debug-info, #debug-info, .otree-debug-info';
+  const form = document.querySelector('form.otree-form');
+  let tail = 0;
+  for (let e = form ? form.nextElementSibling : null; e; e = e.nextElementSibling) {
+    if (e.matches('script, noscript, style, link, ' + DEBUG) || e.querySelector(DEBUG)) continue;
+    tail += e.getBoundingClientRect().height;
+  }
   return {vw: window.innerWidth, vh: window.innerHeight, maxRight: Math.round(maxRight * 10) / 10, worst,
+          tail: Math.round(tail * 10) / 10, docH: document.documentElement.scrollHeight, debug: !!document.querySelector(DEBUG),
           next: box('#dm-next'), nextOff: btn ? btn.disabled : null,
           nextShown: btn ? getComputedStyle(btn).visibility !== 'hidden' : null,
           price: box('[data-chart=price]'), fills: box('[data-chart=fills]'), counters: box('.dm-counters'),
@@ -819,6 +829,8 @@ def fit_findings(runs):
             size, name = (f['vw'], f['vh']), f"{f['vw']}x{f['vh']}"
             if f['maxRight'] > f['vw'] + 1:
                 out.append(f"{tag} {lab} {name}: content reaches {f['maxRight']} px ({f['worst']})")
+            if f.get('tail', 0) > 0.5:
+                out.append(f"{tag} {lab} {name}: the page is {f['tail']} px higher than its column (something follows the form)")
             inside = lambda b: b is not None and b[1] >= 0 and b[3] <= f['vh'] + 0.5
             need = ()
             if size in FIT_PHONES:
@@ -838,6 +850,11 @@ def fit_findings(runs):
                 boxes = [[0, a, 0, b] for a, b in f['sliders']] if part == 'sliders' else [f[part]]
                 if not boxes or not all(inside(b) for b in boxes):
                     out.append(f'{tag} {lab} {name}: {part} is not in view without scrolling {boxes}')
+            # without the development server's debug panel the page is the column: a screen whose parts are all in
+            # view must not be higher than the window, or a finger can still push it up
+            if need and not f.get('debug', True) and lab in ('order', 'clearing_done', 'bet', 'market', 'recall') \
+                    and f.get('docH', 0) > f['vh'] + 0.5:
+                out.append(f"{tag} {lab} {name}: the page is {f['docH'] - f['vh']} px higher than the window")
             if lab == 'rate' and f['next']:
                 rate_need[name] = max(rate_need.get(name, 0), round(f['next'][3] - f['vh']))
     return out, rate_need

@@ -7,6 +7,9 @@ way tools/browser_run.py does. On every page the session stops on, it sets the w
 (the charts are drawn anew for each) and looks at every piece of text, in the page and in the charts:
   cut    the text does not fit the box that clips it;
   over   two pieces of text overlap by more than 1.5 px across and 3 px down;
+  under  the ink of a piece of text in a chart comes within 1 px of the dark box of a tag (the cap, a market's
+         line), or lies under it: the box hides part of the figure (seen in I047 on the market chart of a small
+         phone, where the two pieces of text did not overlap enough to count as 'over');
   out    a piece of text reaches past the window, or past the sheet it belongs to.
 It prints what it finds and exits with status 1 if it finds anything. With --sessions it plays one whole
 session per window size instead (slower; the page is then also loaded at that size).
@@ -31,7 +34,7 @@ SIZES = '360x640,375x667,390x844,412x915,430x932,375x553,390x664,320x568,768x102
 
 LOOK_JS = r"""() => {
   const root = document.querySelector('.dm');
-  const out = {cut: [], over: [], out: []};
+  const out = {cut: [], over: [], under: [], out: []};
   if (!root) return out;
   const vw = window.innerWidth;
   const shown = (el) => !el.checkVisibility || el.checkVisibility({checkOpacity: true, checkVisibilityCSS: true, opacityProperty: true, visibilityProperty: true});
@@ -64,6 +67,24 @@ LOOK_JS = r"""() => {
     if (a.el === b.el || a.el.contains(b.el) || b.el.contains(a.el)) continue;
     const ox = Math.min(a.r, b.r) - Math.max(a.l, b.l), oy = Math.min(a.b, b.b) - Math.max(a.t, b.t);
     if (ox > 1.5 && oy > 3) out.over.push([name(a.el), a.s.slice(0, 30), name(b.el), b.s.slice(0, 30)]);
+  }
+  // text in a chart under the dark box of a tag. Ink of a figure: from its baseline up by .72 of the font size
+  // (the height of a digit in the app's typefaces), and down by .22 where a letter descends
+  for (const rect of root.querySelectorAll('svg .dm-cap-tag rect')) {
+    const svg = rect.ownerSVGElement, tag = rect.closest('.dm-cap-tag');
+    if (!svg || !shown(rect)) continue;
+    const q = rect.getBoundingClientRect();
+    for (const el of svg.querySelectorAll('text')) {
+      const txt = el.textContent.trim();
+      if (!txt || tag.contains(el) || !shown(el)) continue;
+      const r = el.getBoundingClientRect(), fs = parseFloat(getComputedStyle(el).fontSize);
+      const pt = svg.createSVGPoint(), p0 = el.getStartPositionOfChar(0);
+      pt.x = p0.x; pt.y = p0.y;
+      const base = pt.matrixTransform(el.getScreenCTM()).y;
+      const top = base - 0.72 * fs, bottom = base + (/[gjpqy,;]/.test(txt) ? 0.22 * fs : 0);
+      const ox = Math.min(r.right, q.right) - Math.max(r.left, q.left), gap = Math.max(top, q.top) - Math.min(bottom, q.bottom);
+      if (ox > 1.5 && gap < 1) out.under.push([name(el), txt.slice(0, 30), tag.textContent.trim().slice(0, 20), Math.round(-gap * 10) / 10]);
+    }
   }
   const sheet = root.querySelector('.dm-main');
   const lim = sheet ? sheet.getBoundingClientRect() : null;
@@ -123,9 +144,9 @@ def main():
     bad = 0
 
     def tell(size, found, pages, errors):
-        print(f'{size[0]} x {size[1]}: {pages} pages; cut {len(found["cut"])}, over {len(found["over"])}, out {len(found["out"])}'
+        print(f'{size[0]} x {size[1]}: {pages} pages; cut {len(found["cut"])}, over {len(found["over"])}, under {len(found["under"])}, out {len(found["out"])}'
               + (f'; console errors {errors}' if errors is not None else ''), flush=True)
-        for kind in ('cut', 'over', 'out'):
+        for kind in ('cut', 'over', 'under', 'out'):
             for item, labels in sorted(found[kind].items()):
                 print(f'    {kind}: {item} on {", ".join(sorted(labels))}')
         return sum(len(v) for v in found.values())
