@@ -263,3 +263,154 @@ addendum_AD1:
     E12: "the rule read on the means gives 'both'."
     E13: "FREEZE in the both-LOW world at q = 1 has a mean above .02: once everyone is on the better good the
       LOW board no longer leaves a homogeneous control arm, and its lowest-rated third revises visibly less."
+
+# =================================================================== SCORECARD (appended 2026-11-18; nothing above was removed)
+scorecard:
+  measured_on: "the final build (CSL3 main at the I047 close). Second full check: front-end check with two
+    builds, 70 tests without a browser, three bot exports, the browser test in three runs ('both' and 'own' on a
+    development server, 'both' on a production server), the contrast reading of their screenshots, the layout
+    check for 'both', 'own' and a session without a board, the word comparison against 569c3f8. The first full
+    check ran on the build before the two corrections named in the closing record and passed every gate."
+  G1_data: "PASS. market_bots_random, market_bots_model, market_bots_seed (88 rows, 82 columns each): sha256
+    beginning ebc1e22e0d1da7ec, 5e0082b07b945e88, 0dbd4d4190087a36, as at the baseline. engine.py and
+    bots_model.py byte-identical."
+  G2_suites: "PASS. 8 engine, 6 app, 19 interface (17 at the first check; two added for the two defects), 7 for
+    the certification code and 30 earlier tests; the browser test, 3 runs in 2,988 s; type check and 22 unit
+    tests; a second build byte-identical. The interface file of I046 was amended where an invariant was: no
+    colour for a side or an outcome, rows in place of cards, the market chart in place of the price chart, one
+    figure on a bet, one column, sizes of controls, the slider's touch rule, the session key, two added
+    strings."
+  G3_information: "PASS. 'own': one price series on 30 clearing pages, none with a second. 'both': two on 30
+    pages, each equal to engine.price_path. No price on an order page. Marks right on 72 clearing pages per
+    run. Word differences: records/116_phone_market_I047.md, 'What a participant reads'; for a phone before
+    and now the same words on 24 of 43 pages (2,620 words before, 2,642 after), for a laptop before on 3 of 43
+    (2,706 before)."
+  G4_wording: "PASS. Two strings added (order_btn 'Order', fills_caption 'Filled orders'); none changed or
+    removed."
+  G5_arms: "PASS. No page difference inside the pair beyond the board, in the three runs."
+  G6_leaks: "PASS. None on 125 pages per run."
+  G7_isolation: "PASS. No request to another host, no console error, no failed request (13 sessions per run)."
+  G8_measures: "PASS. 192 of 192 stored ratings and forecasts equal the values set (128 by mouse, 32 by
+    finger, 32 by keyboard). Three gestures that start on a slider and are not meant for it store nothing: a
+    swipe upwards that scrolls the page (138 px on the development server, 36 px on the production server,
+    where the page has no more) with the pointer cancelled; a swipe downwards at the top, cancelled; the
+    browser's own scroll synthesiser, which moves the finger without scrolling or cancelling. The button stays
+    off until the fourth slider is touched."
+  G9_timing: "PASS. 9,008 | 9,001 | 9,015 ms for 9,000 (both | own | production). A tab hidden for 3 s: the
+    reveal stood still 3,007 | 3,007 | 3,006 ms and showed nothing. Slowed four-fold: 9,008 | 9,017 | 9,011."
+  G10_fit: "PASS. 519 pages in 13 sessions per run at ten window sizes: nothing past the right edge from
+    320 px; every part the gate names in view at its sizes. Beyond the gate: on the production server both
+    states of the market screen, a market's first forecast, the bet and the recall question are exactly as
+    high as the window at all ten sizes. Rating page: the button 22 px below the window at 360 x 640, 56 px at
+    375 x 553, 65 px at 320 x 568, in view elsewhere. Evidence page: up to 45 px (record) and 36 px (source)
+    too high at 360 x 640, 63 and 66 at 375 x 553, 91 and 74 at 320 x 568, in view elsewhere."
+  G11_access: "PASS except one clause as frozen. No audit finding of any impact on 86 pages per run; the
+    keyboard-only session complete; controls at least 44 x 44 px from 360 px (at 320 px the answer buttons of
+    the closing questions are 39 x 46); nothing moving under reduced motion. NOT as frozen: 'a good's colour
+    at full strength on white or its own tint only'. Under 'both' the line of the good not ordered crosses
+    the zone, which has the ordered good's tint: Triangle on Square's tint 3.001:1 (read from screenshots:
+    3.00:1 on 42 of 590), Square on Triangle's tint 4.17:1. I wrote the clause before deciding where the
+    second line goes."
+  G12_colour_rule: "PASS. No chromatic colour but the goods', their tints and an error banner's on 519 pages
+    per run."
+  G13_weight: "PASS. 168,523 bytes (169,076 before); a second build byte-identical."
+  G14_smooth: "PASS. Emulated phone at pixel ratio 3: median frame 16.7 ms in the three runs, longest
+    21.8 | 19.1 | 20.6 ms; slowed four-fold: median 16.7 ms, longest 48.9 | 48.7 | 47.9 ms."
+  G15_touch: "PASS. A whole session by taps and touch drags at 360 x 640 stores a complete record; a finger
+    moved along the cleared chart shows the clearing under it with each good's price and whether the order
+    filled."
+  G16_modes: "PASS under 'own' and under 'both'."
+  G17_layout: "PASS on the final build: nothing on 440 pages at ten sizes for 'both', for 'own' and for a
+    session without a board. The first full check passed this gate while a tag hid part of two axis figures
+    on small phones: the tool compared pieces of text and a tag's box is not text. It now also measures the
+    ink of every chart figure against every tag."
+  G18_cert: "(a) PASS: with the new argument at its default the arrays are those of 569c3f8 (four
+    fingerprints), and with everybody informed they are those of choice_free = True. (b) FAILED as frozen:
+    differences of up to .098 against the I043 record where .03 was allowed (addendum AD1). (b') PASS: 240
+    values compared, none outside the pools' range widened by .02; the farthest .017 beyond the range itself.
+    (c) the rule gives 'both': largest fall .012, largest rise .088, largest mean size .0061 (single pools up
+    to .0105)."
+  added_after_the_freeze: "three checks, for the two defects found by looking after the first full check. The
+    ink of a chart figure under a tag's box (tools/layout_check.py, and an interface test that derives the
+    chart's least height from its geometry). Nothing after the form takes room (every run). On a production
+    server a screen that fits is not higher than the window (the third run of the browser test)."
+  verification_queue:
+    - "done: the unchanged basket_cert_I043.py reproduces its record byte for byte"
+    - "done in part: looked at on the final build, HIGH board, both prices drawn: every kind of page at
+      360 x 640, 375 x 667 and 320 x 568, the main pages at 375 x 553, 430 x 932 and 1280 x 860; the market
+      screen under 'own' at 360 x 640; without a board at 390 x 844 and 360 x 640; three cleared screens of
+      the LOW board at 390 x 844 from the first check. NOT looked at: reduced motion (the runner measures
+      it), a page at 200% text size (the layout tool finds nothing at 640 x 430, one label out at 260 px, 35
+      findings at 195 px)"
+    - "done: the running screen in the rich round and in a deprivation round, with the better and with the
+      worse good ordered (records/ui_I047_two_displays.png)"
+    - "done: figures of the memo, MARKET_APP.md and YOKED_DESIGN.md checked against the reports; six
+      corrected in the memo before the close (20 for 24 px; a chart height of 'about 120' for 140 px; the top
+      quarter's cells; the evidence page's figures given as fixed where they are upper values; a line count;
+      the button's height at short windows)"
+    - "done: named as not measured: a real phone, Safari, Firefox, a screen reader, a person"
+  E1: "HELD."
+  E2: "PARTLY. q = 1: H1a 1.000; the pair at P4 .985 / .955 / .878; legitimacy .239 against .741. At P0 to P3
+    it does not stay at 1.000: as low as .987 (P1, kappa_s .2)."
+  E3: "PARTLY. Below .90 at P4 under the one-update rule only (.824 / .718 / .566; count rule .936-.977). At
+    P1 to P3 it moves by up to .071."
+  E4: "PARTLY. Every test but one. The top quarter at P4 is highest at q = .5 in all six cells and outside
+    the range by more than .03 in four (up to .091)."
+  E5: "HELD."
+  E6: "PARTLY. Both pages fit 390 x 844, the evidence page with 148 px to spare and without a smaller chart.
+    The rating page fits 375 x 667, because I tightened it; untightened it did not."
+  E7: "FAILED. 168,523 bytes: below the range. The stylesheet lost its desktop layouts."
+  E8: "PARTLY. G14 passes in both displays. The longest frame is not ordered by display: 21.8 against 19.1 ms
+    at pixel ratio 3, 18.8 against 23.7 at pixel ratio 1; in the first check 26.1 against 20.2 and 21.4
+    against 23.6."
+  E9: "HELD. At 360 px the two lines read as one doubled line; the other good's line is 1 px and behind the
+    ordered good's 1.5 px; no price was changed."
+  E10: "HELD."
+  E11: "PARTLY. .005 / .006 / .017 at P4 (kappa_s .5 / .35 / .2): only the last inside .015-.04. Below .001
+    at cells of .99 or more."
+  E12: "HELD."
+  E13: "HELD. .045 / .035 / .027."
+
+closing_record:   # 2026-11-18
+  state: "rounds 1 to 6 of experiment/diss_market are one market screen laid out for a phone; a session key
+    decides whether both goods' prices are drawn, and the frozen rule made 'both' the default; verified in
+    Chromium on development and production servers; server, measures and stored data unchanged; nothing run
+    on people; author-gated"
+  delivered: "the app (templates, styles, scripts, two strings, one session key); experiment/analysis:
+    twins_I040.py (one optional argument), live_cert_I047.py, live_cert_ad_I047.py, tests/test_live_I047.py;
+    experiment/tools/browser_run.py, layout_check.py, mark_contrast.py extended;
+    experiment/analysis/tests/test_market_ui_I046.py and test_market_browser_I043.py amended;
+    experiment/MARKET_APP.md and YOKED_DESIGN.md; records/116_phone_market_I047.md;
+    records/live_cert_I047.txt and live_cert_ad_I047.txt; records/ui_I047_*.png (five pictures);
+    freezes/kg_delta_I047.yaml; freezes/kg_active_I047.yaml"
+  corrected_before_close:
+    - "the first full check passed every gate. Looking at the pictures composed for the memo then found two
+      defects. (1) On the evidence and bet pages the market's small chart was 76 px high at window heights up
+      to 700 px, a height I had set in this iteration to make the evidence page fit small phones; the dark
+      tag of its line hid part of both axis figures (five of the ten sizes, all four markets). Now 84 px. (2)
+      In production every page was one line (24 px) higher than the window: the framework ends a page with
+      an empty line after the form. A screen that fits could be pushed up by a finger. There since I042; a
+      development server hides it under its debug panel; my fit gate asked whether the parts were in view.
+      Now taken out by the stylesheet. Each is measured on every run now."
+    - "before the first full check: a finger that moved on a slider without the browser scrolling ended as a
+      tap and set it (now a tap only within 10 px); the order page did not fit 360 x 640 and 375 x 667 with
+      the last round's recap (heights from constants; now the room the page leaves); the counters' large
+      figure overlapped its neighbours; the ticket's shape was drawn in ink; the reading on the cleared chart
+      named one good and not the other"
+    - "tools/mark_contrast.py read 3x screenshots with a 1x reach and reported Triangle at 2.75:1 on the
+      colour of a hairline; corrected in the tool"
+    - "the freeze's two times were written without reading the clock (AD1); the freeze names 'the two null
+      worlds of the I043 record' where one of them is in the I041 record (both were evaluated)"
+    - "one run was cut off by a restart of the container (exit 137); nothing was lost; it was repeated"
+    - "one layout run printed 'console errors 2' without their text. The tool prints the text now. Seen once
+      more: the framework's auto-advance socket reset during its handshake while the development server
+      restarted, because I had just edited a Python file of the project. The first occurrence fits that
+      and was not reproduced."
+  not_measured: "no person has seen the pages; no real phone; no browser but Chromium; no screen reader. On a
+    phone: what the browser's bars do to the height, whether a pull at the top of the page is ignored, the
+    phone's text-size setting. Whether seeing the other good's price has an effect of its own (A_CF). The
+    pool's coverage of counts when the seed wave draws both prices."
+  next_executable_step: "the author's decisions on the eight points of the memo's section 'For the author',
+    first whether 'live' meant real time from the schedule (built) or prices set by participants' orders
+    (design W, not built), and whether 'both' stays the default; then the specification of the pilot with its
+    frozen analysis"

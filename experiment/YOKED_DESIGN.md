@@ -16,6 +16,11 @@ The participants each step of a staged validation needs, as requirements for pow
 The decision rates below are unchanged by it. As built, the confirmatory pair needs
 84 pairs at the anchoring edge under the one-update rule.
 
+Since KGi-DISS-I047 the app is laid out for phones, its procurement rounds are one
+market screen, and by default that screen draws both goods' clearing prices (session
+key `price_curves`). What this changes statistically is in "Both goods' prices on
+screen" below; the screen itself is described in `MARKET_APP.md`.
+
 ## The session (ten repetitions)
 
 The statistical skeleton is that of I041. Since I043 it is presented as a basket
@@ -31,7 +36,11 @@ listed under "The prediction markets" below.
 - **Prices.** The clearing price of the ordered good is a display of the schedule's
   own draw: `price = cap · exp(σ (z(u) − z(p)))`, with `u` the settlement draw and
   `p` the good's fill chance, so the order fills exactly where the schedule says.
-  Only the ordered good's own price path is shown. Every filled order is one good
+  With `price_curves = 'own'` only the ordered good's own price path is shown (the
+  display certified in I043). With `'both'`, the default since I047, the other good's
+  path of the same round is drawn beside it: what the participant would have seen
+  for that good. One draw settles both goods, so the two paths move in step and the
+  better good is the cheaper one at every clearing. Every filled order is one good
   and one point; six goods make a basket (a count, with no quota).
 - **Board.** HIGH: a trader whose orders fill at .72. LOW: a replay of the
   participant's own trailing record. In the rich round both members of a pair see
@@ -62,9 +71,9 @@ above; the history carries no information about the close.
   on a source's forecast, assumed to be `κ_s · g` with `g` the gate and `κ_s`
   unknown (.2 to .5 examined). (S2) The bet adds a second read-out of the updated
   belief, under an assumed betting rule.
-- **Kept out of the session:** informative prices beyond the ordered good's own
-  path, the other good's prices, a two-stage route task, live order matching,
-  mixed-good baskets, a stated basket quota.
+- **Kept out of the session:** informative prices beyond the two goods' own paths
+  of the round (under `'own'`: beyond the ordered good's path), a two-stage route
+  task, live order matching, mixed-good baskets, a stated basket quota.
 
 ## Yoking
 
@@ -198,6 +207,76 @@ belief + N(0, 8) exceeds the price by 5, NO if it falls 5 below, else pass).
   weight. `κ_s` is a human quantity no simulation supplies; the pilot estimates it
   from the LOW arm's source pair.
 
+## Both goods' prices on screen (I047)
+
+Records `records/live_cert_I047.txt` (one pool per cell, seed 141000) and
+`records/live_cert_ad_I047.txt` (eight independent pools per cell, seeds 141100 to
+141107; the figures below are its means). Kernel, ratings, forecasts, bets and tests
+as in the I043 record.
+
+Ticket choice sets the model's levels (I040): on the worse good the aspiration falls
+further and legitimacy repairs sooner. A participant who sees both price paths knows
+after round 1 which good is cheaper. `q` is the share of participants who then order
+the better good in every deprivation round; the others choose as the model does;
+round 1 is chosen as before. `q = 0` is the design certified in I043.
+
+**Assumed, and not testable without people:** the display reaches the kernel only
+through the good ordered. Seeing the other good's price has no effect of its own on
+legitimacy or aspiration.
+
+Legitimacy at probe time, HIGH / LOW:
+
+| | q = 0 | q = .5 | q = 1 |
+|---|---|---|---|
+| P1 paper's values | .112 / .868 | .107 / .799 | .099 / .728 |
+| P4 anchoring edge | .411 / .874 | .324 / .808 | .239 / .741 |
+
+Decision rates at 72 pairs, one-sided .005, for `κ_s` = .5 \| .35 \| .2; each cell is
+q = 0 / .5 / 1:
+
+| | κ_s = .5 | κ_s = .35 | κ_s = .2 |
+|---|---|---|---|
+| confirmatory pair, P4, one-update rule | .949 / .964 / .985 | .897 / .931 / .955 | .790 / .835 / .878 |
+| confirmatory pair, P4, count rule | .989 / .994 / .998 | .977 / .988 / .996 | .957 / .978 / .990 |
+| confirmatory pair, lowest of P0–P3, one-update rule | 1.000 / 1.000 / 1.000 | 1.000 / 1.000 / .998 | .999 / .995 / .987 |
+| BET, P4, one-update rule | .990 / .992 / .996 | .974 / .981 / .988 | .903 / .922 / .944 |
+| FREEZE, P1–P3, one-update rule | .90–.94 / .84–.91 / .77–.87 | .77–.83 / .70–.78 / .60–.72 | .58–.64 / .51–.58 / .41–.53 |
+| ASSOC_H, P4, one-update rule | .997 / .976 / .824 | .986 / .937 / .718 | .940 / .833 / .566 |
+| ASSOC_H, P1 \| P2 \| P3, one-update rule, q = 0 → 1 | .30 → .24 \| .39 → .42 \| .30 → .26 | .24 → .18 \| .32 → .34 \| .24 → .19 | .16 → .12 \| .23 → .23 \| .17 → .12 |
+| D1 from the source pair alone, P1–P3, one-update rule | 1.00 / 1.00 / .99 | .95–.97 / .91–.94 / .84–.91 | .46–.54 / .41–.47 / .33–.41 |
+
+H1a is 1.000 in every cell and K3 .997 or more.
+
+Pairs for .90 on the confirmatory pair at P4 under the one-update rule:
+
+| | κ_s = .5 | κ_s = .35 | κ_s = .2 |
+|---|---|---|---|
+| q = 0 | 72 (.950; .893 at 60) | 84 (.939; .894 at 72) | 96 (.912) |
+| q = .5 | 60 (.927) | 72 (.929) | 96 (.937; .898 at 84) |
+| q = 1 | 60 (.961) | 60 (.904) | 84 (.929) |
+
+- **The confirmatory pair gains at the anchoring edge and loses at most .012
+  elsewhere** (.987 at P1 for κ_s = .2). At P4 the HIGH arm falls further (.24
+  instead of .41) than the LOW arm (.74 instead of .87).
+- **The control arm is no longer near the ceiling.** LOW legitimacy is .73 at q = 1
+  against .87: its absolute revision is smaller, which is what costs FREEZE and the
+  source pair alone their power.
+- **FREEZE loses its size.** When both members of a pair see the LOW board, it
+  rejects in .0002–.0003 of samples at q = 0, .007–.010 at q = .5 and .027–.045 at
+  q = 1 (nominal .005): the lowest-rated third of an arm revises less than the other
+  arm's average once the LOW board alone leaves people at different levels. As
+  defined it is not evidence about the HIGH board under this display.
+- **State dependence shows in both arms.** The association within LOW rises from
+  .21–.59 to .67–.95 at P1–P3 (κ_s = .5). In the both-LOW world the association
+  within an arm is .22–.43 at q = 0 and .72–.95 at q = 1: a true statement about the
+  kernel there, and no longer a statement about the HIGH board.
+- **Sizes of the confirmatory tests hold.** H1a, D1 and BET are at .0036–.0061 in
+  the two null worlds (ratings move and the gain does not; both members on the LOW
+  board), for every q.
+- **The rule frozen before the run** (default `'both'` if the confirmatory pair
+  falls by no more than .03 in any of thirty cells at q = .5 and q = 1, with sizes at
+  or below .010) gives `'both'`: largest fall .012, largest rise .088.
+
 ## What the design can and cannot show
 
 - **It shows, with power .94–1.00 at 72 pairs across the trap region,** that
@@ -226,7 +305,14 @@ belief + N(0, 8) exceeds the price by 5, NO if it falls 5 below, else pass).
 - **K3 depends on the rating scale.** At gain .25 its power is .65–.91 with plain
   ratings and .17–.46 when 15–20% of people park the slider. At gain .5 it is
   .63–.89 under the non-responsive shape. H1a is not affected (lowest cell .947).
-- **Association rates carry about ±.03** from the simulated pool.
+- **Rates away from 0 and 1 carry more Monte Carlo error than the ±.03 earlier
+  versions of this document gave.** Each certified rate comes from one simulated
+  pool of 20,000 pairs. Across eight independent pools (I047) the standard deviation
+  is up to .017 for the confirmatory pair (P4, κ_s = .2), .04 for FREEZE, the
+  associations, the top quarter and D1 from the source pair alone, and below .001
+  where the confirmatory pair is .99 or more. The I043 record reproduces byte for byte and lies inside
+  the range of the eight pools widened by .02; single figures of it can be off by
+  twice those deviations.
 - Everything inherits the open human quantities: effective draws per summary,
   the revision rule, rating gain and noise, rigidity, ticket choice, and whether
   wins can erode fairness.
@@ -237,7 +323,9 @@ Orders per round and the share of pairs with identical orders; the control arm's
 absolute revision weight after a record and after a source's forecast (`κ_s`), and
 the forecast noise; which revision rule people follow (it sets the sample for
 ASSOC_H); how people bet at a posted price of 50 (shares of YES, NO and pass by
-forecast); the rating gain, noise and parking rate; the entitlement path; the PHI
+forecast); the share who order the cheaper good after round 1 under each display
+(`q`), and whether ratings differ between the two displays at equal orders (the
+assumption above); the rating gain, noise and parking rate; the entitlement path; the PHI
 slope; whether a price curve is read as a record of fills (recall of the round's
 count would show it; not built); attention-check and dropout rates by arm;
 completion time for ten repetitions.

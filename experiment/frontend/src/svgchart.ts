@@ -1,6 +1,7 @@
 import {
   type Box, areaPath, centred, clamp, cumulative, dodge, linePath, linear, logScale, nearestIndex, price2, wholeTicks,
 } from './chart';
+import { glyphShape } from './glyphs';
 
 /**
  * The charts of the market screens, drawn as SVG at the size of their host (no scaling, so
@@ -12,6 +13,8 @@ const NS = 'http://www.w3.org/2000/svg';
 const STRIP_H = 10;
 /** height of the band at the foot of the price chart's fill zone that no price reaches: the zone's caption stands in it */
 const WORD_ROOM = 22;
+/** a chart lower than this (a small phone) has no room for that band: it is drawn without the caption, and the prices get the room */
+const CAPTION_MIN_H = 128;
 /**
  * The price chart and the running-count chart of the clearing page share their time axis: both
  * keep the same room on the left (axis figures) and on the right (the cap, the line names), and
@@ -23,6 +26,7 @@ function roomRight(w: number): number {
   return w < 480 ? 56 : 72;
 }
 type Attrs = Record<string, string | number>;
+const r1 = (v: number): string => (Math.round(v * 10) / 10).toString();
 
 function s<K extends keyof SVGElementTagNameMap>(name: K, attrs: Attrs, parent?: Element): SVGElementTagNameMap[K] {
   const el = document.createElementNS(NS, name);
@@ -79,60 +83,81 @@ abstract class Chart {
     this.svg.addEventListener('pointermove', at);
     this.svg.addEventListener('pointerdown', at);
     this.svg.addEventListener('pointerleave', () => on(null));
+    // a finger that lifts, or a gesture the browser takes for scrolling, ends the reading; a mouse button that lifts does not
+    this.svg.addEventListener('pointerup', (ev) => { if (ev.pointerType !== 'mouse') on(null); });
+    this.svg.addEventListener('pointercancel', () => on(null));
   }
 }
 
-// ------------------------------------------------------------------ clearing prices
+// ------------------------------------------------------------------ clearing prices of the goods market
 
-export interface PriceData {
+export interface PriceLine {
+  ticket: string;
   prices: readonly number[];
-  bits: readonly boolean[];
+}
+
+export interface MarketData {
+  /** clearings in a round */
+  k: number;
   cap: number;
   lo: number;
   hi: number;
   zoneLabel: string;
+  /** the ordered good's clearing prices; null on the frame shown before an order */
+  own: PriceLine | null;
+  /** the other good's clearing prices of the same round, when the session shows them */
+  other: PriceLine | null;
+  /** the ordered good's record: filled or not, clearing by clearing */
+  bits: readonly boolean[];
 }
 
 /**
- * The clearing price of the ordered good against the cap. A filled order is marked twice: a
- * dot on the price line, and a coloured tick in the strip under the chart, where the share of
- * filled orders can be read at a glance however dense the round.
+ * The goods market: the clearing price of each good shown, against the cap. The head of a line
+ * is the good's own shape, so a line is never told from the other by its colour alone. The
+ * ordered good's line lies on top and carries what happened to the order: a dot on the line and
+ * a coloured tick in the strip under the plot for every filled order. Without a line it is the
+ * frame of the order page: the cap, the zone under it and the zone's caption.
  */
-export class PriceChart extends Chart {
+export class MarketChart extends Chart {
   private xs: number[] = [];
   private ys: number[] = [];
+  private ysOther: number[] = [];
   private line: SVGPathElement | null = null;
+  private lineOther: SVGPathElement | null = null;
   private dots: SVGGElement | null = null;
   private strip: SVGGElement | null = null;
   private stripY = 0;
   private tickW = 1;
   private dotR = 3;
   private head: SVGGElement | null = null;
+  private headOther: SVGGElement | null = null;
+  private pick: SVGCircleElement | null = null;
   private cross: SVGLineElement | null = null;
   private shown = 0;
   private drawn = 0;
   private resting = false;
   onHover: ((i: number | null) => void) | null = null;
 
-  constructor(host: HTMLElement, private readonly data: PriceData) {
+  constructor(host: HTMLElement, private readonly data: MarketData) {
     super(host);
     this.start();
     this.hover(() => this.xs, () => (this.resting ? this.shown : 0), (i) => this.onHover?.(i));
   }
 
   protected build(): void {
-    const { prices, cap, lo, hi, zoneLabel } = this.data;
-    const k = prices.length;
+    const { k, cap, lo, hi, zoneLabel, own, other } = this.data;
     const box: Box = { x: ROOM_LEFT, y: 10, w: this.w - ROOM_LEFT - roomRight(this.w), h: this.h - 10 - 22 - STRIP_H - 8 };
     const x = linear(0, k, box.x, box.x + box.w);
     // no price is below `lo`: the band under it, at the foot of the fill zone, is kept for the zone's caption
-    const y = logScale(lo, hi, box.y + box.h - WORD_ROOM, box.y);
+    const captioned = this.h >= CAPTION_MIN_H;
+    const y = logScale(lo, hi, box.y + box.h - (captioned ? WORD_ROOM : 5), box.y);
     const spacing = box.w / Math.max(1, k);
-    this.tickW = clamp(spacing - 1.5, 1, 6);
-    this.dotR = clamp(spacing * 0.5, 1.9, 3.6);
+    this.tickW = clamp(spacing - 1, 1, 6);
+    this.dotR = clamp(spacing * 0.5, 1.7, 3.6);
     this.stripY = box.y + box.h + 7;
-    this.xs = prices.map((_, i) => x(i + 1));
-    this.ys = prices.map((p) => y(p));
+    this.xs = Array.from({ length: k }, (_, i) => x(i + 1));
+    this.ys = own ? own.prices.map((p) => y(p)) : [];
+    this.ysOther = other ? other.prices.map((p) => y(p)) : [];
     const capY = Math.round(y(cap)) + 0.5;
     const right = box.x + box.w;
 
@@ -155,7 +180,7 @@ export class PriceChart extends Chart {
       }
     }
     // the caption stands in its own band, under every mark: nothing that carries data is ever covered by it
-    label(this.svg, box.x + 10, box.y + box.h - 7, zoneLabel, 'dm-zone-word');
+    if (captioned) label(this.svg, box.x + 10, box.y + box.h - 7, zoneLabel, 'dm-zone-word');
     s('line', { x1: box.x, x2: right, y1: capY, y2: capY, class: 'dm-cap-line' }, this.svg);
     const tag = s('g', { class: 'dm-cap-tag' }, this.svg);
     s('rect', { x: right + 7, y: capY - 11, width: 44, height: 22, rx: 6 }, tag);
@@ -165,27 +190,38 @@ export class PriceChart extends Chart {
       label(this.svg, x(i), this.h - 4, String(i), '', i === k ? 'end' : 'middle');
     }
     this.strip = s('g', {}, this.svg);
-    this.line = s('path', { class: 'dm-line is-price', d: '' }, this.svg);
-    this.dots = s('g', {}, this.svg);
+    // the other good's line lies under the ordered good's, thinner and without marks: its price is context
+    this.lineOther = other ? s('path', { class: 'dm-line is-price-other', 'data-good': other.ticket, d: '' }, this.svg) : null;
+    this.line = own ? s('path', { class: 'dm-line is-price', 'data-good': own.ticket, d: '' }, this.svg) : null;
+    this.dots = s('g', own ? { 'data-good': own.ticket } : {}, this.svg);
     this.cross = s('line', { class: 'dm-cross', y1: box.y, y2: box.y + box.h, x1: 0, x2: 0, visibility: 'hidden' }, this.svg);
-    this.head = s('g', { class: 'dm-head-mark', visibility: 'hidden' }, this.svg);
-    s('circle', { class: 'dm-head-halo', r: 9, cx: 0, cy: 0 }, this.head);
-    s('circle', { class: 'dm-head', r: 4.5, cx: 0, cy: 0 }, this.head);
+    this.headOther = other ? this.headOf(other.ticket, false) : null;
+    this.head = own ? this.headOf(own.ticket, true) : null;
+    this.pick = s('circle', { class: 'dm-pick', r: 5, visibility: 'hidden' }, this.svg);
     this.drawn = 0;
     this.render();
   }
 
+  /** the mark at the end of a line: the good's shape, 12 px, ringed in white; the ordered good's has a halo while the round runs */
+  private headOf(ticket: string, ordered: boolean): SVGGElement {
+    const g = s('g', { class: `dm-head-mark${ordered ? ' is-ordered' : ''}`, 'data-good': ticket, visibility: 'hidden' }, this.svg);
+    if (ordered) s('circle', { class: 'dm-head-halo', r: 10, cx: 0, cy: 0 }, g);
+    const shape = s('g', { class: 'dm-head-shape', transform: 'translate(-6 -6) scale(0.5)' }, g);
+    shape.innerHTML = glyphShape(ticket);
+    return g;
+  }
+
   show(n: number): void {
-    const upto = Math.min(n, this.data.prices.length);
+    const upto = Math.min(n, this.data.k);
     if (upto <= this.shown) return;
     this.shown = upto;
     this.render();
   }
 
-  /** the reveal is over: the moving head goes, the chart can be read point by point */
+  /** the round has cleared: the halo goes, the chart can be read clearing by clearing */
   rest(): void {
     this.resting = true;
-    this.head?.setAttribute('visibility', 'hidden');
+    this.host.classList.add('is-resting');
   }
 
   /** where clearing i sits, in px from the left edge of the chart */
@@ -194,24 +230,26 @@ export class PriceChart extends Chart {
   }
 
   mark(i: number | null): void {
-    if (!this.cross || !this.head) return;
-    if (i === null || i < 0 || i >= this.shown) {
+    if (!this.cross || !this.pick) return;
+    if (i === null || i < 0 || i >= this.shown || !this.data.own) {
       this.cross.setAttribute('visibility', 'hidden');
-      if (this.resting) this.head.setAttribute('visibility', 'hidden');
+      this.pick.setAttribute('visibility', 'hidden');
       return;
     }
     const cx = this.xs[i]!;
     this.cross.setAttribute('x1', String(cx));
     this.cross.setAttribute('x2', String(cx));
     this.cross.setAttribute('visibility', 'visible');
-    this.head.setAttribute('transform', `translate(${cx} ${this.ys[i]!})`);
-    this.head.setAttribute('visibility', 'visible');
+    this.pick.setAttribute('cx', String(cx));
+    this.pick.setAttribute('cy', String(this.ys[i]!));
+    this.pick.setAttribute('visibility', 'visible');
   }
 
   private render(): void {
     if (!this.line || !this.dots || !this.head || !this.strip) return;
     const n = this.shown;
     this.line.setAttribute('d', linePath(this.xs, this.ys, n));
+    this.lineOther?.setAttribute('d', linePath(this.xs, this.ysOther, n));
     for (let i = this.drawn; i < n; i++) {
       const filled = this.data.bits[i]!;
       s('rect', {
@@ -221,9 +259,13 @@ export class PriceChart extends Chart {
       if (filled) s('circle', { class: 'dm-dot', r: this.dotR, cx: this.xs[i]!, cy: this.ys[i]! }, this.dots);
     }
     this.drawn = n;
-    if (n > 0 && !this.resting) {
-      this.head.setAttribute('transform', `translate(${this.xs[n - 1]!} ${this.ys[n - 1]!})`);
+    if (n > 0) {
+      this.head.setAttribute('transform', `translate(${r1(this.xs[n - 1]!)} ${r1(this.ys[n - 1]!)})`);
       this.head.setAttribute('visibility', 'visible');
+      if (this.headOther) {
+        this.headOther.setAttribute('transform', `translate(${r1(this.xs[n - 1]!)} ${r1(this.ysOther[n - 1]!)})`);
+        this.headOther.setAttribute('visibility', 'visible');
+      }
     }
   }
 }

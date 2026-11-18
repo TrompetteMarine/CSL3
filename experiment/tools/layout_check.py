@@ -1,17 +1,23 @@
 """Text that is cut off, pieces of text that lie over each other, and text that leaves the window or its
-sheet, on every page at several window sizes (KGi-DISS-I046).
+sheet, on every page at several window sizes (KGi-DISS-I046; the sizes are those of the phone-first layout
+of KGi-DISS-I047).
 
-A glance at a reduced screenshot misses these. The script plays one session per window size against a
-running server, the way tools/browser_run.py does, and on every page the session stops on it looks at
-every piece of text, in the page and in the charts:
+A glance at a reduced screenshot misses these. The script plays one session against a running server, the
+way tools/browser_run.py does. On every page the session stops on, it sets the window to each size in turn
+(the charts are drawn anew for each) and looks at every piece of text, in the page and in the charts:
   cut    the text does not fit the box that clips it;
   over   two pieces of text overlap by more than 1.5 px across and 3 px down;
+  under  the ink of a piece of text in a chart comes within 1 px of the dark box of a tag (the cap, a market's
+         line), or lies under it: the box hides part of the figure (seen in I047 on the market chart of a small
+         phone, where the two pieces of text did not overlap enough to count as 'over');
   out    a piece of text reaches past the window, or past the sheet it belongs to.
-It prints what it finds and exits with status 1 if it finds anything.
+It prints what it finds and exits with status 1 if it finds anything. With --sessions it plays one whole
+session per window size instead (slower; the page is then also loaded at that size).
 
     otree devserver 8000        # in another shell, from experiment/
     python tools/layout_check.py --base http://localhost:8000
-    python tools/layout_check.py --config market_seed --sizes 1280x860,390x844      # a session without a board
+    python tools/layout_check.py --config market_e2e_own                            # only the ordered good's prices drawn
+    python tools/layout_check.py --config market_e2e_seed --sizes 390x844,360x640   # a session without a board
 """
 import argparse
 import collections
@@ -24,11 +30,11 @@ from playwright.sync_api import sync_playwright
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import browser_run as br  # noqa: E402
 
-SIZES = '1920x1080,1366x768,1366x650,1280x860,390x844,375x667,320x568'
+SIZES = '360x640,375x667,390x844,412x915,430x932,375x553,390x664,320x568,768x1024,1280x860'
 
 LOOK_JS = r"""() => {
   const root = document.querySelector('.dm');
-  const out = {cut: [], over: [], out: []};
+  const out = {cut: [], over: [], under: [], out: []};
   if (!root) return out;
   const vw = window.innerWidth;
   const shown = (el) => !el.checkVisibility || el.checkVisibility({checkOpacity: true, checkVisibilityCSS: true, opacityProperty: true, visibilityProperty: true});
@@ -62,6 +68,24 @@ LOOK_JS = r"""() => {
     const ox = Math.min(a.r, b.r) - Math.max(a.l, b.l), oy = Math.min(a.b, b.b) - Math.max(a.t, b.t);
     if (ox > 1.5 && oy > 3) out.over.push([name(a.el), a.s.slice(0, 30), name(b.el), b.s.slice(0, 30)]);
   }
+  // text in a chart under the dark box of a tag. Ink of a figure: from its baseline up by .72 of the font size
+  // (the height of a digit in the app's typefaces), and down by .22 where a letter descends
+  for (const rect of root.querySelectorAll('svg .dm-cap-tag rect')) {
+    const svg = rect.ownerSVGElement, tag = rect.closest('.dm-cap-tag');
+    if (!svg || !shown(rect)) continue;
+    const q = rect.getBoundingClientRect();
+    for (const el of svg.querySelectorAll('text')) {
+      const txt = el.textContent.trim();
+      if (!txt || tag.contains(el) || !shown(el)) continue;
+      const r = el.getBoundingClientRect(), fs = parseFloat(getComputedStyle(el).fontSize);
+      const pt = svg.createSVGPoint(), p0 = el.getStartPositionOfChar(0);
+      pt.x = p0.x; pt.y = p0.y;
+      const base = pt.matrixTransform(el.getScreenCTM()).y;
+      const top = base - 0.72 * fs, bottom = base + (/[gjpqy,;]/.test(txt) ? 0.22 * fs : 0);
+      const ox = Math.min(r.right, q.right) - Math.max(r.left, q.left), gap = Math.max(top, q.top) - Math.min(bottom, q.bottom);
+      if (ox > 1.5 && gap < 1) out.under.push([name(el), txt.slice(0, 30), tag.textContent.trim().slice(0, 20), Math.round(-gap * 10) / 10]);
+    }
+  }
   const sheet = root.querySelector('.dm-main');
   const lim = sheet ? sheet.getBoundingClientRect() : null;
   for (const b of boxes) {
@@ -72,55 +96,76 @@ LOOK_JS = r"""() => {
 }"""
 
 
-def look_at_a_session(browser, link, base, width, height):
-    """one whole session at this window size: {kind: {finding: pages}}, pages looked at, the run"""
-    ctx = browser.new_context(viewport=dict(width=width, height=height), device_scale_factor=2 if width <= 400 else 1)
+def look_at_a_session(browser, link, base, sizes, one_size=None):
+    """one whole session. sizes: the window sizes each page is looked at in; one_size: play the session at this size
+    and look at it there only. Returns {size: {kind: {finding: pages}}}, {size: pages looked at}, the run"""
+    first = one_size or sizes[0]
+    ctx = browser.new_context(viewport=dict(width=first[0], height=first[1]), device_scale_factor=2 if first[0] <= 480 else 1)
     page = ctx.new_page()
     run = br.Run(page, base)
-    found = collections.defaultdict(lambda: collections.defaultdict(set))
-    seen = [0]
-    plain_shot = run.shot
+    found = {s: collections.defaultdict(lambda: collections.defaultdict(set)) for s in ([one_size] if one_size else sizes)}
+    seen = collections.Counter()
 
     def shot(label):
-        plain_shot(label)
+        if label.endswith('_mid'):
+            return                                          # a moving page
         page.wait_for_timeout(350)                          # let the page transition and the fades end
-        seen[0] += 1
-        for kind, items in page.evaluate(LOOK_JS).items():
-            for item in items:
-                found[kind][json.dumps(item)].add(label)
+        for size in ([one_size] if one_size else sizes):
+            if not one_size:
+                page.set_viewport_size(dict(width=size[0], height=size[1]))
+                page.wait_for_timeout(160)                  # the charts are drawn anew for the new size
+            seen[size] += 1
+            for kind, items in page.evaluate(LOOK_JS).items():
+                for item in items:
+                    found[size][kind][json.dumps(item)].add(label)
+        if not one_size:
+            page.set_viewport_size(dict(width=first[0], height=first[1]))
+            page.wait_for_timeout(160)
     run.shot = shot
     run.html = page.goto(link).text()
     run.preamble()
     for r, pick in enumerate([0, 1, 0, 0, 1, 0]):
-        run.market_round(pick, [20 + 10 * r, 55, 70 - 5 * r, 40], hover=(r == 4 and width > 760))
+        run.market_round(pick, [20 + 10 * r, 55, 70 - 5 * r, 40], hover=(r == 4))
     for i, bet in enumerate(br.BETS):
         run.market(40 + 5 * i, 60 - 5 * i, bet)
     run.closing()
     ctx.close()
-    return found, seen[0], run
+    return found, seen, run
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--base', default='http://localhost:8000')
-    ap.add_argument('--config', default='market_e2e')
+    ap.add_argument('--config', default='market_e2e_both')
     ap.add_argument('--sizes', default=SIZES, help='window sizes, e.g. 1280x860,390x844')
+    ap.add_argument('--sessions', action='store_true', help='one whole session per window size, instead of one session resized')
     a = ap.parse_args()
     sizes = [tuple(int(v) for v in s.split('x')) for s in a.sizes.split(',')]
     bad = 0
+
+    def tell(size, found, pages, errors):
+        print(f'{size[0]} x {size[1]}: {pages} pages; cut {len(found["cut"])}, over {len(found["over"])}, under {len(found["under"])}, out {len(found["out"])}'
+              + (f'; console errors {errors}' if errors is not None else ''), flush=True)
+        for kind in ('cut', 'over', 'under', 'out'):
+            for item, labels in sorted(found[kind].items()):
+                print(f'    {kind}: {item} on {", ".join(sorted(labels))}')
+        return sum(len(v) for v in found.values())
+
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         admin = browser.new_page()
-        for width, height in sizes:
+        if a.sessions:
+            for size in sizes:
+                link = br.start_links(admin, a.base, a.config)[0]
+                found, pages, run = look_at_a_session(browser, link, a.base, sizes, one_size=size)
+                bad += tell(size, found[size], pages[size], len(run.errors)) + len(run.errors) + len(run.notes)
+        else:
             link = br.start_links(admin, a.base, a.config)[0]
-            found, pages, run = look_at_a_session(browser, link, a.base, width, height)
-            n = sum(len(v) for v in found.values())
-            bad += n + len(run.errors)
-            print(f'{width} x {height}: {pages} pages; cut {len(found["cut"])}, over {len(found["over"])}, out {len(found["out"])}; '
-                  f'console errors {len(run.errors)}', flush=True)
-            for kind in ('cut', 'over', 'out'):
-                for item, labels in sorted(found[kind].items()):
-                    print(f'    {kind}: {item} on {", ".join(sorted(labels))}')
+            found, pages, run = look_at_a_session(browser, link, a.base, sizes)
+            for size in sizes:
+                bad += tell(size, found[size], pages[size], None)
+            print(f'console errors {len(run.errors)} {sorted(set(run.errors))[:4]}; notes of the run {run.notes}')
+            bad += len(run.errors) + len(run.notes)
         browser.close()
     print('LAYOUT CHECK', 'FAIL' if bad else 'PASS')
     sys.exit(1 if bad else 0)

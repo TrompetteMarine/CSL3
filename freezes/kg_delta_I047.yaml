@@ -1,0 +1,306 @@
+# KG delta — KGi-DISS-I047 (on top of kg_delta_I032 ... kg_delta_I046; scoped transaction;
+# history kept; nothing overwritten)
+version: 1
+baseline_snapshot: "CSL3 main 569c3f8 (I046 close), freeze b389e71, addendum AD1 141cc67; CSL lean-diss-core 11f09cb"
+edge_convention: "requires: dependent -> prerequisite"
+
+node_updates:
+  - id: DISS-CHOICE-EFFECT
+    new_status: "supported-synthetic; the choice-free end is certified for design B (I047)"
+    added_evidence: "I047: with every participant ordering the better good in each deprivation round, design B
+      gives the levels I040 found for a choice-free task: LOW legitimacy at probe time .728 (P1) and .741 (P4)
+      in place of .868 and .874, HIGH at the anchoring edge .239 in place of .411. What the reporting set
+      does between model-like choices and that end is in DISS-CERT-LIVE."
+  - id: DISS-PRICE-DISPLAY
+    new_status: "tested; which paths are drawn is a session key since I047 (DISS-PRICE-CURVES)"
+    added_evidence: "one draw settles both goods, so the two goods' paths are the same curve moved on the
+      logarithmic axis and the better good is the cheaper one at every clearing. Under price_curves = 'both'
+      the clearing page also receives engine.price_path for the good not ordered; the browser run compares
+      both series with the engine on 30 clearing pages per run."
+  - id: DISS-CERT-B
+    added_evidence: "I047: the unchanged script reproduces records/basket_cert_I043.txt byte for byte. Its
+      values stand; the precision of +-.03 that the I041 and I043 records and YOKED_DESIGN.md gave is
+      withdrawn (DISS-MC-PRECISION). Means over eight independent pools for the certified design: confirmatory
+      pair at P4 under the one-update rule .949 / .897 / .790 for kappa_s .5 / .35 / .2 (record .947 / .893 /
+      .790); 240 values of the record compared, none outside the pools' range widened by .02."
+  - id: DISS-TEST-FREEZE
+    new_status: "valid as certified when only the ordered good's prices are drawn; NOT valid as defined when
+      both are (I047)"
+    added_evidence: "DISS-FREEZE-SIZE-BOTH: with both members of a pair on the LOW board it rejects in
+      .0002-.0003 of samples when nobody is informed, .007-.010 when half are and .027-.045 when all are
+      (nominal .005); its power at P1-P3 under the one-update rule falls from .90-.94 to .77-.87 at kappa_s
+      .5 and from .58-.64 to .41-.53 at .2. A form that compares like with like is not written."
+  - id: DISS-ASSOC-BY-ARM
+    added_evidence: "I047, both goods' prices drawn: the association within LOW rises from .21-.59 to .67-.95
+      at P1-P3 (kappa_s .5, one-update rule); with both members on the LOW board the association within an arm
+      fires in .22-.43 of samples when nobody is informed and .72-.95 when all are, the top quarter in .03-.06
+      and .16-.30. State dependence then shows in both arms: true of the kernel, and no evidence about the
+      reference. Within HIGH at the anchoring edge it falls from .997 / .986 / .940 to .824 / .718 / .566."
+  - id: DISS-REPORTING-SET
+    added_evidence: "I047, both goods' prices drawn: H1a, D1 and BET keep their sizes in the two null worlds
+      (means .0036-.0061; single pools up to .0105) and K3 stays at .997 or more; FREEZE is not valid as
+      defined and the association by arm is no longer specific to the HIGH board (DISS-CERT-LIVE)."
+  - id: DISS-GATE-N
+    added_evidence: "I047, pairs for .90 on the confirmatory pair at P4 under the one-update rule, for kappa_s
+      .5 / .35 / .2: 72 / 84 / 96 when nobody is informed (the I045 figures again), 60 / 72 / 96 when half
+      are, 60 / 60 / 84 when all are."
+  - id: DISS-DESIGN-B
+    added_evidence: "I043 listed 'the other good's prices' as excluded. Since I047 they are drawn when
+      price_curves = 'both', the default of settings.py by the rule frozen in freezes/00_freeze_I047.yaml.
+      Still excluded: informative prices, the two-stage route task, live order matching, mixed baskets, a
+      stated quota."
+  - id: DISS-FRONTEND
+    new_status: "rebuilt (I043); polished (I046); laid out for phones with the goods market as one screen
+      (I047); verified in Chromium on development and production servers at ten window sizes, by mouse,
+      finger and keyboard, with reduced motion and by an accessibility audit; not run on people"
+    added_evidence: "one column of at most 480 px at every width. Rounds 1 to 6: a chart frame, a row per good
+      with a button, a ticket at the foot; then the same chart drawn in real time with a line per good shown
+      (the head of a line is the good's shape; the ordered good's line 1.5 px on top with a dot per filled
+      order, the other's 1 px behind), the rows with the clearing prices, the two counters and the running
+      counts; after the round a finger or pointer on a chart reads the clearing under it. Measured on the
+      final build, 'both' | 'own' on a development server | 'both' on a production server: reveal 9,008 |
+      9,001 | 9,015 ms for 9,000; frames on an emulated phone at pixel ratio 3: median 16.7 ms, longest 21.8 |
+      19.1 | 20.6 ms, slowed four-fold 48.9 | 48.7 | 47.9 ms; per run no fit or colour finding on 519 pages in
+      13 sessions, no audit finding on 86 pages, no leak on 125, no outside request; bundle 168,523 bytes."
+    defect_fixed: "two, found by looking at pictures after the first full check had passed every gate. (1)
+      On the evidence and bet pages the market's small chart was 76 px high at window heights up to 700 px (my
+      setting of this iteration): the dark tag of its line hid part of both axis figures at five of ten sizes;
+      now 84 px, the least height at which they clear it by 2 px. (2) In production every page was 24 px
+      higher than the window, because the framework ends a page with an empty line after the form (since
+      I042; hidden on a development server by its debug panel); now taken out by the stylesheet. Before the
+      first full check: a wandering finger set a slider; the order page did not fit two phone sizes with the
+      recap; the counters' figures overlapped; the ticket's shape was in ink; the reading named one good
+      only."
+  - id: DISS-PALETTE
+    added_evidence: "I047: YES and NO have no colour (their tokens are removed; told apart by the word); no
+      green and no magenta anywhere; colour identifies a good and nothing else, always with its shape. Square
+      #2a78d6 (OKLCH lightness .575), Triangle #eb6834 (.671). With both price lines drawn the line of the
+      good not ordered crosses the ordered good's tint: Triangle on Square's tint 3.001:1, at the floor;
+      Square on Triangle's tint 4.17:1. Read from 590 screenshots per run: no ground below 3.00:1."
+  - id: DISS-UI-INVARIANTS
+    added_evidence: "amended in I047 by the author's answers of 2026-11-17 (freezes/00_freeze_I047.yaml): I2
+      the clearing page may show the other good's prices of the same round; I3 at most three new strings (two
+      added); I5 how a finger sets a slider; I6 no colour for a side or an outcome; I7 the interaction
+      pattern of a prediction-market page may be used, nothing that names or copies a real market; I9 the
+      other good's prices never under 'own' and only on the clearing page of the same round under 'both'.
+      I1, I4 and I8 kept."
+  - id: DISS-UI-GATES
+    added_evidence: "the gates of the current build are DISS-UI-GATES-I047. Twice now a full check passed
+      every gate while defects stood outside what the gates measured (five in I046, two in I047); each was
+      found by reading the gate's clauses or looking at the pictures, and each is measured since."
+  - id: DISS-DISPLAY-RISK
+    added_evidence: "I047 changed the display again: one column on every device, the goods market as one
+      screen in the pattern of a prediction-market page, and by default a second price line that shows what
+      the good not ordered would have cost. Both arms alike. New unknowns: whether people take the screen for
+      a live market although the instructions and a quiz item say prices are fixed in advance; how two lines
+      in step are read on a 140 px chart (360 x 640); whether they order the cheaper good afterwards."
+  - id: DISS-HUMAN-PARAMS
+    added_evidence: "I047 adds: the share of participants who order the better good in every deprivation
+      round once both prices are drawn (DISS-INFORMED-SHARE; read directly from a pilot's orders); whether
+      seeing the other good's price has an effect of its own (DISS-NO-REGRET-CHANNEL); on phones: a finger's
+      scatter on a slider, what the browser's bars and the text-size setting do."
+  - id: DISS-BUILD-DRAFTS
+    added_evidence: "the five points of I046 were answered on 2026-11-17 (DISS-AUTHOR-ANSWERS-I047). Raised in
+      I047 and left to the author: whether 'live' meant real time from the schedule or prices set by orders;
+      whether 'both' stays the default; if so FREEZE, the seed wave's display and a sentence in the
+      instructions; the reading of 'neutral'; the bet's unit; which phones are admitted; two sentences
+      written for a mouse ('Click or drag on the line...', the notice that asks for a laptop)."
+  - id: DISS-OTREE-MARKET
+    added_evidence: "I047: session key price_curves ('both' | 'own'; a session refuses any other value);
+      settle_meta gained curves, vw, vh, fit, scrolled; copy_en.py two added strings; __init__.py differs by
+      25 added and 3 removed lines; engine.py and bots_model.py byte-identical; the exports of three bot
+      sessions identical to 569c3f8. The browser test plays three runs: each display on a development
+      server and the default display on a production server (DISS-PROD-MODE-CHECK). tools/layout_check.py
+      also measures chart figures under a tag's box; tools/browser_run.py also measures what follows the
+      form, plays a session by touch with three stray gestures, and checks the prices sent against the
+      engine."
+  - id: DISS-SOURCE-POOL
+    added_evidence: "I047, not measured: the LOW board is the record of the same round nearest to the
+      participant's own count. A seed wave that draws both prices will hold few records of the worse good,
+      so a later participant on the worse good would be shown a trader who did better. The pool tool prints
+      the range of counts per round and the app stores the distance (board_dist). market_seed inherits
+      'both' as built."
+  - id: DISS-DESIGN-W
+    added_evidence: "I047: the author asked that 'the market should run live'. Built: the goods market as a
+      screen that runs in real time from the pre-drawn schedule (DISS-LIVE-READING). It is a candidate front
+      end for design W; the engine is not written and the implementation gate stays closed."
+  - id: DISS-WAVE1-CHECKS
+    added_evidence: "a pilot on the I047 build also reads the informed share from the orders, and, if the
+      display is varied between sessions, a first comparison for DISS-NO-REGRET-CHANNEL."
+
+new_nodes:
+  - id: DISS-AUTHOR-ANSWERS-I047
+    kind: decision
+    status: author decision, 2026-11-17; three of the five answers needed a reading (frozen before the build)
+    statement: "the lower chart gets a caption; one unit on a bet, an abstract one; no text alternative for
+      the charts, and colour is to be neutral; the phone is the device to design for; the legends stay, the
+      market is to run live and the participant is to choose as on a prediction-market page, with the shapes
+      and the curves. Read as: points on the bet; no colour for a side or an outcome; one column at every
+      width; rounds 1 to 6 as one market screen running in real time from the schedule."
+    evidence: "directive of 2026-11-17 21:12, verbatim in freezes/00_freeze_I047.yaml with the readings R1-R5"
+  - id: DISS-LIVE-READING
+    kind: assumption
+    status: open (author)
+    statement: "'live' was read as real time from the pre-drawn schedule, which the existing instructions and
+      the quiz item on how prices are set describe truthfully. It was not read as prices set by the
+      participants' orders (design W: synchronous groups, engine not built). From the page the author named
+      only the interaction pattern is used; no name, logo, colour scheme, typeface, icon or copied layout."
+    evidence: "freezes/00_freeze_I047.yaml (R5, I7); records/116_phone_market_I047.md, 'For the author' 1"
+  - id: DISS-PRICE-CURVES
+    kind: design
+    status: built; default 'both' by a rule frozen before the certification; author-gated
+    statement: "session key price_curves. 'both': the clearing page draws both goods' clearing prices of the
+      round and the other good's row shows its price. 'own': the ordered good's only (the display certified
+      in I043); what a configuration without the key gets. The browser stores how many lines it drew."
+    evidence: "experiment/diss_market/__init__.py; experiment/settings.py; experiment/MARKET_APP.md;
+      records/ui_I047_two_displays.png"
+  - id: DISS-INFORMED-SHARE
+    kind: assumption
+    status: open (human); read directly from a pilot's orders
+    statement: "q: the share of participants who, once both goods' prices are drawn, order the better good in
+      every deprivation round. Examined at 0, .5 and 1 with each member of a pair informed independently and
+      the others choosing as the model does."
+    evidence: "freezes/00_freeze_I047.yaml (assumption A_Q); experiment/analysis/twins_I040.py (argument
+      informed)"
+  - id: DISS-NO-REGRET-CHANNEL
+    kind: assumption
+    status: open (human); no simulation can test it
+    statement: "the display reaches the kernel only through the good ordered: seeing the price of the good
+      one did not order has no effect of its own on legitimacy or aspiration. The model has no term for it."
+    evidence: "freezes/00_freeze_I047.yaml (assumption A_CF)"
+  - id: DISS-CERT-LIVE
+    kind: statistical
+    status: supported-synthetic (eight pools per cell); conditional on DISS-NO-REGRET-CHANNEL
+    statement: "design B at 72 pairs, one-sided .005, with a share q of informed participants, q = 0 / .5 / 1.
+      Confirmatory pair at P4, one-update rule: .949 / .964 / .985 (kappa_s .5), .897 / .931 / .955 (.35),
+      .790 / .835 / .878 (.2); count rule .957 or more. At P0-P3 it is .987 or more. H1a 1.000; K3 .997 or
+      more; BET at P4 .903 or more. Sizes of H1a, D1 and BET in two null worlds .0036-.0061. Largest fall of
+      the pair against q = 0 over thirty cells .012, largest rise .088: the frozen rule gives 'both' as the
+      default. Costs: FREEZE loses its size and power; the associations by arm fire in both arms; D1 from the
+      source pair alone falls from .46-.54 to .33-.41 at kappa_s .2."
+    evidence: "records/live_cert_ad_I047.txt (seeds 141100-141107), records/live_cert_I047.txt (first run,
+      seed 141000); experiment/analysis/live_cert_ad_I047.py, tests/test_live_I047.py;
+      experiment/YOKED_DESIGN.md, 'Both goods' prices on screen (I047)'"
+  - id: DISS-MC-PRECISION
+    kind: statistical
+    status: measured (I047)
+    statement: "a certified rate comes from one simulated pool of 20,000 pairs and the pool's own draw moves
+      it. Across eight independent pools the standard deviation is up to .017 for the confirmatory pair and
+      for BET, .034-.042 for FREEZE, the two associations, the top quarter and D1 from the source pair alone,
+      and below .001 where the pair is .99 or more. The +-.03 of the I041 and I043 records understated it."
+    evidence: "records/live_cert_ad_I047.txt section 4; freezes/00_freeze_I047.yaml addendum AD1"
+  - id: DISS-FREEZE-SIZE-BOTH
+    kind: statistical
+    status: supported-synthetic (I047)
+    statement: "FREEZE compares the lowest-rated third of one arm with the other arm's average. When informed
+      choices leave the LOW board's participants at different levels, it rejects with both members on the LOW
+      board in .007-.010 of samples at q = .5 and .027-.045 at q = 1 (nominal .005; .0002-.0003 at q = 0)."
+    evidence: "records/live_cert_ad_I047.txt section 2(b)"
+  - id: DISS-PHONE-LAYOUT
+    kind: implementation
+    status: verified in Chromium by emulation; no real phone
+    statement: "one column of at most 480 px at every width; the column as high as the visible window; charts
+      take the room the page leaves; the button at the foot. On a production server both states of the market
+      screen, a market's first forecast, the bet and the recall question are exactly as high as the window at
+      ten sizes from 320 x 568 up. The rating page shows its sliders and button at 375 x 667 and larger and
+      needs 22 px of scrolling at 360 x 640; the evidence page up to 45 px there. Controls at least 44 x 44 px
+      from 360 px. No layout for a phone held sideways, below 320 px, or at 150% page zoom."
+    evidence: "experiment/frontend/src/styles/app.css; records/116_phone_market_I047.md;
+      records/ui_I047_small_phones.png"
+  - id: DISS-SLIDER-TOUCH
+    kind: implementation
+    status: verified with synthetic touch events
+    statement: "a tap sets a slider when the finger lifts, and only within 10 px of where it came down; a
+      sideways drag sets it while it moves; a gesture the browser takes for scrolling, or a finger that
+      wanders, stores nothing and leaves the slider untouched. Mouse and keyboard as before."
+    evidence: "experiment/frontend/src/slider.ts; tools/browser_run.py (stray_gestures): three gestures on
+      every run, 32 values set by finger equal to those stored"
+  - id: DISS-UI-GATES-I047
+    kind: implementation
+    status: passed on the final build; one clause of G11 not as frozen; G18(b) failed as frozen and was
+      replaced before the replicate run
+    statement: "eighteen gates. G1 bot exports identical. G2 70 tests without a browser, the browser test in
+      three runs, the front-end check. G3 one price series under 'own', two equal to the engine's under
+      'both', no price on an order page, marks right on 72 clearing pages per run. G4 two strings added. G5
+      no page difference inside the pair beyond the board. G6 no leak on 125 pages. G7 no outside request or
+      error. G8 192 of 192 values, by mouse, finger and keyboard; stray gestures store nothing. G9 reveal
+      9,001-9,015 ms for 9,000. G10 fit at ten sizes. G11 audit, keyboard, 44 px, reduced motion; Triangle on
+      Square's tint at 3.001:1. G12 no colour but the goods'. G13 168,523 bytes. G14 median frame 16.7 ms.
+      G15 a session by touch. G16 both displays. G17 layout check at ten sizes, three configurations. G18
+      the certification. Added after the freeze: chart figures under a tag's box; nothing after the form; on
+      a production server a fitting screen not higher than the window."
+    evidence: "freezes/00_freeze_I047.yaml (scorecard); records/116_phone_market_I047.md;
+      experiment/analysis/tests/test_market_browser_I043.py, test_market_ui_I046.py"
+  - id: DISS-PROD-MODE-CHECK
+    kind: implementation
+    status: in the browser test since I047
+    statement: "a development server puts a debug panel under every page, which hid that the framework's
+      empty line after the form made each page 24 px higher than the window. The browser test therefore
+      plays one run against 'otree prodserver' in production mode, with secrets made for the run, and
+      measures there that a screen whose parts are all in view is not higher than the window."
+    evidence: "experiment/analysis/tests/test_market_browser_I043.py; tools/browser_run.py (fit_findings)"
+
+new_edges:
+  - {from: DISS-PRICE-CURVES, to: DISS-PRICE-DISPLAY, type: requires}
+  - {from: DISS-PRICE-CURVES, to: DISS-AUTHOR-ANSWERS-I047, type: requires}
+  - {from: DISS-PRICE-CURVES, to: DISS-LIVE-READING, type: qualified_by}
+  - {from: DISS-PRICE-CURVES, to: DISS-CERT-LIVE, type: tested_by, note: "the default was set by a rule frozen before the run"}
+  - {from: DISS-CERT-LIVE, to: DISS-CHOICE-EFFECT, type: requires}
+  - {from: DISS-CERT-LIVE, to: DISS-INFORMED-SHARE, type: requires}
+  - {from: DISS-CERT-LIVE, to: DISS-NO-REGRET-CHANNEL, type: requires}
+  - {from: DISS-CERT-LIVE, to: DISS-MC-PRECISION, type: qualified_by}
+  - {from: DISS-CERT-B, to: DISS-MC-PRECISION, type: qualified_by, note: "the values stand; the stated precision does not"}
+  - {from: DISS-TEST-FREEZE, to: DISS-FREEZE-SIZE-BOTH, type: qualified_by, note: "not valid as defined when both prices are drawn"}
+  - {from: DISS-ASSOC-BY-ARM, to: DISS-CERT-LIVE, type: qualified_by, note: "fires in both arms when choices are informed"}
+  - {from: DISS-REPORTING-SET, to: DISS-CERT-LIVE, type: qualified_by}
+  - {from: DISS-GATE-N, to: DISS-CERT-LIVE, type: qualified_by}
+  - {from: DISS-DESIGN-B, to: DISS-PRICE-CURVES, type: qualified_by}
+  - {from: DISS-SOURCE-POOL, to: DISS-PRICE-CURVES, type: qualified_by, note: "the seed wave's display decides which counts the pool holds"}
+  - {from: DISS-DESIGN-W, to: DISS-LIVE-READING, type: qualified_by}
+  - {from: DISS-FRONTEND, to: DISS-PHONE-LAYOUT, type: implemented_by}
+  - {from: DISS-FRONTEND, to: DISS-SLIDER-TOUCH, type: implemented_by}
+  - {from: DISS-PHONE-LAYOUT, to: DISS-AUTHOR-ANSWERS-I047, type: requires}
+  - {from: DISS-FRONTEND, to: DISS-UI-GATES-I047, type: tested_by}
+  - {from: DISS-PHONE-LAYOUT, to: DISS-UI-GATES-I047, type: tested_by}
+  - {from: DISS-SLIDER-TOUCH, to: DISS-UI-GATES-I047, type: tested_by}
+  - {from: DISS-UI-GATES-I047, to: DISS-UI-INVARIANTS, type: requires}
+  - {from: DISS-UI-GATES-I047, to: DISS-UI-GATES, type: supersedes, note: "for the current build; the I046 record stays"}
+  - {from: DISS-OTREE-MARKET, to: DISS-PROD-MODE-CHECK, type: tested_by}
+  - {from: DISS-PHONE-LAYOUT, to: DISS-PROD-MODE-CHECK, type: tested_by}
+  - {from: DISS-DISPLAY-RISK, to: DISS-PRICE-CURVES, type: qualified_by}
+  - {from: DISS-HUMAN-PARAMS, to: DISS-INFORMED-SHARE, type: qualified_by}
+  - {from: DISS-HUMAN-PARAMS, to: DISS-NO-REGRET-CHANNEL, type: qualified_by}
+  - {from: DISS-WAVE1-CHECKS, to: DISS-INFORMED-SHARE, type: qualified_by, note: "read from the pilot's orders"}
+
+refuted_preserved:
+  - "gate G18(b) as frozen (the q = 0 column agrees with records/basket_cert_I043.txt within .03): differences of up to .038 (confirmatory pair), .049 (FREEZE), .091 (association within HIGH) and .098 (D1 from the source pair alone); replaced by G18(b') in addendum AD1 before the replicate run"
+  - "the precision of +-.03 stated for the rates of the I041 and I043 records and in YOKED_DESIGN.md: the standard deviation across independent pools is up to .04"
+  - "the clause of gate G11 'a good's colour at full strength on white or its own tint only': under 'both' the other good's line crosses the ordered good's tint (Triangle 3.001:1)"
+  - "E2 in part (the confirmatory pair stays at 1.000 at P0-P3 when all are informed): as low as .987"
+  - "E3 in part (association within HIGH at P4 below .90; within .05 at P1-P3): below .90 under the one-update rule only; changes of up to .071"
+  - "E4 in part (every rate at q = .5 between its values at q = 0 and q = 1): the top quarter at P4 is highest at q = .5 in all six cells, outside the range by up to .091"
+  - "E6 in part (the rating page does not fit 375 x 667; the evidence page fits 390 x 844 only with a smaller chart): both fit, the first after tightening, the second with 148 px to spare"
+  - "E7 (bundle 170-200 KB): 168,523 bytes"
+  - "E8 in part (the longest frame is higher with two lines): not ordered by display"
+  - "E11 in part (standard deviation across pools .015-.04 for the pair at P4): .005 / .006 / .017"
+  - "the first full check passed every gate while a tag hid part of two axis figures on small phones and every page was a line higher than the window in production"
+  - "my setting of 76 px for the market's small chart on short windows, made to let the evidence page fit: it put the tag over the axis figures"
+  - "my fit gate asked whether a page's parts are in view and took that for 'no scrolling'; the page was 24 px higher than the window since I042"
+  - "tools/layout_check.py as it stood compared pieces of text only; a figure under an opaque box passed"
+  - "the first slider rule for a finger (a touch that ends without a scroll is a tap): a finger that wandered without the browser scrolling set the slider"
+  - "tools/mark_contrast.py with a reach of 6 device pixels on 3x screenshots: a false finding of 2.75:1 on a hairline"
+  - "the freeze's times, written without reading the clock; and its phrase 'the two null worlds of the I043 record', one of which is in the I041 record"
+  - "my assumption while taking pictures that the second link of a session is the pair's LOW member: a participant takes the next free slot on leaving the quiz, so the first to arrive is on the HIGH board"
+
+flags_not_patched: "none for the manuscript. For the experiment: 'live' was read as real time from the
+  schedule and the author has not confirmed it (DISS-LIVE-READING); 'both' is the default and FREEZE is not
+  valid under it; no person has seen the display; every check ran in Chromium, phones by emulation; the
+  instructions do not say that both goods' prices are drawn; two existing sentences speak to a mouse or a
+  laptop; the wording is still draft; the pilot is not specified."
+integrity: {proof_cycle_check: pass, ids_unique: checked_against_prior_deltas,
+  application_bridge: "the certification holds for simulated cohorts under the kernel, the assumed share of
+    informed participants and the assumption that the display acts only through the good ordered; the
+    interface gates were measured by playing whole sessions in a browser against development and production
+    servers and by exporting bot sessions; whether people read the screen as intended is untested; nothing
+    was run on people"}
+persistence: "CSL3 freezes/kg_delta_I047.yaml + Project mirror; no remote KG service"

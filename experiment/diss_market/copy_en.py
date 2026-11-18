@@ -109,6 +109,7 @@ MARKET = dict(
     recap_you='Last round you ordered {ticket}: {wins} of {k} filled',
     recap_board='Trader board: {wins} of {k} filled',
     choose_next='Send the order',
+    order_btn='Order',                        # DRAFT (I047): the word on a good's button of the market screen
     held='ordered',
     settle_title='The market is clearing',
     settle_done='Round cleared',
@@ -124,6 +125,7 @@ MARKET = dict(
     trader_kind=dict(pool='a previous participant', schedule='computer-generated', none=''),
     of='of',
     baskets='baskets',
+    fills_caption='Filled orders',            # DRAFT (I047): the caption of the lower chart of the market screen
     points_gain='+{wins} points',
     settle_next='Continue',
     rate_title='How do you see the market right now?',

@@ -2,7 +2,10 @@
 
 The rule of the interface: a good's colour is drawn at full strength on white or on the good's own
 tint, where it keeps 3:1 against the ground. Triangle's orange has 3.2:1 on white, so a slightly
-darker ground (a grey panel, a stronger tint) already breaks the rule.
+darker ground (a grey panel, a stronger tint) already breaks the rule. Since KGi-DISS-I047 a
+session may draw both goods' price lines: the line of the good that was not ordered then crosses
+the fill zone, which carries the ordered good's tint. Triangle's orange on Square's tint has
+3.001:1: at the floor, and reported here like every other ground.
 
 For every pixel in a good's exact colour, this finds the flat light colour that surrounds it (the
 ground it stands on) and prints, per ground, how many screenshots and pixels it was found on and
@@ -25,7 +28,15 @@ import numpy as np
 from PIL import Image
 
 GOODS = dict(Square=(0x2a, 0x78, 0xd6), Triangle=(0xeb, 0x68, 0x34))
-REACH = 6           # px around a pixel in which its ground is looked for (screenshots at 2x: 12)
+REACH = 6           # CSS px around a pixel in which its ground is looked for (times the screenshot's scale)
+# screenshots of browser_run.py: the window widths it plays, and the scale each is photographed at. A reach left at
+# 6 device px on a 3x picture takes a 3 px hairline for the ground of a line that crosses it (seen in I047)
+SCALE = {1080: 3, 780: 2, 750: 2, 824: 2, 860: 2, 640: 2}
+
+
+def scale_of(width):
+    """device pixels per CSS pixel of a screenshot of this width (1 for a width the runner does not photograph larger)"""
+    return SCALE.get(width, 1)
 
 
 def _lin(c):
@@ -84,9 +95,8 @@ def main():
         sys.exit(f'no screenshots in {a.shots}')
     found = collections.defaultdict(lambda: dict(files=set(), pixels=0))
     for f in files:
-        width = Image.open(f).width
-        reach = REACH * (2 if width in (780, 750, 640) else 1)      # the phone sessions are photographed at 2x
-        for good, by_ground in grounds(f, reach).items():
+        scale = scale_of(Image.open(f).width)                       # the phone sessions are photographed at 2x or 3x
+        for good, by_ground in grounds(f, REACH * scale).items():
             for ground, n in by_ground.items():
                 if n >= a.least:
                     found[(good, ground)]['files'].add(os.path.basename(f))

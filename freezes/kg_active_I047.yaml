@@ -1,0 +1,188 @@
+# Active claim ledger for the experiment after KGi-DISS-I047 (a retrieval aid, not a second
+# source of truth: every line points to its node in the KG deltas and its record).
+# Supersedes kg_active_I046.yaml.
+as_of: "2026-11-18, CSL3 main after the I047 close; CSL lean-diss-core 11f09cb"
+
+formal_core:   # machine-checked (Lean 4.28.0 core, over Rat)
+  - {node: DISS-FORMAL-AGG, value: "T6-T15: freeze, gain ratio, aggregation identity, dispersion, horizon inequality, two-type identification, reference monotonicity, product bound, association", record: "CSL formal_diss/DissAggregation.lean"}
+  - {node: DISS-REF-MONOTONE, value: "a higher reference gives higher aspiration and lower legitimacy path by path, provided phi_plus <= tau"}
+  - {node: DISS-AGG-IDENTITY, value: "the aggregate response is NOT a function of the mean gain beyond one evidence step"}
+
+theory_region:   # where the paper's headline trap holds at its own cell
+  - {node: DISS-TRAP-SPEED-EDGE, value: "gate speed >= .895", record: "records/invcal.csv"}
+  - {node: DISS-DESIGN-BASIS-THEORY-EDGE, value: "repair/erosion ratio <= .292; anchoring weight >= .32-.36", record: "records/100_inverse_calibration_I032pc.md"}
+  - {node: DISS-BGT-TIP, value: "conformity at the tipping gap (.200 = true payoff gap)", record: "records/bgt_I036.txt"}
+  - {node: DISS-SUFF-MEAN-v2, value: "edge-location regularity only: the trap edge sits at a mean coupling of .90-.95 on five shapes; NOT mean sufficiency (trap probability differs by up to .38 at equal means)", record: "records/hetc.csv, hetc2.csv"}
+  - {node: DISS-PREV-EDGE, value: "a shut-down majority is not enough: 80% fully shut with 20% open gives .04", record: "records/hetc.csv"}
+  - {node: DISS-AGG-PATHS, value: "after 20 evidence events the model's HIGH population holds .79 of its error where a mean-gain agent holds .32 (P1); limit = share with legitimacy 0", record: "records/likelihood_I039.txt"}
+  - {node: DISS-CORRECTION-TIME, value: "below the edge: graded lengthening of the wrong consensus", record: "records/ctime.csv"}
+
+minimal_scenario:
+  node: DISS-MIN-SCENARIO
+  observables: "arm, last fairness rating F, probe statistic T (all already in design S1x)"
+  implications: "O1 psi < 1; O2 T-F association within arm (the negative of mean sufficiency); O3 no revision at the bottom of the fairness scale at full coupling"
+
+estimands:
+  first_moment:
+    node: DISS-ESTIMAND-PSI
+    definition: "psi = E[T | HIGH] / E[T | LOW]; ratio of arm means with a 99% Fieller interval"
+    model_values: {node: DISS-PSI-TRAPSET, value: "full coupling: .01 (P0), .13-.19 (P1-P3), .47-.51 (anchoring edge); trap set [.006, .613]; rivals 1.00 (R3, R4), 3.7-4.2 (R1)"}
+    efficiency: {node: DISS-FRONTIER-EST, value: "at the information bound from T alone when the depth of delegitimation is not assumed known (RE .95-1.00); 22-49% below the bound once F is used as a covariate"}
+    limit: {node: DISS-PSI-PRODUCT, value: "psi identifies coupling x achieved delegitimation; T alone keeps 1-27% of the information for c when HIGH legitimacy may be uniformly higher; (F, T) keeps 91-96% (one-update rule), 38-61% (count rule)"}
+  state_dependence:
+    node: DISS-STATE-DEP
+    definition: "within-arm rank association of T and F, reported BY ARM (I041); the pooled form is kept in the records only"
+    value: "HIGH arm (node DISS-ASSOC-BY-ARM): .27 / .40 / .37 at P1-P3 and 1.00 at the anchoring edge at 72 pairs (one-update rule), size-level at P0; .76 / .91 / .88 at 216 pairs, .89 / .98 / .96 at 288; count rule .83 / .96 / .87 at 144. LOW arm: .44 / .18 / .57. Sizes .003-.008."
+    with_both_prices: "I047: when both goods' prices are drawn and choices are informed the association fires in both arms (within LOW .67-.95 at P1-P3; with both members on the LOW board .72-.95; top quarter .16-.30): state dependence of the kernel, no longer evidence about the reference; within HIGH at the anchoring edge it falls from .94-1.00 to .57-.82 (DISS-CERT-LIVE)"
+    scope_of_the_pooled_form: "pooled power .64-.87 at P1-P3 and its false-positive figure for a homogeneous slowdown (.0035) hold only if LOW is ungated; with LOW gated the pooled conjunction passes that rival in .16 (72 pairs) to .65 (216) (node DISS-RIVAL-HS-G)"
+  complementarity: {node: DISS-COMPLEMENT, value: "psi is strongest where state dependence is invisible (P0) and weakest where it is strongest (anchoring edge)"}
+
+human_validation:   # I040: how each theorem is to be tested with people (synthetic power; nothing tested on people yet)
+  ledger: {node: DISS-THEOREM-LEDGER, record: "records/109_theorem_tests_I040.md"}
+  design_audit: {node: DISS-T13-DESIGN-AUDIT, value: "same outcomes: never unless draws are yoked (then 41-73% of pairs); references ordered at every settlement: 56% of pairs; legitimacy ordered at round ends: 99.6-99.7%"}
+  conclusion_T13: "last fairness rating LOW above HIGH: power 1.00 from 18 per arm at P0-P3; .99 at 36 at the anchoring edge"
+  assumptions:
+    - {node: DISS-TEST-K3, value: "aspiration rises with the reference: entitlement rating, power .89-1.00 at 36 per arm; for .90 at one-sided .005: 24 pairs at P1-P3 and 48 at the anchoring edge with three items, 60 and 96 with the one item of the built app (I045)"}
+    - {node: DISS-TEST-K2, value: "legitimacy falls with aspiration: NOT testable at 72 per arm (.07-.25)"}
+    - {node: DISS-PHI-PLUS, value: "a win never erodes fairness: slope test false alarm .01, power .59 (phi_plus .5) / .97 (1.0); if violated LOW is not a clean control; flagged with .90 from 168 pairs (.5) and 60 (1.0); under the frozen model the flag fires in .008-.009 up to 288 pairs and .013 at 576 (I045)"}
+  kernel_tests:
+    - {node: DISS-TEST-FREEZE, value: "lowest-rating third of HIGH: uptake below .5 of normal with power .90-1.00 at 72 per arm; below .25 needs 300 (one-update rule); for .90: 72 pairs with two record pairs and 96 with a source pair (one-update rule), 30 and 60 (count rule) (I045); NOT valid as defined when both goods' prices are drawn: with both members on the LOW board it rejects in .007-.010 of samples when half are informed and .027-.045 when all are, nominal .005 (I047, DISS-FREEZE-SIZE-BOTH)"}
+    - {node: DISS-TWO-TYPE-BOUND, value: "two-type inversion = lower bound on the coupling, factor .90-.995 (analytic; Lean target)"}
+  not_at_this_scale: {node: DISS-TWO-STEP, value: "two-record probe for the horizon theorems: 3,400 per arm at the paper's values under the one-update rule"}
+  design_options: [{node: DISS-YOKE, value: "yoke draws across arms in pairs: harmless and free, but no power gain once people choose their own tickets (I041)"}, {node: DISS-CHOICE-EFFECT, value: "keep the ticket choice; a choice-free variant changes the levels; for design B the reporting set is certified between model-like choices and the choice-free end (I047, DISS-CERT-LIVE)"}]
+
+design_B:   # I043: design Y in the storyboard's institutions; certified for what it changes; built; NOT run on people. I047: the goods market is one phone screen and both goods' prices are drawn by default
+  design: {node: DISS-DESIGN-B, record: "records/112_basket_market_I043.md; experiment/YOKED_DESIGN.md", value: "rounds 1-6: order a good, the goods market clears 120 times, the order fills when the clearing price is at or below the cap; rounds 7-10: four prediction markets (forecast, evidence, forecast, bet); one probe pair is a record of ten trial closes, the other a source's forecast"}
+  price: {node: DISS-PRICE-DISPLAY, value: "the price is a display of the schedule's draw: at or below the cap exactly when the order fills; one draw settles both goods, so the two paths move in step and the better good is the cheaper one at every clearing; which paths are drawn is a session key since I047"}
+  price_curves: {node: DISS-PRICE-CURVES, value: "session key: 'both' draws both goods' clearing prices of the round (default in settings.py by a rule frozen before the certification); 'own' the ordered good's only (the display of I043; what a configuration without the key gets); author-gated"}
+  two_curve_certification: {node: DISS-CERT-LIVE, record: "records/live_cert_ad_I047.txt; experiment/YOKED_DESIGN.md", value: "72 pairs, share informed 0 / .5 / 1: confirmatory pair at P4 (one-update rule) .949 / .964 / .985 for kappa_s .5, .897 / .931 / .955 for .35, .790 / .835 / .878 for .2; .987 or more at P0-P3; sizes of H1a, D1, BET .0036-.0061; largest fall .012, largest rise .088; costs: FREEZE loses its size, the associations fire in both arms, D1 from the source pair alone falls to .33-.41 at kappa_s .2"}
+  two_curve_assumptions: [{node: DISS-INFORMED-SHARE, value: "the share who order the better good in every deprivation round once both prices are drawn: open, read from a pilot's orders"}, {node: DISS-NO-REGRET-CHANNEL, value: "the display acts only through the good ordered: open, not testable by simulation"}]
+  source_weight: {node: DISS-SOURCE-WEIGHT, value: "weight on a source's forecast = kappa_s * g; kappa_s unknown (.2-.5 examined)"}
+  certification: {node: DISS-CERT-B, record: "records/basket_cert_I043.txt", value: "72 pairs: D1 and confirmatory pair 1.000 at P0-P3; at P4 (one-update rule) .947 / .893 / .790 for kappa_s .5 / .35 / .2; 96 pairs .973 / .913 at .35 / .2; FREEZE .77-.84 and ASSOC_H .23-.32 at kappa_s .35; sizes .004-.007; as a requirement at P4: 84 pairs at kappa_s .35, 96 at .2, 72 at .5; 60 under the count rule (I045, DISS-GATE-N); the values stand, their stated precision of +-.03 does not: across eight independent pools the standard deviation is up to .017 for the pair and .034-.042 for FREEZE, the associations, the top quarter and D1 from the source pair alone (I047, DISS-MC-PRECISION)"}
+  bet: {node: DISS-TEST-BET, value: "supporting; under an ASSUMED betting rule: 1.000 at P0-P3, .916-.994 at P4; size .002-.006"}
+  excluded: "informative prices, the two-stage route task, live order matching, mixed baskets, a stated quota; the other good's prices were excluded in I043 and are drawn since I047 when price_curves is 'both'"
+
+design_W:   # I044: the session as a live economy; certified on simulated sessions under ASSUMED order and trading rules; NOT built
+  design: {node: DISS-DESIGN-W, record: "records/113_live_economy_I044.md; experiment/LIVE_ECONOMY.md", value: "two markets of N per session, each sees the other's recent fills; HIGH: focal scarce, neighbour rich; LOW: both scarce; six rounds of 120 clearings with one standing order (the good bid for); then claims on a simulated good with private forecasts and trading against a market maker. Gaps against the request: the order is not a basket; nobody sells in procurement"}
+  control: {node: DISS-GOD-SCRIPT, value: "supply, values, tie-breaks, claims and interventions are scripted; the engine is a function of script and orders; twins share a script; any session can be replayed"}
+  auctioneer: {node: DISS-AUCTIONEER, value: "units to the highest bids at the highest losing bid: the lowest market-clearing price (0 violations in 10.2 million clearings); bidding the value is dominant given the good (numerical; not machine-checked)"}
+  unit: {node: DISS-INTERFERENCE, value: "the market is the unit; individual-level tests reject a true null in 2-5% at nominal 0.5% under session effects of .1-.2; market-level tests .40-.85%"}
+  certification: {node: DISS-CERT-W, record: "records/market_cert_I044.txt", value: "12 + 12 sessions of two markets of six, frozen supply: H1a_M 1.000; D1_M 1.000-.999 at P0-P3, .894 at P4 (count rule .979); 8 + 8 sessions .653 at P4; session effect .2: .94-.97 at P1-P3, .410 at P4"}
+  rules:
+    - {node: DISS-INSTITUTION-EFFECT, value: "unit orders are needed: with shares legitimacy under HIGH stays at .938 and D1_M rejects in .025 (erosion .0052 against repair .0026 per clearing with unit orders; .0030 against .0060 with shares)"}
+    - {node: DISS-BOARD-DISPLAY, value: "the board shows recent fills, never totals: with totals the control arm's legitimacy falls to .684 and D1_M to .856 (P1) and .271 (P4)"}
+    - {node: DISS-SUPPLY-CALIBRATION, value: "rich supply scaled by 1.15 / 1.10 / 1.05 for 4 / 6 / 8 traders so that the neighbour fills .72; more, smaller markets (.861 / .811 / .633 at P4 for markets of 4 / 6 / 8 with a session effect of .1)"}
+  layout: {node: DISS-LAYOUT-TRIPLET, value: "six per market, calibrated supply, D1_M at P4 without | with a session effect of .1: twin pairs 12 + 12 sessions (288 people) .926 | .774; triplets 12 + 6 (216) .900 | .588; triplets 16 + 8 (288) .980 | .770; the two markets of a LOW session correlate at +.16 to +.29 in fairness (DISS-LOW-COUPLING) and are analysed as one unit; triplets needed by market size and session effect: DISS-LIVE-N (I045)"}
+  collective: [{node: DISS-PROCUREMENT-NULL, value: "procurement gives no market-level test (units sold differ by less than .01)"}, {node: DISS-TEST-PLAT2, value: "twelve records on a claim: .61 / .96 at P1 against a uniform slowdown rejected in .001-.008; defeated by disengagement that differs by arm; with each participant a unit .90 needs 288 per arm (one-update rule) and 168 (count rule) (I045)"}, {node: DISS-PRICE-READOUT, value: "under an ASSUMED trading rule the price response ratio tracks psi (.200 against .190); its test .94 at P1, .45 at P4"}]
+  theory: [{node: DISS-BASKET-EXISTENCE, value: "a completion payment makes goods complements: clearing prices may not exist; divisible goods give existence and remove the contrast; a round target served by unit orders keeps the institution (not certified)"}, {node: DISS-SORTING-BENCHMARK, value: "expected price (n - k)/(n + 1), expected surplus k(k + 1)/(2n(n + 1)); six traders in a scarce market split 4 : 2 on surplus, 5 : 1 on the chance of a fill; fill rate .19-.20 (model .18)"}]
+
+staged_validation:   # I045: participants by step, from simulated cohorts under the kernel and ASSUMED human parameters; the steps are a proposal, not an approved plan. Decided on 2026-11-17: the first wave is a pilot (DISS-PILOT-DECISION)
+  budget: {node: DISS-STAGED-BUDGET, record: "records/114_staged_power_I045.md; records/staged_power_I045.txt", value: "people for .90 at one-sided .005, binding point: first wave 192 (144 with three entitlement items); gate 168 (one-update rule) or 120 (count rule); rival test 576 or 384 with two record pairs, 960 or 480 with the probes as built; live economy 288 / 360 / 576 at six per market and 240 / 288 / 384 at four for session effects 0 / .1 / .2. Core (first wave, gate, live at four per market) 504-648; every rung 1,128-1,584"}
+  scope: {node: DISS-POWER-SCOPE, value: "power is at the model's own effect at the anchoring edge (psi .48-.50; legitimacy .41 | .88); a weaker gate is outside the paper's claim and is not detected reliably"}
+  first_wave: {node: DISS-WAVE1-CHECKS, value: "one cell of the built app, 96 pairs (72 with three entitlement items): fairness 24 pairs, entitlement 96 (48), strong PHI violation 60, count of outcomes per round 36, main-study size within +-24% at 72"}
+  round_count: {node: DISS-ROUND-COUNT-READOUT, value: "a classifier on the twelve mean ratings of one cell picks the count of outcomes per round (40, 80, 120): correct in .976 | .917 of waves of 24 pairs and .994 | .951 of 36 with the gate point known | unknown (worst cell); the recovery test needs 30-36 control participants and is not clean at the repair edge; two cells between participants need 84 per cell"}
+  revision_rule: {node: DISS-TEST-REVISION-RULE, value: "weight at 10 closes against 4, within participant: 120 control participants under the count rule; level kept under the one-update rule; needs a probe the app does not have"}
+  gate: {node: DISS-GATE-N, value: "confirmatory pair, design B as built: 30 / 24 / 30 pairs at P1-P3 and 84 at P4 (one-update rule); 18 and 60 (count rule); three draws of the as-built cell gave 84, 84, 72; with both goods' prices drawn, pairs at P4 for kappa_s .5 / .35 / .2: 72 / 84 / 96 if nobody is informed, 60 / 72 / 96 if half are, 60 / 60 / 84 if all are (I047)"}
+  closed_form: {node: DISS-CLOSED-FORM-LOW, value: "n = 14.88 (s_H^2 + s_L^2) / (m_L - m_H)^2 runs low (72 against 84; 23 against 30; median 63 from a wave); a lookup needs the simulated correction"}
+  completion_gate: {node: DISS-COMPLETION-GATE-COST, value: "a basket that ends the bidding: 20 of 30 expected fills triples the requirement at the anchoring edge (240 pairs against 72-84), 15 needs 576, 10 more than 576; live economy with a basket of 15: 6-10 triplets at P1, 20 to more than 32 at P4"}
+  live: {node: DISS-LIVE-N, value: "triplets at P4 for session effects 0 / .1 / .2: 8 / 10 / 16 at six per market, 10 / 12 / 16 at four (one-update rule); 6 / 8 / 12 and 8 / 10 / 12 (count rule); four per market needs fewer people and more sessions"}
+  institution: {node: DISS-TEST-INSTITUTION, value: "unit orders against shares in their own triplets: fairness contrast 4 triplets per institution at P1, 6-8 at P4; uptake contrast 6-10 and 12-20"}
+
+otree_build:   # I042, rebuilt in I043, interface polished in I046, laid out for phones in I047: verified with bots and in a browser on development and production servers; NOT run on people; all wording draft
+  app: {node: DISS-OTREE-MARKET, record: "experiment/MARKET_APP.md", value: "experiment/diss_market; pages Order, Clearing, Rate; Market, Evidence, Bet, Recall; Results settles the markets; stored data equal schedule and engine; reload, back button and repeated submission change nothing; I046 changed the presentation only: engine, bot model and wording byte-identical, bot exports identical; I047: session key price_curves, two strings added and none changed, settle_meta gained curves, vw, vh, fit, scrolled, bot exports identical"}
+  fidelity: {node: DISS-ENGINE-FIDELITY, value: "fills and boards = the simulation's rule; the gate kernel on the engine gives legitimacy at probe time .112 / .865 (certification .109 / .869), ratio of mean T .129 (.124) and bet statistic .090 / .678 (.098 / .689) with one source pair"}
+  front_end: {node: DISS-FRONTEND, value: "TypeScript, CSS, SVG charts in one column of at most 480 px at every width (I047). Rounds 1-6 are one market screen: a chart frame, a row per good with a button and a ticket; then the chart drawn in real time with a line per good shown (heads are the goods' shapes; the ordered good's line on top with a dot per filled order), the rows with the clearing prices, the two counters and the running counts; a finger or pointer on the cleared chart reads the clearing under it. Market price history, ten trial closes; IBM Plex Sans with IBM Plex Sans Condensed for figures; reveal 9,001-9,015 ms for 9,000; median frame 16.7 ms on an emulated phone; identical pages across arms apart from the board; no evidence before the first forecast, no bet price before the second, no settlement before the last page; no outside request; no fit, audit or colour finding at ten window sizes; sessions by finger and by keyboard complete; nothing moving under reduced motion; bundle 168,523 bytes"}
+  phone_layout: {node: DISS-PHONE-LAYOUT, value: "the column is as high as the visible window; on a production server both states of the market screen, a market's first forecast, the bet and the recall question are exactly window-high from 320 x 568 up; the rating page needs 22 px of scrolling at 360 x 640 and 56 at 375 x 553, the evidence page up to 45 and 66; controls at least 44 x 44 px from 360 px; no layout for a phone held sideways, below 320 px or at 150% page zoom; verified by emulation only"}
+  slider_touch: {node: DISS-SLIDER-TOUCH, value: "a tap sets a slider when the finger lifts within 10 px; a sideways drag sets it while it moves; a scroll or a wandering finger stores nothing"}
+  production_check: {node: DISS-PROD-MODE-CHECK, value: "the browser test plays one of its three runs on a production server: only there, without the debug panel, does it show that a page is not higher than the window (the framework's empty line after the form made every page 24 px too high since I042)"}
+  author_answers: {node: DISS-AUTHOR-ANSWERS-I047, record: "freezes/00_freeze_I047.yaml", value: "2026-11-17: caption for the lower chart; one abstract unit on a bet; no text alternative, neutral colour; phones; legends stay, the market runs live in the pattern of a prediction-market page"}
+  live_reading: {node: DISS-LIVE-READING, value: "OPEN (author): 'live' was read as real time from the pre-drawn schedule, which the instructions and a quiz item describe truthfully; not as prices set by the participants' orders (design W, not built)"}
+  interface_contract: {node: DISS-UI-INVARIANTS, record: "freezes/00_freeze_I046.yaml", value: "what a change of the interface may not touch: server, information and timing, wording, arms, measures, colour rule, isolation, access, leaks; amended in I047 by the author's answers: the other good's prices of the same round may be shown, two strings added, how a finger sets a slider, no colour for a side or an outcome, the pattern of a prediction-market page without anything that names or copies one"}
+  interface_gates: {node: DISS-UI-GATES-I047, record: "records/116_phone_market_I047.md", value: "eighteen gates on the final build in Chromium, development and production servers: all passed except that Triangle's colour on Square's tint stands at 3.001:1 where the gate allowed a good's colour on white or its own tint only, and that G18(b) failed as frozen (DISS-MC-PRECISION) and was replaced before the replicate run; two defects were found by looking after the first full check had passed (a tag over two axis figures on small phones; every page a line higher than the window in production) and are measured since; repeatable with the browser test (three runs), tools/layout_check.py, tools/mark_contrast.py and the interface test"}
+  interface_gates_I046: {node: DISS-UI-GATES, record: "records/115_interface_polish_I046.md", value: "fourteen gates passed on the final build in Chromium; five defects were found outside what the gates measured at the time and corrected (a price line at 2.1-2.7:1, Triangle at 2.96:1 on two grounds, a cross-fade under reduced motion, a caption hiding the dot of a filled order, a hover readout over its own point); repeatable with tools/browser_run.py --strict, tools/mark_contrast.py and the style test"}
+  display_risk: {node: DISS-DISPLAY-RISK, value: "the display is part of the stimulus and I046 changed it (layout of the clearing page, a stronger price line, feedback and darker slider marks on the rating page); I047 changed it again: one column on every device, the goods market as one screen in the pattern of a prediction-market page, a second price line by default; both arms alike; no person has seen any version; whether people take the screen for a live market is not known"}
+  palette: {node: DISS-PALETTE, value: "goods in colour (Square #2a78d6, Triangle #eb6834), always with their shape; everything else neutral: the trader in slate, sources in ink, YES and NO in ink with the word since I047 (green and magenta are gone); validated pair by pair (the palette named in the I043 freeze failed two pairs); with both price lines drawn Triangle stands on Square's tint at 3.001:1; a good's colour at full strength on white or its own 5% tint only (Triangle 3.20:1 and 3.02:1; 2.96:1 on a grey panel); text 4.8:1 or more, control boundaries 3.0:1 or more (I046)"}
+  board_and_sources: {node: DISS-PEER-REPLAY, value: "seed wave on a record-only schedule -> pool of real fill records and forecasts -> replay (HIGH: rich-round record at .65-.80; LOW: same round, nearest count; source: same market, inside 80-100 or 0-20, best record on the other three markets) (DISS-SOURCE-POOL); computer-generated board and source refused for people in production; not measured: a seed wave that draws both prices will hold few records of the worse good, so a later participant on the worse good would see a trader who did better (I047)"}
+  container: {node: DISS-DOCKER, value: "image and compose stack with Postgres; exercised on stand-in base images only (official images could not be pulled)"}
+  drafts: {node: DISS-BUILD-DRAFTS, value: "consent, rating items, board and source descriptions, market wording, the bet's terms, forecast payment, recall check, reveal speed, whether the price curve is shown, devices, payment rates, time-outs: author decisions; raised in I046 and answered on 2026-11-17: a caption for the lower chart of the clearing page, the two units on the bet button, a text alternative for the charts, whether the legends of the instructions stay; raised in I047: whether 'live' meant real time from the schedule or prices set by orders, whether 'both' stays the default and, if so, FREEZE, the seed wave's display and a sentence in the instructions, the reading of 'neutral', the bet's unit, which phones are admitted, two sentences written for a mouse"}
+  ratings: "three fairness items and one entitlement item per procurement round (the certified noise 5.8 is three-item); the entitlement test was certified at that noise, which one item does not deliver"
+  analysis_path: "experiment/analysis/yoked_from_export.py (export -> yoked_analysis.decisions, the bet test, T by kind of evidence)"
+
+yoked_design:   # I041: certified on synthetic cohorts; built in I042; author-gated
+  design: {node: DISS-DESIGN-Y, record: "experiment/YOKED_DESIGN.md", tool: "experiment/tools/yoked_schedules.py (node DISS-YOKED-SCHEDULES)"}
+  reporting_set: {node: DISS-REPORTING-SET, code: "experiment/analysis/yoked_analysis.py", value: "confirmatory pair H1a then D1; supporting K3, FREEZE, association by arm; PHI warning flag; one-sided .005"}
+  at_72_pairs: "confirmatory pair .94-1.00 (.67 at 36 pairs at the anchoring edge); K3 1.00 with plain ratings, .63-.98 under other shapes, .17-.46 at gain .25 with parked or non-responsive sliders; FREEZE .89-.95 | 1.00; ASSOC_H .27-.40 at P1-P3"
+  what_yoking_does: "same tickets in all five deprivation rounds in 10-16% of pairs; H1a yoked | re-matched .726 | .724 at 18 pairs at the weakest point"
+  limits: [{node: DISS-RIVAL-HS-G, value: "72 pairs do not separate the gate from a homogeneous slowdown of HIGH at the central points; 216-288 pairs do (144-216 under the count rule); for .90: 288 pairs with two record pairs and 480 with a source pair (one-update rule), 192 and 240 (count rule) (I045); at P0 nothing does"}, {node: DISS-MEDIATION-LIMIT, value: "no statistic identifies mediation by fairness"}]
+
+frontier:   # inside the model family; bounds, not designs
+  - {node: DISS-LIK-ABM, value: "likelihood = mixture over the ABM-generated legitimacy distribution of an exact probe kernel and a rating kernel", record: "experiment/analysis/likelihood_core_I039.py"}
+  - {node: DISS-FRONTIER-TEST, value: "n per arm for .90, psi < 1: most powerful test 8 / 16 (P1 / P4), likelihood ratio with unknown baseline weight 16 / 36, model-free interval 24 / 60-72", record: "records/frontier_I039.txt, frontier_ad_I039.txt"}
+  - {node: DISS-LR-SIZE, value: "the profiled likelihood-ratio test loses its size (up to .50) unless calibrated over the nuisance; the interval holds .004-.006"}
+
+design_current_candidate:   # author-gated
+  task: {node: DISS-TASK-TEN, value: "1 rich + 5 deprivation rounds (120 settlements each, summary screen) + 4 probe tickets = 10 repetitions"}
+  board: {node: DISS-PEER-REPLAY, value: "same-rule replay; HIGH level in a fixed band"}
+  hypotheses: {node: DISS-H1-STRUCTURE-V3, value: "H1a fairness (last rating, LOW above HIGH within pairs); H1b = psi with its interval and decisions; supporting: K3, FREEZE, the T-F association by arm"}
+  pairing: {node: DISS-DESIGN-Y, value: "yoked pairs, each schedule once per arm"}
+  presentation: {node: DISS-DESIGN-B, value: "basket economy and prediction markets (I043); two waves if sources are to be real forecasts; the goods market as one phone screen with both goods' prices drawn by default (I047)"}
+  interactive_candidate: {node: DISS-DESIGN-W, value: "live economy (I044): certified on simulated sessions, not built; the market screen of I047 is a candidate front end for it and the author's 'live' may mean it (DISS-LIVE-READING); for .90 at the anchoring edge by triplets it costs 288 / 360 / 576 people at six per market and 240 / 288 / 384 at four, for session effects 0 / .1 / .2 (one-update rule; I045), where the individual design as built needs 168"}
+  sample: "for .90 at the anchoring edge, design B as built: 84 pairs (168 participants) under the one-update rule, 60 under the count rule; 30 pairs or fewer at P0-P3; 96 if the weight on a source is .2; 120 if forecast noise is 16 or 20% are inattentive; 288-336 if a round counts for 40-80 settlements (I045, DISS-GATE-N). The figures of I043 at 72 and 96 pairs stand (DISS-CERT-B). From I041, not recomputed: 96 in place of 72 if the trimming interval is primary and exclusion may differ by 10 points. HIGH-arm association at .90: 288 pairs with two record pairs, 480 with a source pair (one-update rule); 192 and 240 (count rule)"
+  staged: {node: DISS-STAGED-BUDGET, value: "a first wave of 96 pairs on the built app, then the gate, the rival test and the live economy: 504-648 people for the core, 1,128-1,584 for every rung (I045; a proposal, not an approved plan)"}
+
+rivals:
+  with_both_prices: "not re-examined: I047 certified the reporting set under informed choices, not the rival tests; the association by arm then fires in both arms (DISS-CERT-LIVE)"
+  excluded_by_design: ["R1-global (opposite sign)", "R3 aspiration-in-utility", "R3 slow-reporting variants", "R4 group-contingent", "R3+R4 composite", "R5 rule inference", "disengagement that differs by arm, in the supplementary analysis (trimming interval)", "static heterogeneity linking rating and weight, by psi < 1 (.0018)"]
+  excluded_only_with_a_larger_sample: ["homogeneous slowdown of the HIGH arm (HamJenkins2025 class): rejected at size by the HIGH-arm association, whose power is .27-.40 at 72 pairs at P1-P3 and .76-.98 at 216-288 (DISS-ASSOC-BY-ARM); .90 needs 288 pairs with two record pairs and 480 with a source pair under the one-update rule, 192 and 240 under the count rule (I045); not at all at P0", "the same rival with twelve records on a claim (DISS-TEST-PLAT2): power .61 (one-update rule) and .96 (count rule) at P1 with 72 traders per arm in 12 markets; with each participant a unit .35 and .60 at 72 per arm, .90 from 288 and 168 per arm (I045); not at P0; not if disengagement differs by arm"]
+  not_excluded: ["a uniform slowdown combined with a trait that links rating and weight inside HIGH (DISS-RIVAL-HS-SH, DISS-MEDIATION-LIMIT)", "disengagement that differs by arm, in the primary analysis"]
+
+open_human:   # node DISS-HUMAN-PARAMS; what only a pilot can supply, in order
+  - "effective draws per round summary (DISS-EFFECTIVE-DRAWS) - decides between 84 pairs and 288-336 at the anchoring edge; readable from the ratings of one cell of a first wave (DISS-ROUND-COUNT-READOUT: .95 correct from 36 pairs)"
+  - "the size of the effect: every requirement of I045 is at the model's own effect at the anchoring edge (DISS-POWER-SCOPE)"
+  - "control arm's absolute revision weight W0 and the revision rule - the frontier differs by a factor of 5-15 in information between the two rules; the rule is identified by a 4-against-10 record probe with 120 control participants, which the app does not have (DISS-TEST-REVISION-RULE); it moves the gate test from 84 to 60 pairs and the rival test from 288 to 192"
+  - "forecast noise and its shape; fairness scale gain, noise and link"
+  - "starting entitlement; rigidity distribution"
+  - "differential disengagement; board believability"
+  - "ticket choices: the share of yoked pairs that choose alike; whether a win can erode fairness (PHI)"
+  - "the revision rule also sets the sample for the HIGH-arm association (288 pairs or 192 for .90, two record pairs)"
+  - "how the display is integrated: reveal speed (9 s per round as built), device, clearings per round - candidate pilot factors; whether a price curve is read as a record of fills; the display itself was laid out anew in I046 (DISS-DISPLAY-RISK): attention to the board and heaping of ratings at the slider's marks are to be read in the pilot; I047 laid it out for phones and draws a second price line by default"
+  - "the share of participants who order the better good in every deprivation round once both prices are drawn (DISS-INFORMED-SHARE): read directly from a pilot's orders; it moves the gate test between 60 and 96 pairs and decides how far FREEZE and the association by arm are off"
+  - "whether seeing the price of the good not ordered has an effect of its own (DISS-NO-REGRET-CHANNEL); whether people take the market screen for a live market although the instructions say prices are fixed in advance"
+  - "on phones: a finger's scatter on a slider, what the browser's bars, a pull at the top of the page and the text-size setting do (every I047 check ran in Chromium by emulation)"
+  - "kappa_s, the weight on a source's forecast (DISS-SOURCE-WEIGHT); how people bet at a posted price of 50 (DISS-TEST-BET)"
+  - "for a live economy (DISS-DESIGN-W): the size of session effects; how people sort between the goods (it sets the rich neighbour's fill rate, the dose); whether they trade their forecasts against a market maker; how they bid if they set bids; how they would split a basket target; a session effect of .2 against none doubles the live rung (16 triplets against 8 at six per market)"
+
+open_simulation:
+  - "a form of FREEZE that stays valid when choices are informed; the rival tests and the rating shapes M2-M6 under informed choices; the pool's coverage of counts under each display of the seed wave (I047)"
+  - "a state-dependence statistic near its frontier (collapsed stratum against the rest) and the slope-equality test against DISS-RIVAL-HS-SH"
+  - "a covariate-adjusted estimator of psi using F, with robustness to the rating link"
+  - "machine-check the two-type lower bound (T16) and a general monotone-kernel version of T13"
+  - "the association by arm under rating shapes M2-M6 (I041 scored it with plain ratings only); slowdowns other than the mean-gain one"
+  - "design W: a basket as a round target with a completion payment, under an assumed rule for how people split"
+  - "design W: K3, FREEZE, the association by arm and the PHI flag at market level; the long news sequence under calibrated supply"
+  - "design W: interventions not simulated - withdrawing the rich neighbour in mid-session, a shock inside a round, a reserve price, a neighbour whose supply follows its demand; stand-ins for empty seats"
+  - "machine-check the dominant-strategy property of the highest-losing-bid price for unit demands"
+  - "combinations of adverse human parameters for the gate test (I045 varied one at a time); a requirement for a smallest effect of interest set independently of the model"
+  - "why PLAT2 has less power on individuals than on markets (.35 against .61 at 72 per arm; not measured)"
+  - "the round-count classifier on trajectories outside the model's family, at P2 and P3, and under session effects"
+  - "the first-wave checks and the classifier under the rating shapes M2-M6 of I041 (I045 used plain ratings only)"
+  - "shares in the individual design; a basket as a milestone with trading on; session effects in the individual design; stand-ins and dropouts"
+open_build:
+  - "page time-outs and refill of slots left by dropouts"
+  - "a build on the official Docker base images, on a machine with registry access"
+  - "translations; a screen-reader pass; checks on a real phone and in Firefox and Safari (every check ran in Chromium, phones by emulation); a layout for a phone held sideways; the charts have no text alternative by the author's answer of 2026-11-17"
+  - "if 'both' stays: a sentence in the instructions saying that both goods' prices are drawn (author); the display of the seed wave"
+  - "the pilot's specification and its frozen lookup (the first wave is a pilot: DISS-PILOT-DECISION; the closed form runs low: DISS-CLOSED-FORM-LOW)"
+  - "if the author decides so: two more entitlement items, a 4-close record probe, a second record pair in place of the source pair"
+  - "the live economy (experiment/LIVE_ECONOMY.md): script format 4, an engine without oTree, groups and synchronised rounds, the claim market on live_method, export at trader and market level, a replay tool. Implementation gate closed until the author's decisions"
+
+superseded_or_refuted: "see refuted_preserved in kg_delta_I032 / I033_I034 (incl. i035, i036) /
+  I037 / I038 / I039 / I040 / I041 / I042 / I043 / I044 / I045 / I046 / I047; notably the precision of +-.03 given for the rates of the I041 and I043 records, the pooled association as a test against a
+  homogeneous slowdown, the power gain from yoking, the mean-sufficiency reading of I038, the shut-share reading of
+  the trap, the asymptotic sample sizes for psi, and the fixed-critical-value likelihood-ratio test"
+
+manuscript_flags_not_patched:
+  - "speed edge (.895) not stated"
+  - "paper cell sits at the conformity tipping gap"
+  - "trap needs nearly everyone to have nearly stopped learning; an 80% shut-down majority is not enough"
+  - "the supplement lists reference monotonicity as open; it is now proved pathwise under phi_plus <= tau (Lean T13)"

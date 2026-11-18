@@ -41,6 +41,7 @@ class C(BaseConstants):
     N_FAIR = 3
     STEP = 5
     BOARD_SOURCES = ('schedule', 'pool', 'none')
+    PRICE_CURVES = ('own', 'both')    # which clearing prices the market screen draws (KGi-DISS-I047)
     REVEAL_MS = 9000                   # DRAFT: time over which a round's clearings appear
     PROBE_REVEAL_MS = 6000             # DRAFT: time over which ten trial closes appear
     SOURCE_REVEAL_MS = 2500            # DRAFT: time before a source's forecast can be answered
@@ -184,6 +185,12 @@ def pool(session):
     return _load(session.config['pool_path'], _json)
 
 
+def price_curves(session):
+    """'own': only the ordered good's clearing prices are drawn (the display certified in I043);
+    'both': the other good's prices of the same round are drawn beside them (certified in I047)"""
+    return session.config.get('price_curves', 'own')
+
+
 def _is_production():
     return bool(os.environ.get('OTREE_PRODUCTION'))
 
@@ -200,6 +207,8 @@ def creating_session(subsession: Subsession):
     src = board_source(session)
     if src not in C.BOARD_SOURCES:
         raise RuntimeError(f'board_source must be one of {C.BOARD_SOURCES}')
+    if price_curves(session) not in C.PRICE_CURVES:
+        raise RuntimeError(f'price_curves must be one of {C.PRICE_CURVES}')
     human = not cfg.get('bot_kind')
     social = any(p['evidence'] == 'source' for s in obj['schedules'] for p in s['probe'])
     if src == 'schedule' and human and _is_production():
@@ -536,7 +545,11 @@ class Order(_Base):
 
     @staticmethod
     def js_vars(player: Player):
-        return dict(page='order')
+        # the frame of the chart: the cap and the price axis of the whole schedule file; no price of any round
+        d, s = _sched(player)
+        lo, hi = price_axis(player.session)
+        return dict(page='order', cap=d['cap'], price_lo=lo, price_hi=hi, k=d['settlements_per_round'],
+                    text=dict(zone=copy.MARKET['zone_label']))
 
     @staticmethod
     def error_message(player: Player, values):
@@ -563,7 +576,10 @@ class Clearing(_Base):
         t = copy.MARKET
         shell = _shell(player, 'clearing')
         shell['points'] -= player.wins          # the total rises only once the reveal is over (counted up in the browser)
+        other = [x for x in C.TICKETS if x != s['good_ticket']][0]
+        order = [s['good_ticket'], other] if s['good_side'] == 'left' else [other, s['good_ticket']]
         return dict(t=t, ticket_name=t['ticket_names'][player.ticket], cap=f"{d['cap']:.2f}",
+                    goods=[dict(value=x, name=t['ticket_names'][x], ordered=x == player.ticket) for x in order],
                     has_board=player.board_source != 'none',
                     board_name=f"{t['trader']} {player.field_maybe_none('board_label') or ''}",
                     board_kind=t['trader_kind'][player.board_source],
@@ -576,14 +592,20 @@ class Clearing(_Base):
         t = copy.MARKET
         part = player.participant
         lo, hi = price_axis(player.session)
+        r = player.round_number - 1
+        both = price_curves(player.session) == 'both'
+        not_ordered = [x for x in C.TICKETS if x != player.ticket][0]
         return dict(page='clearing', own=player.own_bits, board=player.board_bits or None,
                     prices=[float(x) for x in player.prices.split(',')], cap=d['cap'], price_lo=lo, price_hi=hi,
+                    # 'both': what the participant would have seen for the good not ordered, in this round only
+                    other_ticket=not_ordered if both else None,
+                    other_prices=en.price_path(s, d, r, not player.chose_good) if both else None,
                     ticket=player.ticket, reveal_ms=int(cfg.get('reveal_ms', C.REVEAL_MS)),
                     points_before=part.vars['points'] - player.wins,
                     goods_before=part.vars['goods'] - player.wins, basket_size=d['basket_size'],
                     text=dict(done=t['settle_done'], gain=t['points_gain'].format(wins=player.wins),
                               zone=t['zone_label'], you=t['you'], trader=t['trader'], clearing=t['clearing'],
-                              filled=t['filled'], not_filled=t['not_filled']))
+                              filled=t['filled'], not_filled=t['not_filled'], names=t['ticket_names']))
 
     @staticmethod
     def error_message(player: Player, values):
@@ -750,7 +772,7 @@ class Bet(_Base):
         t = copy.PROBE
         mt = _market_text(m)
         price, pay, allow = m['price_yes'], d['bet_payout'], d['bet_allowance']
-        cost = lambda p: t['bet_cost'].format(cost=int(round(pay * p / 100)))
+        cost = lambda p: t['bet_cost'].format(cost=f'<b>{int(round(pay * p / 100))}</b>')   # the figure is set off in the sentence
         return dict(t=t, symbol=m['asset'], mt=mt, price_yes=price, price_no=100 - price,
                     last=f"{m['chart'][-1]:.2f}", compact=True,
                     cost_yes=cost(price), cost_no=cost(100 - price),

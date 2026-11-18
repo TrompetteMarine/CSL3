@@ -2,34 +2,42 @@
 {{ block content }}
 <div class="dm">
   {{ include_sibling '_top.html' }}
-  <main class="dm-main dm-clearing {{ if has_board }}has-board{{ endif }}" data-good="{{ player.ticket }}">
+  <main class="dm-main dm-screen dm-clearing {{ if has_board }}has-board{{ endif }}" data-good="{{ player.ticket }}">
     <div class="dm-clear-head">
       <h1 class="dm-h1" id="dm-clear-title" aria-live="polite">{{ t.settle_title }}</h1>
       <p class="dm-ticker">{{ t.clearing }} <b data-seen>0</b> {{ t.of }} {{ k }}</p>
-    </div>
-    <section class="dm-inst">
-      <div class="dm-quote">
-        <span class="dm-asset"><span class="dm-glyph" data-glyph="{{ player.ticket }}"></span>{{ ticket_name }}</span>
-        <span class="dm-now"><span>{{ t.price_label }}</span><b data-price>&ndash;</b></span>
-      </div>
-      <div class="dm-chart is-price" data-chart="price"></div>
-      <div class="dm-counters">
-        <div class="dm-counter is-own">
-          <span class="dm-counter-who">{{ t.you }}</span>
-          <span class="dm-counter-fig"><b data-count="own">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
-          <span class="dm-baskets"><span class="dm-pips" data-pips aria-hidden="true">{{ for i in pips }}<i></i>{{ endfor }}</span><b data-baskets>0</b> {{ t.baskets }}</span>
-        </div>
-        {{ if has_board }}
-        <div class="dm-counter is-board">
-          <span class="dm-counter-who">{{ board_name }}</span>
-          <span class="dm-counter-fig"><b data-count="board">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
-          <span class="dm-counter-kind">{{ board_kind }}</span>
-        </div>
-        {{ endif }}
-      </div>
-      <div class="dm-chart is-fills" data-chart="fills"></div>
       <p class="dm-readout" id="dm-readout" aria-hidden="true"></p>
-    </section>
+    </div>
+    <div class="dm-chart is-price" data-chart="price"></div>
+    <div class="dm-rows is-live">
+      <p class="dm-rows-head">{{ t.price_label }}</p>
+      {{ for g in goods }}
+      <div class="dm-row {{ if g.ordered }}is-ordered{{ endif }}" data-good="{{ g.value }}">
+        <span class="dm-row-body">
+          <span class="dm-glyph" data-glyph="{{ g.value }}"></span>
+          <span class="dm-row-name">{{ g.name }}</span>
+          {{ if g.ordered }}<span class="dm-row-tag">{{ t.held }}</span>{{ endif }}
+          <b class="dm-row-price" data-price="{{ g.value }}">&ndash;</b>
+        </span>
+      </div>
+      {{ endfor }}
+    </div>
+    <h2 class="dm-caption">{{ t.fills_caption }}</h2>
+    <div class="dm-counters">
+      <div class="dm-counter is-own">
+        <span class="dm-counter-who">{{ t.you }}</span>
+        <span class="dm-counter-fig"><b data-count="own">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
+        <span class="dm-baskets"><span class="dm-pips" data-pips aria-hidden="true">{{ for i in pips }}<i></i>{{ endfor }}</span><b data-baskets>0</b> {{ t.baskets }}</span>
+      </div>
+      {{ if has_board }}
+      <div class="dm-counter is-board">
+        <span class="dm-counter-who">{{ board_name }}</span>
+        <span class="dm-counter-fig"><b data-count="board">0</b><span>{{ t.fills_of }} <span data-seen>0</span></span></span>
+        <span class="dm-counter-kind">{{ board_kind }}</span>
+      </div>
+      {{ endif }}
+    </div>
+    <div class="dm-chart is-fills" data-chart="fills"></div>
     <input type="hidden" name="rt_settle_ms" value="">
     <input type="hidden" name="settle_done" value="">
     <input type="hidden" name="settle_meta" value="">
